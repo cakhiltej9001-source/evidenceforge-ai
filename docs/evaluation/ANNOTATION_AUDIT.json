@@ -1,0 +1,106 @@
+{
+  "dataset_sha256": "5e5c012fd1a612513a934e30469ba5a20b532e909732cfd47500f8453cdf4e89",
+  "scope": "automated structural checks only; independent semantic human review pending",
+  "cases": [
+    {
+      "case_id": "diverse_01",
+      "scenario": "custom_two_pass",
+      "structural_label_check": "passed"
+    },
+    {
+      "case_id": "diverse_02",
+      "scenario": "custom_two_pass",
+      "structural_label_check": "passed"
+    },
+    {
+      "case_id": "diverse_03",
+      "scenario": "custom_two_pass",
+      "structural_label_check": "passed"
+    },
+    {
+      "case_id": "diverse_04",
+      "scenario": "custom_two_pass",
+      "structural_label_check": "passed"
+    },
+    {
+      "case_id": "diverse_05",
+      "scenario": "custom_two_pass",
+      "structural_label_check": "passed"
+    },
+    {
+      "case_id": "diverse_06",
+      "scenario": "custom_two_pass",
+      "structural_label_check": "passed"
+    },
+    {
+      "case_id": "diverse_07",
+      "scenario": "custom_two_pass",
+      "structural_label_check": "passed"
+    },
+    {
+      "case_id": "diverse_08",
+      "scenario": "custom_two_pass",
+      "structural_label_check": "passed"
+    },
+    {
+      "case_id": "diverse_09",
+      "scenario": "custom_two_pass",
+      "structural_label_check": "passed"
+    },
+    {
+      "case_id": "diverse_10",
+      "scenario": "custom_two_pass",
+      "structural_label_check": "passed"
+    },
+    {
+      "case_id": "diverse_11",
+      "scenario": "custom_two_pass",
+      "structural_label_check": "passed"
+    },
+    {
+      "case_id": "diverse_12",
+      "scenario": "custom_two_pass",
+      "structural_label_check": "passed"
+    },
+    {
+      "case_id": "diverse_13",
+      "scenario": "custom_two_pass",
+      "structural_label_check": "passed"
+    },
+    {
+      "case_id": "diverse_14",
+      "scenario": "custom_two_pass",
+      "structural_label_check": "passed"
+    },
+    {
+      "case_id": "diverse_15",
+      "scenario": "custom_two_pass",
+      "structural_label_check": "passed"
+    },
+    {
+      "case_id": "diverse_16",
+      "scenario": "custom_two_pass",
+      "structural_label_check": "passed"
+    },
+    {
+      "case_id": "diverse_17",
+      "scenario": "dispute",
+      "structural_label_check": "passed"
+    },
+    {
+      "case_id": "diverse_18",
+      "scenario": "dispute",
+      "structural_label_check": "passed"
+    },
+    {
+      "case_id": "diverse_19",
+      "scenario": "empty",
+      "structural_label_check": "passed"
+    },
+    {
+      "case_id": "diverse_20",
+      "scenario": "empty",
+      "structural_label_check": "passed"
+    }
+  ]
+}

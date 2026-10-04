@@ -1,0 +1,494 @@
+"""Bounded structured assessment, drafting, criticism and quote verification."""
+
+import asyncio
+from collections.abc import Awaitable
+from typing import TypeVar, cast
+
+from pydantic import JsonValue, ValidationError
+
+from evidenceforge.graph.state import ResearchState, StateSnapshot
+from evidenceforge.identity import stable_id
+from evidenceforge.nodes.common import Update, checked_patch, record_data
+from evidenceforge.nodes.quality_common import quality_error, quality_event
+from evidenceforge.planning import ModelUnavailable, PlanningContractError, parse_response
+from evidenceforge.research import (
+    CoverageAssessment,
+    CoverageInput,
+    CriticAssessment,
+    CriticInput,
+    ReportDraft,
+    ResearchModel,
+    ResearchOptions,
+    SynthesisInput,
+)
+from evidenceforge.retrieval.contracts import ArtifactFailure
+from evidenceforge.schemas import (
+    CitationAuditItem,
+    Claim,
+    ClaimEvidenceLink,
+    Contract,
+    CriticVerdict,
+    QuestionCoverage,
+    QuestionCoverageStatus,
+    Relationship,
+    Report,
+    ReportSection,
+    ResearchGap,
+    SourceType,
+    SupportVerdict,
+    utc_now,
+)
+from evidenceforge.storage.artifacts import ArtifactStore
+
+T = TypeVar("T", bound=Contract)
+
+
+def quality_remaining(s: StateSnapshot) -> int:
+    return s.budget.max_model_calls - s.quality_attempts - s.planning_attempts
+
+
+def research_stop(s: StateSnapshot) -> str | None:
+    if s.stage_error:
+        return s.stop_reason.value if s.stop_reason else "fatal_error"
+    if s.coverage_status == "sufficient":
+        return "sufficient"
+    if (utc_now() - s.started_at).total_seconds() >= s.budget.max_elapsed_seconds:
+        return "time_limit"
+    if s.iteration_count >= s.budget.max_research_passes:
+        return "pass_limit"
+    searches = sum(r.searches for r in s.reservations.values() if r.status != "released")
+    if searches >= s.budget.max_searches:
+        return "search_limit"
+    if (
+        len(s.evidence_store) >= s.budget.max_evidence_count
+        or sum(len(e.passage.encode()) for e in s.evidence_store.values())
+        >= s.budget.max_evidence_bytes
+    ):
+        return "evidence_limit"
+    if s.no_progress_count >= 2:
+        return "no_progress"
+    if quality_remaining(s) <= max(2, s.budget.reserved_quality_calls):
+        return "model_call_limit"
+    return None
+
+
+class QualityNode:
+    def __init__(self, model: ResearchModel, options: ResearchOptions) -> None:
+        self.model = model
+        self.options = options
+
+    async def response(self, task: Awaitable[object], schema: type[T]) -> T:
+        payload = await asyncio.wait_for(task, self.options.node_timeout_seconds)
+        return parse_response(payload, schema, self.options.max_response_bytes)
+
+    def failure(self, state: ResearchState, role: str, exc: Exception) -> Update:
+        category = (
+            "timeout"
+            if isinstance(exc, TimeoutError)
+            else ("provider" if isinstance(exc, ModelUnavailable) else "schema")
+        )
+        return quality_error(state, role, category, state["quality_attempts"] + 1)
+
+
+class CoverageEvaluator(QualityNode):
+    async def __call__(self, state: ResearchState) -> Update:
+        s = StateSnapshot.model_validate(state)
+        if s.run_status != "running":
+            return {}
+        if s.last_coverage_pass == s.iteration_count:
+            return checked_patch(state, {"stop_reason": "no_progress"})
+        if quality_remaining(s) <= 2:
+            return quality_error(state, "coverage", "budget", s.quality_attempts)
+        try:
+            result = await self.response(
+                self.model.evaluate_coverage(
+                    CoverageInput(
+                        questions=s.research_questions,
+                        evidence=tuple(s.evidence_store.values()),
+                    )
+                ),
+                CoverageAssessment,
+            )
+            known = {q.id: q for q in s.research_questions}
+            if len(result.questions) != len(known) or {
+                q.question_id for q in result.questions
+            } != set(known):
+                raise PlanningContractError("coverage question mismatch")
+            coverage = {}
+            gaps = []
+            signature = []
+            for assessment in result.questions:
+                q = known[assessment.question_id]
+                indices = set()
+                evidence_ids = set()
+                for criterion in assessment.criteria:
+                    if criterion.index in indices or criterion.index >= len(q.acceptance_criteria):
+                        raise PlanningContractError("invalid criterion")
+                    indices.add(criterion.index)
+                    for eid in criterion.evidence_ids:
+                        if (
+                            eid not in s.evidence_store
+                            or q.id not in s.evidence_store[eid].question_ids
+                        ):
+                            raise PlanningContractError("invalid coverage evidence")
+                        evidence_ids.add(eid)
+                    signature.append(
+                        [
+                            q.id,
+                            criterion.index,
+                            sorted(
+                                {
+                                    stable_id(
+                                        "retained_text",
+                                        " ".join(s.evidence_store[eid].passage.casefold().split()),
+                                    )
+                                    for eid in criterion.evidence_ids
+                                }
+                            ),
+                        ]
+                    )
+                complete = len(indices) == len(q.acceptance_criteria)
+                status = "sufficient" if complete else "partial" if indices else "missing"
+                coverage[q.id] = record_data(
+                    QuestionCoverage(
+                        question_id=q.id,
+                        status=QuestionCoverageStatus(status),
+                        evidence_ids=tuple(sorted(evidence_ids)),
+                        rationale=(
+                            f"Structured assessment supported {len(indices)} of "
+                            f"{len(q.acceptance_criteria)} criteria; "
+                            "source truth is not independently verified."
+                        ),
+                    )
+                )
+                for index, text in enumerate(q.acceptance_criteria):
+                    if index not in indices:
+                        gaps.append(
+                            record_data(
+                                ResearchGap(
+                                    id=stable_id("gap", q.id, index),
+                                    question_id=q.id,
+                                    missing_aspect=text,
+                                    needed_source_types=(SourceType.WEB,),
+                                    recommended_query=(
+                                        f"{text} supporting evidence "
+                                        f"research pass {s.iteration_count + 1}"
+                                    ),
+                                )
+                            )
+                        )
+            # Numeric disputes override lexical sufficiency and share search limits.
+            dispute_gaps = []
+            for qid in sorted(known):
+                conflicts = [
+                    c
+                    for c in s.comparisons.values()
+                    if c.relationship == "contradicts" and qid in c.question_ids
+                ]
+                if not conflicts and not s.analysis_limited:
+                    continue
+                existing = QuestionCoverage.model_validate(coverage[qid])
+                coverage[qid] = record_data(
+                    QuestionCoverage(
+                        question_id=qid,
+                        status=QuestionCoverageStatus.DISPUTED
+                        if conflicts
+                        else QuestionCoverageStatus.PARTIAL,
+                        evidence_ids=existing.evidence_ids,
+                        rationale="Unresolved comparable numeric disagreement."
+                        if conflicts
+                        else "Comparison coverage is incomplete after reaching an analysis cap.",
+                    )
+                )
+                if conflicts:
+                    c = sorted(conflicts, key=lambda c: c.id)[0]
+                    p = s.propositions[c.left_id]
+                    scope = (
+                        f"{p.entity} {p.metric} in {p.timeframe} "
+                        f"for {p.population} under {p.conditions}"
+                    )
+                    aspect = (
+                        f"Reconcile retained values {c.normalized_left} versus "
+                        f"{c.normalized_right} {c.canonical_unit}: {scope}"
+                    )
+                else:
+                    scope = known[qid].question
+                    aspect = "Incomplete numeric comparison coverage: " + scope
+                source_types = tuple(
+                    sorted(
+                        {source.source_type for source in s.source_records.values()},
+                        key=lambda k: k.value,
+                    )
+                ) or (SourceType.WEB,)
+                for purpose, prefix in (
+                    ("primary_source", "Find primary-source measurements and definitions for "),
+                    ("counter_evidence", "Find counter-evidence or corrections that reconcile "),
+                ):
+                    dispute_gaps.append(
+                        record_data(
+                            ResearchGap(
+                                id=stable_id("gap", qid, purpose, scope),
+                                question_id=qid,
+                                purpose=purpose,
+                                missing_aspect=aspect,
+                                needed_source_types=source_types,
+                                recommended_query=prefix + scope,
+                            )
+                        )
+                    )
+            gaps = dispute_gaps + gaps
+            signature.append(["analysis", s.analysis_signature or "none"])
+            digest = stable_id("coverage", cast(JsonValue, sorted(signature)))
+            return checked_patch(
+                state,
+                {
+                    "coverage_by_question": coverage,
+                    "coverage_status": "missing" if gaps else "sufficient",
+                    "gaps": gaps,
+                    "coverage_signature": digest,
+                    "last_coverage_pass": s.iteration_count,
+                    "no_progress_count": s.no_progress_count + 1
+                    if digest == s.coverage_signature
+                    else 0,
+                    "quality_attempts": s.quality_attempts + 1,
+                    **quality_event(
+                        state,
+                        "coverage",
+                        "Assessed question acceptance criteria against retained evidence.",
+                    ),
+                },
+            )
+        except (ValidationError, PlanningContractError, TimeoutError, ModelUnavailable) as exc:
+            return self.failure(state, "coverage", exc)
+
+
+class Synthesis(QualityNode):
+    async def __call__(self, state: ResearchState) -> Update:
+        s = StateSnapshot.model_validate(state)
+        if quality_remaining(s) <= 0:
+            return quality_error(state, "synthesis", "budget", s.quality_attempts)
+        try:
+            version = s.revision_count + 1
+            result = await self.response(
+                self.model.synthesize(
+                    SynthesisInput(
+                        request=s.request,
+                        questions=s.research_questions,
+                        evidence=tuple(
+                            sorted(
+                                s.evidence_store.values(),
+                                key=lambda e: (
+                                    -(
+                                        s.source_quality[e.source_id].score
+                                        if e.source_id in s.source_quality
+                                        else 0.5
+                                    ),
+                                    e.id,
+                                ),
+                            )
+                        ),
+                        source_quality=tuple(s.source_quality.values()),
+                        propositions=tuple(s.propositions.values()),
+                        comparisons=tuple(s.comparisons.values()),
+                        gaps=s.gaps,
+                        revision_brief=s.revision_brief,
+                        draft_version=version,
+                    )
+                ),
+                ReportDraft,
+            )
+            claims = {}
+            placed: dict[str, list[str]] = {"summary": [], "key_findings": []}
+            sources: set[str] = set()
+            questions = {q.id for q in s.research_questions}
+            for index, draft in enumerate(result.claims):
+                if not set(draft.question_ids).issubset(questions) or not set(
+                    draft.evidence_ids
+                ).issubset(s.evidence_store):
+                    raise PlanningContractError("unknown draft reference")
+                claim = Claim(
+                    id=stable_id("claim", s.run_id, version, index),
+                    **draft.model_dump(exclude={"section"}),
+                )
+                claims[claim.id] = record_data(claim)
+                placed.setdefault(draft.section, []).append(claim.id)
+                sources.update(s.evidence_store[eid].source_id for eid in claim.evidence_ids)
+            if not placed["summary"]:
+                placed["summary"] = [next(iter(claims))]
+            report = Report(
+                id=stable_id("report", s.run_id, version),
+                draft_version=version,
+                sections=tuple(
+                    ReportSection(name=name, claim_ids=tuple(ids)) for name, ids in placed.items()
+                ),
+                source_ids=tuple(sorted(sources)),
+            )
+            return checked_patch(
+                state,
+                {
+                    "report_claims": claims,
+                    "draft_report": record_data(report),
+                    "claim_evidence_map": {},
+                    "critic_verdict": None,
+                    "citation_audit": [],
+                    "quality_attempts": s.quality_attempts + 1,
+                    **quality_event(
+                        state,
+                        "synthesis",
+                        "Prepared structured claims for criticism and citation audit.",
+                    ),
+                },
+            )
+        except (ValidationError, PlanningContractError, TimeoutError, ModelUnavailable) as exc:
+            return self.failure(state, "synthesis", exc)
+
+
+class Critic(QualityNode):
+    async def __call__(self, state: ResearchState) -> Update:
+        s = StateSnapshot.model_validate(state)
+        if s.draft_report is None:
+            return {}
+        if quality_remaining(s) <= 0:
+            return quality_error(state, "critic", "budget", s.quality_attempts)
+        try:
+            result = await self.response(
+                self.model.critique(
+                    CriticInput(
+                        report=s.draft_report,
+                        claims=tuple(s.report_claims.values()),
+                        evidence=tuple(s.evidence_store.values()),
+                        coverage=tuple(s.coverage_by_question.values()),
+                    )
+                ),
+                CriticAssessment,
+            )
+            verdict = CriticVerdict(
+                draft_version=s.draft_report.draft_version,
+                decision=result.decision,
+                revision_brief=result.revision_brief,
+            )
+            return checked_patch(
+                state,
+                {
+                    "critic_verdict": record_data(verdict),
+                    "quality_attempts": s.quality_attempts + 1,
+                    **quality_event(state, "critic", "Reviewed the current structured draft."),
+                },
+            )
+        except (ValidationError, PlanningContractError, TimeoutError, ModelUnavailable) as exc:
+            return self.failure(state, "critic", exc)
+
+
+class CitationChecker:
+    def __init__(self, artifacts: ArtifactStore) -> None:
+        self.artifacts = artifacts
+
+    def __call__(self, state: ResearchState) -> Update:
+        s = StateSnapshot.model_validate(state)
+        if s.draft_report is None:
+            return {}
+        audits = []
+        links = {}
+        for claim in s.report_claims.values():
+            structural = bool(claim.evidence_ids) and bool(claim.question_ids)
+            supported = structural and all(q in claim.statement for q in claim.qualifiers)
+            for eid in claim.evidence_ids:
+                item = s.evidence_store[eid]
+                structural = structural and set(claim.question_ids).issubset(item.question_ids)
+                try:
+                    content = self.artifacts.read(s.raw_result_refs[item.locator.snapshot_id])
+                    authentic = (
+                        content[item.locator.start_offset : item.locator.end_offset] == item.passage
+                    )
+                except ArtifactFailure:
+                    authentic = False
+                match = authentic and claim.statement == item.passage
+                supported = supported and match
+                link = ClaimEvidenceLink(
+                    id=stable_id("link", claim.id, eid),
+                    claim_id=claim.id,
+                    evidence_id=eid,
+                    relationship=Relationship.SUPPORTS if match else Relationship.UNCERTAIN,
+                    rationale="Exact retained passage match."
+                    if match
+                    else "The retained passage does not exactly support this claim.",
+                    verifier="offline_exact_quote",
+                )
+                links[link.id] = record_data(link)
+            passed = structural and supported
+            audit = CitationAuditItem(
+                id=stable_id("audit", claim.id, s.draft_report.draft_version),
+                draft_version=s.draft_report.draft_version,
+                claim_id=claim.id,
+                evidence_ids=claim.evidence_ids,
+                structural_valid=structural,
+                support=SupportVerdict.SUPPORTED if passed else SupportVerdict.UNSUPPORTED,
+                rationale=(
+                    "Exact quote and retained snapshot verified; "
+                    "source truth was not independently verified."
+                )
+                if passed
+                else "Citation or retained passage support failed.",
+                repair_action=None
+                if passed
+                else "Replace with an exact supported retained passage and valid references.",
+            )
+            audits.append(record_data(audit))
+        # Separate numeric comparison links from exact-quote authentication.
+        for claim in s.report_claims.values():
+            authentic_ids = {
+                eid
+                for eid in claim.evidence_ids
+                if claim.statement == s.evidence_store[eid].passage
+            }
+            for comparison in s.comparisons.values():
+                if comparison.relationship != "contradicts":
+                    continue
+                left = s.propositions[comparison.left_id].evidence_id
+                right = s.propositions[comparison.right_id].evidence_id
+                for cited, opposing in ((left, right), (right, left)):
+                    if cited in authentic_ids and opposing not in claim.evidence_ids:
+                        link = ClaimEvidenceLink(
+                            id=stable_id("link", claim.id, opposing, "contradicts"),
+                            claim_id=claim.id,
+                            evidence_id=opposing,
+                            relationship=Relationship.CONTRADICTS,
+                            rationale=comparison.rationale,
+                            verifier="scoped_numeric_v1",
+                        )
+                        links[link.id] = record_data(link)
+        return checked_patch(
+            state,
+            {
+                "citation_audit": audits,
+                "claim_evidence_map": links,
+                **quality_event(
+                    state, "citations", "Audited every claim against its retained source snapshot."
+                ),
+            },
+        )
+
+
+def can_rewrite(s: StateSnapshot) -> bool:
+    return (
+        not s.stage_error and s.revision_count < s.budget.max_rewrites and quality_remaining(s) >= 2
+    )
+
+
+def reserve_rewrite(state: ResearchState) -> Update:
+    s = StateSnapshot.model_validate(state)
+    if not can_rewrite(s):
+        raise ValueError("rewrite allowance unavailable")
+    brief = (
+        s.critic_verdict.revision_brief
+        if s.critic_verdict and s.critic_verdict.decision == "revise"
+        else ("Repair unsupported claims using exact retained quotations and valid evidence IDs.",)
+    )
+    return checked_patch(
+        state,
+        {
+            "revision_count": s.revision_count + 1,
+            "revision_brief": list(brief),
+            **quality_event(state, "rewrite", "Reserved one shared critic/citation rewrite."),
+        },
+    )

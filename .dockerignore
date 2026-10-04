@@ -1,0 +1,11 @@
+# Build context allowlist: excludes dotenv, data, receipts, documents and Git state.
+**
+!Dockerfile
+!.dockerignore
+!pyproject.toml
+!uv.lock
+!README.md
+!src/
+!src/**
+src/**/__pycache__/
+src/**/*.pyc

@@ -1,0 +1,1643 @@
+{
+  "schema_version": 1,
+  "run_id": "run_61cb47f2859a4d53a888aba1fdf44488",
+  "thread_id": "thread_f13fc64ea85e465aa5010fb82067bfda",
+  "owner_scope": "local",
+  "request": {
+    "question": "What was Northfield solar electricity output?",
+    "owner_scope": "local",
+    "mode": "deep",
+    "language": "en",
+    "document_ids": [],
+    "preferences": []
+  },
+  "budget": {
+    "max_research_passes": 3,
+    "max_rewrites": 2,
+    "max_subquestions": 8,
+    "max_queries_per_pass": 4,
+    "max_searches": 12,
+    "max_model_calls": 32,
+    "reserved_quality_calls": 3,
+    "max_total_tokens": 100000,
+    "max_evidence_count": 200,
+    "max_evidence_bytes": 1000000,
+    "max_elapsed_seconds": 1800,
+    "max_concurrency": 3,
+    "max_attempts_per_call": 3,
+    "max_cost_usd": null
+  },
+  "research_questions": [
+    {
+      "id": "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a",
+      "question": "What was Northfield solar electricity output?",
+      "acceptance_criteria": [
+        "electricity northfield output solar was"
+      ],
+      "importance": 1.0
+    }
+  ],
+  "plan_version": 1,
+  "planning_status": "ready",
+  "initialization_results": {
+    "initialization_8f0d92eb6193503582dc74716729954abcfcc7c6d586694d75c7a5d9e271f87e": {
+      "id": "initialization_8f0d92eb6193503582dc74716729954abcfcc7c6d586694d75c7a5d9e271f87e",
+      "role": "context_manager",
+      "status": "ready"
+    },
+    "initialization_e833887fe7d7d42af130148a7b439f8de419827c988faeb20709e06d9d579ac5": {
+      "id": "initialization_e833887fe7d7d42af130148a7b439f8de419827c988faeb20709e06d9d579ac5",
+      "role": "planner",
+      "status": "ready"
+    }
+  },
+  "context_refs": [],
+  "search_queries": [],
+  "query_records": {
+    "query_545d387a98ca9e8b11644b0bb6b7f20f5055fb571256a69c412c1cec32487b08": {
+      "id": "query_545d387a98ca9e8b11644b0bb6b7f20f5055fb571256a69c412c1cec32487b08",
+      "question_ids": [
+        "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a"
+      ],
+      "text": "Find counter-evidence or corrections that reconcile northfield solar electricity output in 2024 for all plants under standard operation",
+      "source_type": "web",
+      "research_pass": 2,
+      "purpose": "counter_evidence"
+    },
+    "query_5a90df8380c0267e628b60d8ff6be7506891566610bc67880c8d8739c322d26b": {
+      "id": "query_5a90df8380c0267e628b60d8ff6be7506891566610bc67880c8d8739c322d26b",
+      "question_ids": [
+        "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a"
+      ],
+      "text": "What was Northfield solar electricity output primary sources",
+      "source_type": "web",
+      "research_pass": 1,
+      "purpose": "primary_source"
+    },
+    "query_ce87ded91d0f76c821656ff0282929d63c3a7b728b6bbee8325afc54e125228d": {
+      "id": "query_ce87ded91d0f76c821656ff0282929d63c3a7b728b6bbee8325afc54e125228d",
+      "question_ids": [
+        "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a"
+      ],
+      "text": "Find primary-source measurements and definitions for northfield solar electricity output in 2024 for all plants under standard operation",
+      "source_type": "web",
+      "research_pass": 2,
+      "purpose": "primary_source"
+    }
+  },
+  "attempted_query_keys": [
+    "query_key_3b2a4408b11154001dc9b44cd425c566c376d0c21841567226020274b8b6beb1",
+    "query_key_3ff14f8c5527dad233ea9bbe0b958c98506e2c917dba722e4d087dc3fb233d0f",
+    "query_key_8a2b745ff0c4dfe2593c5891985d7b7c291a35f18426840077cf90b6164d8f31"
+  ],
+  "source_records": {
+    "source_788a873729764ce7edd64eec6f2ae61e8ae78c5a2032985304d6a0076d4d6dbe": {
+      "id": "source_788a873729764ce7edd64eec6f2ae61e8ae78c5a2032985304d6a0076d4d6dbe",
+      "primary_evidence": false,
+      "methodology_transparent": false,
+      "metadata_rationale": "Synthetic metadata; publisher assessment is unverified.",
+      "title": "Synthetic historical",
+      "source_type": "web",
+      "provider": "fixture",
+      "content_hash": "d5021bb8f59104e70e505c3f96aa06e10853f5d7eb269b73e1c52740942d0a38",
+      "url": "https://historical.example.org/energy",
+      "document_id": null,
+      "document_hash": null,
+      "chunk_id": null,
+      "owner_scope": null,
+      "publisher": "Synthetic historical",
+      "publication_date": "2026-09-01",
+      "source_family": "family_historical",
+      "access_status": "available"
+    },
+    "source_956212a3790b7f4f606f0628bf81388a20577ebd6cab99dc6acd19ab3980bebf": {
+      "id": "source_956212a3790b7f4f606f0628bf81388a20577ebd6cab99dc6acd19ab3980bebf",
+      "primary_evidence": true,
+      "methodology_transparent": true,
+      "metadata_rationale": "Synthetic metadata; publisher assessment is unverified.",
+      "title": "Synthetic primary",
+      "source_type": "web",
+      "provider": "fixture",
+      "content_hash": "5036768b7be128cf1b27d558182f90c2e26de9c4d279f750d3b4d410bcf54000",
+      "url": "https://primary.example.org/energy",
+      "document_id": null,
+      "document_hash": null,
+      "chunk_id": null,
+      "owner_scope": null,
+      "publisher": "Synthetic primary",
+      "publication_date": "2025-01-01",
+      "source_family": "family_primary",
+      "access_status": "available"
+    },
+    "source_b6e936d3389db91d88e1e36307a7ffad1cdd599f153cda9ec190d564660fcd28": {
+      "id": "source_b6e936d3389db91d88e1e36307a7ffad1cdd599f153cda9ec190d564660fcd28",
+      "primary_evidence": false,
+      "methodology_transparent": false,
+      "metadata_rationale": "Synthetic metadata; publisher assessment is unverified.",
+      "title": "Synthetic secondary",
+      "source_type": "web",
+      "provider": "fixture",
+      "content_hash": "4fc6eb9c8d331b0761b5b2b48e794dc488e5ae92db5cced5f37e3a5ced6982c0",
+      "url": "https://secondary.example.org/energy",
+      "document_id": null,
+      "document_hash": null,
+      "chunk_id": null,
+      "owner_scope": null,
+      "publisher": "Synthetic secondary",
+      "publication_date": "2026-09-01",
+      "source_family": "family_secondary",
+      "access_status": "available"
+    },
+    "source_ba210b1000e58c26c3cde745d9a1e76538848f38b51a87467f6b6b9756e979f7": {
+      "id": "source_ba210b1000e58c26c3cde745d9a1e76538848f38b51a87467f6b6b9756e979f7",
+      "primary_evidence": true,
+      "methodology_transparent": true,
+      "metadata_rationale": "Synthetic metadata; publisher assessment is unverified.",
+      "title": "Synthetic units",
+      "source_type": "web",
+      "provider": "fixture",
+      "content_hash": "eb94f3c54699536cc168a4d5017b23459d115b7902c91354238bce15ecea55a3",
+      "url": "https://units.example.org/energy",
+      "document_id": null,
+      "document_hash": null,
+      "chunk_id": null,
+      "owner_scope": null,
+      "publisher": "Synthetic units",
+      "publication_date": "2025-01-01",
+      "source_family": "family_units",
+      "access_status": "available"
+    },
+    "source_e2e7be0c719af4759092f8cd64b55a417febbb5930f05ac866afbddb6c51af25": {
+      "id": "source_e2e7be0c719af4759092f8cd64b55a417febbb5930f05ac866afbddb6c51af25",
+      "primary_evidence": false,
+      "methodology_transparent": false,
+      "metadata_rationale": "Synthetic metadata; publisher assessment is unverified.",
+      "title": "Synthetic copy",
+      "source_type": "web",
+      "provider": "fixture",
+      "content_hash": "5036768b7be128cf1b27d558182f90c2e26de9c4d279f750d3b4d410bcf54000",
+      "url": "https://copy.example.org/energy",
+      "document_id": null,
+      "document_hash": null,
+      "chunk_id": null,
+      "owner_scope": null,
+      "publisher": "Synthetic copy",
+      "publication_date": "2026-09-01",
+      "source_family": "family_primary",
+      "access_status": "available"
+    }
+  },
+  "source_acquisitions": {
+    "acquisition_54406521935a929b47c58046aae282aa365e5896b4609cff46ee5c4f92823fa3": {
+      "id": "acquisition_54406521935a929b47c58046aae282aa365e5896b4609cff46ee5c4f92823fa3",
+      "page": null,
+      "paragraph": null,
+      "section": null,
+      "document_start_offset": null,
+      "document_end_offset": null,
+      "source_id": "source_e2e7be0c719af4759092f8cd64b55a417febbb5930f05ac866afbddb6c51af25",
+      "query_id": "query_ce87ded91d0f76c821656ff0282929d63c3a7b728b6bbee8325afc54e125228d",
+      "snapshot_id": "artifact_c9be91e62e1094a9455e6be6301d2c4aadfd2133dd679cfe8ead5b992a669d79",
+      "retrieved_at": "2026-10-01T18:09:34.977493Z",
+      "content_scope": "full_text"
+    },
+    "acquisition_6cef9f3b65e18e2d1c25d15889db6160f3836d3b34e24a168f1736bcc74f592e": {
+      "id": "acquisition_6cef9f3b65e18e2d1c25d15889db6160f3836d3b34e24a168f1736bcc74f592e",
+      "page": null,
+      "paragraph": null,
+      "section": null,
+      "document_start_offset": null,
+      "document_end_offset": null,
+      "source_id": "source_b6e936d3389db91d88e1e36307a7ffad1cdd599f153cda9ec190d564660fcd28",
+      "query_id": "query_545d387a98ca9e8b11644b0bb6b7f20f5055fb571256a69c412c1cec32487b08",
+      "snapshot_id": "artifact_66bd184032be9e32b65a9c97766020bd45a34e63b4cac8cc33fe43c6871f193c",
+      "retrieved_at": "2026-10-01T18:09:35.391884Z",
+      "content_scope": "full_text"
+    },
+    "acquisition_75688b51eab90a24d384c70869048f3ee21d6d7b2ddfd2bab36e9b8358792eb5": {
+      "id": "acquisition_75688b51eab90a24d384c70869048f3ee21d6d7b2ddfd2bab36e9b8358792eb5",
+      "page": null,
+      "paragraph": null,
+      "section": null,
+      "document_start_offset": null,
+      "document_end_offset": null,
+      "source_id": "source_956212a3790b7f4f606f0628bf81388a20577ebd6cab99dc6acd19ab3980bebf",
+      "query_id": "query_ce87ded91d0f76c821656ff0282929d63c3a7b728b6bbee8325afc54e125228d",
+      "snapshot_id": "artifact_c9be91e62e1094a9455e6be6301d2c4aadfd2133dd679cfe8ead5b992a669d79",
+      "retrieved_at": "2026-10-01T18:09:34.977493Z",
+      "content_scope": "full_text"
+    },
+    "acquisition_79311bd97ec34385597d5d49b6e4829d00b62f86595deb3e92ab2c03a3f914d7": {
+      "id": "acquisition_79311bd97ec34385597d5d49b6e4829d00b62f86595deb3e92ab2c03a3f914d7",
+      "page": null,
+      "paragraph": null,
+      "section": null,
+      "document_start_offset": null,
+      "document_end_offset": null,
+      "source_id": "source_b6e936d3389db91d88e1e36307a7ffad1cdd599f153cda9ec190d564660fcd28",
+      "query_id": "query_ce87ded91d0f76c821656ff0282929d63c3a7b728b6bbee8325afc54e125228d",
+      "snapshot_id": "artifact_66bd184032be9e32b65a9c97766020bd45a34e63b4cac8cc33fe43c6871f193c",
+      "retrieved_at": "2026-10-01T18:09:34.977493Z",
+      "content_scope": "full_text"
+    },
+    "acquisition_7c99e73004342c4a949db34f6ea2f18eddb7a39c4f9033f5a2ea7e9f07917687": {
+      "id": "acquisition_7c99e73004342c4a949db34f6ea2f18eddb7a39c4f9033f5a2ea7e9f07917687",
+      "page": null,
+      "paragraph": null,
+      "section": null,
+      "document_start_offset": null,
+      "document_end_offset": null,
+      "source_id": "source_ba210b1000e58c26c3cde745d9a1e76538848f38b51a87467f6b6b9756e979f7",
+      "query_id": "query_ce87ded91d0f76c821656ff0282929d63c3a7b728b6bbee8325afc54e125228d",
+      "snapshot_id": "artifact_cf6c760b49249c825ee5acb8b8a0743853d27f6e679578680f58da2894dd6012",
+      "retrieved_at": "2026-10-01T18:09:34.977493Z",
+      "content_scope": "full_text"
+    },
+    "acquisition_947ebb44a09c59b0009ea889995719fa0ec257e7c30a7d36f859a633444266ee": {
+      "id": "acquisition_947ebb44a09c59b0009ea889995719fa0ec257e7c30a7d36f859a633444266ee",
+      "page": null,
+      "paragraph": null,
+      "section": null,
+      "document_start_offset": null,
+      "document_end_offset": null,
+      "source_id": "source_b6e936d3389db91d88e1e36307a7ffad1cdd599f153cda9ec190d564660fcd28",
+      "query_id": "query_5a90df8380c0267e628b60d8ff6be7506891566610bc67880c8d8739c322d26b",
+      "snapshot_id": "artifact_66bd184032be9e32b65a9c97766020bd45a34e63b4cac8cc33fe43c6871f193c",
+      "retrieved_at": "2026-10-01T18:09:34.351791Z",
+      "content_scope": "full_text"
+    },
+    "acquisition_a300cd4b1a4eae3a389e8eac21b96055dde35a8f18b99fabd0e4550db37a41f1": {
+      "id": "acquisition_a300cd4b1a4eae3a389e8eac21b96055dde35a8f18b99fabd0e4550db37a41f1",
+      "page": null,
+      "paragraph": null,
+      "section": null,
+      "document_start_offset": null,
+      "document_end_offset": null,
+      "source_id": "source_956212a3790b7f4f606f0628bf81388a20577ebd6cab99dc6acd19ab3980bebf",
+      "query_id": "query_5a90df8380c0267e628b60d8ff6be7506891566610bc67880c8d8739c322d26b",
+      "snapshot_id": "artifact_c9be91e62e1094a9455e6be6301d2c4aadfd2133dd679cfe8ead5b992a669d79",
+      "retrieved_at": "2026-10-01T18:09:34.351791Z",
+      "content_scope": "full_text"
+    },
+    "acquisition_bb7e5ac560672e231706644ea35e38c54731207534fa151fcf8581ff3ec2f357": {
+      "id": "acquisition_bb7e5ac560672e231706644ea35e38c54731207534fa151fcf8581ff3ec2f357",
+      "page": null,
+      "paragraph": null,
+      "section": null,
+      "document_start_offset": null,
+      "document_end_offset": null,
+      "source_id": "source_788a873729764ce7edd64eec6f2ae61e8ae78c5a2032985304d6a0076d4d6dbe",
+      "query_id": "query_ce87ded91d0f76c821656ff0282929d63c3a7b728b6bbee8325afc54e125228d",
+      "snapshot_id": "artifact_fb707703f763e3fbfe4448863559c768d99a2a871d29d6f56505bbe4bd00c344",
+      "retrieved_at": "2026-10-01T18:09:34.977493Z",
+      "content_scope": "full_text"
+    },
+    "acquisition_bd3ed3650bc5fa38d7801299962faf00f3e1d178304bd8d12471787e0e67cfa0": {
+      "id": "acquisition_bd3ed3650bc5fa38d7801299962faf00f3e1d178304bd8d12471787e0e67cfa0",
+      "page": null,
+      "paragraph": null,
+      "section": null,
+      "document_start_offset": null,
+      "document_end_offset": null,
+      "source_id": "source_e2e7be0c719af4759092f8cd64b55a417febbb5930f05ac866afbddb6c51af25",
+      "query_id": "query_545d387a98ca9e8b11644b0bb6b7f20f5055fb571256a69c412c1cec32487b08",
+      "snapshot_id": "artifact_c9be91e62e1094a9455e6be6301d2c4aadfd2133dd679cfe8ead5b992a669d79",
+      "retrieved_at": "2026-10-01T18:09:35.391884Z",
+      "content_scope": "full_text"
+    },
+    "acquisition_f0cd5e6fd99cc681734345660194c8c99975f1a624849b16c9e79d69674ba644": {
+      "id": "acquisition_f0cd5e6fd99cc681734345660194c8c99975f1a624849b16c9e79d69674ba644",
+      "page": null,
+      "paragraph": null,
+      "section": null,
+      "document_start_offset": null,
+      "document_end_offset": null,
+      "source_id": "source_ba210b1000e58c26c3cde745d9a1e76538848f38b51a87467f6b6b9756e979f7",
+      "query_id": "query_545d387a98ca9e8b11644b0bb6b7f20f5055fb571256a69c412c1cec32487b08",
+      "snapshot_id": "artifact_cf6c760b49249c825ee5acb8b8a0743853d27f6e679578680f58da2894dd6012",
+      "retrieved_at": "2026-10-01T18:09:35.391884Z",
+      "content_scope": "full_text"
+    },
+    "acquisition_fd76b93d05c177456c17dcef79a0d426ed392e0d36e80979cd324bd444b629a5": {
+      "id": "acquisition_fd76b93d05c177456c17dcef79a0d426ed392e0d36e80979cd324bd444b629a5",
+      "page": null,
+      "paragraph": null,
+      "section": null,
+      "document_start_offset": null,
+      "document_end_offset": null,
+      "source_id": "source_788a873729764ce7edd64eec6f2ae61e8ae78c5a2032985304d6a0076d4d6dbe",
+      "query_id": "query_545d387a98ca9e8b11644b0bb6b7f20f5055fb571256a69c412c1cec32487b08",
+      "snapshot_id": "artifact_fb707703f763e3fbfe4448863559c768d99a2a871d29d6f56505bbe4bd00c344",
+      "retrieved_at": "2026-10-01T18:09:35.391884Z",
+      "content_scope": "full_text"
+    },
+    "acquisition_ff11d3dc1f280b12430daab47384aefd31b11a21cb8a9a90d1cc37f44baab96b": {
+      "id": "acquisition_ff11d3dc1f280b12430daab47384aefd31b11a21cb8a9a90d1cc37f44baab96b",
+      "page": null,
+      "paragraph": null,
+      "section": null,
+      "document_start_offset": null,
+      "document_end_offset": null,
+      "source_id": "source_956212a3790b7f4f606f0628bf81388a20577ebd6cab99dc6acd19ab3980bebf",
+      "query_id": "query_545d387a98ca9e8b11644b0bb6b7f20f5055fb571256a69c412c1cec32487b08",
+      "snapshot_id": "artifact_c9be91e62e1094a9455e6be6301d2c4aadfd2133dd679cfe8ead5b992a669d79",
+      "retrieved_at": "2026-10-01T18:09:35.391884Z",
+      "content_scope": "full_text"
+    }
+  },
+  "raw_result_refs": {
+    "artifact_0c94212be8d5194c7dc8ecc95a75c0696bc2a05d1f01db7eb3a20fb9e3ad07a2": {
+      "id": "artifact_0c94212be8d5194c7dc8ecc95a75c0696bc2a05d1f01db7eb3a20fb9e3ad07a2",
+      "content_hash": "99a2b14083027f1d2a6461d69a6ad6b4defd876ae0c0f01b29136532eb308100",
+      "storage_key": "068249ff8344b9c57e7bc1fc39140633/6bc2a05d1f01db7eb3a20fb9e3ad07a2.txt",
+      "parser_version": "retrieval_response_v1",
+      "byte_count": 2492
+    },
+    "artifact_4da9094dca1f2eda725b9b7a693138c0aaec3f3f2d9f9f55e34bf5bb696901b7": {
+      "id": "artifact_4da9094dca1f2eda725b9b7a693138c0aaec3f3f2d9f9f55e34bf5bb696901b7",
+      "content_hash": "9373198b3620a5895f0e5d0a32c9d761ec7e68c3c841f498cf4030ba9ee0e855",
+      "storage_key": "068249ff8344b9c57e7bc1fc39140633/aaec3f3f2d9f9f55e34bf5bb696901b7.txt",
+      "parser_version": "retrieval_response_v1",
+      "byte_count": 1050
+    },
+    "artifact_66bd184032be9e32b65a9c97766020bd45a34e63b4cac8cc33fe43c6871f193c": {
+      "id": "artifact_66bd184032be9e32b65a9c97766020bd45a34e63b4cac8cc33fe43c6871f193c",
+      "content_hash": "4fc6eb9c8d331b0761b5b2b48e794dc488e5ae92db5cced5f37e3a5ced6982c0",
+      "storage_key": "068249ff8344b9c57e7bc1fc39140633/45a34e63b4cac8cc33fe43c6871f193c.txt",
+      "parser_version": "web_full_text_v1",
+      "byte_count": 96
+    },
+    "artifact_98703006f6786a9b85170198ea7705b65f4bedb78953d5110621d4c309eb705f": {
+      "id": "artifact_98703006f6786a9b85170198ea7705b65f4bedb78953d5110621d4c309eb705f",
+      "content_hash": "c39fe08f7c82967b146262301fc422ef2577367451be888b6838922571f3b5ad",
+      "storage_key": "068249ff8344b9c57e7bc1fc39140633/5f4bedb78953d5110621d4c309eb705f.txt",
+      "parser_version": "retrieval_response_v1",
+      "byte_count": 2492
+    },
+    "artifact_c9be91e62e1094a9455e6be6301d2c4aadfd2133dd679cfe8ead5b992a669d79": {
+      "id": "artifact_c9be91e62e1094a9455e6be6301d2c4aadfd2133dd679cfe8ead5b992a669d79",
+      "content_hash": "5036768b7be128cf1b27d558182f90c2e26de9c4d279f750d3b4d410bcf54000",
+      "storage_key": "068249ff8344b9c57e7bc1fc39140633/adfd2133dd679cfe8ead5b992a669d79.txt",
+      "parser_version": "web_full_text_v1",
+      "byte_count": 96
+    },
+    "artifact_cf6c760b49249c825ee5acb8b8a0743853d27f6e679578680f58da2894dd6012": {
+      "id": "artifact_cf6c760b49249c825ee5acb8b8a0743853d27f6e679578680f58da2894dd6012",
+      "content_hash": "eb94f3c54699536cc168a4d5017b23459d115b7902c91354238bce15ecea55a3",
+      "storage_key": "068249ff8344b9c57e7bc1fc39140633/53d27f6e679578680f58da2894dd6012.txt",
+      "parser_version": "web_full_text_v1",
+      "byte_count": 99
+    },
+    "artifact_fb707703f763e3fbfe4448863559c768d99a2a871d29d6f56505bbe4bd00c344": {
+      "id": "artifact_fb707703f763e3fbfe4448863559c768d99a2a871d29d6f56505bbe4bd00c344",
+      "content_hash": "d5021bb8f59104e70e505c3f96aa06e10853f5d7eb269b73e1c52740942d0a38",
+      "storage_key": "068249ff8344b9c57e7bc1fc39140633/d99a2a871d29d6f56505bbe4bd00c344.txt",
+      "parser_version": "web_full_text_v1",
+      "byte_count": 96
+    }
+  },
+  "evidence_store": {
+    "evidence_1049df6fe0fd5135f72e229f0035586183b123024a2316e798f4cc664b8649b7": {
+      "id": "evidence_1049df6fe0fd5135f72e229f0035586183b123024a2316e798f4cc664b8649b7",
+      "source_id": "source_ba210b1000e58c26c3cde745d9a1e76538848f38b51a87467f6b6b9756e979f7",
+      "owner_scope": "local",
+      "acquisition_ids": [
+        "acquisition_7c99e73004342c4a949db34f6ea2f18eddb7a39c4f9033f5a2ea7e9f07917687",
+        "acquisition_f0cd5e6fd99cc681734345660194c8c99975f1a624849b16c9e79d69674ba644"
+      ],
+      "question_ids": [
+        "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a"
+      ],
+      "passage": "Northfield solar electricity output was 100000 MWh in 2024 for all plants under standard operation.",
+      "locator": {
+        "document_start_offset": null,
+        "document_end_offset": null,
+        "snapshot_id": "artifact_cf6c760b49249c825ee5acb8b8a0743853d27f6e679578680f58da2894dd6012",
+        "start_offset": 0,
+        "end_offset": 99,
+        "page": null,
+        "paragraph": null,
+        "section": null
+      },
+      "relevance": 1.0,
+      "relevance_rationale": "Lexical question overlap; not factual verification."
+    },
+    "evidence_2a54b5ba2e6ae418332ad9aa493943c2c8853eb53bbe2fa96d0c5320ac7ae122": {
+      "id": "evidence_2a54b5ba2e6ae418332ad9aa493943c2c8853eb53bbe2fa96d0c5320ac7ae122",
+      "source_id": "source_e2e7be0c719af4759092f8cd64b55a417febbb5930f05ac866afbddb6c51af25",
+      "owner_scope": "local",
+      "acquisition_ids": [
+        "acquisition_54406521935a929b47c58046aae282aa365e5896b4609cff46ee5c4f92823fa3",
+        "acquisition_bd3ed3650bc5fa38d7801299962faf00f3e1d178304bd8d12471787e0e67cfa0"
+      ],
+      "question_ids": [
+        "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a"
+      ],
+      "passage": "Northfield solar electricity output was 100 GWh in 2024 for all plants under standard operation.",
+      "locator": {
+        "document_start_offset": null,
+        "document_end_offset": null,
+        "snapshot_id": "artifact_c9be91e62e1094a9455e6be6301d2c4aadfd2133dd679cfe8ead5b992a669d79",
+        "start_offset": 0,
+        "end_offset": 96,
+        "page": null,
+        "paragraph": null,
+        "section": null
+      },
+      "relevance": 1.0,
+      "relevance_rationale": "Lexical question overlap; not factual verification."
+    },
+    "evidence_67b317ae22864228210c1581dbbbc8f56ffeebdd9cc875f576fcdd12300dd379": {
+      "id": "evidence_67b317ae22864228210c1581dbbbc8f56ffeebdd9cc875f576fcdd12300dd379",
+      "source_id": "source_956212a3790b7f4f606f0628bf81388a20577ebd6cab99dc6acd19ab3980bebf",
+      "owner_scope": "local",
+      "acquisition_ids": [
+        "acquisition_75688b51eab90a24d384c70869048f3ee21d6d7b2ddfd2bab36e9b8358792eb5",
+        "acquisition_a300cd4b1a4eae3a389e8eac21b96055dde35a8f18b99fabd0e4550db37a41f1",
+        "acquisition_ff11d3dc1f280b12430daab47384aefd31b11a21cb8a9a90d1cc37f44baab96b"
+      ],
+      "question_ids": [
+        "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a"
+      ],
+      "passage": "Northfield solar electricity output was 100 GWh in 2024 for all plants under standard operation.",
+      "locator": {
+        "document_start_offset": null,
+        "document_end_offset": null,
+        "snapshot_id": "artifact_c9be91e62e1094a9455e6be6301d2c4aadfd2133dd679cfe8ead5b992a669d79",
+        "start_offset": 0,
+        "end_offset": 96,
+        "page": null,
+        "paragraph": null,
+        "section": null
+      },
+      "relevance": 1.0,
+      "relevance_rationale": "Lexical question overlap; not factual verification."
+    },
+    "evidence_849a78c5f8db2c7326642348e2c3a9aa906b3db6337ddc2ec363ca1797a330db": {
+      "id": "evidence_849a78c5f8db2c7326642348e2c3a9aa906b3db6337ddc2ec363ca1797a330db",
+      "source_id": "source_b6e936d3389db91d88e1e36307a7ffad1cdd599f153cda9ec190d564660fcd28",
+      "owner_scope": "local",
+      "acquisition_ids": [
+        "acquisition_6cef9f3b65e18e2d1c25d15889db6160f3836d3b34e24a168f1736bcc74f592e",
+        "acquisition_79311bd97ec34385597d5d49b6e4829d00b62f86595deb3e92ab2c03a3f914d7",
+        "acquisition_947ebb44a09c59b0009ea889995719fa0ec257e7c30a7d36f859a633444266ee"
+      ],
+      "question_ids": [
+        "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a"
+      ],
+      "passage": "Northfield solar electricity output was 120 GWh in 2024 for all plants under standard operation.",
+      "locator": {
+        "document_start_offset": null,
+        "document_end_offset": null,
+        "snapshot_id": "artifact_66bd184032be9e32b65a9c97766020bd45a34e63b4cac8cc33fe43c6871f193c",
+        "start_offset": 0,
+        "end_offset": 96,
+        "page": null,
+        "paragraph": null,
+        "section": null
+      },
+      "relevance": 1.0,
+      "relevance_rationale": "Lexical question overlap; not factual verification."
+    },
+    "evidence_993a4e16df625975ef53be24f319808f3a234aafd07a3d8a653c5b41f6e4cdd6": {
+      "id": "evidence_993a4e16df625975ef53be24f319808f3a234aafd07a3d8a653c5b41f6e4cdd6",
+      "source_id": "source_788a873729764ce7edd64eec6f2ae61e8ae78c5a2032985304d6a0076d4d6dbe",
+      "owner_scope": "local",
+      "acquisition_ids": [
+        "acquisition_bb7e5ac560672e231706644ea35e38c54731207534fa151fcf8581ff3ec2f357",
+        "acquisition_fd76b93d05c177456c17dcef79a0d426ed392e0d36e80979cd324bd444b629a5"
+      ],
+      "question_ids": [
+        "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a"
+      ],
+      "passage": "Northfield solar electricity output was 900 GWh in 2023 for all plants under standard operation.",
+      "locator": {
+        "document_start_offset": null,
+        "document_end_offset": null,
+        "snapshot_id": "artifact_fb707703f763e3fbfe4448863559c768d99a2a871d29d6f56505bbe4bd00c344",
+        "start_offset": 0,
+        "end_offset": 96,
+        "page": null,
+        "paragraph": null,
+        "section": null
+      },
+      "relevance": 1.0,
+      "relevance_rationale": "Lexical question overlap; not factual verification."
+    }
+  },
+  "rejected_evidence": {
+    "rejection_0bd262b04ae15be817e37901a59060f268d3ca29f1daae9cb099f58b7df58dd2": {
+      "id": "rejection_0bd262b04ae15be817e37901a59060f268d3ca29f1daae9cb099f58b7df58dd2",
+      "candidate_id": "evidence_2a54b5ba2e6ae418332ad9aa493943c2c8853eb53bbe2fa96d0c5320ac7ae122",
+      "source_id": "source_e2e7be0c719af4759092f8cd64b55a417febbb5930f05ac866afbddb6c51af25",
+      "reason": "duplicate",
+      "rationale": "Duplicate passage retained once; provenance merged."
+    },
+    "rejection_9089463a36f25910d9582ac90e395ea79c58606a3c116a4d60cd5c52b326a79a": {
+      "id": "rejection_9089463a36f25910d9582ac90e395ea79c58606a3c116a4d60cd5c52b326a79a",
+      "candidate_id": "evidence_849a78c5f8db2c7326642348e2c3a9aa906b3db6337ddc2ec363ca1797a330db",
+      "source_id": "source_b6e936d3389db91d88e1e36307a7ffad1cdd599f153cda9ec190d564660fcd28",
+      "reason": "duplicate",
+      "rationale": "Duplicate passage retained once; provenance merged."
+    },
+    "rejection_aa97cc715674162c24bb10c745e5f543393ba2ca687970a2ff9f52d58db0e87f": {
+      "id": "rejection_aa97cc715674162c24bb10c745e5f543393ba2ca687970a2ff9f52d58db0e87f",
+      "candidate_id": "evidence_993a4e16df625975ef53be24f319808f3a234aafd07a3d8a653c5b41f6e4cdd6",
+      "source_id": "source_788a873729764ce7edd64eec6f2ae61e8ae78c5a2032985304d6a0076d4d6dbe",
+      "reason": "duplicate",
+      "rationale": "Duplicate passage retained once; provenance merged."
+    },
+    "rejection_b2c2129ae3008dcd97189fab855a78b91fbb36db165562ad934636ef075246b7": {
+      "id": "rejection_b2c2129ae3008dcd97189fab855a78b91fbb36db165562ad934636ef075246b7",
+      "candidate_id": "evidence_1049df6fe0fd5135f72e229f0035586183b123024a2316e798f4cc664b8649b7",
+      "source_id": "source_ba210b1000e58c26c3cde745d9a1e76538848f38b51a87467f6b6b9756e979f7",
+      "reason": "duplicate",
+      "rationale": "Duplicate passage retained once; provenance merged."
+    },
+    "rejection_ea398d893b1fa838357e02d803ec8ea5f15a32ee51197df7ef25a6f0afcebfcf": {
+      "id": "rejection_ea398d893b1fa838357e02d803ec8ea5f15a32ee51197df7ef25a6f0afcebfcf",
+      "candidate_id": "evidence_67b317ae22864228210c1581dbbbc8f56ffeebdd9cc875f576fcdd12300dd379",
+      "source_id": "source_956212a3790b7f4f606f0628bf81388a20577ebd6cab99dc6acd19ab3980bebf",
+      "reason": "duplicate",
+      "rationale": "Duplicate passage retained once; provenance merged."
+    }
+  },
+  "coverage_by_question": {
+    "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a": {
+      "question_id": "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a",
+      "status": "disputed",
+      "evidence_ids": [
+        "evidence_1049df6fe0fd5135f72e229f0035586183b123024a2316e798f4cc664b8649b7",
+        "evidence_2a54b5ba2e6ae418332ad9aa493943c2c8853eb53bbe2fa96d0c5320ac7ae122",
+        "evidence_67b317ae22864228210c1581dbbbc8f56ffeebdd9cc875f576fcdd12300dd379",
+        "evidence_849a78c5f8db2c7326642348e2c3a9aa906b3db6337ddc2ec363ca1797a330db",
+        "evidence_993a4e16df625975ef53be24f319808f3a234aafd07a3d8a653c5b41f6e4cdd6"
+      ],
+      "rationale": "Unresolved comparable numeric disagreement."
+    }
+  },
+  "coverage_status": "missing",
+  "source_quality": {
+    "source_788a873729764ce7edd64eec6f2ae61e8ae78c5a2032985304d6a0076d4d6dbe": {
+      "source_id": "source_788a873729764ce7edd64eec6f2ae61e8ae78c5a2032985304d6a0076d4d6dbe",
+      "version": "weighted_metadata_v1",
+      "profile": "general",
+      "score": 0.5495890410958904,
+      "observed_weight": 1.0,
+      "family_group": "family_group_f6ffb591d59ac6a83967435bffbc12c3f2f543414abd9f2e15c4458697fd5dce",
+      "family_size": 1,
+      "features": [
+        {
+          "name": "relevance",
+          "value": 1.0,
+          "weight": 0.35,
+          "rationale": "Maximum admitted lexical relevance; not semantic verification."
+        },
+        {
+          "name": "primary_evidence",
+          "value": 0.0,
+          "weight": 0.25,
+          "rationale": "Synthetic metadata; publisher assessment is unverified."
+        },
+        {
+          "name": "publisher_identity",
+          "value": 1.0,
+          "weight": 0.1,
+          "rationale": "A supplied publisher name is an identity signal, not verified authority."
+        },
+        {
+          "name": "methodology",
+          "value": 0.0,
+          "weight": 0.1,
+          "rationale": "Synthetic metadata; publisher assessment is unverified."
+        },
+        {
+          "name": "recency",
+          "value": 0.9917808219178083,
+          "weight": 0.05,
+          "rationale": "ISO publication date uses a ten-year decay from run start; absent, invalid or future dates are unknown."
+        },
+        {
+          "name": "independent_corroboration",
+          "value": 0.0,
+          "weight": 0.1,
+          "rationale": "Equal measurements across known families; copied text is excluded. Family labels are supplied signals."
+        },
+        {
+          "name": "family_uniqueness",
+          "value": 1.0,
+          "weight": 0.05,
+          "rationale": "Same supplied family or content hash is grouped; copies add no votes."
+        }
+      ]
+    },
+    "source_956212a3790b7f4f606f0628bf81388a20577ebd6cab99dc6acd19ab3980bebf": {
+      "source_id": "source_956212a3790b7f4f606f0628bf81388a20577ebd6cab99dc6acd19ab3980bebf",
+      "version": "weighted_metadata_v1",
+      "profile": "general",
+      "score": 0.9162602739726027,
+      "observed_weight": 1.0,
+      "family_group": "family_group_1b9e2d85ef5dd7844c0d17f74c44b4a58aceb5926a538a6803e2bf08a5267d92",
+      "family_size": 2,
+      "features": [
+        {
+          "name": "relevance",
+          "value": 1.0,
+          "weight": 0.35,
+          "rationale": "Maximum admitted lexical relevance; not semantic verification."
+        },
+        {
+          "name": "primary_evidence",
+          "value": 1.0,
+          "weight": 0.25,
+          "rationale": "Synthetic metadata; publisher assessment is unverified."
+        },
+        {
+          "name": "publisher_identity",
+          "value": 1.0,
+          "weight": 0.1,
+          "rationale": "A supplied publisher name is an identity signal, not verified authority."
+        },
+        {
+          "name": "methodology",
+          "value": 1.0,
+          "weight": 0.1,
+          "rationale": "Synthetic metadata; publisher assessment is unverified."
+        },
+        {
+          "name": "recency",
+          "value": 0.8252054794520548,
+          "weight": 0.05,
+          "rationale": "ISO publication date uses a ten-year decay from run start; absent, invalid or future dates are unknown."
+        },
+        {
+          "name": "independent_corroboration",
+          "value": 0.5,
+          "weight": 0.1,
+          "rationale": "Equal measurements across known families; copied text is excluded. Family labels are supplied signals."
+        },
+        {
+          "name": "family_uniqueness",
+          "value": 0.5,
+          "weight": 0.05,
+          "rationale": "Same supplied family or content hash is grouped; copies add no votes."
+        }
+      ]
+    },
+    "source_b6e936d3389db91d88e1e36307a7ffad1cdd599f153cda9ec190d564660fcd28": {
+      "source_id": "source_b6e936d3389db91d88e1e36307a7ffad1cdd599f153cda9ec190d564660fcd28",
+      "version": "weighted_metadata_v1",
+      "profile": "general",
+      "score": 0.5495890410958904,
+      "observed_weight": 1.0,
+      "family_group": "family_group_baf982df059ca17a7692ea63a459265c40100ff791549ea707c85f942fc0a862",
+      "family_size": 1,
+      "features": [
+        {
+          "name": "relevance",
+          "value": 1.0,
+          "weight": 0.35,
+          "rationale": "Maximum admitted lexical relevance; not semantic verification."
+        },
+        {
+          "name": "primary_evidence",
+          "value": 0.0,
+          "weight": 0.25,
+          "rationale": "Synthetic metadata; publisher assessment is unverified."
+        },
+        {
+          "name": "publisher_identity",
+          "value": 1.0,
+          "weight": 0.1,
+          "rationale": "A supplied publisher name is an identity signal, not verified authority."
+        },
+        {
+          "name": "methodology",
+          "value": 0.0,
+          "weight": 0.1,
+          "rationale": "Synthetic metadata; publisher assessment is unverified."
+        },
+        {
+          "name": "recency",
+          "value": 0.9917808219178083,
+          "weight": 0.05,
+          "rationale": "ISO publication date uses a ten-year decay from run start; absent, invalid or future dates are unknown."
+        },
+        {
+          "name": "independent_corroboration",
+          "value": 0.0,
+          "weight": 0.1,
+          "rationale": "Equal measurements across known families; copied text is excluded. Family labels are supplied signals."
+        },
+        {
+          "name": "family_uniqueness",
+          "value": 1.0,
+          "weight": 0.05,
+          "rationale": "Same supplied family or content hash is grouped; copies add no votes."
+        }
+      ]
+    },
+    "source_ba210b1000e58c26c3cde745d9a1e76538848f38b51a87467f6b6b9756e979f7": {
+      "source_id": "source_ba210b1000e58c26c3cde745d9a1e76538848f38b51a87467f6b6b9756e979f7",
+      "version": "weighted_metadata_v1",
+      "profile": "general",
+      "score": 0.9412602739726027,
+      "observed_weight": 1.0,
+      "family_group": "family_group_48e16c97f50133942c898e62fcd61c19b09c6fe1498ac19f6666aa88188ebfdc",
+      "family_size": 1,
+      "features": [
+        {
+          "name": "relevance",
+          "value": 1.0,
+          "weight": 0.35,
+          "rationale": "Maximum admitted lexical relevance; not semantic verification."
+        },
+        {
+          "name": "primary_evidence",
+          "value": 1.0,
+          "weight": 0.25,
+          "rationale": "Synthetic metadata; publisher assessment is unverified."
+        },
+        {
+          "name": "publisher_identity",
+          "value": 1.0,
+          "weight": 0.1,
+          "rationale": "A supplied publisher name is an identity signal, not verified authority."
+        },
+        {
+          "name": "methodology",
+          "value": 1.0,
+          "weight": 0.1,
+          "rationale": "Synthetic metadata; publisher assessment is unverified."
+        },
+        {
+          "name": "recency",
+          "value": 0.8252054794520548,
+          "weight": 0.05,
+          "rationale": "ISO publication date uses a ten-year decay from run start; absent, invalid or future dates are unknown."
+        },
+        {
+          "name": "independent_corroboration",
+          "value": 0.5,
+          "weight": 0.1,
+          "rationale": "Equal measurements across known families; copied text is excluded. Family labels are supplied signals."
+        },
+        {
+          "name": "family_uniqueness",
+          "value": 1.0,
+          "weight": 0.05,
+          "rationale": "Same supplied family or content hash is grouped; copies add no votes."
+        }
+      ]
+    },
+    "source_e2e7be0c719af4759092f8cd64b55a417febbb5930f05ac866afbddb6c51af25": {
+      "source_id": "source_e2e7be0c719af4759092f8cd64b55a417febbb5930f05ac866afbddb6c51af25",
+      "version": "weighted_metadata_v1",
+      "profile": "general",
+      "score": 0.5745890410958904,
+      "observed_weight": 1.0,
+      "family_group": "family_group_1b9e2d85ef5dd7844c0d17f74c44b4a58aceb5926a538a6803e2bf08a5267d92",
+      "family_size": 2,
+      "features": [
+        {
+          "name": "relevance",
+          "value": 1.0,
+          "weight": 0.35,
+          "rationale": "Maximum admitted lexical relevance; not semantic verification."
+        },
+        {
+          "name": "primary_evidence",
+          "value": 0.0,
+          "weight": 0.25,
+          "rationale": "Synthetic metadata; publisher assessment is unverified."
+        },
+        {
+          "name": "publisher_identity",
+          "value": 1.0,
+          "weight": 0.1,
+          "rationale": "A supplied publisher name is an identity signal, not verified authority."
+        },
+        {
+          "name": "methodology",
+          "value": 0.0,
+          "weight": 0.1,
+          "rationale": "Synthetic metadata; publisher assessment is unverified."
+        },
+        {
+          "name": "recency",
+          "value": 0.9917808219178083,
+          "weight": 0.05,
+          "rationale": "ISO publication date uses a ten-year decay from run start; absent, invalid or future dates are unknown."
+        },
+        {
+          "name": "independent_corroboration",
+          "value": 0.5,
+          "weight": 0.1,
+          "rationale": "Equal measurements across known families; copied text is excluded. Family labels are supplied signals."
+        },
+        {
+          "name": "family_uniqueness",
+          "value": 0.5,
+          "weight": 0.05,
+          "rationale": "Same supplied family or content hash is grouped; copies add no votes."
+        }
+      ]
+    }
+  },
+  "propositions": {
+    "proposition_9326e984e981290f65d8189d9f82bc484f79636dd7ab7ea379155dda71d59c96": {
+      "id": "proposition_9326e984e981290f65d8189d9f82bc484f79636dd7ab7ea379155dda71d59c96",
+      "evidence_id": "evidence_1049df6fe0fd5135f72e229f0035586183b123024a2316e798f4cc664b8649b7",
+      "question_ids": [
+        "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a"
+      ],
+      "start_offset": 0,
+      "end_offset": 98,
+      "quote": "Northfield solar electricity output was 100000 MWh in 2024 for all plants under standard operation",
+      "entity": "northfield solar",
+      "metric": "electricity output",
+      "timeframe": "2024",
+      "population": "all plants",
+      "conditions": "standard operation",
+      "value": "100000",
+      "unit": "MWh",
+      "extractor": "scoped_numeric_v1"
+    },
+    "proposition_1e67a337211791a22be1ddea76073108862cd3ecf6dd3cf2115abed3a68dd002": {
+      "id": "proposition_1e67a337211791a22be1ddea76073108862cd3ecf6dd3cf2115abed3a68dd002",
+      "evidence_id": "evidence_2a54b5ba2e6ae418332ad9aa493943c2c8853eb53bbe2fa96d0c5320ac7ae122",
+      "question_ids": [
+        "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a"
+      ],
+      "start_offset": 0,
+      "end_offset": 95,
+      "quote": "Northfield solar electricity output was 100 GWh in 2024 for all plants under standard operation",
+      "entity": "northfield solar",
+      "metric": "electricity output",
+      "timeframe": "2024",
+      "population": "all plants",
+      "conditions": "standard operation",
+      "value": "100",
+      "unit": "GWh",
+      "extractor": "scoped_numeric_v1"
+    },
+    "proposition_14e0742701a8b6e6efe5e5c83489fc140ad5584d64fb6511c8da7d7860c3986f": {
+      "id": "proposition_14e0742701a8b6e6efe5e5c83489fc140ad5584d64fb6511c8da7d7860c3986f",
+      "evidence_id": "evidence_67b317ae22864228210c1581dbbbc8f56ffeebdd9cc875f576fcdd12300dd379",
+      "question_ids": [
+        "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a"
+      ],
+      "start_offset": 0,
+      "end_offset": 95,
+      "quote": "Northfield solar electricity output was 100 GWh in 2024 for all plants under standard operation",
+      "entity": "northfield solar",
+      "metric": "electricity output",
+      "timeframe": "2024",
+      "population": "all plants",
+      "conditions": "standard operation",
+      "value": "100",
+      "unit": "GWh",
+      "extractor": "scoped_numeric_v1"
+    },
+    "proposition_c1dbc927af9dcedfc0d3cdc78bbb611709c14d8c57d1347f8a8a41b935885f8e": {
+      "id": "proposition_c1dbc927af9dcedfc0d3cdc78bbb611709c14d8c57d1347f8a8a41b935885f8e",
+      "evidence_id": "evidence_849a78c5f8db2c7326642348e2c3a9aa906b3db6337ddc2ec363ca1797a330db",
+      "question_ids": [
+        "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a"
+      ],
+      "start_offset": 0,
+      "end_offset": 95,
+      "quote": "Northfield solar electricity output was 120 GWh in 2024 for all plants under standard operation",
+      "entity": "northfield solar",
+      "metric": "electricity output",
+      "timeframe": "2024",
+      "population": "all plants",
+      "conditions": "standard operation",
+      "value": "120",
+      "unit": "GWh",
+      "extractor": "scoped_numeric_v1"
+    },
+    "proposition_d4034dc69a590a366c5f995e1da857bfd5c398ea7ffc9b95d9ce39abf70661d3": {
+      "id": "proposition_d4034dc69a590a366c5f995e1da857bfd5c398ea7ffc9b95d9ce39abf70661d3",
+      "evidence_id": "evidence_993a4e16df625975ef53be24f319808f3a234aafd07a3d8a653c5b41f6e4cdd6",
+      "question_ids": [
+        "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a"
+      ],
+      "start_offset": 0,
+      "end_offset": 95,
+      "quote": "Northfield solar electricity output was 900 GWh in 2023 for all plants under standard operation",
+      "entity": "northfield solar",
+      "metric": "electricity output",
+      "timeframe": "2023",
+      "population": "all plants",
+      "conditions": "standard operation",
+      "value": "900",
+      "unit": "GWh",
+      "extractor": "scoped_numeric_v1"
+    }
+  },
+  "comparisons": {
+    "comparison_31c7ce20ba5c5cc8eb01a605cd16b7fed7663eccb410465b0d399fd1e7556c1b": {
+      "id": "comparison_31c7ce20ba5c5cc8eb01a605cd16b7fed7663eccb410465b0d399fd1e7556c1b",
+      "left_id": "proposition_14e0742701a8b6e6efe5e5c83489fc140ad5584d64fb6511c8da7d7860c3986f",
+      "right_id": "proposition_1e67a337211791a22be1ddea76073108862cd3ecf6dd3cf2115abed3a68dd002",
+      "question_ids": [
+        "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a"
+      ],
+      "relationship": "duplicate",
+      "rationale": "Identical normalized quotation; independent corroboration is not established.",
+      "normalized_left": "100000000000",
+      "normalized_right": "100000000000",
+      "canonical_unit": "Wh",
+      "version": "scoped_numeric_v1"
+    },
+    "comparison_d486452f57c4b0b3a05cbc60aa4bf14c9ee03a2d4394e930c3b86aac458dd948": {
+      "id": "comparison_d486452f57c4b0b3a05cbc60aa4bf14c9ee03a2d4394e930c3b86aac458dd948",
+      "left_id": "proposition_14e0742701a8b6e6efe5e5c83489fc140ad5584d64fb6511c8da7d7860c3986f",
+      "right_id": "proposition_9326e984e981290f65d8189d9f82bc484f79636dd7ab7ea379155dda71d59c96",
+      "question_ids": [
+        "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a"
+      ],
+      "relationship": "supports",
+      "rationale": "Equal numeric values after unit conversion under the same explicit scope.",
+      "normalized_left": "100000000000",
+      "normalized_right": "100000000000",
+      "canonical_unit": "Wh",
+      "version": "scoped_numeric_v1"
+    },
+    "comparison_16dceaeac5b1e133219790a2ab6392a244b5080f4b5fce6b45ee02144dab2a3e": {
+      "id": "comparison_16dceaeac5b1e133219790a2ab6392a244b5080f4b5fce6b45ee02144dab2a3e",
+      "left_id": "proposition_14e0742701a8b6e6efe5e5c83489fc140ad5584d64fb6511c8da7d7860c3986f",
+      "right_id": "proposition_c1dbc927af9dcedfc0d3cdc78bbb611709c14d8c57d1347f8a8a41b935885f8e",
+      "question_ids": [
+        "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a"
+      ],
+      "relationship": "contradicts",
+      "rationale": "Unequal numeric values under the same scope; unresolved without a vote decision.",
+      "normalized_left": "100000000000",
+      "normalized_right": "120000000000",
+      "canonical_unit": "Wh",
+      "version": "scoped_numeric_v1"
+    },
+    "comparison_ba5a319af9ad5dc308085c09f5069b02ee0b036a3df4017ae1d129800b9f55d8": {
+      "id": "comparison_ba5a319af9ad5dc308085c09f5069b02ee0b036a3df4017ae1d129800b9f55d8",
+      "left_id": "proposition_14e0742701a8b6e6efe5e5c83489fc140ad5584d64fb6511c8da7d7860c3986f",
+      "right_id": "proposition_d4034dc69a590a366c5f995e1da857bfd5c398ea7ffc9b95d9ce39abf70661d3",
+      "question_ids": [
+        "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a"
+      ],
+      "relationship": "not_comparable",
+      "rationale": "Different timeframe; no contradiction inferred.",
+      "normalized_left": null,
+      "normalized_right": null,
+      "canonical_unit": null,
+      "version": "scoped_numeric_v1"
+    },
+    "comparison_c00ab13fe7ff0c20c3128804158de4b425e683a488e07764362dd50c3bbfb1f8": {
+      "id": "comparison_c00ab13fe7ff0c20c3128804158de4b425e683a488e07764362dd50c3bbfb1f8",
+      "left_id": "proposition_1e67a337211791a22be1ddea76073108862cd3ecf6dd3cf2115abed3a68dd002",
+      "right_id": "proposition_9326e984e981290f65d8189d9f82bc484f79636dd7ab7ea379155dda71d59c96",
+      "question_ids": [
+        "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a"
+      ],
+      "relationship": "supports",
+      "rationale": "Equal numeric values after unit conversion under the same explicit scope.",
+      "normalized_left": "100000000000",
+      "normalized_right": "100000000000",
+      "canonical_unit": "Wh",
+      "version": "scoped_numeric_v1"
+    },
+    "comparison_28c689e9ee79ad78ab1911ebfacdf83ee638209717cadc2b31d1ac40eb5521b0": {
+      "id": "comparison_28c689e9ee79ad78ab1911ebfacdf83ee638209717cadc2b31d1ac40eb5521b0",
+      "left_id": "proposition_1e67a337211791a22be1ddea76073108862cd3ecf6dd3cf2115abed3a68dd002",
+      "right_id": "proposition_c1dbc927af9dcedfc0d3cdc78bbb611709c14d8c57d1347f8a8a41b935885f8e",
+      "question_ids": [
+        "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a"
+      ],
+      "relationship": "contradicts",
+      "rationale": "Unequal numeric values under the same scope; unresolved without a vote decision.",
+      "normalized_left": "100000000000",
+      "normalized_right": "120000000000",
+      "canonical_unit": "Wh",
+      "version": "scoped_numeric_v1"
+    },
+    "comparison_64b3cc1ae0421e17acd498170fc3c61952dcc9c93eb861eb1488d57e89198732": {
+      "id": "comparison_64b3cc1ae0421e17acd498170fc3c61952dcc9c93eb861eb1488d57e89198732",
+      "left_id": "proposition_1e67a337211791a22be1ddea76073108862cd3ecf6dd3cf2115abed3a68dd002",
+      "right_id": "proposition_d4034dc69a590a366c5f995e1da857bfd5c398ea7ffc9b95d9ce39abf70661d3",
+      "question_ids": [
+        "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a"
+      ],
+      "relationship": "not_comparable",
+      "rationale": "Different timeframe; no contradiction inferred.",
+      "normalized_left": null,
+      "normalized_right": null,
+      "canonical_unit": null,
+      "version": "scoped_numeric_v1"
+    },
+    "comparison_cd80d66a0fea6b82a8dc0177e96fa1efdc7fa5023588c66ad57ea9b109aad63d": {
+      "id": "comparison_cd80d66a0fea6b82a8dc0177e96fa1efdc7fa5023588c66ad57ea9b109aad63d",
+      "left_id": "proposition_9326e984e981290f65d8189d9f82bc484f79636dd7ab7ea379155dda71d59c96",
+      "right_id": "proposition_c1dbc927af9dcedfc0d3cdc78bbb611709c14d8c57d1347f8a8a41b935885f8e",
+      "question_ids": [
+        "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a"
+      ],
+      "relationship": "contradicts",
+      "rationale": "Unequal numeric values under the same scope; unresolved without a vote decision.",
+      "normalized_left": "100000000000",
+      "normalized_right": "120000000000",
+      "canonical_unit": "Wh",
+      "version": "scoped_numeric_v1"
+    },
+    "comparison_0b5350a0f7eb3350d02ddf8cc539711b8db2ed5d124488f8bc971eb066cbfc4b": {
+      "id": "comparison_0b5350a0f7eb3350d02ddf8cc539711b8db2ed5d124488f8bc971eb066cbfc4b",
+      "left_id": "proposition_9326e984e981290f65d8189d9f82bc484f79636dd7ab7ea379155dda71d59c96",
+      "right_id": "proposition_d4034dc69a590a366c5f995e1da857bfd5c398ea7ffc9b95d9ce39abf70661d3",
+      "question_ids": [
+        "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a"
+      ],
+      "relationship": "not_comparable",
+      "rationale": "Different timeframe; no contradiction inferred.",
+      "normalized_left": null,
+      "normalized_right": null,
+      "canonical_unit": null,
+      "version": "scoped_numeric_v1"
+    },
+    "comparison_ca251f519332cf5af8898abe5c9271a44d54af14f4f135167d0eea90c0e66e18": {
+      "id": "comparison_ca251f519332cf5af8898abe5c9271a44d54af14f4f135167d0eea90c0e66e18",
+      "left_id": "proposition_c1dbc927af9dcedfc0d3cdc78bbb611709c14d8c57d1347f8a8a41b935885f8e",
+      "right_id": "proposition_d4034dc69a590a366c5f995e1da857bfd5c398ea7ffc9b95d9ce39abf70661d3",
+      "question_ids": [
+        "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a"
+      ],
+      "relationship": "not_comparable",
+      "rationale": "Different timeframe; no contradiction inferred.",
+      "normalized_left": null,
+      "normalized_right": null,
+      "canonical_unit": null,
+      "version": "scoped_numeric_v1"
+    }
+  },
+  "analysis_signature": "analysis_3e3084ce62f5c4ee47d5337b9d82fdb77c3e3ee5216c72183cb81e5f3556b3ba",
+  "last_analysis_pass": 2,
+  "analysis_notes": [
+    "5 of 5 passages matched numeric scope grammar; other passages remain unclassified."
+  ],
+  "analysis_limited": false,
+  "gaps": [
+    {
+      "id": "gap_4a3f854af2a441b8abb3e6fbda54956a0a7cbf23bf8b0543c462001cec596753",
+      "purpose": "primary_source",
+      "question_id": "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a",
+      "missing_aspect": "Reconcile retained values 100000000000 versus 120000000000 Wh: northfield solar electricity output in 2024 for all plants under standard operation",
+      "needed_source_types": [
+        "web"
+      ],
+      "recommended_query": "Find primary-source measurements and definitions for northfield solar electricity output in 2024 for all plants under standard operation",
+      "priority": 1.0
+    },
+    {
+      "id": "gap_f85cfa2ea53df1852ecf63c6469f6aa69c3cccbdd526ea177269ab34501fd9f2",
+      "purpose": "counter_evidence",
+      "question_id": "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a",
+      "missing_aspect": "Reconcile retained values 100000000000 versus 120000000000 Wh: northfield solar electricity output in 2024 for all plants under standard operation",
+      "needed_source_types": [
+        "web"
+      ],
+      "recommended_query": "Find counter-evidence or corrections that reconcile northfield solar electricity output in 2024 for all plants under standard operation",
+      "priority": 1.0
+    }
+  ],
+  "report_claims": {
+    "claim_d0218755e625165597b6fcc4f6afc6ee19f6a598ddc521224a40029aec203533": {
+      "id": "claim_d0218755e625165597b6fcc4f6afc6ee19f6a598ddc521224a40029aec203533",
+      "statement": "Northfield solar electricity output was 100000 MWh in 2024 for all plants under standard operation.",
+      "kind": "fact",
+      "question_ids": [
+        "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a"
+      ],
+      "evidence_ids": [
+        "evidence_1049df6fe0fd5135f72e229f0035586183b123024a2316e798f4cc664b8649b7"
+      ],
+      "qualifiers": []
+    },
+    "claim_38ab5c62eac859cb6d9d6adb989d21e69a1ff521bcd244a6ef192992b07948ed": {
+      "id": "claim_38ab5c62eac859cb6d9d6adb989d21e69a1ff521bcd244a6ef192992b07948ed",
+      "statement": "Northfield solar electricity output was 100 GWh in 2024 for all plants under standard operation.",
+      "kind": "fact",
+      "question_ids": [
+        "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a"
+      ],
+      "evidence_ids": [
+        "evidence_67b317ae22864228210c1581dbbbc8f56ffeebdd9cc875f576fcdd12300dd379"
+      ],
+      "qualifiers": []
+    },
+    "claim_934217c0fc872744ee39eaf551343f40924b002d03959dac040ec6641144c380": {
+      "id": "claim_934217c0fc872744ee39eaf551343f40924b002d03959dac040ec6641144c380",
+      "statement": "Northfield solar electricity output was 100 GWh in 2024 for all plants under standard operation.",
+      "kind": "fact",
+      "question_ids": [
+        "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a"
+      ],
+      "evidence_ids": [
+        "evidence_2a54b5ba2e6ae418332ad9aa493943c2c8853eb53bbe2fa96d0c5320ac7ae122"
+      ],
+      "qualifiers": []
+    },
+    "claim_bfbe459c57e7e997a40d9c0a5b0fdbf153ee01ee862fd924b0738c3ccdb20e50": {
+      "id": "claim_bfbe459c57e7e997a40d9c0a5b0fdbf153ee01ee862fd924b0738c3ccdb20e50",
+      "statement": "Northfield solar electricity output was 120 GWh in 2024 for all plants under standard operation.",
+      "kind": "fact",
+      "question_ids": [
+        "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a"
+      ],
+      "evidence_ids": [
+        "evidence_849a78c5f8db2c7326642348e2c3a9aa906b3db6337ddc2ec363ca1797a330db"
+      ],
+      "qualifiers": []
+    },
+    "claim_47835937afaf92534f593f736367b82f00619964d4a42e014125064c04ed515b": {
+      "id": "claim_47835937afaf92534f593f736367b82f00619964d4a42e014125064c04ed515b",
+      "statement": "Northfield solar electricity output was 900 GWh in 2023 for all plants under standard operation.",
+      "kind": "fact",
+      "question_ids": [
+        "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a"
+      ],
+      "evidence_ids": [
+        "evidence_993a4e16df625975ef53be24f319808f3a234aafd07a3d8a653c5b41f6e4cdd6"
+      ],
+      "qualifiers": []
+    }
+  },
+  "claim_evidence_map": {
+    "link_b3c766627f66dd2687b8003677293d72627fb6a763cf78d07f1e1152c1df0188": {
+      "id": "link_b3c766627f66dd2687b8003677293d72627fb6a763cf78d07f1e1152c1df0188",
+      "claim_id": "claim_d0218755e625165597b6fcc4f6afc6ee19f6a598ddc521224a40029aec203533",
+      "evidence_id": "evidence_1049df6fe0fd5135f72e229f0035586183b123024a2316e798f4cc664b8649b7",
+      "relationship": "supports",
+      "rationale": "Exact retained passage match.",
+      "verifier": "offline_exact_quote"
+    },
+    "link_0de915b2716c8e6c9275bdfdd5a57f0454058bf3447e22b72fc1bcf8ac22d445": {
+      "id": "link_0de915b2716c8e6c9275bdfdd5a57f0454058bf3447e22b72fc1bcf8ac22d445",
+      "claim_id": "claim_38ab5c62eac859cb6d9d6adb989d21e69a1ff521bcd244a6ef192992b07948ed",
+      "evidence_id": "evidence_67b317ae22864228210c1581dbbbc8f56ffeebdd9cc875f576fcdd12300dd379",
+      "relationship": "supports",
+      "rationale": "Exact retained passage match.",
+      "verifier": "offline_exact_quote"
+    },
+    "link_c24498de44ec4775e4a92764cf4aad4d726a7cd741e170918799e6f214bb5f53": {
+      "id": "link_c24498de44ec4775e4a92764cf4aad4d726a7cd741e170918799e6f214bb5f53",
+      "claim_id": "claim_934217c0fc872744ee39eaf551343f40924b002d03959dac040ec6641144c380",
+      "evidence_id": "evidence_2a54b5ba2e6ae418332ad9aa493943c2c8853eb53bbe2fa96d0c5320ac7ae122",
+      "relationship": "supports",
+      "rationale": "Exact retained passage match.",
+      "verifier": "offline_exact_quote"
+    },
+    "link_3edb0d360ea094d1248f5bbaa090666b7c384d08e8d7cc03b6ee212c5afd648f": {
+      "id": "link_3edb0d360ea094d1248f5bbaa090666b7c384d08e8d7cc03b6ee212c5afd648f",
+      "claim_id": "claim_bfbe459c57e7e997a40d9c0a5b0fdbf153ee01ee862fd924b0738c3ccdb20e50",
+      "evidence_id": "evidence_849a78c5f8db2c7326642348e2c3a9aa906b3db6337ddc2ec363ca1797a330db",
+      "relationship": "supports",
+      "rationale": "Exact retained passage match.",
+      "verifier": "offline_exact_quote"
+    },
+    "link_0530d38ceb876a430d4085b93055941ea6650a5895d51eda0253c1807380fb54": {
+      "id": "link_0530d38ceb876a430d4085b93055941ea6650a5895d51eda0253c1807380fb54",
+      "claim_id": "claim_47835937afaf92534f593f736367b82f00619964d4a42e014125064c04ed515b",
+      "evidence_id": "evidence_993a4e16df625975ef53be24f319808f3a234aafd07a3d8a653c5b41f6e4cdd6",
+      "relationship": "supports",
+      "rationale": "Exact retained passage match.",
+      "verifier": "offline_exact_quote"
+    },
+    "link_99186d1391270a5db4778940373b2ca9586f3ea7ceb0b63db10f1684e9708338": {
+      "id": "link_99186d1391270a5db4778940373b2ca9586f3ea7ceb0b63db10f1684e9708338",
+      "claim_id": "claim_d0218755e625165597b6fcc4f6afc6ee19f6a598ddc521224a40029aec203533",
+      "evidence_id": "evidence_849a78c5f8db2c7326642348e2c3a9aa906b3db6337ddc2ec363ca1797a330db",
+      "relationship": "contradicts",
+      "rationale": "Unequal numeric values under the same scope; unresolved without a vote decision.",
+      "verifier": "scoped_numeric_v1"
+    },
+    "link_1aced1b72885a9a07b313826bcb8bb2bdab97f4a4a8ffeb149492930c09741f5": {
+      "id": "link_1aced1b72885a9a07b313826bcb8bb2bdab97f4a4a8ffeb149492930c09741f5",
+      "claim_id": "claim_38ab5c62eac859cb6d9d6adb989d21e69a1ff521bcd244a6ef192992b07948ed",
+      "evidence_id": "evidence_849a78c5f8db2c7326642348e2c3a9aa906b3db6337ddc2ec363ca1797a330db",
+      "relationship": "contradicts",
+      "rationale": "Unequal numeric values under the same scope; unresolved without a vote decision.",
+      "verifier": "scoped_numeric_v1"
+    },
+    "link_137755fb308d3420015d516650b9ff6a79cd02e597c683bf194f48c72933be7a": {
+      "id": "link_137755fb308d3420015d516650b9ff6a79cd02e597c683bf194f48c72933be7a",
+      "claim_id": "claim_934217c0fc872744ee39eaf551343f40924b002d03959dac040ec6641144c380",
+      "evidence_id": "evidence_849a78c5f8db2c7326642348e2c3a9aa906b3db6337ddc2ec363ca1797a330db",
+      "relationship": "contradicts",
+      "rationale": "Unequal numeric values under the same scope; unresolved without a vote decision.",
+      "verifier": "scoped_numeric_v1"
+    },
+    "link_4448ca9b60c3e6cd8f8eb520025f58615e2ee002308d6454c499b2ca69a5b336": {
+      "id": "link_4448ca9b60c3e6cd8f8eb520025f58615e2ee002308d6454c499b2ca69a5b336",
+      "claim_id": "claim_bfbe459c57e7e997a40d9c0a5b0fdbf153ee01ee862fd924b0738c3ccdb20e50",
+      "evidence_id": "evidence_67b317ae22864228210c1581dbbbc8f56ffeebdd9cc875f576fcdd12300dd379",
+      "relationship": "contradicts",
+      "rationale": "Unequal numeric values under the same scope; unresolved without a vote decision.",
+      "verifier": "scoped_numeric_v1"
+    },
+    "link_a52362f1b1b3079d8d8062e41d55a82e559ec351fe4133209a33b837aeaf147c": {
+      "id": "link_a52362f1b1b3079d8d8062e41d55a82e559ec351fe4133209a33b837aeaf147c",
+      "claim_id": "claim_bfbe459c57e7e997a40d9c0a5b0fdbf153ee01ee862fd924b0738c3ccdb20e50",
+      "evidence_id": "evidence_2a54b5ba2e6ae418332ad9aa493943c2c8853eb53bbe2fa96d0c5320ac7ae122",
+      "relationship": "contradicts",
+      "rationale": "Unequal numeric values under the same scope; unresolved without a vote decision.",
+      "verifier": "scoped_numeric_v1"
+    },
+    "link_e0a02e381e9e17efd44cfa4342d5bcec1fc183270b3cd6dec550e0ac3aa83ca9": {
+      "id": "link_e0a02e381e9e17efd44cfa4342d5bcec1fc183270b3cd6dec550e0ac3aa83ca9",
+      "claim_id": "claim_bfbe459c57e7e997a40d9c0a5b0fdbf153ee01ee862fd924b0738c3ccdb20e50",
+      "evidence_id": "evidence_1049df6fe0fd5135f72e229f0035586183b123024a2316e798f4cc664b8649b7",
+      "relationship": "contradicts",
+      "rationale": "Unequal numeric values under the same scope; unresolved without a vote decision.",
+      "verifier": "scoped_numeric_v1"
+    }
+  },
+  "draft_report": {
+    "id": "final_report_2c0e546862671dc2a6830d3c3ff80ca28eddf11319f30d7a31c9f16111591747",
+    "draft_version": 1,
+    "sections": [
+      {
+        "name": "summary",
+        "claim_ids": [
+          "claim_d0218755e625165597b6fcc4f6afc6ee19f6a598ddc521224a40029aec203533"
+        ]
+      },
+      {
+        "name": "key_findings",
+        "claim_ids": [
+          "claim_47835937afaf92534f593f736367b82f00619964d4a42e014125064c04ed515b"
+        ]
+      },
+      {
+        "name": "disagreements",
+        "claim_ids": [
+          "claim_d0218755e625165597b6fcc4f6afc6ee19f6a598ddc521224a40029aec203533",
+          "claim_38ab5c62eac859cb6d9d6adb989d21e69a1ff521bcd244a6ef192992b07948ed",
+          "claim_934217c0fc872744ee39eaf551343f40924b002d03959dac040ec6641144c380",
+          "claim_bfbe459c57e7e997a40d9c0a5b0fdbf153ee01ee862fd924b0738c3ccdb20e50"
+        ]
+      }
+    ],
+    "source_ids": [
+      "source_788a873729764ce7edd64eec6f2ae61e8ae78c5a2032985304d6a0076d4d6dbe",
+      "source_956212a3790b7f4f606f0628bf81388a20577ebd6cab99dc6acd19ab3980bebf",
+      "source_b6e936d3389db91d88e1e36307a7ffad1cdd599f153cda9ec190d564660fcd28",
+      "source_ba210b1000e58c26c3cde745d9a1e76538848f38b51a87467f6b6b9756e979f7",
+      "source_e2e7be0c719af4759092f8cd64b55a417febbb5930f05ac866afbddb6c51af25"
+    ]
+  },
+  "critic_verdict": {
+    "draft_version": 1,
+    "decision": "approved",
+    "revision_brief": []
+  },
+  "citation_audit": [
+    {
+      "id": "audit_e6875611af8a9b2525921ecd7a65e38b07a1637fbcbf4bd146deaf7f3ea7473a",
+      "draft_version": 1,
+      "claim_id": "claim_d0218755e625165597b6fcc4f6afc6ee19f6a598ddc521224a40029aec203533",
+      "evidence_ids": [
+        "evidence_1049df6fe0fd5135f72e229f0035586183b123024a2316e798f4cc664b8649b7"
+      ],
+      "structural_valid": true,
+      "support": "supported",
+      "rationale": "Exact quote and retained snapshot verified; source truth was not independently verified.",
+      "repair_action": null
+    },
+    {
+      "id": "audit_be65a17baa6246c113981c6014e00bd2c030dfcb9fda60cdb2d2105a11f33531",
+      "draft_version": 1,
+      "claim_id": "claim_38ab5c62eac859cb6d9d6adb989d21e69a1ff521bcd244a6ef192992b07948ed",
+      "evidence_ids": [
+        "evidence_67b317ae22864228210c1581dbbbc8f56ffeebdd9cc875f576fcdd12300dd379"
+      ],
+      "structural_valid": true,
+      "support": "supported",
+      "rationale": "Exact quote and retained snapshot verified; source truth was not independently verified.",
+      "repair_action": null
+    },
+    {
+      "id": "audit_a2642d9ed9f9a05058d874072aa01fe66c0735dca791df51ea573e026b50627d",
+      "draft_version": 1,
+      "claim_id": "claim_934217c0fc872744ee39eaf551343f40924b002d03959dac040ec6641144c380",
+      "evidence_ids": [
+        "evidence_2a54b5ba2e6ae418332ad9aa493943c2c8853eb53bbe2fa96d0c5320ac7ae122"
+      ],
+      "structural_valid": true,
+      "support": "supported",
+      "rationale": "Exact quote and retained snapshot verified; source truth was not independently verified.",
+      "repair_action": null
+    },
+    {
+      "id": "audit_7c6e881fc77a58c8226f8e1e7432397ae9571822d826529ff66299572dd29af2",
+      "draft_version": 1,
+      "claim_id": "claim_bfbe459c57e7e997a40d9c0a5b0fdbf153ee01ee862fd924b0738c3ccdb20e50",
+      "evidence_ids": [
+        "evidence_849a78c5f8db2c7326642348e2c3a9aa906b3db6337ddc2ec363ca1797a330db"
+      ],
+      "structural_valid": true,
+      "support": "supported",
+      "rationale": "Exact quote and retained snapshot verified; source truth was not independently verified.",
+      "repair_action": null
+    },
+    {
+      "id": "audit_a8381b50e9249c7ac878a53ca81c2756e7279dac8ac02b50b51fa919e20220fe",
+      "draft_version": 1,
+      "claim_id": "claim_47835937afaf92534f593f736367b82f00619964d4a42e014125064c04ed515b",
+      "evidence_ids": [
+        "evidence_993a4e16df625975ef53be24f319808f3a234aafd07a3d8a653c5b41f6e4cdd6"
+      ],
+      "structural_valid": true,
+      "support": "supported",
+      "rationale": "Exact quote and retained snapshot verified; source truth was not independently verified.",
+      "repair_action": null
+    }
+  ],
+  "final_report": {
+    "id": "final_report_2c0e546862671dc2a6830d3c3ff80ca28eddf11319f30d7a31c9f16111591747",
+    "draft_version": 1,
+    "sections": [
+      {
+        "name": "summary",
+        "claim_ids": [
+          "claim_d0218755e625165597b6fcc4f6afc6ee19f6a598ddc521224a40029aec203533"
+        ]
+      },
+      {
+        "name": "key_findings",
+        "claim_ids": [
+          "claim_47835937afaf92534f593f736367b82f00619964d4a42e014125064c04ed515b"
+        ]
+      },
+      {
+        "name": "disagreements",
+        "claim_ids": [
+          "claim_d0218755e625165597b6fcc4f6afc6ee19f6a598ddc521224a40029aec203533",
+          "claim_38ab5c62eac859cb6d9d6adb989d21e69a1ff521bcd244a6ef192992b07948ed",
+          "claim_934217c0fc872744ee39eaf551343f40924b002d03959dac040ec6641144c380",
+          "claim_bfbe459c57e7e997a40d9c0a5b0fdbf153ee01ee862fd924b0738c3ccdb20e50"
+        ]
+      }
+    ],
+    "source_ids": [
+      "source_788a873729764ce7edd64eec6f2ae61e8ae78c5a2032985304d6a0076d4d6dbe",
+      "source_956212a3790b7f4f606f0628bf81388a20577ebd6cab99dc6acd19ab3980bebf",
+      "source_b6e936d3389db91d88e1e36307a7ffad1cdd599f153cda9ec190d564660fcd28",
+      "source_ba210b1000e58c26c3cde745d9a1e76538848f38b51a87467f6b6b9756e979f7",
+      "source_e2e7be0c719af4759092f8cd64b55a417febbb5930f05ac866afbddb6c51af25"
+    ]
+  },
+  "quality_attempts": 4,
+  "revision_brief": [],
+  "stage_error": null,
+  "coverage_signature": "coverage_9d26ad00f5be5cf740ce7e7a4c4b71dc6503bbe805ccc62ac57358f6697fc21e",
+  "last_coverage_pass": 2,
+  "no_progress_count": 0,
+  "unresolved_audits": [],
+  "iteration_count": 2,
+  "revision_count": 0,
+  "stop_reason": "no_progress",
+  "run_status": "partial",
+  "started_at": "2026-10-01T18:09:33.247245Z",
+  "finished_at": "2026-10-01T18:09:36.260443Z",
+  "reservations": {
+    "reservation_1d0d458e2acbcc5a0b5384257f835af2a5bb8652be72e554d57bea83520933f6": {
+      "id": "reservation_1d0d458e2acbcc5a0b5384257f835af2a5bb8652be72e554d57bea83520933f6",
+      "call_id": "call_9c81a7380f809dd2caca0aa3aa368084e5d569475f30782b29ff85a2373f270a",
+      "searches": 1,
+      "model_calls": 0,
+      "tokens": 0,
+      "estimated_cost_usd": null,
+      "status": "settled"
+    },
+    "reservation_7d7f528108d16712fa7033b3eee653ed5346e378619ee26bfc7130cf013c4ecd": {
+      "id": "reservation_7d7f528108d16712fa7033b3eee653ed5346e378619ee26bfc7130cf013c4ecd",
+      "call_id": "call_c4a1729caf0ed3e7a2b96e27cc2490b795ee975b056997e25224c0d9e2fe2cdd",
+      "searches": 1,
+      "model_calls": 0,
+      "tokens": 0,
+      "estimated_cost_usd": null,
+      "status": "settled"
+    },
+    "reservation_b3a8e7fcb386beb2aedbd7282000da90321b6041696b4203e4d9274d3f3b640b": {
+      "id": "reservation_b3a8e7fcb386beb2aedbd7282000da90321b6041696b4203e4d9274d3f3b640b",
+      "call_id": "call_2296606468f0d04e6d82394e7d15f335f419c4445e760edf264192bb031da9d1",
+      "searches": 1,
+      "model_calls": 0,
+      "tokens": 0,
+      "estimated_cost_usd": null,
+      "status": "settled"
+    }
+  },
+  "usage": {
+    "usage_1d0d458e2acbcc5a0b5384257f835af2a5bb8652be72e554d57bea83520933f6": {
+      "id": "usage_1d0d458e2acbcc5a0b5384257f835af2a5bb8652be72e554d57bea83520933f6",
+      "call_id": "call_9c81a7380f809dd2caca0aa3aa368084e5d569475f30782b29ff85a2373f270a",
+      "provider": "fixture",
+      "model": null,
+      "input_tokens": null,
+      "output_tokens": null,
+      "search_credits": null,
+      "latency_ms": 62.000000005355105,
+      "estimated_cost_usd": null,
+      "price_table_version": null
+    },
+    "usage_7d7f528108d16712fa7033b3eee653ed5346e378619ee26bfc7130cf013c4ecd": {
+      "id": "usage_7d7f528108d16712fa7033b3eee653ed5346e378619ee26bfc7130cf013c4ecd",
+      "call_id": "call_c4a1729caf0ed3e7a2b96e27cc2490b795ee975b056997e25224c0d9e2fe2cdd",
+      "provider": "fixture",
+      "model": null,
+      "input_tokens": null,
+      "output_tokens": null,
+      "search_credits": null,
+      "latency_ms": 62.000000005355105,
+      "estimated_cost_usd": null,
+      "price_table_version": null
+    },
+    "usage_b3a8e7fcb386beb2aedbd7282000da90321b6041696b4203e4d9274d3f3b640b": {
+      "id": "usage_b3a8e7fcb386beb2aedbd7282000da90321b6041696b4203e4d9274d3f3b640b",
+      "call_id": "call_2296606468f0d04e6d82394e7d15f335f419c4445e760edf264192bb031da9d1",
+      "provider": "fixture",
+      "model": null,
+      "input_tokens": null,
+      "output_tokens": null,
+      "search_credits": null,
+      "latency_ms": 62.000000005355105,
+      "estimated_cost_usd": null,
+      "price_table_version": null
+    }
+  },
+  "calls": {
+    "call_2296606468f0d04e6d82394e7d15f335f419c4445e760edf264192bb031da9d1": {
+      "id": "call_2296606468f0d04e6d82394e7d15f335f419c4445e760edf264192bb031da9d1",
+      "revision": 2,
+      "request_hash": "27276ec42310f4247f342a5e8ff4670db9b633a4326a60a25a42d961bdcfc0a7",
+      "provider": "fixture",
+      "kind": "search",
+      "status": "completed",
+      "started_at": "2026-10-01T18:09:35.232902Z",
+      "finished_at": "2026-10-01T18:09:35.444301Z",
+      "response_artifact_id": "artifact_0c94212be8d5194c7dc8ecc95a75c0696bc2a05d1f01db7eb3a20fb9e3ad07a2"
+    },
+    "call_9c81a7380f809dd2caca0aa3aa368084e5d569475f30782b29ff85a2373f270a": {
+      "id": "call_9c81a7380f809dd2caca0aa3aa368084e5d569475f30782b29ff85a2373f270a",
+      "revision": 2,
+      "request_hash": "f1babe6eca154dce2ae3988c0d8f79e6282536c5be82bd0a3b16b8ccad1edfdf",
+      "provider": "fixture",
+      "kind": "search",
+      "status": "completed",
+      "started_at": "2026-10-01T18:09:34.218069Z",
+      "finished_at": "2026-10-01T18:09:34.414290Z",
+      "response_artifact_id": "artifact_4da9094dca1f2eda725b9b7a693138c0aaec3f3f2d9f9f55e34bf5bb696901b7"
+    },
+    "call_c4a1729caf0ed3e7a2b96e27cc2490b795ee975b056997e25224c0d9e2fe2cdd": {
+      "id": "call_c4a1729caf0ed3e7a2b96e27cc2490b795ee975b056997e25224c0d9e2fe2cdd",
+      "revision": 2,
+      "request_hash": "6d8a0fae969894d305bef36fedbe683d1638c451ecb2800dff44e4b47f45e20b",
+      "provider": "fixture",
+      "kind": "search",
+      "status": "completed",
+      "started_at": "2026-10-01T18:09:34.831784Z",
+      "finished_at": "2026-10-01T18:09:35.042574Z",
+      "response_artifact_id": "artifact_98703006f6786a9b85170198ea7705b65f4bedb78953d5110621d4c309eb705f"
+    }
+  },
+  "messages": {},
+  "events": {
+    "event_0efe9d90a4aa2e8c9a239f82c50a8c04e00f60c4a5a1ae484b4f9b419c41b68c": {
+      "id": "event_0efe9d90a4aa2e8c9a239f82c50a8c04e00f60c4a5a1ae484b4f9b419c41b68c",
+      "kind": "initialization_started",
+      "message": "Fixture planning started.",
+      "related_ids": [],
+      "occurred_at": "2026-10-01T18:09:34.186821Z"
+    },
+    "event_28f1cd62339e47e256a20d363b60fca0c074799274c5a6d5e80121486c7e8cd9": {
+      "id": "event_28f1cd62339e47e256a20d363b60fca0c074799274c5a6d5e80121486c7e8cd9",
+      "kind": "context_selected",
+      "message": "Selected 0 scoped context references; 0 requested document references unavailable.",
+      "related_ids": [],
+      "occurred_at": "2026-10-01T18:09:34.202445Z"
+    },
+    "event_9904f42a69c8bdcf307e6e91799281bc2f96df1b6907b38f31abd5dbcda9193c": {
+      "id": "event_9904f42a69c8bdcf307e6e91799281bc2f96df1b6907b38f31abd5dbcda9193c",
+      "kind": "plan_created",
+      "message": "Fixture plan validated with 1 focused questions.",
+      "related_ids": [],
+      "occurred_at": "2026-10-01T18:09:34.202445Z"
+    },
+    "event_a1ac1ef39ef99321695a89ff887ecbe4cb3a2625ae199d8a8f8c6647f21871cc": {
+      "id": "event_a1ac1ef39ef99321695a89ff887ecbe4cb3a2625ae199d8a8f8c6647f21871cc",
+      "kind": "queries_generated",
+      "message": "Prepared 2 fixture queries for the next retrieval pass.",
+      "related_ids": [],
+      "occurred_at": "2026-10-01T18:09:34.815297Z"
+    },
+    "event_a3fb0cb25ccccd5ac45caea5fe815bd62342757aadf148b18145b5ba69089dec": {
+      "id": "event_a3fb0cb25ccccd5ac45caea5fe815bd62342757aadf148b18145b5ba69089dec",
+      "kind": "queries_generated",
+      "message": "Prepared 0 fixture queries for the next retrieval pass.",
+      "related_ids": [],
+      "occurred_at": "2026-10-01T18:09:35.966926Z"
+    },
+    "event_e3cb3304aa41b2574e3d4ae84cb748a452dd4cb5f6f6661a86aa4a41941058d2": {
+      "id": "event_e3cb3304aa41b2574e3d4ae84cb748a452dd4cb5f6f6661a86aa4a41941058d2",
+      "kind": "queries_generated",
+      "message": "Prepared 1 fixture queries for the next retrieval pass.",
+      "related_ids": [],
+      "occurred_at": "2026-10-01T18:09:34.202445Z"
+    },
+    "extraction_pass_7bc16665421210ec0fa87b13ac4740d451d58039bead3a95a7e08677ac654be3": {
+      "id": "extraction_pass_7bc16665421210ec0fa87b13ac4740d451d58039bead3a95a7e08677ac654be3",
+      "kind": "evidence_extraction_completed",
+      "message": "Admitted or merged 5 passages; recorded 5 rejections.",
+      "related_ids": [],
+      "occurred_at": "2026-10-01T18:09:35.836007Z"
+    },
+    "extraction_pass_dc00157f5ea9905598c9f8514758651cb8a72ce359ce70fd849ca686b0421e15": {
+      "id": "extraction_pass_dc00157f5ea9905598c9f8514758651cb8a72ce359ce70fd849ca686b0421e15",
+      "kind": "evidence_extraction_completed",
+      "message": "Admitted or merged 2 passages; recorded 0 rejections.",
+      "related_ids": [],
+      "occurred_at": "2026-10-01T18:09:34.741374Z"
+    },
+    "quality_event_1b99220d0f7fd41b72b5a07ec899c048f5fdd5940e0199ee8fbc33b071a82c76": {
+      "id": "quality_event_1b99220d0f7fd41b72b5a07ec899c048f5fdd5940e0199ee8fbc33b071a82c76",
+      "kind": "evidence_intelligence",
+      "message": "Ranked metadata and compared explicit scoped numeric propositions.",
+      "related_ids": [],
+      "occurred_at": "2026-10-01T18:09:34.756993Z"
+    },
+    "quality_event_27a721da02b5fed5fda83fbe4bae92f42db6914b19d34f6cf9acf33d4607eb9d": {
+      "id": "quality_event_27a721da02b5fed5fda83fbe4bae92f42db6914b19d34f6cf9acf33d4607eb9d",
+      "kind": "evidence_intelligence",
+      "message": "Ranked metadata and compared explicit scoped numeric propositions.",
+      "related_ids": [],
+      "occurred_at": "2026-10-01T18:09:35.871380Z"
+    },
+    "quality_event_41a7b16281de5e4f61c8d2cb560685f74f12dd539fd5bac875bd603145bed514": {
+      "id": "quality_event_41a7b16281de5e4f61c8d2cb560685f74f12dd539fd5bac875bd603145bed514",
+      "kind": "coverage",
+      "message": "Assessed question acceptance criteria against retained evidence.",
+      "related_ids": [],
+      "occurred_at": "2026-10-01T18:09:35.895714Z"
+    },
+    "quality_event_68373ac50613b9c3c745e04ba17d2b8f4db695921a06214c6cc8787de1b85865": {
+      "id": "quality_event_68373ac50613b9c3c745e04ba17d2b8f4db695921a06214c6cc8787de1b85865",
+      "kind": "finalizer",
+      "message": "Finalized the audited report with explicit limits and stop reason.",
+      "related_ids": [],
+      "occurred_at": "2026-10-01T18:09:36.260443Z"
+    },
+    "quality_event_805158911500decc442fccebdf247fd5d15e64c94bf318fcedd9fb5382741ede": {
+      "id": "quality_event_805158911500decc442fccebdf247fd5d15e64c94bf318fcedd9fb5382741ede",
+      "kind": "citations",
+      "message": "Audited every claim against its retained source snapshot.",
+      "related_ids": [],
+      "occurred_at": "2026-10-01T18:09:36.213565Z"
+    },
+    "quality_event_81c3c994b23f34b77bfb0f8435f0c6792426dab94cb3e13bbcdb2cf5988958f5": {
+      "id": "quality_event_81c3c994b23f34b77bfb0f8435f0c6792426dab94cb3e13bbcdb2cf5988958f5",
+      "kind": "synthesis",
+      "message": "Prepared structured claims for criticism and citation audit.",
+      "related_ids": [],
+      "occurred_at": "2026-10-01T18:09:36.087944Z"
+    },
+    "quality_event_b260efc67f5a3539a1a8319cd0be06595e78fe18a7a2331eb5e709ec0a73de04": {
+      "id": "quality_event_b260efc67f5a3539a1a8319cd0be06595e78fe18a7a2331eb5e709ec0a73de04",
+      "kind": "coverage",
+      "message": "Assessed question acceptance criteria against retained evidence.",
+      "related_ids": [],
+      "occurred_at": "2026-10-01T18:09:34.780988Z"
+    },
+    "quality_event_bce2261a99de2e966f3df6233b1e0058afeacdc3a8bd03e5a548875349a23192": {
+      "id": "quality_event_bce2261a99de2e966f3df6233b1e0058afeacdc3a8bd03e5a548875349a23192",
+      "kind": "critic",
+      "message": "Reviewed the current structured draft.",
+      "related_ids": [],
+      "occurred_at": "2026-10-01T18:09:36.119189Z"
+    },
+    "retrieval_pass_7bc16665421210ec0fa87b13ac4740d451d58039bead3a95a7e08677ac654be3": {
+      "id": "retrieval_pass_7bc16665421210ec0fa87b13ac4740d451d58039bead3a95a7e08677ac654be3",
+      "kind": "retrieval_batch_completed",
+      "message": "Completed one retrieval batch: 5 sources, 0 errors.",
+      "related_ids": [],
+      "occurred_at": "2026-10-01T18:09:35.764141Z"
+    },
+    "retrieval_pass_dc00157f5ea9905598c9f8514758651cb8a72ce359ce70fd849ca686b0421e15": {
+      "id": "retrieval_pass_dc00157f5ea9905598c9f8514758651cb8a72ce359ce70fd849ca686b0421e15",
+      "kind": "retrieval_batch_completed",
+      "message": "Completed one retrieval batch: 2 sources, 0 errors.",
+      "related_ids": [],
+      "occurred_at": "2026-10-01T18:09:34.694491Z"
+    }
+  },
+  "tool_errors": {}
+}

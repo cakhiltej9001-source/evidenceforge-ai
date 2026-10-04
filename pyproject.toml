@@ -1,0 +1,65 @@
+[build-system]
+requires = ["hatchling==1.32.4"]
+build-backend = "hatchling.build"
+
+[project]
+name = "evidenceforge-ai"
+version = "0.1.0"
+description = "Evidence-first offline research workflow with bounded calls, cancellation and sanitized observability."
+readme = "README.md"
+requires-python = ">=3.12,<3.15"
+dependencies = [
+  "langgraph>=1.2.12,<2",
+  "httpx>=0.28.1,<1",
+  "typing-extensions>=4,<5",
+  "pydantic>=2.13.5,<3",
+  "pydantic-settings>=2.15,<3",
+  "pypdf>=6.19.0,<7",
+  "python-docx>=1.2.0,<2",
+  "langgraph-checkpoint-sqlite>=3.1.1,<4",
+  "langsmith>=0.14,<1",
+]
+
+[project.scripts]
+evidenceforge-check = "evidenceforge.config:main"
+evidenceforge-plan = "evidenceforge.planning_demo:main"
+evidenceforge-retrieve = "evidenceforge.retrieval_demo:main"
+evidenceforge-research = "evidenceforge.research_demo:main"
+evidenceforge-ingest = "evidenceforge.ingestion_demo:main"
+evidenceforge-ui = "evidenceforge.ui_launcher:main"
+evidenceforge-inspect = "evidenceforge.inspection_demo:main"
+evidenceforge-energy = "evidenceforge.energy_demo:main"
+
+[project.optional-dependencies]
+ui = [
+    "streamlit>=1.50,<2",
+]
+
+[dependency-groups]
+dev = ["pytest", "ruff", "mypy", "build", "hatchling"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/evidenceforge"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+files = ["src/evidenceforge"]
+
+
+[[tool.mypy.overrides]]
+module = ["streamlit", "streamlit.*"]
+follow_imports = "skip"
+ignore_missing_imports = true
+

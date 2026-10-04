@@ -1,0 +1,68 @@
+name: checks
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  python:
+    timeout-minutes: 20
+    runs-on: ubuntu-latest
+    env:
+      EVIDENCEFORGE_MODEL_PROVIDER: fixture
+      EVIDENCEFORGE_MODEL_API_KEY: ""
+      EVIDENCEFORGE_MODEL_ID: ""
+      LANGSMITH_TRACING: "false"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+        with:
+          version: "0.11.13"
+      - run: uv sync --locked --extra ui --python 3.12
+      - run: uv run --locked ruff check .
+      - run: uv run --locked ruff format --check .
+      - run: uv run --locked mypy
+      - run: uv run --locked pytest -q
+      - name: Validate official Render schema
+        run: |
+          curl --fail --silent --show-error --location --max-time 30 https://render.com/schema/render.yaml.json -o /tmp/render-schema.json
+          uv run --locked --extra ui python scripts/validate_render.py --schema /tmp/render-schema.json
+      - run: uv build
+      - run: uv run --locked python scripts/deployment_smoke.py --data-dir .evidenceforge/ci-smoke
+  container:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker compose config --quiet
+      - run: docker build -t evidenceforge-ci .
+      - name: Offline graph and checkpoint persistence across fresh containers
+        run: |
+          docker volume create evidenceforge-ci-data
+          docker run --rm --memory 512m --cpus 0.5 -v evidenceforge-ci-data:/data -v "$PWD/scripts/deployment_smoke.py:/tmp/deployment_smoke.py:ro" --entrypoint python evidenceforge-ci /tmp/deployment_smoke.py --data-dir /data/offline-smoke
+          docker run --rm --memory 512m --cpus 0.5 -v evidenceforge-ci-data:/data -v "$PWD/scripts/deployment_smoke.py:/tmp/deployment_smoke.py:ro" --entrypoint python evidenceforge-ci /tmp/deployment_smoke.py --data-dir /data/offline-smoke --reconnect
+      - name: Nonroot runtime and backup restore into a fresh volume
+        run: |
+          docker run --rm --memory 512m --cpus 0.5 --entrypoint python evidenceforge-ci -c "import os; assert os.getuid() == 10001"
+          docker run --rm -v evidenceforge-ci-data:/data:ro -v "$PWD:/backup" --user 0:0 --entrypoint tar evidenceforge-ci czf /backup/offline-smoke-backup.tar.gz -C /data offline-smoke
+          docker volume create evidenceforge-ci-restored
+          docker run --rm -v evidenceforge-ci-restored:/data -v "$PWD:/backup:ro" --user 0:0 --entrypoint tar evidenceforge-ci xzf /backup/offline-smoke-backup.tar.gz -C /data
+          docker run --rm --memory 512m --cpus 0.5 -v evidenceforge-ci-restored:/data -v "$PWD/scripts/deployment_smoke.py:/tmp/deployment_smoke.py:ro" --entrypoint python evidenceforge-ci /tmp/deployment_smoke.py --data-dir /data/offline-smoke --reconnect
+      - name: UI health smoke
+        run: |
+          docker run -d --memory 512m --cpus 0.5 --name evidenceforge-ci-ui -p 127.0.0.1:8501:8501 -v evidenceforge-ci-data:/data evidenceforge-ci
+          for attempt in $(seq 1 60); do
+            if curl --fail --silent http://127.0.0.1:8501/_stcore/health; then exit 0; fi
+            sleep 2
+          done
+          docker logs evidenceforge-ci-ui
+          exit 1
+      - name: Clean up CI containers
+        if: always()
+        run: |
+          docker rm -f evidenceforge-ci-ui || true
+          docker volume rm evidenceforge-ci-data evidenceforge-ci-restored || true
+
+
+

@@ -1,0 +1,528 @@
+{
+  "version": "evidence_graph_v1",
+  "run_id": "run_61cb47f2859a4d53a888aba1fdf44488",
+  "owner_scope": "local",
+  "draft_version": 1,
+  "nodes": [
+    {
+      "id": "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a",
+      "kind": "question",
+      "label": "What was Northfield solar electricity output?",
+      "record": {
+        "id": "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a",
+        "question": "What was Northfield solar electricity output?",
+        "acceptance_criteria": [
+          "electricity northfield output solar was"
+        ],
+        "importance": 1.0
+      }
+    },
+    {
+      "id": "claim_d0218755e625165597b6fcc4f6afc6ee19f6a598ddc521224a40029aec203533",
+      "kind": "claim",
+      "label": "Northfield solar electricity output was 100000 MWh in 2024 for all plants under standard operation.",
+      "record": {
+        "id": "claim_d0218755e625165597b6fcc4f6afc6ee19f6a598ddc521224a40029aec203533",
+        "statement": "Northfield solar electricity output was 100000 MWh in 2024 for all plants under standard operation.",
+        "kind": "fact",
+        "question_ids": [
+          "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a"
+        ],
+        "evidence_ids": [
+          "evidence_1049df6fe0fd5135f72e229f0035586183b123024a2316e798f4cc664b8649b7"
+        ],
+        "qualifiers": []
+      }
+    },
+    {
+      "id": "evidence_1049df6fe0fd5135f72e229f0035586183b123024a2316e798f4cc664b8649b7",
+      "kind": "evidence",
+      "label": "Northfield solar electricity output was 100000 MWh in 2024 for all plants under standard operation.",
+      "record": {
+        "id": "evidence_1049df6fe0fd5135f72e229f0035586183b123024a2316e798f4cc664b8649b7",
+        "source_id": "source_ba210b1000e58c26c3cde745d9a1e76538848f38b51a87467f6b6b9756e979f7",
+        "owner_scope": "local",
+        "acquisition_ids": [
+          "acquisition_7c99e73004342c4a949db34f6ea2f18eddb7a39c4f9033f5a2ea7e9f07917687",
+          "acquisition_f0cd5e6fd99cc681734345660194c8c99975f1a624849b16c9e79d69674ba644"
+        ],
+        "question_ids": [
+          "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a"
+        ],
+        "passage": "Northfield solar electricity output was 100000 MWh in 2024 for all plants under standard operation.",
+        "locator": {
+          "document_start_offset": null,
+          "document_end_offset": null,
+          "snapshot_id": "artifact_cf6c760b49249c825ee5acb8b8a0743853d27f6e679578680f58da2894dd6012",
+          "start_offset": 0,
+          "end_offset": 99,
+          "page": null,
+          "paragraph": null,
+          "section": null
+        },
+        "relevance": 1.0,
+        "relevance_rationale": "Lexical question overlap; not factual verification."
+      }
+    },
+    {
+      "id": "evidence_2a54b5ba2e6ae418332ad9aa493943c2c8853eb53bbe2fa96d0c5320ac7ae122",
+      "kind": "evidence",
+      "label": "Northfield solar electricity output was 100 GWh in 2024 for all plants under standard operation.",
+      "record": {
+        "id": "evidence_2a54b5ba2e6ae418332ad9aa493943c2c8853eb53bbe2fa96d0c5320ac7ae122",
+        "source_id": "source_e2e7be0c719af4759092f8cd64b55a417febbb5930f05ac866afbddb6c51af25",
+        "owner_scope": "local",
+        "acquisition_ids": [
+          "acquisition_54406521935a929b47c58046aae282aa365e5896b4609cff46ee5c4f92823fa3",
+          "acquisition_bd3ed3650bc5fa38d7801299962faf00f3e1d178304bd8d12471787e0e67cfa0"
+        ],
+        "question_ids": [
+          "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a"
+        ],
+        "passage": "Northfield solar electricity output was 100 GWh in 2024 for all plants under standard operation.",
+        "locator": {
+          "document_start_offset": null,
+          "document_end_offset": null,
+          "snapshot_id": "artifact_c9be91e62e1094a9455e6be6301d2c4aadfd2133dd679cfe8ead5b992a669d79",
+          "start_offset": 0,
+          "end_offset": 96,
+          "page": null,
+          "paragraph": null,
+          "section": null
+        },
+        "relevance": 1.0,
+        "relevance_rationale": "Lexical question overlap; not factual verification."
+      }
+    },
+    {
+      "id": "evidence_67b317ae22864228210c1581dbbbc8f56ffeebdd9cc875f576fcdd12300dd379",
+      "kind": "evidence",
+      "label": "Northfield solar electricity output was 100 GWh in 2024 for all plants under standard operation.",
+      "record": {
+        "id": "evidence_67b317ae22864228210c1581dbbbc8f56ffeebdd9cc875f576fcdd12300dd379",
+        "source_id": "source_956212a3790b7f4f606f0628bf81388a20577ebd6cab99dc6acd19ab3980bebf",
+        "owner_scope": "local",
+        "acquisition_ids": [
+          "acquisition_75688b51eab90a24d384c70869048f3ee21d6d7b2ddfd2bab36e9b8358792eb5",
+          "acquisition_a300cd4b1a4eae3a389e8eac21b96055dde35a8f18b99fabd0e4550db37a41f1",
+          "acquisition_ff11d3dc1f280b12430daab47384aefd31b11a21cb8a9a90d1cc37f44baab96b"
+        ],
+        "question_ids": [
+          "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a"
+        ],
+        "passage": "Northfield solar electricity output was 100 GWh in 2024 for all plants under standard operation.",
+        "locator": {
+          "document_start_offset": null,
+          "document_end_offset": null,
+          "snapshot_id": "artifact_c9be91e62e1094a9455e6be6301d2c4aadfd2133dd679cfe8ead5b992a669d79",
+          "start_offset": 0,
+          "end_offset": 96,
+          "page": null,
+          "paragraph": null,
+          "section": null
+        },
+        "relevance": 1.0,
+        "relevance_rationale": "Lexical question overlap; not factual verification."
+      }
+    },
+    {
+      "id": "evidence_849a78c5f8db2c7326642348e2c3a9aa906b3db6337ddc2ec363ca1797a330db",
+      "kind": "evidence",
+      "label": "Northfield solar electricity output was 120 GWh in 2024 for all plants under standard operation.",
+      "record": {
+        "id": "evidence_849a78c5f8db2c7326642348e2c3a9aa906b3db6337ddc2ec363ca1797a330db",
+        "source_id": "source_b6e936d3389db91d88e1e36307a7ffad1cdd599f153cda9ec190d564660fcd28",
+        "owner_scope": "local",
+        "acquisition_ids": [
+          "acquisition_6cef9f3b65e18e2d1c25d15889db6160f3836d3b34e24a168f1736bcc74f592e",
+          "acquisition_79311bd97ec34385597d5d49b6e4829d00b62f86595deb3e92ab2c03a3f914d7",
+          "acquisition_947ebb44a09c59b0009ea889995719fa0ec257e7c30a7d36f859a633444266ee"
+        ],
+        "question_ids": [
+          "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a"
+        ],
+        "passage": "Northfield solar electricity output was 120 GWh in 2024 for all plants under standard operation.",
+        "locator": {
+          "document_start_offset": null,
+          "document_end_offset": null,
+          "snapshot_id": "artifact_66bd184032be9e32b65a9c97766020bd45a34e63b4cac8cc33fe43c6871f193c",
+          "start_offset": 0,
+          "end_offset": 96,
+          "page": null,
+          "paragraph": null,
+          "section": null
+        },
+        "relevance": 1.0,
+        "relevance_rationale": "Lexical question overlap; not factual verification."
+      }
+    },
+    {
+      "id": "evidence_993a4e16df625975ef53be24f319808f3a234aafd07a3d8a653c5b41f6e4cdd6",
+      "kind": "evidence",
+      "label": "Northfield solar electricity output was 900 GWh in 2023 for all plants under standard operation.",
+      "record": {
+        "id": "evidence_993a4e16df625975ef53be24f319808f3a234aafd07a3d8a653c5b41f6e4cdd6",
+        "source_id": "source_788a873729764ce7edd64eec6f2ae61e8ae78c5a2032985304d6a0076d4d6dbe",
+        "owner_scope": "local",
+        "acquisition_ids": [
+          "acquisition_bb7e5ac560672e231706644ea35e38c54731207534fa151fcf8581ff3ec2f357",
+          "acquisition_fd76b93d05c177456c17dcef79a0d426ed392e0d36e80979cd324bd444b629a5"
+        ],
+        "question_ids": [
+          "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a"
+        ],
+        "passage": "Northfield solar electricity output was 900 GWh in 2023 for all plants under standard operation.",
+        "locator": {
+          "document_start_offset": null,
+          "document_end_offset": null,
+          "snapshot_id": "artifact_fb707703f763e3fbfe4448863559c768d99a2a871d29d6f56505bbe4bd00c344",
+          "start_offset": 0,
+          "end_offset": 96,
+          "page": null,
+          "paragraph": null,
+          "section": null
+        },
+        "relevance": 1.0,
+        "relevance_rationale": "Lexical question overlap; not factual verification."
+      }
+    },
+    {
+      "id": "source_788a873729764ce7edd64eec6f2ae61e8ae78c5a2032985304d6a0076d4d6dbe",
+      "kind": "source",
+      "label": "Synthetic historical",
+      "record": {
+        "id": "source_788a873729764ce7edd64eec6f2ae61e8ae78c5a2032985304d6a0076d4d6dbe",
+        "primary_evidence": false,
+        "methodology_transparent": false,
+        "metadata_rationale": "Synthetic metadata; publisher assessment is unverified.",
+        "title": "Synthetic historical",
+        "source_type": "web",
+        "provider": "fixture",
+        "content_hash": "d5021bb8f59104e70e505c3f96aa06e10853f5d7eb269b73e1c52740942d0a38",
+        "url": "https://historical.example.org/energy",
+        "document_id": null,
+        "document_hash": null,
+        "chunk_id": null,
+        "owner_scope": null,
+        "publisher": "Synthetic historical",
+        "publication_date": "2026-09-01",
+        "source_family": "family_historical",
+        "access_status": "available"
+      }
+    },
+    {
+      "id": "source_956212a3790b7f4f606f0628bf81388a20577ebd6cab99dc6acd19ab3980bebf",
+      "kind": "source",
+      "label": "Synthetic primary",
+      "record": {
+        "id": "source_956212a3790b7f4f606f0628bf81388a20577ebd6cab99dc6acd19ab3980bebf",
+        "primary_evidence": true,
+        "methodology_transparent": true,
+        "metadata_rationale": "Synthetic metadata; publisher assessment is unverified.",
+        "title": "Synthetic primary",
+        "source_type": "web",
+        "provider": "fixture",
+        "content_hash": "5036768b7be128cf1b27d558182f90c2e26de9c4d279f750d3b4d410bcf54000",
+        "url": "https://primary.example.org/energy",
+        "document_id": null,
+        "document_hash": null,
+        "chunk_id": null,
+        "owner_scope": null,
+        "publisher": "Synthetic primary",
+        "publication_date": "2025-01-01",
+        "source_family": "family_primary",
+        "access_status": "available"
+      }
+    },
+    {
+      "id": "source_b6e936d3389db91d88e1e36307a7ffad1cdd599f153cda9ec190d564660fcd28",
+      "kind": "source",
+      "label": "Synthetic secondary",
+      "record": {
+        "id": "source_b6e936d3389db91d88e1e36307a7ffad1cdd599f153cda9ec190d564660fcd28",
+        "primary_evidence": false,
+        "methodology_transparent": false,
+        "metadata_rationale": "Synthetic metadata; publisher assessment is unverified.",
+        "title": "Synthetic secondary",
+        "source_type": "web",
+        "provider": "fixture",
+        "content_hash": "4fc6eb9c8d331b0761b5b2b48e794dc488e5ae92db5cced5f37e3a5ced6982c0",
+        "url": "https://secondary.example.org/energy",
+        "document_id": null,
+        "document_hash": null,
+        "chunk_id": null,
+        "owner_scope": null,
+        "publisher": "Synthetic secondary",
+        "publication_date": "2026-09-01",
+        "source_family": "family_secondary",
+        "access_status": "available"
+      }
+    },
+    {
+      "id": "source_ba210b1000e58c26c3cde745d9a1e76538848f38b51a87467f6b6b9756e979f7",
+      "kind": "source",
+      "label": "Synthetic units",
+      "record": {
+        "id": "source_ba210b1000e58c26c3cde745d9a1e76538848f38b51a87467f6b6b9756e979f7",
+        "primary_evidence": true,
+        "methodology_transparent": true,
+        "metadata_rationale": "Synthetic metadata; publisher assessment is unverified.",
+        "title": "Synthetic units",
+        "source_type": "web",
+        "provider": "fixture",
+        "content_hash": "eb94f3c54699536cc168a4d5017b23459d115b7902c91354238bce15ecea55a3",
+        "url": "https://units.example.org/energy",
+        "document_id": null,
+        "document_hash": null,
+        "chunk_id": null,
+        "owner_scope": null,
+        "publisher": "Synthetic units",
+        "publication_date": "2025-01-01",
+        "source_family": "family_units",
+        "access_status": "available"
+      }
+    },
+    {
+      "id": "source_e2e7be0c719af4759092f8cd64b55a417febbb5930f05ac866afbddb6c51af25",
+      "kind": "source",
+      "label": "Synthetic copy",
+      "record": {
+        "id": "source_e2e7be0c719af4759092f8cd64b55a417febbb5930f05ac866afbddb6c51af25",
+        "primary_evidence": false,
+        "methodology_transparent": false,
+        "metadata_rationale": "Synthetic metadata; publisher assessment is unverified.",
+        "title": "Synthetic copy",
+        "source_type": "web",
+        "provider": "fixture",
+        "content_hash": "5036768b7be128cf1b27d558182f90c2e26de9c4d279f750d3b4d410bcf54000",
+        "url": "https://copy.example.org/energy",
+        "document_id": null,
+        "document_hash": null,
+        "chunk_id": null,
+        "owner_scope": null,
+        "publisher": "Synthetic copy",
+        "publication_date": "2026-09-01",
+        "source_family": "family_primary",
+        "access_status": "available"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge_00a4cff1d569860915e1b2aa23008151c4b462686ef34545d9b6dd0fe8f83a19",
+      "source": "evidence_67b317ae22864228210c1581dbbbc8f56ffeebdd9cc875f576fcdd12300dd379",
+      "target": "evidence_993a4e16df625975ef53be24f319808f3a234aafd07a3d8a653c5b41f6e4cdd6",
+      "relationship": "contextualizes",
+      "rationale": "Different timeframe; no contradiction inferred.",
+      "record_id": "comparison_ba5a319af9ad5dc308085c09f5069b02ee0b036a3df4017ae1d129800b9f55d8"
+    },
+    {
+      "id": "edge_06986c12c52641320af4f63d37b558b8328026f50c3dc83a13b38910293758ff",
+      "source": "evidence_849a78c5f8db2c7326642348e2c3a9aa906b3db6337ddc2ec363ca1797a330db",
+      "target": "evidence_993a4e16df625975ef53be24f319808f3a234aafd07a3d8a653c5b41f6e4cdd6",
+      "relationship": "contextualizes",
+      "rationale": "Different timeframe; no contradiction inferred.",
+      "record_id": "comparison_ca251f519332cf5af8898abe5c9271a44d54af14f4f135167d0eea90c0e66e18"
+    },
+    {
+      "id": "edge_06fd33a260d5a867b71c5643777526037b922e61b1084ff5a6d2a1dee50427d1",
+      "source": "evidence_1049df6fe0fd5135f72e229f0035586183b123024a2316e798f4cc664b8649b7",
+      "target": "evidence_993a4e16df625975ef53be24f319808f3a234aafd07a3d8a653c5b41f6e4cdd6",
+      "relationship": "contextualizes",
+      "rationale": "Different timeframe; no contradiction inferred.",
+      "record_id": "comparison_0b5350a0f7eb3350d02ddf8cc539711b8db2ed5d124488f8bc971eb066cbfc4b"
+    },
+    {
+      "id": "edge_1b5c9df423d34a3baf1ab6e5ebae24810872a312ca30a06d331d1823a21709a3",
+      "source": "claim_d0218755e625165597b6fcc4f6afc6ee19f6a598ddc521224a40029aec203533",
+      "target": "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a",
+      "relationship": "addresses",
+      "rationale": "Claim was assigned to this research question.",
+      "record_id": null
+    },
+    {
+      "id": "edge_2174f9822e8167c0aa3241a47059553b43081b7483f324588332143634a4fafd",
+      "source": "evidence_67b317ae22864228210c1581dbbbc8f56ffeebdd9cc875f576fcdd12300dd379",
+      "target": "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a",
+      "relationship": "addresses",
+      "rationale": "Lexical question overlap; not factual verification.",
+      "record_id": null
+    },
+    {
+      "id": "edge_2cc8539c04cc2dcab90f235cdb3b0fbdc43ebe8e929c03b4e1e2d84164e525f1",
+      "source": "evidence_849a78c5f8db2c7326642348e2c3a9aa906b3db6337ddc2ec363ca1797a330db",
+      "target": "claim_d0218755e625165597b6fcc4f6afc6ee19f6a598ddc521224a40029aec203533",
+      "relationship": "contradicts",
+      "rationale": "Unequal numeric values under the same scope; unresolved without a vote decision.",
+      "record_id": "link_99186d1391270a5db4778940373b2ca9586f3ea7ceb0b63db10f1684e9708338"
+    },
+    {
+      "id": "edge_35d38762f2bc4251835e639ad1da1bdc99ae0f9486e58c4ade7d951d20482011",
+      "source": "evidence_1049df6fe0fd5135f72e229f0035586183b123024a2316e798f4cc664b8649b7",
+      "target": "claim_d0218755e625165597b6fcc4f6afc6ee19f6a598ddc521224a40029aec203533",
+      "relationship": "supports",
+      "rationale": "Exact retained passage match.",
+      "record_id": "link_b3c766627f66dd2687b8003677293d72627fb6a763cf78d07f1e1152c1df0188"
+    },
+    {
+      "id": "edge_3f69b275549ce69497d0a7684fb1c512cfe6554776f1aee2f38d32e93b8647ea",
+      "source": "evidence_67b317ae22864228210c1581dbbbc8f56ffeebdd9cc875f576fcdd12300dd379",
+      "target": "evidence_849a78c5f8db2c7326642348e2c3a9aa906b3db6337ddc2ec363ca1797a330db",
+      "relationship": "contradicts",
+      "rationale": "Unequal numeric values under the same scope; unresolved without a vote decision.",
+      "record_id": "comparison_16dceaeac5b1e133219790a2ab6392a244b5080f4b5fce6b45ee02144dab2a3e"
+    },
+    {
+      "id": "edge_47f75ccdff5fa140bc5b95230eeb26a3c8541cf9441e5461416d224b54209624",
+      "source": "evidence_993a4e16df625975ef53be24f319808f3a234aafd07a3d8a653c5b41f6e4cdd6",
+      "target": "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a",
+      "relationship": "addresses",
+      "rationale": "Lexical question overlap; not factual verification.",
+      "record_id": null
+    },
+    {
+      "id": "edge_498066c7a2fdd0de246b8ed075dba9b1c91fcc6a6e7ef950c578cc34209aac77",
+      "source": "evidence_1049df6fe0fd5135f72e229f0035586183b123024a2316e798f4cc664b8649b7",
+      "target": "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a",
+      "relationship": "addresses",
+      "rationale": "Lexical question overlap; not factual verification.",
+      "record_id": null
+    },
+    {
+      "id": "edge_4fbccfb35f262eba2a89ec607eab8a01d87e1a4fb71b9db80012a2728fc2bc71",
+      "source": "evidence_2a54b5ba2e6ae418332ad9aa493943c2c8853eb53bbe2fa96d0c5320ac7ae122",
+      "target": "evidence_849a78c5f8db2c7326642348e2c3a9aa906b3db6337ddc2ec363ca1797a330db",
+      "relationship": "contradicts",
+      "rationale": "Unequal numeric values under the same scope; unresolved without a vote decision.",
+      "record_id": "comparison_28c689e9ee79ad78ab1911ebfacdf83ee638209717cadc2b31d1ac40eb5521b0"
+    },
+    {
+      "id": "edge_595aee59a81753aab0dab5c12b405ea06ea306aa41820df0a46f30d0d248ddf4",
+      "source": "evidence_1049df6fe0fd5135f72e229f0035586183b123024a2316e798f4cc664b8649b7",
+      "target": "evidence_849a78c5f8db2c7326642348e2c3a9aa906b3db6337ddc2ec363ca1797a330db",
+      "relationship": "contradicts",
+      "rationale": "Unequal numeric values under the same scope; unresolved without a vote decision.",
+      "record_id": "comparison_cd80d66a0fea6b82a8dc0177e96fa1efdc7fa5023588c66ad57ea9b109aad63d"
+    },
+    {
+      "id": "edge_676a6e64d15b6f177fd2a7ada89440b78d0052811084c60519dd71b810488996",
+      "source": "evidence_2a54b5ba2e6ae418332ad9aa493943c2c8853eb53bbe2fa96d0c5320ac7ae122",
+      "target": "evidence_993a4e16df625975ef53be24f319808f3a234aafd07a3d8a653c5b41f6e4cdd6",
+      "relationship": "contextualizes",
+      "rationale": "Different timeframe; no contradiction inferred.",
+      "record_id": "comparison_64b3cc1ae0421e17acd498170fc3c61952dcc9c93eb861eb1488d57e89198732"
+    },
+    {
+      "id": "edge_79898b57ccd11638f627771b3917a48d27f2591ccade9dad84e7c2a7c978628f",
+      "source": "evidence_67b317ae22864228210c1581dbbbc8f56ffeebdd9cc875f576fcdd12300dd379",
+      "target": "evidence_2a54b5ba2e6ae418332ad9aa493943c2c8853eb53bbe2fa96d0c5320ac7ae122",
+      "relationship": "duplicate_of",
+      "rationale": "Identical normalized quotation; independent corroboration is not established.",
+      "record_id": "comparison_31c7ce20ba5c5cc8eb01a605cd16b7fed7663eccb410465b0d399fd1e7556c1b"
+    },
+    {
+      "id": "edge_8f54650e7b8c54aef2499d3f4dacfe41dbf96d054c5c0f4ba74dfa76469c3df6",
+      "source": "evidence_67b317ae22864228210c1581dbbbc8f56ffeebdd9cc875f576fcdd12300dd379",
+      "target": "source_956212a3790b7f4f606f0628bf81388a20577ebd6cab99dc6acd19ab3980bebf",
+      "relationship": "retrieved_from",
+      "rationale": "Exact retained passage and source version.",
+      "record_id": null
+    },
+    {
+      "id": "edge_97067f89b074a0b80ca45493cd3ebf5dba59f5e1b65325f0396c6edbdc60b8c6",
+      "source": "source_e2e7be0c719af4759092f8cd64b55a417febbb5930f05ac866afbddb6c51af25",
+      "target": "source_956212a3790b7f4f606f0628bf81388a20577ebd6cab99dc6acd19ab3980bebf",
+      "relationship": "duplicate_of",
+      "rationale": "Same family or retained content; independent votes are not established.",
+      "record_id": null
+    },
+    {
+      "id": "edge_a0273b4d193c4f771e02965ec66bcc75216cc73cf08b91d2a81d82ef5a88b581",
+      "source": "evidence_2a54b5ba2e6ae418332ad9aa493943c2c8853eb53bbe2fa96d0c5320ac7ae122",
+      "target": "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a",
+      "relationship": "addresses",
+      "rationale": "Lexical question overlap; not factual verification.",
+      "record_id": null
+    },
+    {
+      "id": "edge_ad35283ac654628a982f4126ac74f554398a40c798ca0cd69637547b4e08c1d4",
+      "source": "evidence_1049df6fe0fd5135f72e229f0035586183b123024a2316e798f4cc664b8649b7",
+      "target": "source_ba210b1000e58c26c3cde745d9a1e76538848f38b51a87467f6b6b9756e979f7",
+      "relationship": "retrieved_from",
+      "rationale": "Exact retained passage and source version.",
+      "record_id": null
+    },
+    {
+      "id": "edge_aeefdd54bd83196917d1955b5e53a4582ba41a3aaf49fe549e348404b37221d3",
+      "source": "evidence_67b317ae22864228210c1581dbbbc8f56ffeebdd9cc875f576fcdd12300dd379",
+      "target": "evidence_1049df6fe0fd5135f72e229f0035586183b123024a2316e798f4cc664b8649b7",
+      "relationship": "supports",
+      "rationale": "Equal numeric values after unit conversion under the same explicit scope.",
+      "record_id": "comparison_d486452f57c4b0b3a05cbc60aa4bf14c9ee03a2d4394e930c3b86aac458dd948"
+    },
+    {
+      "id": "edge_b31c21ee72b8105127c7b774ad132951979f7462ce974724c40d6931c6ef1872",
+      "source": "evidence_993a4e16df625975ef53be24f319808f3a234aafd07a3d8a653c5b41f6e4cdd6",
+      "target": "source_788a873729764ce7edd64eec6f2ae61e8ae78c5a2032985304d6a0076d4d6dbe",
+      "relationship": "retrieved_from",
+      "rationale": "Exact retained passage and source version.",
+      "record_id": null
+    },
+    {
+      "id": "edge_c2dce111083c13b323662aea6324cef76d6dd6cd26d5e3879c2c5915fc8777ab",
+      "source": "evidence_849a78c5f8db2c7326642348e2c3a9aa906b3db6337ddc2ec363ca1797a330db",
+      "target": "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a",
+      "relationship": "addresses",
+      "rationale": "Lexical question overlap; not factual verification.",
+      "record_id": null
+    },
+    {
+      "id": "edge_d14e72729997e8219e8c70c3fcde27134ac4ea4b81cbe64f2261ea8c65da1471",
+      "source": "evidence_2a54b5ba2e6ae418332ad9aa493943c2c8853eb53bbe2fa96d0c5320ac7ae122",
+      "target": "source_e2e7be0c719af4759092f8cd64b55a417febbb5930f05ac866afbddb6c51af25",
+      "relationship": "retrieved_from",
+      "rationale": "Exact retained passage and source version.",
+      "record_id": null
+    },
+    {
+      "id": "edge_dc59f2456be04e20ce61fe091ed7c72d929b6ae1d605486925f68f3128a64462",
+      "source": "evidence_2a54b5ba2e6ae418332ad9aa493943c2c8853eb53bbe2fa96d0c5320ac7ae122",
+      "target": "evidence_1049df6fe0fd5135f72e229f0035586183b123024a2316e798f4cc664b8649b7",
+      "relationship": "supports",
+      "rationale": "Equal numeric values after unit conversion under the same explicit scope.",
+      "record_id": "comparison_c00ab13fe7ff0c20c3128804158de4b425e683a488e07764362dd50c3bbfb1f8"
+    },
+    {
+      "id": "edge_de817350ff2da6b94bcceb14bd6104e6c1215787f181a76c7f146dec9fc7a80e",
+      "source": "evidence_849a78c5f8db2c7326642348e2c3a9aa906b3db6337ddc2ec363ca1797a330db",
+      "target": "source_b6e936d3389db91d88e1e36307a7ffad1cdd599f153cda9ec190d564660fcd28",
+      "relationship": "retrieved_from",
+      "rationale": "Exact retained passage and source version.",
+      "record_id": null
+    }
+  ],
+  "gap_records": [
+    {
+      "id": "gap_4a3f854af2a441b8abb3e6fbda54956a0a7cbf23bf8b0543c462001cec596753",
+      "purpose": "primary_source",
+      "question_id": "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a",
+      "missing_aspect": "Reconcile retained values 100000000000 versus 120000000000 Wh: northfield solar electricity output in 2024 for all plants under standard operation",
+      "needed_source_types": [
+        "web"
+      ],
+      "recommended_query": "Find primary-source measurements and definitions for northfield solar electricity output in 2024 for all plants under standard operation",
+      "priority": 1.0
+    },
+    {
+      "id": "gap_f85cfa2ea53df1852ecf63c6469f6aa69c3cccbdd526ea177269ab34501fd9f2",
+      "purpose": "counter_evidence",
+      "question_id": "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a",
+      "missing_aspect": "Reconcile retained values 100000000000 versus 120000000000 Wh: northfield solar electricity output in 2024 for all plants under standard operation",
+      "needed_source_types": [
+        "web"
+      ],
+      "recommended_query": "Find counter-evidence or corrections that reconcile northfield solar electricity output in 2024 for all plants under standard operation",
+      "priority": 1.0
+    }
+  ]
+}

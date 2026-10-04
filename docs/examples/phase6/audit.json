@@ -1,0 +1,702 @@
+{
+  "version": "evidence_audit_v1",
+  "run_id": "run_61cb47f2859a4d53a888aba1fdf44488",
+  "owner_scope": "local",
+  "analysis_signature": "analysis_3e3084ce62f5c4ee47d5337b9d82fdb77c3e3ee5216c72183cb81e5f3556b3ba",
+  "analysis_notes": [
+    "5 of 5 passages matched numeric scope grammar; other passages remain unclassified."
+  ],
+  "analysis_limited": false,
+  "source_quality": {
+    "source_788a873729764ce7edd64eec6f2ae61e8ae78c5a2032985304d6a0076d4d6dbe": {
+      "source_id": "source_788a873729764ce7edd64eec6f2ae61e8ae78c5a2032985304d6a0076d4d6dbe",
+      "version": "weighted_metadata_v1",
+      "profile": "general",
+      "score": 0.5495890410958904,
+      "observed_weight": 1.0,
+      "family_group": "family_group_f6ffb591d59ac6a83967435bffbc12c3f2f543414abd9f2e15c4458697fd5dce",
+      "family_size": 1,
+      "features": [
+        {
+          "name": "relevance",
+          "value": 1.0,
+          "weight": 0.35,
+          "rationale": "Maximum admitted lexical relevance; not semantic verification."
+        },
+        {
+          "name": "primary_evidence",
+          "value": 0.0,
+          "weight": 0.25,
+          "rationale": "Synthetic metadata; publisher assessment is unverified."
+        },
+        {
+          "name": "publisher_identity",
+          "value": 1.0,
+          "weight": 0.1,
+          "rationale": "A supplied publisher name is an identity signal, not verified authority."
+        },
+        {
+          "name": "methodology",
+          "value": 0.0,
+          "weight": 0.1,
+          "rationale": "Synthetic metadata; publisher assessment is unverified."
+        },
+        {
+          "name": "recency",
+          "value": 0.9917808219178083,
+          "weight": 0.05,
+          "rationale": "ISO publication date uses a ten-year decay from run start; absent, invalid or future dates are unknown."
+        },
+        {
+          "name": "independent_corroboration",
+          "value": 0.0,
+          "weight": 0.1,
+          "rationale": "Equal measurements across known families; copied text is excluded. Family labels are supplied signals."
+        },
+        {
+          "name": "family_uniqueness",
+          "value": 1.0,
+          "weight": 0.05,
+          "rationale": "Same supplied family or content hash is grouped; copies add no votes."
+        }
+      ]
+    },
+    "source_956212a3790b7f4f606f0628bf81388a20577ebd6cab99dc6acd19ab3980bebf": {
+      "source_id": "source_956212a3790b7f4f606f0628bf81388a20577ebd6cab99dc6acd19ab3980bebf",
+      "version": "weighted_metadata_v1",
+      "profile": "general",
+      "score": 0.9162602739726027,
+      "observed_weight": 1.0,
+      "family_group": "family_group_1b9e2d85ef5dd7844c0d17f74c44b4a58aceb5926a538a6803e2bf08a5267d92",
+      "family_size": 2,
+      "features": [
+        {
+          "name": "relevance",
+          "value": 1.0,
+          "weight": 0.35,
+          "rationale": "Maximum admitted lexical relevance; not semantic verification."
+        },
+        {
+          "name": "primary_evidence",
+          "value": 1.0,
+          "weight": 0.25,
+          "rationale": "Synthetic metadata; publisher assessment is unverified."
+        },
+        {
+          "name": "publisher_identity",
+          "value": 1.0,
+          "weight": 0.1,
+          "rationale": "A supplied publisher name is an identity signal, not verified authority."
+        },
+        {
+          "name": "methodology",
+          "value": 1.0,
+          "weight": 0.1,
+          "rationale": "Synthetic metadata; publisher assessment is unverified."
+        },
+        {
+          "name": "recency",
+          "value": 0.8252054794520548,
+          "weight": 0.05,
+          "rationale": "ISO publication date uses a ten-year decay from run start; absent, invalid or future dates are unknown."
+        },
+        {
+          "name": "independent_corroboration",
+          "value": 0.5,
+          "weight": 0.1,
+          "rationale": "Equal measurements across known families; copied text is excluded. Family labels are supplied signals."
+        },
+        {
+          "name": "family_uniqueness",
+          "value": 0.5,
+          "weight": 0.05,
+          "rationale": "Same supplied family or content hash is grouped; copies add no votes."
+        }
+      ]
+    },
+    "source_b6e936d3389db91d88e1e36307a7ffad1cdd599f153cda9ec190d564660fcd28": {
+      "source_id": "source_b6e936d3389db91d88e1e36307a7ffad1cdd599f153cda9ec190d564660fcd28",
+      "version": "weighted_metadata_v1",
+      "profile": "general",
+      "score": 0.5495890410958904,
+      "observed_weight": 1.0,
+      "family_group": "family_group_baf982df059ca17a7692ea63a459265c40100ff791549ea707c85f942fc0a862",
+      "family_size": 1,
+      "features": [
+        {
+          "name": "relevance",
+          "value": 1.0,
+          "weight": 0.35,
+          "rationale": "Maximum admitted lexical relevance; not semantic verification."
+        },
+        {
+          "name": "primary_evidence",
+          "value": 0.0,
+          "weight": 0.25,
+          "rationale": "Synthetic metadata; publisher assessment is unverified."
+        },
+        {
+          "name": "publisher_identity",
+          "value": 1.0,
+          "weight": 0.1,
+          "rationale": "A supplied publisher name is an identity signal, not verified authority."
+        },
+        {
+          "name": "methodology",
+          "value": 0.0,
+          "weight": 0.1,
+          "rationale": "Synthetic metadata; publisher assessment is unverified."
+        },
+        {
+          "name": "recency",
+          "value": 0.9917808219178083,
+          "weight": 0.05,
+          "rationale": "ISO publication date uses a ten-year decay from run start; absent, invalid or future dates are unknown."
+        },
+        {
+          "name": "independent_corroboration",
+          "value": 0.0,
+          "weight": 0.1,
+          "rationale": "Equal measurements across known families; copied text is excluded. Family labels are supplied signals."
+        },
+        {
+          "name": "family_uniqueness",
+          "value": 1.0,
+          "weight": 0.05,
+          "rationale": "Same supplied family or content hash is grouped; copies add no votes."
+        }
+      ]
+    },
+    "source_ba210b1000e58c26c3cde745d9a1e76538848f38b51a87467f6b6b9756e979f7": {
+      "source_id": "source_ba210b1000e58c26c3cde745d9a1e76538848f38b51a87467f6b6b9756e979f7",
+      "version": "weighted_metadata_v1",
+      "profile": "general",
+      "score": 0.9412602739726027,
+      "observed_weight": 1.0,
+      "family_group": "family_group_48e16c97f50133942c898e62fcd61c19b09c6fe1498ac19f6666aa88188ebfdc",
+      "family_size": 1,
+      "features": [
+        {
+          "name": "relevance",
+          "value": 1.0,
+          "weight": 0.35,
+          "rationale": "Maximum admitted lexical relevance; not semantic verification."
+        },
+        {
+          "name": "primary_evidence",
+          "value": 1.0,
+          "weight": 0.25,
+          "rationale": "Synthetic metadata; publisher assessment is unverified."
+        },
+        {
+          "name": "publisher_identity",
+          "value": 1.0,
+          "weight": 0.1,
+          "rationale": "A supplied publisher name is an identity signal, not verified authority."
+        },
+        {
+          "name": "methodology",
+          "value": 1.0,
+          "weight": 0.1,
+          "rationale": "Synthetic metadata; publisher assessment is unverified."
+        },
+        {
+          "name": "recency",
+          "value": 0.8252054794520548,
+          "weight": 0.05,
+          "rationale": "ISO publication date uses a ten-year decay from run start; absent, invalid or future dates are unknown."
+        },
+        {
+          "name": "independent_corroboration",
+          "value": 0.5,
+          "weight": 0.1,
+          "rationale": "Equal measurements across known families; copied text is excluded. Family labels are supplied signals."
+        },
+        {
+          "name": "family_uniqueness",
+          "value": 1.0,
+          "weight": 0.05,
+          "rationale": "Same supplied family or content hash is grouped; copies add no votes."
+        }
+      ]
+    },
+    "source_e2e7be0c719af4759092f8cd64b55a417febbb5930f05ac866afbddb6c51af25": {
+      "source_id": "source_e2e7be0c719af4759092f8cd64b55a417febbb5930f05ac866afbddb6c51af25",
+      "version": "weighted_metadata_v1",
+      "profile": "general",
+      "score": 0.5745890410958904,
+      "observed_weight": 1.0,
+      "family_group": "family_group_1b9e2d85ef5dd7844c0d17f74c44b4a58aceb5926a538a6803e2bf08a5267d92",
+      "family_size": 2,
+      "features": [
+        {
+          "name": "relevance",
+          "value": 1.0,
+          "weight": 0.35,
+          "rationale": "Maximum admitted lexical relevance; not semantic verification."
+        },
+        {
+          "name": "primary_evidence",
+          "value": 0.0,
+          "weight": 0.25,
+          "rationale": "Synthetic metadata; publisher assessment is unverified."
+        },
+        {
+          "name": "publisher_identity",
+          "value": 1.0,
+          "weight": 0.1,
+          "rationale": "A supplied publisher name is an identity signal, not verified authority."
+        },
+        {
+          "name": "methodology",
+          "value": 0.0,
+          "weight": 0.1,
+          "rationale": "Synthetic metadata; publisher assessment is unverified."
+        },
+        {
+          "name": "recency",
+          "value": 0.9917808219178083,
+          "weight": 0.05,
+          "rationale": "ISO publication date uses a ten-year decay from run start; absent, invalid or future dates are unknown."
+        },
+        {
+          "name": "independent_corroboration",
+          "value": 0.5,
+          "weight": 0.1,
+          "rationale": "Equal measurements across known families; copied text is excluded. Family labels are supplied signals."
+        },
+        {
+          "name": "family_uniqueness",
+          "value": 0.5,
+          "weight": 0.05,
+          "rationale": "Same supplied family or content hash is grouped; copies add no votes."
+        }
+      ]
+    }
+  },
+  "propositions": {
+    "proposition_14e0742701a8b6e6efe5e5c83489fc140ad5584d64fb6511c8da7d7860c3986f": {
+      "id": "proposition_14e0742701a8b6e6efe5e5c83489fc140ad5584d64fb6511c8da7d7860c3986f",
+      "evidence_id": "evidence_67b317ae22864228210c1581dbbbc8f56ffeebdd9cc875f576fcdd12300dd379",
+      "question_ids": [
+        "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a"
+      ],
+      "start_offset": 0,
+      "end_offset": 95,
+      "quote": "Northfield solar electricity output was 100 GWh in 2024 for all plants under standard operation",
+      "entity": "northfield solar",
+      "metric": "electricity output",
+      "timeframe": "2024",
+      "population": "all plants",
+      "conditions": "standard operation",
+      "value": "100",
+      "unit": "GWh",
+      "extractor": "scoped_numeric_v1"
+    },
+    "proposition_1e67a337211791a22be1ddea76073108862cd3ecf6dd3cf2115abed3a68dd002": {
+      "id": "proposition_1e67a337211791a22be1ddea76073108862cd3ecf6dd3cf2115abed3a68dd002",
+      "evidence_id": "evidence_2a54b5ba2e6ae418332ad9aa493943c2c8853eb53bbe2fa96d0c5320ac7ae122",
+      "question_ids": [
+        "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a"
+      ],
+      "start_offset": 0,
+      "end_offset": 95,
+      "quote": "Northfield solar electricity output was 100 GWh in 2024 for all plants under standard operation",
+      "entity": "northfield solar",
+      "metric": "electricity output",
+      "timeframe": "2024",
+      "population": "all plants",
+      "conditions": "standard operation",
+      "value": "100",
+      "unit": "GWh",
+      "extractor": "scoped_numeric_v1"
+    },
+    "proposition_9326e984e981290f65d8189d9f82bc484f79636dd7ab7ea379155dda71d59c96": {
+      "id": "proposition_9326e984e981290f65d8189d9f82bc484f79636dd7ab7ea379155dda71d59c96",
+      "evidence_id": "evidence_1049df6fe0fd5135f72e229f0035586183b123024a2316e798f4cc664b8649b7",
+      "question_ids": [
+        "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a"
+      ],
+      "start_offset": 0,
+      "end_offset": 98,
+      "quote": "Northfield solar electricity output was 100000 MWh in 2024 for all plants under standard operation",
+      "entity": "northfield solar",
+      "metric": "electricity output",
+      "timeframe": "2024",
+      "population": "all plants",
+      "conditions": "standard operation",
+      "value": "100000",
+      "unit": "MWh",
+      "extractor": "scoped_numeric_v1"
+    },
+    "proposition_c1dbc927af9dcedfc0d3cdc78bbb611709c14d8c57d1347f8a8a41b935885f8e": {
+      "id": "proposition_c1dbc927af9dcedfc0d3cdc78bbb611709c14d8c57d1347f8a8a41b935885f8e",
+      "evidence_id": "evidence_849a78c5f8db2c7326642348e2c3a9aa906b3db6337ddc2ec363ca1797a330db",
+      "question_ids": [
+        "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a"
+      ],
+      "start_offset": 0,
+      "end_offset": 95,
+      "quote": "Northfield solar electricity output was 120 GWh in 2024 for all plants under standard operation",
+      "entity": "northfield solar",
+      "metric": "electricity output",
+      "timeframe": "2024",
+      "population": "all plants",
+      "conditions": "standard operation",
+      "value": "120",
+      "unit": "GWh",
+      "extractor": "scoped_numeric_v1"
+    },
+    "proposition_d4034dc69a590a366c5f995e1da857bfd5c398ea7ffc9b95d9ce39abf70661d3": {
+      "id": "proposition_d4034dc69a590a366c5f995e1da857bfd5c398ea7ffc9b95d9ce39abf70661d3",
+      "evidence_id": "evidence_993a4e16df625975ef53be24f319808f3a234aafd07a3d8a653c5b41f6e4cdd6",
+      "question_ids": [
+        "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a"
+      ],
+      "start_offset": 0,
+      "end_offset": 95,
+      "quote": "Northfield solar electricity output was 900 GWh in 2023 for all plants under standard operation",
+      "entity": "northfield solar",
+      "metric": "electricity output",
+      "timeframe": "2023",
+      "population": "all plants",
+      "conditions": "standard operation",
+      "value": "900",
+      "unit": "GWh",
+      "extractor": "scoped_numeric_v1"
+    }
+  },
+  "comparisons": {
+    "comparison_0b5350a0f7eb3350d02ddf8cc539711b8db2ed5d124488f8bc971eb066cbfc4b": {
+      "id": "comparison_0b5350a0f7eb3350d02ddf8cc539711b8db2ed5d124488f8bc971eb066cbfc4b",
+      "left_id": "proposition_9326e984e981290f65d8189d9f82bc484f79636dd7ab7ea379155dda71d59c96",
+      "right_id": "proposition_d4034dc69a590a366c5f995e1da857bfd5c398ea7ffc9b95d9ce39abf70661d3",
+      "question_ids": [
+        "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a"
+      ],
+      "relationship": "not_comparable",
+      "rationale": "Different timeframe; no contradiction inferred.",
+      "normalized_left": null,
+      "normalized_right": null,
+      "canonical_unit": null,
+      "version": "scoped_numeric_v1"
+    },
+    "comparison_16dceaeac5b1e133219790a2ab6392a244b5080f4b5fce6b45ee02144dab2a3e": {
+      "id": "comparison_16dceaeac5b1e133219790a2ab6392a244b5080f4b5fce6b45ee02144dab2a3e",
+      "left_id": "proposition_14e0742701a8b6e6efe5e5c83489fc140ad5584d64fb6511c8da7d7860c3986f",
+      "right_id": "proposition_c1dbc927af9dcedfc0d3cdc78bbb611709c14d8c57d1347f8a8a41b935885f8e",
+      "question_ids": [
+        "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a"
+      ],
+      "relationship": "contradicts",
+      "rationale": "Unequal numeric values under the same scope; unresolved without a vote decision.",
+      "normalized_left": "100000000000",
+      "normalized_right": "120000000000",
+      "canonical_unit": "Wh",
+      "version": "scoped_numeric_v1"
+    },
+    "comparison_28c689e9ee79ad78ab1911ebfacdf83ee638209717cadc2b31d1ac40eb5521b0": {
+      "id": "comparison_28c689e9ee79ad78ab1911ebfacdf83ee638209717cadc2b31d1ac40eb5521b0",
+      "left_id": "proposition_1e67a337211791a22be1ddea76073108862cd3ecf6dd3cf2115abed3a68dd002",
+      "right_id": "proposition_c1dbc927af9dcedfc0d3cdc78bbb611709c14d8c57d1347f8a8a41b935885f8e",
+      "question_ids": [
+        "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a"
+      ],
+      "relationship": "contradicts",
+      "rationale": "Unequal numeric values under the same scope; unresolved without a vote decision.",
+      "normalized_left": "100000000000",
+      "normalized_right": "120000000000",
+      "canonical_unit": "Wh",
+      "version": "scoped_numeric_v1"
+    },
+    "comparison_31c7ce20ba5c5cc8eb01a605cd16b7fed7663eccb410465b0d399fd1e7556c1b": {
+      "id": "comparison_31c7ce20ba5c5cc8eb01a605cd16b7fed7663eccb410465b0d399fd1e7556c1b",
+      "left_id": "proposition_14e0742701a8b6e6efe5e5c83489fc140ad5584d64fb6511c8da7d7860c3986f",
+      "right_id": "proposition_1e67a337211791a22be1ddea76073108862cd3ecf6dd3cf2115abed3a68dd002",
+      "question_ids": [
+        "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a"
+      ],
+      "relationship": "duplicate",
+      "rationale": "Identical normalized quotation; independent corroboration is not established.",
+      "normalized_left": "100000000000",
+      "normalized_right": "100000000000",
+      "canonical_unit": "Wh",
+      "version": "scoped_numeric_v1"
+    },
+    "comparison_64b3cc1ae0421e17acd498170fc3c61952dcc9c93eb861eb1488d57e89198732": {
+      "id": "comparison_64b3cc1ae0421e17acd498170fc3c61952dcc9c93eb861eb1488d57e89198732",
+      "left_id": "proposition_1e67a337211791a22be1ddea76073108862cd3ecf6dd3cf2115abed3a68dd002",
+      "right_id": "proposition_d4034dc69a590a366c5f995e1da857bfd5c398ea7ffc9b95d9ce39abf70661d3",
+      "question_ids": [
+        "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a"
+      ],
+      "relationship": "not_comparable",
+      "rationale": "Different timeframe; no contradiction inferred.",
+      "normalized_left": null,
+      "normalized_right": null,
+      "canonical_unit": null,
+      "version": "scoped_numeric_v1"
+    },
+    "comparison_ba5a319af9ad5dc308085c09f5069b02ee0b036a3df4017ae1d129800b9f55d8": {
+      "id": "comparison_ba5a319af9ad5dc308085c09f5069b02ee0b036a3df4017ae1d129800b9f55d8",
+      "left_id": "proposition_14e0742701a8b6e6efe5e5c83489fc140ad5584d64fb6511c8da7d7860c3986f",
+      "right_id": "proposition_d4034dc69a590a366c5f995e1da857bfd5c398ea7ffc9b95d9ce39abf70661d3",
+      "question_ids": [
+        "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a"
+      ],
+      "relationship": "not_comparable",
+      "rationale": "Different timeframe; no contradiction inferred.",
+      "normalized_left": null,
+      "normalized_right": null,
+      "canonical_unit": null,
+      "version": "scoped_numeric_v1"
+    },
+    "comparison_c00ab13fe7ff0c20c3128804158de4b425e683a488e07764362dd50c3bbfb1f8": {
+      "id": "comparison_c00ab13fe7ff0c20c3128804158de4b425e683a488e07764362dd50c3bbfb1f8",
+      "left_id": "proposition_1e67a337211791a22be1ddea76073108862cd3ecf6dd3cf2115abed3a68dd002",
+      "right_id": "proposition_9326e984e981290f65d8189d9f82bc484f79636dd7ab7ea379155dda71d59c96",
+      "question_ids": [
+        "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a"
+      ],
+      "relationship": "supports",
+      "rationale": "Equal numeric values after unit conversion under the same explicit scope.",
+      "normalized_left": "100000000000",
+      "normalized_right": "100000000000",
+      "canonical_unit": "Wh",
+      "version": "scoped_numeric_v1"
+    },
+    "comparison_ca251f519332cf5af8898abe5c9271a44d54af14f4f135167d0eea90c0e66e18": {
+      "id": "comparison_ca251f519332cf5af8898abe5c9271a44d54af14f4f135167d0eea90c0e66e18",
+      "left_id": "proposition_c1dbc927af9dcedfc0d3cdc78bbb611709c14d8c57d1347f8a8a41b935885f8e",
+      "right_id": "proposition_d4034dc69a590a366c5f995e1da857bfd5c398ea7ffc9b95d9ce39abf70661d3",
+      "question_ids": [
+        "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a"
+      ],
+      "relationship": "not_comparable",
+      "rationale": "Different timeframe; no contradiction inferred.",
+      "normalized_left": null,
+      "normalized_right": null,
+      "canonical_unit": null,
+      "version": "scoped_numeric_v1"
+    },
+    "comparison_cd80d66a0fea6b82a8dc0177e96fa1efdc7fa5023588c66ad57ea9b109aad63d": {
+      "id": "comparison_cd80d66a0fea6b82a8dc0177e96fa1efdc7fa5023588c66ad57ea9b109aad63d",
+      "left_id": "proposition_9326e984e981290f65d8189d9f82bc484f79636dd7ab7ea379155dda71d59c96",
+      "right_id": "proposition_c1dbc927af9dcedfc0d3cdc78bbb611709c14d8c57d1347f8a8a41b935885f8e",
+      "question_ids": [
+        "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a"
+      ],
+      "relationship": "contradicts",
+      "rationale": "Unequal numeric values under the same scope; unresolved without a vote decision.",
+      "normalized_left": "100000000000",
+      "normalized_right": "120000000000",
+      "canonical_unit": "Wh",
+      "version": "scoped_numeric_v1"
+    },
+    "comparison_d486452f57c4b0b3a05cbc60aa4bf14c9ee03a2d4394e930c3b86aac458dd948": {
+      "id": "comparison_d486452f57c4b0b3a05cbc60aa4bf14c9ee03a2d4394e930c3b86aac458dd948",
+      "left_id": "proposition_14e0742701a8b6e6efe5e5c83489fc140ad5584d64fb6511c8da7d7860c3986f",
+      "right_id": "proposition_9326e984e981290f65d8189d9f82bc484f79636dd7ab7ea379155dda71d59c96",
+      "question_ids": [
+        "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a"
+      ],
+      "relationship": "supports",
+      "rationale": "Equal numeric values after unit conversion under the same explicit scope.",
+      "normalized_left": "100000000000",
+      "normalized_right": "100000000000",
+      "canonical_unit": "Wh",
+      "version": "scoped_numeric_v1"
+    }
+  },
+  "claim_evidence_links": {
+    "link_0530d38ceb876a430d4085b93055941ea6650a5895d51eda0253c1807380fb54": {
+      "id": "link_0530d38ceb876a430d4085b93055941ea6650a5895d51eda0253c1807380fb54",
+      "claim_id": "claim_47835937afaf92534f593f736367b82f00619964d4a42e014125064c04ed515b",
+      "evidence_id": "evidence_993a4e16df625975ef53be24f319808f3a234aafd07a3d8a653c5b41f6e4cdd6",
+      "relationship": "supports",
+      "rationale": "Exact retained passage match.",
+      "verifier": "offline_exact_quote"
+    },
+    "link_0de915b2716c8e6c9275bdfdd5a57f0454058bf3447e22b72fc1bcf8ac22d445": {
+      "id": "link_0de915b2716c8e6c9275bdfdd5a57f0454058bf3447e22b72fc1bcf8ac22d445",
+      "claim_id": "claim_38ab5c62eac859cb6d9d6adb989d21e69a1ff521bcd244a6ef192992b07948ed",
+      "evidence_id": "evidence_67b317ae22864228210c1581dbbbc8f56ffeebdd9cc875f576fcdd12300dd379",
+      "relationship": "supports",
+      "rationale": "Exact retained passage match.",
+      "verifier": "offline_exact_quote"
+    },
+    "link_137755fb308d3420015d516650b9ff6a79cd02e597c683bf194f48c72933be7a": {
+      "id": "link_137755fb308d3420015d516650b9ff6a79cd02e597c683bf194f48c72933be7a",
+      "claim_id": "claim_934217c0fc872744ee39eaf551343f40924b002d03959dac040ec6641144c380",
+      "evidence_id": "evidence_849a78c5f8db2c7326642348e2c3a9aa906b3db6337ddc2ec363ca1797a330db",
+      "relationship": "contradicts",
+      "rationale": "Unequal numeric values under the same scope; unresolved without a vote decision.",
+      "verifier": "scoped_numeric_v1"
+    },
+    "link_1aced1b72885a9a07b313826bcb8bb2bdab97f4a4a8ffeb149492930c09741f5": {
+      "id": "link_1aced1b72885a9a07b313826bcb8bb2bdab97f4a4a8ffeb149492930c09741f5",
+      "claim_id": "claim_38ab5c62eac859cb6d9d6adb989d21e69a1ff521bcd244a6ef192992b07948ed",
+      "evidence_id": "evidence_849a78c5f8db2c7326642348e2c3a9aa906b3db6337ddc2ec363ca1797a330db",
+      "relationship": "contradicts",
+      "rationale": "Unequal numeric values under the same scope; unresolved without a vote decision.",
+      "verifier": "scoped_numeric_v1"
+    },
+    "link_3edb0d360ea094d1248f5bbaa090666b7c384d08e8d7cc03b6ee212c5afd648f": {
+      "id": "link_3edb0d360ea094d1248f5bbaa090666b7c384d08e8d7cc03b6ee212c5afd648f",
+      "claim_id": "claim_bfbe459c57e7e997a40d9c0a5b0fdbf153ee01ee862fd924b0738c3ccdb20e50",
+      "evidence_id": "evidence_849a78c5f8db2c7326642348e2c3a9aa906b3db6337ddc2ec363ca1797a330db",
+      "relationship": "supports",
+      "rationale": "Exact retained passage match.",
+      "verifier": "offline_exact_quote"
+    },
+    "link_4448ca9b60c3e6cd8f8eb520025f58615e2ee002308d6454c499b2ca69a5b336": {
+      "id": "link_4448ca9b60c3e6cd8f8eb520025f58615e2ee002308d6454c499b2ca69a5b336",
+      "claim_id": "claim_bfbe459c57e7e997a40d9c0a5b0fdbf153ee01ee862fd924b0738c3ccdb20e50",
+      "evidence_id": "evidence_67b317ae22864228210c1581dbbbc8f56ffeebdd9cc875f576fcdd12300dd379",
+      "relationship": "contradicts",
+      "rationale": "Unequal numeric values under the same scope; unresolved without a vote decision.",
+      "verifier": "scoped_numeric_v1"
+    },
+    "link_99186d1391270a5db4778940373b2ca9586f3ea7ceb0b63db10f1684e9708338": {
+      "id": "link_99186d1391270a5db4778940373b2ca9586f3ea7ceb0b63db10f1684e9708338",
+      "claim_id": "claim_d0218755e625165597b6fcc4f6afc6ee19f6a598ddc521224a40029aec203533",
+      "evidence_id": "evidence_849a78c5f8db2c7326642348e2c3a9aa906b3db6337ddc2ec363ca1797a330db",
+      "relationship": "contradicts",
+      "rationale": "Unequal numeric values under the same scope; unresolved without a vote decision.",
+      "verifier": "scoped_numeric_v1"
+    },
+    "link_a52362f1b1b3079d8d8062e41d55a82e559ec351fe4133209a33b837aeaf147c": {
+      "id": "link_a52362f1b1b3079d8d8062e41d55a82e559ec351fe4133209a33b837aeaf147c",
+      "claim_id": "claim_bfbe459c57e7e997a40d9c0a5b0fdbf153ee01ee862fd924b0738c3ccdb20e50",
+      "evidence_id": "evidence_2a54b5ba2e6ae418332ad9aa493943c2c8853eb53bbe2fa96d0c5320ac7ae122",
+      "relationship": "contradicts",
+      "rationale": "Unequal numeric values under the same scope; unresolved without a vote decision.",
+      "verifier": "scoped_numeric_v1"
+    },
+    "link_b3c766627f66dd2687b8003677293d72627fb6a763cf78d07f1e1152c1df0188": {
+      "id": "link_b3c766627f66dd2687b8003677293d72627fb6a763cf78d07f1e1152c1df0188",
+      "claim_id": "claim_d0218755e625165597b6fcc4f6afc6ee19f6a598ddc521224a40029aec203533",
+      "evidence_id": "evidence_1049df6fe0fd5135f72e229f0035586183b123024a2316e798f4cc664b8649b7",
+      "relationship": "supports",
+      "rationale": "Exact retained passage match.",
+      "verifier": "offline_exact_quote"
+    },
+    "link_c24498de44ec4775e4a92764cf4aad4d726a7cd741e170918799e6f214bb5f53": {
+      "id": "link_c24498de44ec4775e4a92764cf4aad4d726a7cd741e170918799e6f214bb5f53",
+      "claim_id": "claim_934217c0fc872744ee39eaf551343f40924b002d03959dac040ec6641144c380",
+      "evidence_id": "evidence_2a54b5ba2e6ae418332ad9aa493943c2c8853eb53bbe2fa96d0c5320ac7ae122",
+      "relationship": "supports",
+      "rationale": "Exact retained passage match.",
+      "verifier": "offline_exact_quote"
+    },
+    "link_e0a02e381e9e17efd44cfa4342d5bcec1fc183270b3cd6dec550e0ac3aa83ca9": {
+      "id": "link_e0a02e381e9e17efd44cfa4342d5bcec1fc183270b3cd6dec550e0ac3aa83ca9",
+      "claim_id": "claim_bfbe459c57e7e997a40d9c0a5b0fdbf153ee01ee862fd924b0738c3ccdb20e50",
+      "evidence_id": "evidence_1049df6fe0fd5135f72e229f0035586183b123024a2316e798f4cc664b8649b7",
+      "relationship": "contradicts",
+      "rationale": "Unequal numeric values under the same scope; unresolved without a vote decision.",
+      "verifier": "scoped_numeric_v1"
+    }
+  },
+  "citation_audit": [
+    {
+      "id": "audit_e6875611af8a9b2525921ecd7a65e38b07a1637fbcbf4bd146deaf7f3ea7473a",
+      "draft_version": 1,
+      "claim_id": "claim_d0218755e625165597b6fcc4f6afc6ee19f6a598ddc521224a40029aec203533",
+      "evidence_ids": [
+        "evidence_1049df6fe0fd5135f72e229f0035586183b123024a2316e798f4cc664b8649b7"
+      ],
+      "structural_valid": true,
+      "support": "supported",
+      "rationale": "Exact quote and retained snapshot verified; source truth was not independently verified.",
+      "repair_action": null
+    },
+    {
+      "id": "audit_be65a17baa6246c113981c6014e00bd2c030dfcb9fda60cdb2d2105a11f33531",
+      "draft_version": 1,
+      "claim_id": "claim_38ab5c62eac859cb6d9d6adb989d21e69a1ff521bcd244a6ef192992b07948ed",
+      "evidence_ids": [
+        "evidence_67b317ae22864228210c1581dbbbc8f56ffeebdd9cc875f576fcdd12300dd379"
+      ],
+      "structural_valid": true,
+      "support": "supported",
+      "rationale": "Exact quote and retained snapshot verified; source truth was not independently verified.",
+      "repair_action": null
+    },
+    {
+      "id": "audit_a2642d9ed9f9a05058d874072aa01fe66c0735dca791df51ea573e026b50627d",
+      "draft_version": 1,
+      "claim_id": "claim_934217c0fc872744ee39eaf551343f40924b002d03959dac040ec6641144c380",
+      "evidence_ids": [
+        "evidence_2a54b5ba2e6ae418332ad9aa493943c2c8853eb53bbe2fa96d0c5320ac7ae122"
+      ],
+      "structural_valid": true,
+      "support": "supported",
+      "rationale": "Exact quote and retained snapshot verified; source truth was not independently verified.",
+      "repair_action": null
+    },
+    {
+      "id": "audit_7c6e881fc77a58c8226f8e1e7432397ae9571822d826529ff66299572dd29af2",
+      "draft_version": 1,
+      "claim_id": "claim_bfbe459c57e7e997a40d9c0a5b0fdbf153ee01ee862fd924b0738c3ccdb20e50",
+      "evidence_ids": [
+        "evidence_849a78c5f8db2c7326642348e2c3a9aa906b3db6337ddc2ec363ca1797a330db"
+      ],
+      "structural_valid": true,
+      "support": "supported",
+      "rationale": "Exact quote and retained snapshot verified; source truth was not independently verified.",
+      "repair_action": null
+    },
+    {
+      "id": "audit_a8381b50e9249c7ac878a53ca81c2756e7279dac8ac02b50b51fa919e20220fe",
+      "draft_version": 1,
+      "claim_id": "claim_47835937afaf92534f593f736367b82f00619964d4a42e014125064c04ed515b",
+      "evidence_ids": [
+        "evidence_993a4e16df625975ef53be24f319808f3a234aafd07a3d8a653c5b41f6e4cdd6"
+      ],
+      "structural_valid": true,
+      "support": "supported",
+      "rationale": "Exact quote and retained snapshot verified; source truth was not independently verified.",
+      "repair_action": null
+    }
+  ],
+  "unresolved_audits": [],
+  "coverage": {
+    "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a": {
+      "question_id": "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a",
+      "status": "disputed",
+      "evidence_ids": [
+        "evidence_1049df6fe0fd5135f72e229f0035586183b123024a2316e798f4cc664b8649b7",
+        "evidence_2a54b5ba2e6ae418332ad9aa493943c2c8853eb53bbe2fa96d0c5320ac7ae122",
+        "evidence_67b317ae22864228210c1581dbbbc8f56ffeebdd9cc875f576fcdd12300dd379",
+        "evidence_849a78c5f8db2c7326642348e2c3a9aa906b3db6337ddc2ec363ca1797a330db",
+        "evidence_993a4e16df625975ef53be24f319808f3a234aafd07a3d8a653c5b41f6e4cdd6"
+      ],
+      "rationale": "Unresolved comparable numeric disagreement."
+    }
+  },
+  "gaps": [
+    {
+      "id": "gap_4a3f854af2a441b8abb3e6fbda54956a0a7cbf23bf8b0543c462001cec596753",
+      "purpose": "primary_source",
+      "question_id": "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a",
+      "missing_aspect": "Reconcile retained values 100000000000 versus 120000000000 Wh: northfield solar electricity output in 2024 for all plants under standard operation",
+      "needed_source_types": [
+        "web"
+      ],
+      "recommended_query": "Find primary-source measurements and definitions for northfield solar electricity output in 2024 for all plants under standard operation",
+      "priority": 1.0
+    },
+    {
+      "id": "gap_f85cfa2ea53df1852ecf63c6469f6aa69c3cccbdd526ea177269ab34501fd9f2",
+      "purpose": "counter_evidence",
+      "question_id": "question_a840fa79cde89f49191e7be5c7f64f058b816c9c591e4e089458934ca28e6d5a",
+      "missing_aspect": "Reconcile retained values 100000000000 versus 120000000000 Wh: northfield solar electricity output in 2024 for all plants under standard operation",
+      "needed_source_types": [
+        "web"
+      ],
+      "recommended_query": "Find counter-evidence or corrections that reconcile northfield solar electricity output in 2024 for all plants under standard operation",
+      "priority": 1.0
+    }
+  ]
+}

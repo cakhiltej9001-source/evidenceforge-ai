@@ -1,0 +1,24 @@
+# Reviewable PRIVATE service template. Applying this creates paid resources.
+# No public URL or authentication gateway is provisioned by this template.
+services:
+  - type: pserv
+    name: evidenceforge-demo
+    runtime: docker
+    plan: 0.5c-512mb
+    numInstances: 1
+    autoDeployTrigger: "off"
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: PORT
+        value: "8501"
+      - key: EVIDENCEFORGE_DATA_DIR
+        value: /data/evidenceforge
+      - key: EVIDENCEFORGE_MODEL_PROVIDER
+        value: fixture
+      - key: EVIDENCEFORGE_TRACING_ENABLED
+        value: "false"
+    disk:
+      name: evidenceforge-data
+      mountPath: /data
+      sizeGB: 1
+

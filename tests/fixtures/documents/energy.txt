@@ -1,0 +1,5 @@
+Synthetic fixture: solar electricity output depends on sunlight.
+
+Synthetic fixture: wind electricity output depends on wind speed.
+
+Synthetic limitations: these are examples, not real measurements.

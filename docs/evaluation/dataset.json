@@ -1,0 +1,226 @@
+{
+  "version": 1,
+  "annotation_status": "draft_requires_human_review",
+  "annotation_author": "Codex draft; independent human review pending",
+  "cases": [
+    {
+      "id": "case_01",
+      "split": "development",
+      "question": "Compare solar and wind electricity output.",
+      "scenario": "immediate",
+      "reference_passages": [
+        "Synthetic fixture: solar electricity output depends on sunlight.",
+        "Synthetic fixture: wind electricity output depends on wind speed."
+      ],
+      "expected_dispute": false,
+      "expected_abstention": false
+    },
+    {
+      "id": "case_02",
+      "split": "development",
+      "question": "Compare solar and wind electricity output across changing weather.",
+      "scenario": "second_pass",
+      "reference_passages": [
+        "Synthetic fixture: solar electricity output depends on sunlight.",
+        "Synthetic fixture: wind electricity output depends on wind speed."
+      ],
+      "expected_dispute": false,
+      "expected_abstention": false
+    },
+    {
+      "id": "case_03",
+      "split": "development",
+      "question": "How does solar electricity output depend on sunlight?",
+      "scenario": "immediate",
+      "reference_passages": [
+        "Synthetic fixture: solar electricity output depends on sunlight."
+      ],
+      "expected_dispute": false,
+      "expected_abstention": false
+    },
+    {
+      "id": "case_04",
+      "split": "development",
+      "question": "How does wind electricity output depend on wind speed?",
+      "scenario": "immediate",
+      "reference_passages": [
+        "Synthetic fixture: wind electricity output depends on wind speed."
+      ],
+      "expected_dispute": false,
+      "expected_abstention": false
+    },
+    {
+      "id": "case_05",
+      "split": "development",
+      "question": "Compare solar and wind electricity output under variable conditions.",
+      "scenario": "second_pass",
+      "reference_passages": [
+        "Synthetic fixture: solar electricity output depends on sunlight.",
+        "Synthetic fixture: wind electricity output depends on wind speed."
+      ],
+      "expected_dispute": false,
+      "expected_abstention": false
+    },
+    {
+      "id": "case_06",
+      "split": "development",
+      "question": "Which source explains solar electricity output?",
+      "scenario": "immediate",
+      "reference_passages": [
+        "Synthetic fixture: solar electricity output depends on sunlight."
+      ],
+      "expected_dispute": false,
+      "expected_abstention": false
+    },
+    {
+      "id": "case_07",
+      "split": "development",
+      "question": "Which source explains wind electricity output?",
+      "scenario": "immediate",
+      "reference_passages": [
+        "Synthetic fixture: wind electricity output depends on wind speed."
+      ],
+      "expected_dispute": false,
+      "expected_abstention": false
+    },
+    {
+      "id": "case_08",
+      "split": "development",
+      "question": "Compare solar and wind electricity output using cited passages.",
+      "scenario": "immediate",
+      "reference_passages": [
+        "Synthetic fixture: solar electricity output depends on sunlight.",
+        "Synthetic fixture: wind electricity output depends on wind speed."
+      ],
+      "expected_dispute": false,
+      "expected_abstention": false
+    },
+    {
+      "id": "case_09",
+      "split": "development",
+      "question": "Compare Northfield solar electricity output reported by two synthetic sources.",
+      "scenario": "dispute",
+      "reference_passages": [
+        "Northfield solar electricity output was 100 GWh in 2024 for all plants under standard operation.",
+        "Northfield solar electricity output was 120 GWh in 2024 for all plants under standard operation."
+      ],
+      "expected_dispute": true,
+      "expected_abstention": false
+    },
+    {
+      "id": "case_10",
+      "split": "development",
+      "question": "Investigate disagreement in Northfield solar electricity output for 2024.",
+      "scenario": "dispute",
+      "reference_passages": [
+        "Northfield solar electricity output was 100 GWh in 2024 for all plants under standard operation.",
+        "Northfield solar electricity output was 120 GWh in 2024 for all plants under standard operation."
+      ],
+      "expected_dispute": true,
+      "expected_abstention": false
+    },
+    {
+      "id": "case_11",
+      "split": "development",
+      "question": "Compare battery and hydrogen electricity output.",
+      "scenario": "empty",
+      "reference_passages": [],
+      "expected_dispute": false,
+      "expected_abstention": true
+    },
+    {
+      "id": "case_12",
+      "split": "development",
+      "question": "Compare tidal and wave electricity output.",
+      "scenario": "empty",
+      "reference_passages": [],
+      "expected_dispute": false,
+      "expected_abstention": true
+    },
+    {
+      "id": "case_13",
+      "split": "held_out",
+      "question": "Compare the conditions affecting solar and wind electricity output.",
+      "scenario": "second_pass",
+      "reference_passages": [
+        "Synthetic fixture: solar electricity output depends on sunlight.",
+        "Synthetic fixture: wind electricity output depends on wind speed."
+      ],
+      "expected_dispute": false,
+      "expected_abstention": false
+    },
+    {
+      "id": "case_14",
+      "split": "held_out",
+      "question": "How does sunlight affect solar electricity output?",
+      "scenario": "immediate",
+      "reference_passages": [
+        "Synthetic fixture: solar electricity output depends on sunlight."
+      ],
+      "expected_dispute": false,
+      "expected_abstention": false
+    },
+    {
+      "id": "case_15",
+      "split": "held_out",
+      "question": "How does wind speed affect wind electricity output?",
+      "scenario": "immediate",
+      "reference_passages": [
+        "Synthetic fixture: wind electricity output depends on wind speed."
+      ],
+      "expected_dispute": false,
+      "expected_abstention": false
+    },
+    {
+      "id": "case_16",
+      "split": "held_out",
+      "question": "Why do synthetic sources disagree on Northfield solar electricity output?",
+      "scenario": "dispute",
+      "reference_passages": [
+        "Northfield solar electricity output was 100 GWh in 2024 for all plants under standard operation.",
+        "Northfield solar electricity output was 120 GWh in 2024 for all plants under standard operation."
+      ],
+      "expected_dispute": true,
+      "expected_abstention": false
+    },
+    {
+      "id": "case_17",
+      "split": "held_out",
+      "question": "Investigate two reported 2024 Northfield solar electricity output figures.",
+      "scenario": "dispute",
+      "reference_passages": [
+        "Northfield solar electricity output was 100 GWh in 2024 for all plants under standard operation.",
+        "Northfield solar electricity output was 120 GWh in 2024 for all plants under standard operation."
+      ],
+      "expected_dispute": true,
+      "expected_abstention": false
+    },
+    {
+      "id": "case_18",
+      "split": "held_out",
+      "question": "Compare hydro and geothermal electricity output.",
+      "scenario": "empty",
+      "reference_passages": [],
+      "expected_dispute": false,
+      "expected_abstention": true
+    },
+    {
+      "id": "case_19",
+      "split": "held_out",
+      "question": "Compare rail and bus electricity output.",
+      "scenario": "empty",
+      "reference_passages": [],
+      "expected_dispute": false,
+      "expected_abstention": true
+    },
+    {
+      "id": "case_20",
+      "split": "held_out",
+      "question": "Compare LED and heat pump electricity output.",
+      "scenario": "empty",
+      "reference_passages": [],
+      "expected_dispute": false,
+      "expected_abstention": true
+    }
+  ]
+}
