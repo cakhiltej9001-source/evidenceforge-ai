@@ -48,10 +48,22 @@ Open `http://127.0.0.1:8503/`. Serve this demo directory only. Generated replay 
 
 Phase 11's local submission materials and demonstration are prepared. Assignment acceptance remains unverified because the original PDF, rubric and deadline have not been supplied.
 
-Phase 9 independent annotation review and a successful matched Gemini comparison remain open. The paid ledger remains 26/30; no new Gemini calls were made for this phase. Additional budget authorization is still required for the proposed extension.
+Following the user's delegation, all eight missing Gemini one-shots were recovered,
+for 20/20 usable cases. The extension plus repair diagnostics used 28/40 authorized
+additional calls; the original ledger remains 26/30. The repaired fresh workflow
+returned two cited claims, partial at three passes, with all nine calls succeeding.
+[Detailed results](evaluation/EXTENSION_REPORT.md) retain earlier failures and separate
+post-repair diagnostics. All 20 labels have an [AI review](evaluation/AI_REVIEW.md);
+human validation and a defensible research-quality comparison remain unclaimed.
 
-Phase 10 local source/runtime checks passed. Docker image/runtime checks and hosted deployment checks remain open. This computer has about 4 GB RAM and reports firmware virtualization disabled. Creating/uploading a private GitHub repository for hosted CI and provisioning a hosting target still require the user's pending decisions.
+The [private GitHub repository](https://github.com/cakhiltej9001-source/evidenceforge-ai) exists and [remote CI passed](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/37169054208) on
+`ab66cb464d4b3d024f394ccb3cdc3e5e67746ff8`. Docker build, nonroot execution,
+constrained research/reconnect, synthetic backup/restore and health passed.
+The provider repair also passed 24 affected offline tests, lint/format and strict
+types locally; CI repeats all checks on new pushes. Local Docker remains absent.
 
-No repository publication, external deployment or OS installation was performed. Passing offline tests does not close these external gates.
+Persistent hosting still needs an account/target, access path and spending cap.
+Live Tavily needs a configured key; original PDF/rubric reconciliation remains open.
+No Render deployment or OS installation was performed.
 
 - Both distribution archives inspected (221 entries): no configured credentials, private runtime directories or local databases. Local demo HTTP 200 and synthetic label verified.

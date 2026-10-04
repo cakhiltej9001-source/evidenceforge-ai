@@ -1,7 +1,9 @@
 # Phase 10: specialized source and deployment preparation
 
-Status: local source/runtime implementation verified; deployment configuration prepared.
-No hosted deployment has been created.
+Status updated 4 October 2026: local source/runtime and remote Docker CI verified;
+persistent hosted deployment remains unverified. No Render resources have been created.
+The sections below retain the phase's earlier local checks; the latest execution
+results and dependencies are recorded at the end.
 The user authorized moving to Phase 10 on 4 October 2026. Phase 9 remains open
 for independent annotation review and a successful matched Gemini comparison.
 The original paid ledger remains 26/30; this phase makes no Gemini calls.
@@ -66,7 +68,8 @@ attribution and the period when sharing derived records.
   automatic deploys disabled. No public browser URL or authentication gateway.
 - `.github/workflows/ci.yml`: locked install, checks/tests/package build, offline
   resume/export smoke, Docker build, cross-container persistence and health smoke.
-  Workflow is prepared locally; no remote CI result is claimed.
+  [Remote CI passed](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/37169054208) on source commit
+  `ab66cb464d4b3d024f394ccb3cdc3e5e67746ff8`; subsequent pushes repeat the checks.
 
 | Variable | Default / purpose |
 |---|---|
@@ -144,7 +147,7 @@ No numeric HTTP timeout is assumed to establish a long-job guarantee.
 - Locked offline install with UI passed (91 resolved packages).
 - Compose, Render and CI YAML parsed successfully; platform validation is separate.
 - Live acquisition retained one source and eight located passages, including solar
-  and wind, for 3 October 2026 18:30–19:00 UTC; no API errors or Gemini calls.
+  and wind, for 3 October 2026 18:30â€“19:00 UTC; no API errors or Gemini calls.
   Run: `run_2b485ed0acce41fcbed9ea005c604c3f` under ignored
   `.evidenceforge/verification/phase10-live/energy/`.
 - Offline deployment smoke passed source acquisition, approval, fresh-service
@@ -153,21 +156,22 @@ No numeric HTTP timeout is assumed to establish a long-job guarantee.
 - Installed `uv run --locked --offline evidenceforge-energy` command passed.
 - Temporary workbench launch on 127.0.0.1:8502 returned HTTP 200 after startup.
 
-Docker is absent on this host: local image build/runtime smoke cannot be claimed.
-The prepared CI job supplies container build/persistence/health checks for a
-Docker-capable runner, but it has not run remotely yet. Render account validation,
-disk ownership, capacity/load, backup/restore and authenticated remote access
-remain deployment gates. No resources have been created and no public site is
-published. Original assignment/rubric reconciliation and Phase 9 review/provider
-comparison also remain open.
+Docker is absent on this Windows host. A compatible GitHub runner has now passed
+image/runtime, constrained research, reconnect, fresh-volume backup/restore and
+UI health checks. Render account validation, actual platform disk ownership,
+capacity/load and authenticated remote access remain deployment gates. Synthetic
+container restore does not establish production disk backup reliability. No Render
+resources or public endpoint have been created. Original assignment reconciliation
+and research-quality validation also remain open.
 
 
 
 
-Local verification completed: 4 October 2026, 00:43 IST. Docker/host gates remain open.
+Historical local verification completed: 4 October 2026, 00:43 IST.
+Docker execution later passed remotely; the persistent host gate remains open.
 
 
-## Pending-item repair — 4 October 2026
+## Pending-item repair â€” 4 October 2026
 
 Completed in this audit:
 
@@ -199,18 +203,27 @@ Evidence is retained under ignored `.evidenceforge/verification/phase10-deployme
 (`render-validation.json`, official schema, `backup-restore.json`, synthetic ZIP).
 The restart run is `run_d06ffdba531d46f89223027b92dac106`.
 
-### Exact remaining dependencies
+### Latest execution and remaining dependencies
 
-| Item | Verified cause | Concrete next step |
+The user authorized private GitHub execution and additional Gemini calls by asking
+Codex to act on their behalf. The private [repository](https://github.com/cakhiltej9001-source/evidenceforge-ai) was created and
+[CI passed](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/37169054208) on commit `ab66cb464d4b3d024f394ccb3cdc3e5e67746ff8`.
+Both Python and container jobs succeeded. The container job built the image,
+asserted UID 10001, ran research/approval/reconnect/export under 512 MB and
+half-CPU limits, restored synthetic data into a fresh volume, reconnected again
+and passed UI health. These checks made no model calls. New pushes repeat CI.
+
+| Item | Current evidence | Remaining step |
 |---|---|---|
-| Docker execution | Docker absent; this PC reports ~4 GB RAM and firmware virtualization disabled. WSL status exits 50; Windows feature queries require administrator elevation. | Use a compatible hosted Docker runner. A private `cakhiltej9001-source/evidenceforge-ai` repository and CI run have been proposed and need approval. |
-| Hosted deployment | No Git remote or Render credentials configured; no matching research repository found. GitHub login works outside the sandbox. | Confirm the hosting account/target and repository; deploy the reviewed private service configuration, then check storage ownership, health, restart and runtime capacity there. |
-| Phase 9 provider comparison | Original ledger remains 26/30; the prepared extension needs at most 32 new attempts. | Approve the separately requested cap of up to 40 additional Gemini calls before execution. |
-| Phase 9 annotation sign-off | All 20 labels remain draft; no completed independent review record supplied. | A person reviews ANNOTATION_PACKET.md and supplies decisions plus reviewer name/date. |
+| Docker execution | Passed on hosted GitHub runner; local prerequisites remain unmet | Gate closed for the measured synthetic workload |
+| Persistent deployment | Private source repository exists; no Render account/target is configured | User supplies account access, service target and spending cap; check actual platform storage/restart/health/access there |
+| Phase 9 execution | 20/20 one-shots available; 28/40 new calls; fresh repaired workflow partial/pass-limit without provider failure | Interpret the disclosed outcomes with richer or narrower versioned cases before research-quality sign-off |
+| Phase 9 review | All 20 cases reviewed by Codex as AI, with reasons | Independent human validation remains unclaimed; see AI_REVIEW.md |
+| Live Tavily | No key configured here; no call made | Configure EVIDENCEFORGE_TAVILY_API_KEY here or explicitly authorize a named credential source |
+| Assignment | Original PDF/rubric absent | Reconcile supplied originals before claiming assignment compliance |
 
-The hardware requirements are from [Docker's Windows installation documentation](https://docs.docker.com/desktop/setup/install/windows-install/).
-Canonical Render schema source: [official Blueprint validation guidance](https://render.com/tutorials/advanced-blueprint-patterns/introduction).
-No Docker installation, OS feature change, restart, repository upload, hosted resources
-or additional Gemini calls have been performed during this audit. Docker and hosted
-runtime checks are not claimed as passed. Local synthetic backup/restore does not
-establish backup reliability for a future hosted production disk.
+The [extension report](evaluation/EXTENSION_REPORT.md) preserves all original
+failures and source versions. The original Gemini ledger remains 26/30.
+Automatic approval review rejected searching unrelated project environments for a
+Tavily key; no such credential search executed. Hosting access and budget questions
+remain pending. No local OS changes or hosted Render resources were made.

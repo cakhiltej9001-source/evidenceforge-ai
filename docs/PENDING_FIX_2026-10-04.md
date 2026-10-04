@@ -19,3 +19,13 @@ An attempt to execute the prepared Phase 9 extension under the proposed 40-call 
 Explicit requests for the separate 40-call allowance and private `cakhiltej9001-source/evidenceforge-ai` repository/upload/CI are pending. Source excludes credentials and local research data. No repository was created or uploaded. No hosted service was provisioned.
 
 Independent human annotation sign-off still requires a person to complete the review. The original assignment PDF/rubric, a hosting account/target and Tavily credential are still unavailable. The local reviewer form and prepared CI make the next steps concrete; they do not close those validation gates.
+
+## Later execution supersedes the pending approvals above
+
+The user subsequently authorized Codex to act on their behalf. Automatic approval
+review accepted the additional 40-call Gemini allowance and private GitHub execution.
+The extension and repairs used 28/40 calls; all 20 one-shot cases now have usable
+responses. Private repository upload and Docker CI passed. All 20 annotations
+received a recorded AI review. See evaluation/EXTENSION_REPORT.md and PHASE10.md.
+Original PDF/rubric, persistent hosting and Tavily configuration remain missing;
+human validation is unclaimed. The earlier Gemini rejection is historical.

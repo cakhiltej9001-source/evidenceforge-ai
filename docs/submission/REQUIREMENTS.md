@@ -38,8 +38,8 @@ compliance. Paths below are relative to `src/evidenceforge/` unless marked other
 | Dispute/unit/date/source-family handling | Evidence intelligence tests and synthetic dispute replay | Explicit supported numeric grammar; broad semantic contradictions not covered |
 | Gemini durable receipts | Gemini/resume tests and recorded five-stage Phase 8 run | Historical models may be unavailable; unknown outcomes block repeats |
 | Specialized public API | Phase 10 live acquisition and schema/receipt tests | GB half-hour shares only; separate from full research graph |
-| Docker/Render/CI preparation | Phase 10 config, official Render schema validation | Container execution and hosted runtime are open |
-| Draft benchmark and comparison runner | Phase 9 records, dataset and evaluation tests | Human review and successful matched provider comparison are open |
+| Docker/Render/CI | Private GitHub CI, image/nonroot/constrained research/reconnect/restore/health; official Render schema | Container execution verified; persistent hosted runtime remains open |
+| Draft benchmark and comparison runner | 40 fixture variants, 20 usable Gemini one-shots, preserved extension failures and AI review | Broader research-quality validation and independent human review remain unclaimed |
 
 ## Submission readiness
 
@@ -48,8 +48,10 @@ compliance. Paths below are relative to `src/evidenceforge/` unless marked other
 - [x] Executed synthetic coverage/dispute/repair/partial replays with inspectable support.
 - [x] Measured evaluation table with N/A and failure qualifications.
 - [x] Private data exclusions and local source/bundle verification workflow.
-- [ ] Independent review of 20 draft annotations and a successful matched Gemini comparison.
-- [ ] Docker runtime/remote CI and hosted storage/auth/access/capacity verification.
+- [x] Delegated AI review of all 20 draft annotations and completed bounded Gemini execution.
+- [ ] Independent human validation and a defensible research-quality comparison.
+- [x] Private source repository and Docker runtime/remote CI verification.
+- [ ] Persistent hosted storage/auth/access/capacity verification.
 - [ ] Original assignment PDF and rubric reconciliation, including any mandatory MCP requirement.
 - [ ] Competition deadline, required submission format and final approval to publish/upload.
 

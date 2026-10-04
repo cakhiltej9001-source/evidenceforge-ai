@@ -218,3 +218,39 @@ def test_configured_gemini_needs_explicit_evidence_and_owned_resume(tmp_path, mo
         asyncio.run(execute(QUESTION, tmp_path, None))
     with pytest.raises(CheckpointFailure, match="unavailable"):
         asyncio.run(execute(None, tmp_path, None, resume="thread_fake"))
+
+
+def test_coverage_array_bounds_and_failure_diagnostics_do_not_echo_unknown_fields():
+    seen = []
+
+    def handler(request):
+        seen.append(request)
+        data = json.loads(request.content)
+        wire = data["generationConfig"]["responseJsonSchema"]
+        assert wire["$defs"]["CriterionSupport"]["properties"]["evidence_ids"]["minItems"] == 1
+        malformed = {
+            "questions": [{"question_id": "q_1", "criteria": [{"index": 0, "evidence_ids": []}]}],
+            SECRET: SECRET,
+        }
+        return httpx.Response(200, json=reply(malformed))
+
+    adapter = model(handler)
+    request = CoverageInput.model_validate(
+        {
+            "questions": [
+                {
+                    "id": "q_1",
+                    "question": "What determines solar output?",
+                    "acceptance_criteria": ["solar"],
+                }
+            ],
+            "evidence": [],
+        }
+    )
+    with pytest.raises(ModelUnavailable):
+        asyncio.run(adapter.evaluate_coverage(request))
+    diagnostics = adapter.observations[0]["validation_errors"]
+    assert any(error["location"][-1] == "evidence_ids" for error in diagnostics)
+    assert any(error["location"] == ["other_field"] for error in diagnostics)
+    assert SECRET not in json.dumps(adapter.observations)
+    assert len(seen) == 1

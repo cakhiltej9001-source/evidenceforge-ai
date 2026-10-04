@@ -10,10 +10,12 @@ Updated: 4 October 2026, Asia/Calcutta.
 
 
 
-**Phase 9 evaluation implementation and initial experiments complete.** Human annotation
-review and a successful matched Gemini full-agent comparison remain open, so Phase 9 is
-not yet signed off as a validated research-quality benchmark. Phases 0–8 remain complete;
-Phase 10 local source/runtime is verified and deployment configuration is prepared; Docker/host checks remain open. Phase 11 local submission materials and synthetic demonstration are prepared. See PHASE11.md and PHASE10.md. See `evaluation/PHASE9_REPORT.md` for measured results.
+**Phases 0–8 are complete for the local foundation.** Phase 9 engineering runs
+and delegated AI review are complete with disclosed failures and corpus limitations;
+research-quality sign-off remains open. Phase 10 local source/runtime and remote Docker
+CI passed; persistent hosting and live Tavily access need account configuration.
+Phase 11 materials and synthetic demo are prepared; original PDF/rubric reconciliation
+remains open. See `evaluation/EXTENSION_REPORT.md`, `PHASE10.md` and `PHASE11.md`.
 
 ## Phase 0 history
 
@@ -700,3 +702,14 @@ Artifacts: `.evidenceforge/verification/gemini-resume/` (ignored local data).
 - The separately capped Gemini extension is now authorized and running. The original 30-call ledger remains separate and unchanged.
 - Private `cakhiltej9001-source/evidenceforge-ai` repository creation, source upload and prepared CI execution are authorized; the repository did not already exist.
 - Codex will record its 20-case review as AI review, preserving the distinction from independent human annotation sign-off.
+
+## Delegated execution results — 4 October 2026
+
+- User delegation authorized the additional 40-call Gemini allowance and private GitHub upload/CI; automatic approval review accepted both actions.
+- Created the private [repository](https://github.com/cakhiltej9001-source/evidenceforge-ai), uploaded 147 checked source files and ran [CI](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/37169054208) on commit `ab66cb464d4b3d024f394ccb3cdc3e5e67746ff8`. Both Python and container jobs passed: 349 tests, strict typing, package build, official Render schema, nonroot Docker runtime, 512 MB/half-CPU research/reconnect, fresh-volume synthetic backup/restore and UI health.
+- The initial extension used 17 calls, all HTTP 200, recovering eight missing one-shot responses. Combined with the prior 12, all 20 cases now have usable responses. Original full-agent outcomes were insufficient/no-evidence (development) and partial/fatal-error (held out); both remain recorded unchanged.
+- Repaired Gemini coverage instructions/schema bounds and added sanitized validation diagnostics. A coverage diagnostic validated; a broad schema experiment produced one planner HTTP 400 and was reverted for noncoverage roles. The final fresh workflow `diverse_14` then made nine successful calls, three passes and two cited claims: partial/pass-limit, with no provider or schema failure.
+- Shared extension ledger: 28/40 calls, 27 HTTP 200 and one HTTP 400; 26 validated responses; 29,641 known tokens, one unknown usage and unknown dollar cost. Original ledger remains 26/30. No further paid calls are needed for this repair.
+- Delegated AI review records decisions and reasons for all 20 cases. First 16 broad comparison questions need narrower wording or richer corpora for real quality evaluation. Two dispute and two empty-source labels are consistent with their fixtures. Human review is not claimed; the frozen dataset is unchanged.
+- Final repair checks: 24 affected offline tests passed (33.29 s); Ruff lint/format passed (131 files); strict mypy passed (71 source files). Remote CI repeats the complete checks on every pushed revision.
+- Persistent Render hosting, Tavily access and original assignment PDF/rubric remain unresolved inputs. Automatic approval review rejected a broad search for Tavily credentials in other projects; that search did not execute and no Tavily call occurred.

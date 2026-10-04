@@ -4,10 +4,12 @@ A local research workbench that plans questions, retains source passages, follow
 coverage gaps and produces reports with inspectable claim support. Python,
 LangGraph, SQLite and an optional Streamlit UI provide the workflow.
 
-**Status:** local workflows and source acquisition are verified. Submission materials
-are prepared in Phase 11. Phase 9 human annotation/provider comparisons, hosted
-Docker/deployment checks, and original assignment PDF/rubric reconciliation remain open.
-The synthetic demonstrations show workflow behavior, not independently verified facts.
+**Status:** local workflows, public energy acquisition and remote Docker CI are verified.
+The source is in a private GitHub repository; Phase 11 submission materials are prepared.
+All 20 Gemini one-shot responses are available, and the repaired workflow completed its
+model stages. Research-quality validation, persistent hosting, live Tavily access and
+original assignment PDF/rubric reconciliation remain open. Synthetic demonstrations
+show workflow behavior, not independently verified facts.
 
 ## Start here — Windows PowerShell
 
@@ -119,10 +121,14 @@ workflow scores from provider outcomes. All 40 fixture variants ran. Full-agent
 aspect coverage was 1.0 in both partitions; one-pass coverage was 0.5 development
 and 0.6667 held out. These are exact-string measures on draft synthetic labels.
 
-The Gemini evaluation reserved 26/30 calls and yielded 12 usable one-shot responses
-from 20 cases. Both bounded full-agent probes ended partial/failed. A successful
-matched provider quality comparison and independent human label review remain
-open. Token/cost/latency fields are reported as unknown where not verified.
+The original Gemini evaluation reserved 26/30 calls. The separately authorized
+extension and repair checks used 28/40 additional calls, recovering the eight missing
+responses for 20/20 usable one-shot cases. A fresh repaired workflow made nine
+successful calls and returned two cited claims, partial at the three-pass limit.
+All 20 annotations received an [AI review](docs/evaluation/AI_REVIEW.md); the draft
+labels remain qualified for synthetic workflow checks. Research-quality validation
+is still open. [Extension results](docs/evaluation/EXTENSION_REPORT.md) retain every
+failure and disclose unknown usage/cost.
 
 ## Development and deployment
 
@@ -138,10 +144,13 @@ Tests use synthetic credentials and block ordinary network connections. Optional
 UI checks need `--extra ui` in the installation. [Phase 11](docs/PHASE11.md) records
 final verification; [progress](docs/PROGRESS.md) preserves earlier executed results.
 
-Docker, localhost Compose, a private Render template and CI are prepared. Official
-Render schema validation, local restart and synthetic backup/restore passed.
-Container execution and hosted runtime remain unverified. No hosting resources or
-public deployment have been created. [Deployment details](docs/PHASE10.md).
+Docker, localhost Compose and a private Render template are prepared. The
+[private repository](https://github.com/cakhiltej9001-source/evidenceforge-ai) has a [successful CI run](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/37169054208) covering 349 tests,
+Docker build, UID 10001, research/reconnect and synthetic backup/restore under
+512 MB and half-CPU limits, plus UI health. This run verified source snapshot
+`ab66cb464d4b3d024f394ccb3cdc3e5e67746ff8`; pushes repeat the checks for new revisions.
+Persistent hosted storage/access remains unverified. No Render resources or public
+endpoint have been created. [Deployment details](docs/PHASE10.md).
 
 ## Submission materials
 

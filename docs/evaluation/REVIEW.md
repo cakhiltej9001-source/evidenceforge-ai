@@ -36,3 +36,11 @@ and does not change the dataset or claim review has occurred merely by generatin
 or opening the page. Retain this record and apply approved revisions to a new
 versioned dataset before rerunning benchmark variants. This form has no external
 requests or provider calls. Do not serve the project root.
+
+## Delegated review record
+
+On 4 October 2026 the user asked Codex to act on their behalf. Codex recorded a
+decision and reason for every case in [AI_REVIEW.md](AI_REVIEW.md) and
+[AI_REVIEW.json](AI_REVIEW.json). This is AI review; the frozen dataset status and
+hash are unchanged. The first 16 questions need tighter scope or richer corpora
+for real quality evaluation. No human name, attestation or approval was fabricated.

@@ -28,28 +28,58 @@ from evidenceforge.schemas import BudgetLimits, Contract, ResearchRequest
 from evidenceforge.storage.model_calls import ModelCallLedger, ModelReceipt
 
 
-def provider_schema(value: Any) -> Any:
+def provider_schema(value: Any, *, array_bounds: bool = False) -> Any:
     """Use the endpoint's accepted subset; retain full validation on responses."""
     omitted = {
         "additionalProperties",
         "minLength",
         "maxLength",
-        "minItems",
-        "maxItems",
         "exclusiveMinimum",
         "exclusiveMaximum",
         "default",
         "pattern",
     }
+    if not array_bounds:
+        omitted.update({"minItems", "maxItems"})
     if isinstance(value, dict):
-        converted = {k: provider_schema(v) for k, v in value.items() if k not in omitted}
+        converted = {
+            k: provider_schema(v, array_bounds=array_bounds)
+            for k, v in value.items()
+            if k not in omitted
+        }
         pattern = value.get("pattern")
         if isinstance(pattern, str) and re.fullmatch(r"\^\([a-z_]+(?:\|[a-z_]+)+\)\$", pattern):
             converted["enum"] = pattern[2:-2].split("|")
         return converted
     if isinstance(value, list):
-        return [provider_schema(v) for v in value]
+        return [provider_schema(v, array_bounds=array_bounds) for v in value]
     return value
+
+
+def validation_summary(exc: ValidationError, schema: type[Contract]) -> list[dict[str, object]]:
+    """Expose error kinds and schema field paths without provider text or input values."""
+    fields: set[str] = set()
+
+    def collect(value: Any) -> None:
+        if isinstance(value, dict):
+            fields.update(value.get("properties", {}))
+            for item in value.values():
+                collect(item)
+        elif isinstance(value, list):
+            for item in value:
+                collect(item)
+
+    collect(schema.model_json_schema())
+    return [
+        {
+            "type": error["type"],
+            "location": [
+                part if isinstance(part, int) or part in fields else "other_field"
+                for part in error["loc"]
+            ],
+        }
+        for error in exc.errors(include_input=False, include_url=False)[:8]
+    ]
 
 
 class GeminiResearchModel:
@@ -121,7 +151,9 @@ class GeminiResearchModel:
             "contents": [{"role": "user", "parts": [{"text": request.model_dump_json()}]}],
             "generationConfig": {
                 "responseMimeType": "application/json",
-                "responseJsonSchema": provider_schema(schema.model_json_schema()),
+                "responseJsonSchema": provider_schema(
+                    schema.model_json_schema(), array_bounds=role == "coverage_evaluator"
+                ),
                 "maxOutputTokens": 4096,
                 "thinkingConfig": {"thinkingLevel": "low"},
             },
@@ -221,7 +253,15 @@ class GeminiResearchModel:
                     receipt.model_copy(update={"status": "failed", "observation": observation})
                 )
             raise
-        except (httpx.HTTPError, ValueError, ValidationError, KeyError, TypeError, AttributeError):
+        except ValidationError as exc:
+            observation["status"] = "failed"
+            observation["validation_errors"] = validation_summary(exc, schema)
+            if receipt is not None and self._ledger is not None:
+                self._ledger.finish(
+                    receipt.model_copy(update={"status": "failed", "observation": observation})
+                )
+            raise ModelUnavailable("Gemini response did not satisfy the local schema.") from None
+        except (httpx.HTTPError, ValueError, KeyError, TypeError, AttributeError):
             observation["status"] = "failed"
             if receipt is not None and self._ledger is not None:
                 self._ledger.finish(
@@ -257,7 +297,9 @@ class GeminiResearchModel:
             CoverageAssessment,
             "Return every supplied question ID. Criteria indices are zero based. Include "
             "a criterion only if retained evidence directly supports it. Use only evidence "
-            "linked to that question. An unanswered criterion must be omitted, not guessed.",
+            "linked to that question. An unanswered criterion must be omitted, not guessed. "
+            "Use criteria=[] when no criterion has support. Every included criterion must "
+            "have at least one linked evidence ID; never return evidence_ids=[].",
         )
 
     async def synthesize(self, request: SynthesisInput) -> object:

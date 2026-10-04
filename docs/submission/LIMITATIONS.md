@@ -12,8 +12,11 @@ families are inspectable heuristics, not calibrated trust probabilities.
 The replay and fixture benchmark use synthetic content and scripted reasoning.
 The repair replay deliberately injects one incorrect first draft. Its real audit
 and bounded rewrite demonstrate control flow, not a measured hallucination rate.
-The 20 evaluation labels remain draft; only the retrieval-loop ablation is measured.
-The two incomplete Gemini probes do not provide a matched quality comparison.
+The 20 evaluation labels remain draft and have a documented AI review; only the
+retrieval-loop ablation is measured. All 20 Gemini one-shots are now usable, but
+broader synthetic questions and short dependency corpora do not establish a
+matched research-quality comparison. The final repaired workflow stopped partial
+at its three-pass limit; original provider failures remain recorded.
 
 ## Sources, documents and providers
 
@@ -38,24 +41,25 @@ persistent distributed queue. Restart/deploy can interrupt active work; reconnec
 uses checkpoints and uncertain receipts still block automatic repeated charges.
 Graph version 8 checkpoints cannot silently resume older graph versions.
 
-Docker and private Render configuration are prepared, and official schema/local
-restart/synthetic backup-restore checks passed. No Docker runner, hosted instance,
-authentication gateway or remote CI result has been verified. The current PC reports
-about 4 GB RAM and disabled firmware virtualization; hosted container CI is the
-proposed route. Real hosting requires an account/target and approved repository.
-Local synthetic restore does not verify a future hosted production backup.
+Docker execution passed in the private repository's remote CI: image build,
+nonroot UID, constrained research/reconnect, fresh-volume synthetic restore and
+UI health. Official Render schema and local restart checks also passed. No
+persistent Render instance or authenticated remote access path has been verified.
+The local PC still lacks Docker. Actual hosting requires account/target access
+and a spending cap. Synthetic restore does not verify a future production backup.
 
 ## Remaining external inputs
 
 | Input | Why it is required |
 |---|---|
 | Completed independent 20-case annotation review | Needed before calling labels human-validated |
-| Explicit additional Gemini allowance | Original evaluation cap is 30 with 26 reserved; the proposed extension needs up to 32 new attempts |
-| Approved GitHub repository/CI execution | Needed to verify Docker on a compatible runner |
-| Hosting account and access target | Needed for deployed runtime/storage/security checks |
+| Hosting account, access target and spending cap | Needed for persistent runtime/storage/security checks |
+| Tavily key configured here or explicitly authorized source | Needed for the dedicated live search check |
 | Original PDF and judging rubric | Needed for actual assignment/competition compliance |
 | Deadline and submission format | Needed for final delivery/publishing decisions |
 
-Proceeding to Phase 11 authorized these preparation materials. It did not approve
-additional paid calls, a repository upload, a public deployment or a human review
-claim. Those decisions remain open. No award/outperformance guarantee is made.
+Subsequent user delegation authorized 40 additional Gemini calls and the private
+repository/upload/CI; these actions executed, with 28 additional calls reserved.
+Codex reviewed all 20 labels as AI without supplying a human attestation. Persistent
+hosting and live Tavily configuration remain pending. No award or provider
+outperformance is established by these checks.

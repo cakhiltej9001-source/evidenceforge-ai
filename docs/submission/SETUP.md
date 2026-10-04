@@ -102,7 +102,8 @@ uv run --locked python scripts/deployment_smoke.py --data-dir .evidenceforge/ver
 
 For Docker, persistent storage, private Render setup and verification dependencies,
 see [Phase 10](../PHASE10.md). Local Docker prerequisites are unmet on the current
-host; CI and deployment have not executed. No public endpoint is configured.
+host; remote Docker CI has passed in the private repository. Persistent Render
+deployment remains unverified. No public endpoint is configured.
 
 ## Final checks
 

@@ -60,10 +60,38 @@ EvidenceForge outperforms another model is supported by these measurements.
 1. A person reviews all 20 annotations using [the packet](../evaluation/ANNOTATION_PACKET.md)
    and records decisions, name, date and dataset hash.
 2. Preserve a reviewed dataset version and freeze settings before reruns.
-3. Obtain explicit authorization for the prepared additional Gemini allowance;
-   no new paid calls were authorized merely by proceeding to Phase 11.
-4. Complete provider-available matched runs, disclose failures/usage and interpret
-   quality using human-reviewed evidence and known denominators.
+3. Improve question/corpus scope in a new frozen version before meaningful quality reruns.
+4. Interpret actual provider outcomes, including partial/failed runs and known denominators.
 
-The proposed extension has not executed. The current dataset and provider limits
-remain visible rather than being replaced with assumed passing results.
+The authorized extension and repair checks have now executed, as recorded below.
+Original provider failures and draft labels remain preserved.
+
+## Authorized extension and repair — 4 October 2026
+
+The historical table above is preserved. User delegation subsequently authorized
+up to 40 additional calls. The extension recovered all eight missing one-shots;
+combined with the prior 12, there are now **20/20 usable responses**. All successful
+one-shot receipts have 3,041 known tokens in total; historical latency for the
+first 12 remains unknown. These responses are ungrounded general-knowledge
+baselines: usable JSON does not establish correct facts or verified citations.
+
+| New execution | Calls | Actual outcome |
+|---|---:|---|
+| Missing one-shots, cases 01–08 | 8 | Eight usable responses; 1,261 known tokens |
+| Original extension development workflow, case 01 | 4 | insufficient_evidence/no_evidence; two passes, zero claims |
+| Original extension held-out workflow, case 13 | 5 | partial/fatal_error; one pass, one cited claim; coverage response failed validation |
+| Coverage/schema diagnostic and experimental planning | 2 | Coverage validated; planning returned HTTP 400; noncoverage bounds reverted |
+| Fresh repaired workflow, case 14 | 9 | All nine stages succeeded; partial/pass_limit; three passes and two cited claims; 14,587 known tokens |
+
+Shared allowance: **28/40** reserved, 27 HTTP 200 and one HTTP 400; 26 schema-valid
+responses, 29,641 known tokens and one unknown usage. Dollar cost remains N/A.
+The original ledger is unchanged at 26/30. All new full workflows used the fixture
+full variant's three-pass/12-call/eight-search limits. Original measured outcomes
+remain frozen; the diagnostic's changed source/case is separately recorded.
+
+The broad synthetic comparison questions often invite criteria absent from their
+two dependency statements. Codex reviewed all 20 labels and recorded these
+qualifications in [AI_REVIEW.md](../evaluation/AI_REVIEW.md); no human validation
+or provider superiority is claimed. Case 14's exact quotation coverage is 1.0,
+while its broader planner criteria remain unmet, yielding an honest partial report.
+See [the complete extension report](../evaluation/EXTENSION_REPORT.md).

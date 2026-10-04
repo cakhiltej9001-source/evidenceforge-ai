@@ -1,0 +1,151 @@
+{
+  "review_kind": "ai_review",
+  "reviewed_by": "Codex (AI), delegated by user",
+  "reviewed_at": "2026-10-04",
+  "dataset_sha256": "5e5c012fd1a612513a934e30469ba5a20b532e909732cfd47500f8453cdf4e89",
+  "human_review_completed": false,
+  "dataset_changed": false,
+  "cases": [
+    {
+      "case_id": "diverse_01",
+      "split": "development",
+      "decision": "qualified_for_synthetic_workflow_only",
+      "reference_label_consistency": true,
+      "notes": "The passages identify sunlight and wind speed. They contain no electricity amount, capacity factor, location or interval; the broad outputs question invites a quantitative plan the corpus cannot answer."
+    },
+    {
+      "case_id": "diverse_02",
+      "split": "development",
+      "decision": "qualified_for_synthetic_workflow_only",
+      "reference_label_consistency": true,
+      "notes": "Water flow and subsurface heat are explicit dependencies. No generation quantities or comparative efficiency are supplied."
+    },
+    {
+      "case_id": "diverse_03",
+      "split": "development",
+      "decision": "qualified_for_synthetic_workflow_only",
+      "reference_label_consistency": true,
+      "notes": "Charge cycles and conversion efficiency are retained statements. Stored energy, discharge power and conversion yield are distinct outputs and need a stated metric for real research."
+    },
+    {
+      "case_id": "diverse_04",
+      "split": "development",
+      "decision": "qualified_for_synthetic_workflow_only",
+      "reference_label_consistency": true,
+      "notes": "Electrification and fleet scheduling are explicit fixture dependencies. Rail and bus outputs lack a common outcome or unit; these labels only test retrieval of two statements."
+    },
+    {
+      "case_id": "diverse_05",
+      "split": "development",
+      "decision": "qualified_for_synthetic_workflow_only",
+      "reference_label_consistency": true,
+      "notes": "Electrical supply and ambient temperature appear in the corpus. Lighting and heat-pump outputs have different units, so this is a dependency comparison only."
+    },
+    {
+      "case_id": "diverse_06",
+      "split": "development",
+      "decision": "qualified_for_synthetic_workflow_only",
+      "reference_label_consistency": true,
+      "notes": "Membrane pressure and treatment stages are stated. Water yield, quality and recovery rate are absent; the corpus supports the two qualitative statements only."
+    },
+    {
+      "case_id": "diverse_07",
+      "split": "development",
+      "decision": "qualified_for_synthetic_workflow_only",
+      "reference_label_consistency": true,
+      "notes": "Thermal resistance and surface reflectance are stated. No temperature or energy-saving comparison can be inferred."
+    },
+    {
+      "case_id": "diverse_08",
+      "split": "development",
+      "decision": "qualified_for_synthetic_workflow_only",
+      "reference_label_consistency": true,
+      "notes": "Signal reflections and orbital coverage are stated. These do not establish comparable sensing accuracy, spatial resolution or output quantity."
+    },
+    {
+      "case_id": "diverse_09",
+      "split": "development",
+      "decision": "qualified_for_synthetic_workflow_only",
+      "reference_label_consistency": true,
+      "notes": "Canopy growth and surface material are stated. No cooling magnitude, period or urban context is supplied."
+    },
+    {
+      "case_id": "diverse_10",
+      "split": "development",
+      "decision": "qualified_for_synthetic_workflow_only",
+      "reference_label_consistency": true,
+      "notes": "Cable capacity and radio spectrum are stated. Throughput, latency and operating conditions are absent."
+    },
+    {
+      "case_id": "diverse_11",
+      "split": "development",
+      "decision": "qualified_for_synthetic_workflow_only",
+      "reference_label_consistency": true,
+      "notes": "Organic feedstock and waste containment are stated. The question does not define whether output means material, emissions or disposal performance."
+    },
+    {
+      "case_id": "diverse_12",
+      "split": "development",
+      "decision": "qualified_for_synthetic_workflow_only",
+      "reference_label_consistency": true,
+      "notes": "Tidal range and wave motion are stated. No electricity generation or capacity comparison is available."
+    },
+    {
+      "case_id": "diverse_13",
+      "split": "held_out",
+      "decision": "qualified_for_synthetic_workflow_only",
+      "reference_label_consistency": true,
+      "notes": "Delivery pressure and field runoff are stated. Yield, water delivery and efficiency are unspecified; the live planner expanded beyond these two references."
+    },
+    {
+      "case_id": "diverse_14",
+      "split": "held_out",
+      "decision": "qualified_for_synthetic_workflow_only",
+      "reference_label_consistency": true,
+      "notes": "Cache freshness and network latency are stated. Result correctness and response performance are different metrics, and no measured values are supplied."
+    },
+    {
+      "case_id": "diverse_15",
+      "split": "held_out",
+      "decision": "qualified_for_synthetic_workflow_only",
+      "reference_label_consistency": true,
+      "notes": "Indexed sources and training data are stated. The corpus cannot compare answer quality or define equivalent retrieval and fine-tuning outputs."
+    },
+    {
+      "case_id": "diverse_16",
+      "split": "held_out",
+      "decision": "qualified_for_synthetic_workflow_only",
+      "reference_label_consistency": true,
+      "notes": "Air exchange and filter media are stated. No comparable pollutant removal or airflow figures are provided."
+    },
+    {
+      "case_id": "diverse_17",
+      "split": "held_out",
+      "decision": "dispute_label_supported_by_fixture",
+      "reference_label_consistency": true,
+      "notes": "The two independent synthetic sources report 100 and 120 GWh for the same entity, year, population and condition: a valid numeric dispute. 100000 MWh equals 100 GWh; 900 GWh concerns 2023; the copied 100 GWh source is not independent."
+    },
+    {
+      "case_id": "diverse_18",
+      "split": "held_out",
+      "decision": "dispute_label_supported_by_fixture",
+      "reference_label_consistency": true,
+      "notes": "The same 100 versus 120 GWh conflict supports the dispute label. Unit conversion, different-year evidence and copied-source provenance must retain their separate relationships."
+    },
+    {
+      "case_id": "diverse_19",
+      "split": "held_out",
+      "decision": "abstention_label_supported_by_empty_fixture",
+      "reference_label_consistency": true,
+      "notes": "The fixture returns no source. Empty references and abstention are consistent for evidence-grounded output; a general-knowledge answer has no retained-source support."
+    },
+    {
+      "case_id": "diverse_20",
+      "split": "held_out",
+      "decision": "abstention_label_supported_by_empty_fixture",
+      "reference_label_consistency": true,
+      "notes": "The fixture returns no source. Empty references and abstention are consistent; no rainfall or river-flow facts can be verified from this corpus."
+    }
+  ],
+  "finding": "All labels are internally consistent with their synthetic fixtures. Cases 1-16 support dependency statements only and need narrower questions or richer corpora before real research-quality claims."
+}
