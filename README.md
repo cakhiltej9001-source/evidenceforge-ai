@@ -150,10 +150,12 @@ UI checks need `--extra ui` in the installation. [Phase 11](docs/PHASE11.md) rec
 final verification; [progress](docs/PROGRESS.md) preserves earlier executed results.
 
 Docker, localhost Compose and a private Render template are prepared. The
-[private repository](https://github.com/cakhiltej9001-source/evidenceforge-ai) has a [successful CI run](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/37169054208) covering 349 tests,
-Docker build, UID 10001, research/reconnect and synthetic backup/restore under
-512 MB and half-CPU limits, plus UI health. This run verified source snapshot
-`ab66cb464d4b3d024f394ccb3cdc3e5e67746ff8`; pushes repeat the checks for new revisions.
+[private repository](https://github.com/cakhiltej9001-source/evidenceforge-ai) has a
+[successful CI run](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/37253453020)
+covering **362 tests**, strict typing/lint/format, package build and Render schema.
+Docker build, UID 10001, research/reconnect, fresh-volume synthetic backup/restore
+under 512 MB and half-CPU limits, and UI health also passed. This run verified
+source `36d1e44a414bbc9ced7a74fa151b30faffd53593`; source pushes repeat the checks.
 Persistent hosted storage/access remains unverified. No Render resources or public
 endpoint have been created. [Deployment details](docs/PHASE10.md).
 
@@ -182,3 +184,5 @@ serialization are preserved for paid receipt hashes. Completed reconnect still m
 no new provider call. Older runs retain their historical findings; start a new run to
 use the updated quality behavior. Graph versions predating 8 and paid runs without
 durable receipts retain their existing incompatibility checks.
+
+[Original assignment fixes and verification](docs/ASSIGNMENT_FIXES_2026-10-05.md).

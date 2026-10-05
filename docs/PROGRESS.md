@@ -756,3 +756,29 @@ Artifacts: `.evidenceforge/verification/gemini-resume/` (ignored local data).
   (5.14 s); 31 affected focused tests passed across runs. Initial CI passed 360
   tests and failed only the obsolete message assertion; its Docker job passed.
   Corrected complete CI rerun remains the verification gate.
+
+## Completed verification — 5 October 2026
+
+[CI run 37253453020](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/37253453020)
+passed both jobs on source `36d1e44a414bbc9ced7a74fa151b30faffd53593`.
+Completed **07:28:22 IST** (01:58:22 UTC):
+
+- **362 tests passed**, 17.90 seconds, Linux/Python 3.12.
+- Ruff lint passed; 137 Python files formatted; strict mypy passed, 72 source files.
+- Wheel/sdist built; official Render schema and offline deployment smoke passed.
+- Docker build, UID 10001, 512 MB/half-CPU research and fresh-container reconnect,
+  fresh-volume synthetic backup/restore, and UI health all passed.
+- Private repository visibility reconfirmed; 157 allowlisted source files passed
+  configured-credential/private-runtime-path checks; 59 local documentation links
+  passed. Local paid ledgers and Gemini adapter provenance remained unchanged.
+
+At **07:29:33 IST**, refreshed four provider-free local replay runs. Coverage-loop
+completed in two passes; numeric dispute remained partial/no-progress; injected
+unsupported draft was repaired once and completed; pass-limited result remained
+partial with its gap. Source chunks/paragraph summaries were inspected in the new
+saved report. Artifacts remain in ignored `.evidenceforge/demo/phase11/`.
+
+The original PDF/page mapping and the identified baseline engineering mechanics
+are addressed within the conservative limits above. Actual Tavily access, persistent
+hosting, independent research-quality validation and P02–P05 production guidance
+remain open. No new real model/search/API request ran for these fixes.

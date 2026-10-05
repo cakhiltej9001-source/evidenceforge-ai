@@ -35,8 +35,7 @@ Grouping repeated text does not establish independent corroboration or source tr
   from the complete claim citation.
 - Final focused failure/cancellation/locator checks passed after correcting the
   fabricated test spans and using the established tool-error channel. Across the
-  focused runs, **29 affected behavioral tests passed**. Full private CI is the
-  remaining verification gate; its final result will be recorded below.
+  focused runs, **29 affected behavioral tests passed**. The complete private CI result is recorded below.
 
 The tests use fabricated credentials and mocked HTTP; ordinary network is blocked.
 No new Gemini, Tavily or NESO request ran for this change. Original Gemini accounting
@@ -86,4 +85,30 @@ compatibility regression passed (26.15 seconds), with one retained coverage requ
 reused across a fresh-service restart and no repeated mock charge. The initial
 container job also passed image build, constrained research/reconnect, nonroot UID,
 fresh-volume backup/restore and UI health. Across focused runs, **31 affected
-behavioral tests passed**. The corrected complete source is being verified by CI.
+behavioral tests passed**. The corrected complete source passed both CI jobs, as recorded below.
+
+## Completed verification — 5 October 2026
+
+[CI run 37253453020](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/37253453020)
+passed both jobs on source `36d1e44a414bbc9ced7a74fa151b30faffd53593`.
+Completed **07:28:22 IST** (01:58:22 UTC):
+
+- **362 tests passed**, 17.90 seconds, Linux/Python 3.12.
+- Ruff lint passed; 137 Python files formatted; strict mypy passed, 72 source files.
+- Wheel/sdist built; official Render schema and offline deployment smoke passed.
+- Docker build, UID 10001, 512 MB/half-CPU research and fresh-container reconnect,
+  fresh-volume synthetic backup/restore, and UI health all passed.
+- Private repository visibility reconfirmed; 157 allowlisted source files passed
+  configured-credential/private-runtime-path checks; 59 local documentation links
+  passed. Local paid ledgers and Gemini adapter provenance remained unchanged.
+
+At **07:29:33 IST**, refreshed four provider-free local replay runs. Coverage-loop
+completed in two passes; numeric dispute remained partial/no-progress; injected
+unsupported draft was repaired once and completed; pass-limited result remained
+partial with its gap. Source chunks/paragraph summaries were inspected in the new
+saved report. Artifacts remain in ignored `.evidenceforge/demo/phase11/`.
+
+The original PDF/page mapping and the identified baseline engineering mechanics
+are addressed within the conservative limits above. Actual Tavily access, persistent
+hosting, independent research-quality validation and P02–P05 production guidance
+remain open. No new real model/search/API request ran for these fixes.

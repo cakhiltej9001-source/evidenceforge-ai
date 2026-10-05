@@ -1,5 +1,9 @@
 # Original PDF reconciliation
 
+The initial snapshot audit is preserved below. The 5 October implementation update
+and [passing verification](../ASSIGNMENT_FIXES_2026-10-05.md) supersede its runtime
+gap statuses.
+
 Reviewed 4 October 2026, Asia/Calcutta, against source revision
 `93b320d65d87dd449905ddc65d91315ef0bf3303`.
 
