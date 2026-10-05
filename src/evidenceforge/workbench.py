@@ -6,7 +6,7 @@ from concurrent.futures import Future, ThreadPoolExecutor
 from pathlib import Path
 from threading import Lock
 
-from evidenceforge.config import load_settings
+from evidenceforge.config import ConfigurationError, load_settings
 from evidenceforge.graph.state import ResearchState
 from evidenceforge.guardrails import require_research_request
 from evidenceforge.identity import new_id
@@ -44,8 +44,15 @@ class LocalWorkbench:
         gemini: bool = False,
         model_id: str | None = None,
     ) -> ResearchService:
+        options = options or ResearchOptions(require_plan_approval=True)
+        if options.live_web and load_settings().tavily_api_key is None:
+            raise ConfigurationError("Live web research requires EVIDENCEFORGE_TAVILY_API_KEY.")
         retrieval = None
-        if demo in {"second-pass", "empty", "dispute"}:
+        if not (options.live_web or options.live_energy) and demo in {
+            "second-pass",
+            "empty",
+            "dispute",
+        }:
             adapter = (
                 SecondPassFixture()
                 if demo == "second-pass"
@@ -121,13 +128,19 @@ class LocalWorkbench:
         *,
         budget: BudgetLimits | None = None,
         gemini: bool = False,
+        live_web: bool = False,
+        live_energy: bool = False,
     ) -> str:
         request = require_research_request(request)
         if demo not in {"immediate", "second-pass", "empty", "dispute"}:
             raise ValueError("Unknown fixture scenario.")
         if request.document_ids:
             demo = "immediate"
-        service = self.service(demo, gemini=gemini)
+        service = self.service(
+            demo,
+            ResearchOptions(require_plan_approval=True, live_web=live_web, live_energy=live_energy),
+            gemini=gemini,
+        )
         return self.submit(
             request.owner_scope,
             new_id("job"),

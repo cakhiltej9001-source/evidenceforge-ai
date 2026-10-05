@@ -29,3 +29,21 @@ responses. Private repository upload and Docker CI passed. All 20 annotations
 received a recorded AI review. See evaluation/EXTENSION_REPORT.md and PHASE10.md.
 Original PDF/rubric, persistent hosting and Tavily configuration remain missing;
 human validation is unclaimed. The earlier Gemini rejection is historical.
+
+## Original supplied and mapped
+
+The user supplied `AI Research Agent(1).pdf` later on 4 October 2026. All 23 pages,
+including the page-5 diagram, were read. The original-document/page-mapping gate
+is closed. See submission/ORIGINAL_PDF_RECONCILIATION.md for implementation gaps;
+the PDF states no grading rubric, deadline or particular live MCP-server mandate.
+No provider execution was needed for this reconciliation.
+
+## Subsequent runtime fixes — 5 October 2026
+
+The supplied original PDF was fully reconciled. Runtime work now implements
+explicit mixed-source research, supported summary paragraphs, per-source evidence
+chunks and conservative literal working-set deduplication. See
+[ASSIGNMENT_FIXES_2026-10-05.md](ASSIGNMENT_FIXES_2026-10-05.md) and the current
+[requirements](submission/REQUIREMENTS.md). Earlier missing-integration/format
+statements describe older snapshots. Actual Tavily access, hosting and qualified
+production/research-quality checks remain pending; no new paid calls ran.

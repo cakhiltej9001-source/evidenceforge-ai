@@ -79,12 +79,46 @@ finalize it. Create a fresh service/model for every new paid run.
 | Gemini document/explicit synthetic report | Configured model ID/key; approved call/token limits | Question, relevant passages and scoped prior context |
 | NESO acquisition (`evidenceforge-energy --live`) | Public HTTPS access, no key | One fixed GET, no prompt or document payload |
 | Tavily acquisition (`evidenceforge-retrieve --live`) | Tavily key and fixture planning configuration | Generated search query |
+| Full mixed-source research (`--live-web`, `--energy-api`) | Explicit flags; Tavily key for web; chosen reasoning configuration | Search queries to Tavily; fixed GET to NESO; selected evidence/context to Google only with Gemini |
 
 `evidenceforge-energy` without `--live` is synthetic. It retains source evidence
-and state and does not generate a report. Gemini mode does not enable external
-web search in the research UI. Recorded historical fallback use does not establish
+and state and does not generate a report. Gemini reasoning alone does not enable
+web search; explicit live-source choices control acquisition separately. Recorded
+historical fallback use does not establish
 the model's current availability. Failed/unconfirmed paid calls are not automatically
 retried; historical paid checkpoints without receipts cannot migrate.
+
+## Explicit mixed-source research
+
+Privately configure `EVIDENCEFORGE_TAVILY_API_KEY` in the current project's `.env`
+to enable web search. Ingest an authorized document and use its returned ID:
+
+```powershell
+uv run --locked evidenceforge-research "Compare solar and wind electricity output, distinguishing GB half-hour shares from annual output." --owner demo --document DOCUMENT_ID --live-web --energy-api --require-approval
+uv run --locked evidenceforge-research --resume THREAD_ID --owner demo --approve-plan 1
+uv run --locked evidenceforge-research --resume THREAD_ID --owner demo
+```
+
+Both live flags are optional. Configure the reasoning provider separately; omitting
+`--offline` follows the current private model settings and can consume Gemini calls.
+Live source flags cannot be combined with `--offline` or `--demo`. On reconnect the
+saved source choices, owner and document IDs are restored. Completed reconnect
+makes no new search request. Missing Tavily credentials fail before planning.
+
+In the UI, use **Search live web with Tavily** and/or **Include GB half-hour energy
+API**, select any document IDs, and create/review the plan. The energy API describes
+GB shares in one half-hour, not annual/global/absolute output. Selecting it does not
+promise that it can answer every requested comparison. The synthetic scenario is
+used only when no live source or document is selected.
+
+Summary paragraphs contain audited quotations and shorten with disclosure if fewer
+than two supported claims exist. Sources list cited evidence chunks with exact
+locators. Literal copies/contained passages are grouped for model input; all original
+records remain retained. Distinct facts, qualifiers and uncovered question links are
+preserved. Grouping does not establish independent corroboration.
+
+The mixed-source path is verified with mocked HTTP; actual Tavily access remains
+unverified until a search credential is configured. No paid call ran for this fix.
 
 ## Files and storage
 

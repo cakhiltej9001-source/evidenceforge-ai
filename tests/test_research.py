@@ -262,3 +262,30 @@ def test_coverage_unknown_question_is_typed_failure(tmp_path):
     assert state["stage_error"] == "coverage"
     assert state["stop_reason"] == "fatal_error"
     assert all(a["support"] == "supported" for a in state["citation_audit"])
+
+
+def test_report_summary_paragraphs_and_per_source_evidence(tmp_path):
+    state = run(tmp_path)
+    markdown = render_report(state)
+    summary = markdown.split("## Summary\n\n", 1)[1].split("## Key Findings", 1)[0].strip()
+    paragraphs = summary.split("\n\n")
+    assert 2 <= len(paragraphs) <= 3
+    assert all(not paragraph.startswith("- ") and "[1]" in paragraph for paragraph in paragraphs)
+    sources = markdown.split("## Sources\n\n", 1)[1].split("## Limitations", 1)[0]
+    for claim in state["report_claims"].values():
+        for eid in claim["evidence_ids"]:
+            evidence = state["evidence_store"][eid]
+            assert f"Evidence `{eid}`" in sources
+            locator = evidence["locator"]
+            assert f"offsets {locator['start_offset']}-{locator['end_offset']}" in sources
+    assert all(a["support"] == "supported" for a in state["citation_audit"])
+
+
+def test_report_shortens_summary_when_only_one_claim_is_supported(tmp_path):
+    state = run(tmp_path, adapter=SecondPassFixture(), budget=BudgetLimits(max_research_passes=1))
+    markdown = render_report(state)
+    assert len(state["report_claims"]) == 1
+    assert "Only one supported summary claim is available" in markdown
+    summary = markdown.split("## Summary\n\n", 1)[1].split("## Key Findings", 1)[0]
+    assert "wind speed" not in summary
+    assert "Unmet task criterion" in markdown

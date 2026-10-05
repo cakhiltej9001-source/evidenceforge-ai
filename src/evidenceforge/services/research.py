@@ -11,6 +11,7 @@ from langgraph.errors import GraphRecursionError
 from langgraph.types import Command
 from langsmith import tracing_context
 
+from evidenceforge.config import ConfigurationError, load_settings
 from evidenceforge.evidence.projection import audit, project, render_inspection
 from evidenceforge.graph.research import build_research_graph
 from evidenceforge.graph.state import (
@@ -33,9 +34,11 @@ from evidenceforge.nodes.sources import SourceProcessor
 from evidenceforge.planning import ModelUnavailable, PlanDraft, normalized
 from evidenceforge.reporting import finalize, render_report
 from evidenceforge.research import ResearchModel, ResearchOptions
-from evidenceforge.retrieval.contracts import CallReceipt, RetrievalBatch
+from evidenceforge.retrieval.carbon_intensity import CarbonIntensityAdapter
+from evidenceforge.retrieval.contracts import CallReceipt, RetrievalAdapter, RetrievalBatch
 from evidenceforge.retrieval.documents import DocumentRetrievalAdapter
 from evidenceforge.retrieval.fixtures import FixtureRetrievalAdapter
+from evidenceforge.retrieval.tavily import TavilyAdapter
 from evidenceforge.schemas import (
     BudgetLimits,
     ResearchQuestion,
@@ -93,8 +96,16 @@ class ResearchService:
         self.options = options or ResearchOptions()
         self.trace_sink = trace_sink
         self.prices = prices
-        if retrieval and any(adapter.is_live for adapter in retrieval.adapters.values()):
-            raise ValueError("Phase 4 end-to-end research currently uses offline fixtures.")
+        self._owned_live_adapters: list[TavilyAdapter | CarbonIntensityAdapter] = []
+        if retrieval:
+            for kind, adapter in retrieval.adapters.items():
+                enabled = (kind == SourceType.WEB and self.options.live_web) or (
+                    kind == SourceType.API and self.options.live_energy
+                )
+                if adapter.is_live and not enabled:
+                    raise ValueError(
+                        "Live retrieval requires an explicit matching research option."
+                    )
 
     def report_path(self, state: ResearchState) -> Path:
         return self.data_dir / "reports" / state["run_id"] / "report.md"
@@ -102,6 +113,26 @@ class ResearchService:
     def retrieval_for(self, request: ResearchRequest) -> RetrievalService:
         if self.retrieval is not None:
             return self.retrieval
+        if self.options.live_web or self.options.live_energy:
+            adapters: dict[SourceType, RetrievalAdapter] = {}
+            if self.options.live_web:
+                key = load_settings().tavily_api_key
+                if key is None:
+                    raise ConfigurationError(
+                        "Live web research requires EVIDENCEFORGE_TAVILY_API_KEY."
+                    )
+                web = TavilyAdapter(key)
+                adapters[SourceType.WEB] = web
+                self._owned_live_adapters.append(web)
+            if self.options.live_energy:
+                energy = CarbonIntensityAdapter()
+                adapters[SourceType.API] = energy
+                self._owned_live_adapters.append(energy)
+            if request.document_ids:
+                adapters[SourceType.DOCUMENT] = DocumentRetrievalAdapter(
+                    self.documents, request.owner_scope, request.document_ids
+                )
+            return RetrievalService(self.data_dir, adapters)
         if request.document_ids:
             return RetrievalService(
                 self.data_dir,
@@ -137,7 +168,11 @@ class ResearchService:
                     for kind, adapter in retrieval.adapters.items()
                 },
                 "retrieval_options": retrieval.options.model_dump(mode="json"),
-                "research_options": self.options.model_dump(mode="json"),
+                "research_options": {
+                    **self.options.model_dump(mode="json", exclude={"live_web", "live_energy"}),
+                    **({"live_web": True} if self.options.live_web else {}),
+                    **({"live_energy": True} if self.options.live_energy else {}),
+                },
             },
             sort_keys=True,
         )
@@ -167,12 +202,22 @@ class ResearchService:
                 message=self.model.model_id,
             )
             state = apply_update(state, {"events": {event.id: record_data(event)}})
-        retrieval = self.retrieval_for(request)
-        checkpoint = CheckpointRepository(self.data_dir / "checkpoints", request.owner_scope)
-        checkpoint.register(state, self.profile(retrieval))
-        return await self.execute(
-            state, retrieval, checkpoint, resume=False, pause_after=pause_after
-        )
+        try:
+            retrieval = self.retrieval_for(request)
+            if any(adapter.is_live for adapter in retrieval.adapters.values()):
+                event = RunEvent(
+                    id=stable_id("live_retrieval", state["run_id"]),
+                    kind="live_retrieval",
+                    message="Explicit live source acquisition is enabled.",
+                )
+                state = apply_update(state, {"events": {event.id: record_data(event)}})
+            checkpoint = CheckpointRepository(self.data_dir / "checkpoints", request.owner_scope)
+            checkpoint.register(state, self.profile(retrieval))
+            return await self.execute(
+                state, retrieval, checkpoint, resume=False, pause_after=pause_after
+            )
+        finally:
+            await self.close_live_adapters()
 
     async def snapshot(self, thread_id: str, owner_scope: str = "local") -> ResearchState:
         """Read a checkpoint only after validating the owner registration."""
@@ -210,70 +255,76 @@ class ResearchService:
         checkpoint = CheckpointRepository(self.data_dir / "checkpoints", owner_scope)
         registration = checkpoint.load(thread_id)
         initial = validate_state(registration.initial_state)
-        retrieval = self.retrieval_for(ResearchRequest.model_validate(initial["request"]))
-        if self.profile(retrieval) != registration.profile:
-            raise CheckpointFailure("Edit configuration differs from the registered workflow.")
-        artifacts, ledger = retrieval.components(initial)
-        config: RunnableConfig = {"configurable": {"thread_id": thread_id}}
-        with tracing_context(enabled=False), checkpoint.exclusive(thread_id):
-            state = await self.snapshot(thread_id, owner_scope)
-            if (
-                state["run_status"] != "running"
-                or state["approval_status"] != "awaiting_approval"
-                or checkpoint.cancellation_requested(thread_id)
-            ):
-                raise CheckpointFailure("Only a pending, uncancelled plan can be edited.")
-            if state["plan_version"] != expected_version:
-                raise CheckpointFailure("Edit plan version is stale.")
-            if state["query_records"] or state["calls"] or state["evidence_store"]:
-                raise CheckpointFailure("Plan editing is allowed only before query generation.")
-            if len(plan.questions) > BudgetLimits.model_validate(state["budget"]).max_subquestions:
-                raise CheckpointFailure("Edited plan exceeds the subquestion allowance.")
-            questions = [
-                ResearchQuestion(
-                    id=stable_id(
-                        "question",
-                        owner_scope,
-                        normalized(str(state["request"]["question"])),
-                        normalized(q.question),
-                    ),
-                    question=q.question,
-                    acceptance_criteria=q.acceptance_criteria,
-                    importance=q.importance,
-                )
-                for q in plan.questions
-            ]
-            event = RunEvent(
-                id=stable_id("plan_edit", state["run_id"], expected_version + 1),
-                kind="plan_edited",
-                message="Edited plan requires renewed approval.",
-            )
-            updated = apply_update(
-                state,
-                {
-                    "research_questions": [record_data(q) for q in questions],
-                    "plan_version": expected_version + 1,
-                    "approval_status": "awaiting_approval",
-                    "events": {event.id: record_data(event)},
-                },
-            )
-            async with AsyncSqliteSaver.from_conn_string(str(checkpoint.path)) as saver:
-                graph = build_research_graph(
-                    self.model,
-                    self.repository,
-                    SourceProcessor(retrieval.adapters, artifacts, ledger, retrieval.options),
-                    EvidenceExtractor(artifacts, retrieval.options),
-                    artifacts,
-                    self.options,
-                    checkpointer=saver,
-                )
-                await graph.aupdate_state(config, dict(updated), as_node="prepare_approval")
-                # Re-enter only the approval node. No planning/query/retrieval work is replayed.
-                async for value in graph.astream(None, config=config, stream_mode="values"):
-                    updated = validate_state(
-                        {k: v for k, v in value.items() if k != "__interrupt__"}
+        try:
+            retrieval = self.retrieval_for(ResearchRequest.model_validate(initial["request"]))
+            if self.profile(retrieval) != registration.profile:
+                raise CheckpointFailure("Edit configuration differs from the registered workflow.")
+            artifacts, ledger = retrieval.components(initial)
+            config: RunnableConfig = {"configurable": {"thread_id": thread_id}}
+            with tracing_context(enabled=False), checkpoint.exclusive(thread_id):
+                state = await self.snapshot(thread_id, owner_scope)
+                if (
+                    state["run_status"] != "running"
+                    or state["approval_status"] != "awaiting_approval"
+                    or checkpoint.cancellation_requested(thread_id)
+                ):
+                    raise CheckpointFailure("Only a pending, uncancelled plan can be edited.")
+                if state["plan_version"] != expected_version:
+                    raise CheckpointFailure("Edit plan version is stale.")
+                if state["query_records"] or state["calls"] or state["evidence_store"]:
+                    raise CheckpointFailure("Plan editing is allowed only before query generation.")
+                if (
+                    len(plan.questions)
+                    > BudgetLimits.model_validate(state["budget"]).max_subquestions
+                ):
+                    raise CheckpointFailure("Edited plan exceeds the subquestion allowance.")
+                questions = [
+                    ResearchQuestion(
+                        id=stable_id(
+                            "question",
+                            owner_scope,
+                            normalized(str(state["request"]["question"])),
+                            normalized(q.question),
+                        ),
+                        question=q.question,
+                        acceptance_criteria=q.acceptance_criteria,
+                        importance=q.importance,
                     )
-            return updated
+                    for q in plan.questions
+                ]
+                event = RunEvent(
+                    id=stable_id("plan_edit", state["run_id"], expected_version + 1),
+                    kind="plan_edited",
+                    message="Edited plan requires renewed approval.",
+                )
+                updated = apply_update(
+                    state,
+                    {
+                        "research_questions": [record_data(q) for q in questions],
+                        "plan_version": expected_version + 1,
+                        "approval_status": "awaiting_approval",
+                        "events": {event.id: record_data(event)},
+                    },
+                )
+                async with AsyncSqliteSaver.from_conn_string(str(checkpoint.path)) as saver:
+                    graph = build_research_graph(
+                        self.model,
+                        self.repository,
+                        SourceProcessor(retrieval.adapters, artifacts, ledger, retrieval.options),
+                        EvidenceExtractor(artifacts, retrieval.options),
+                        artifacts,
+                        self.options,
+                        checkpointer=saver,
+                    )
+                    await graph.aupdate_state(config, dict(updated), as_node="prepare_approval")
+                    # Re-enter only the approval node. No planning/query/retrieval work is replayed.
+                    async for value in graph.astream(None, config=config, stream_mode="values"):
+                        updated = validate_state(
+                            {k: v for k, v in value.items() if k != "__interrupt__"}
+                        )
+                return updated
+        finally:
+            await self.close_live_adapters()
 
     async def resume(
         self,
@@ -285,12 +336,44 @@ class ResearchService:
         checkpoint = CheckpointRepository(self.data_dir / "checkpoints", owner_scope)
         registration = checkpoint.load(thread_id)
         state = validate_state(registration.initial_state)
-        retrieval = self.retrieval_for(ResearchRequest.model_validate(state["request"]))
-        if self.profile(retrieval) != registration.profile:
-            raise CheckpointFailure("Resume configuration differs from the registered workflow.")
-        return await self.execute(state, retrieval, checkpoint, resume=True, decision=decision)
+        try:
+            retrieval = self.retrieval_for(ResearchRequest.model_validate(state["request"]))
+            if self.profile(retrieval) != registration.profile:
+                raise CheckpointFailure(
+                    "Resume configuration differs from the registered workflow."
+                )
+            return await self.execute(state, retrieval, checkpoint, resume=True, decision=decision)
+        finally:
+            await self.close_live_adapters()
+
+    async def close_live_adapters(self) -> None:
+        adapters, self._owned_live_adapters = self._owned_live_adapters, []
+        for adapter in adapters:
+            await adapter.aclose()
 
     async def execute(
+        self,
+        initial: ResearchState,
+        retrieval: RetrievalService,
+        checkpoint: CheckpointRepository,
+        *,
+        resume: bool,
+        decision: PlanDecision | None = None,
+        pause_after: str | None = None,
+    ) -> ResearchState:
+        try:
+            return await self._execute(
+                initial,
+                retrieval,
+                checkpoint,
+                resume=resume,
+                decision=decision,
+                pause_after=pause_after,
+            )
+        finally:
+            await self.close_live_adapters()
+
+    async def _execute(
         self,
         initial: ResearchState,
         retrieval: RetrievalService,

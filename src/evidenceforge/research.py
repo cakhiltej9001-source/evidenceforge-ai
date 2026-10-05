@@ -2,9 +2,10 @@
 
 from typing import Annotated, Literal, Protocol
 
-from pydantic import Field
+from pydantic import Field, StrictBool
 
 from evidenceforge.evidence.contracts import AnalysisOptions, Comparison, Proposition, SourceQuality
+from evidenceforge.evidence.deduplication import DuplicateEvidence
 from evidenceforge.models.base import PlanningModel
 from evidenceforge.schemas import (
     Claim,
@@ -38,6 +39,7 @@ class CoverageAssessment(Contract):
 
 
 class CoverageInput(Contract):
+    duplicate_evidence: tuple[DuplicateEvidence, ...] = ()
     questions: tuple[ResearchQuestion, ...]
     evidence: tuple[EvidenceItem, ...]
 
@@ -56,6 +58,7 @@ class ReportDraft(Contract):
 
 
 class SynthesisInput(Contract):
+    duplicate_evidence: tuple[DuplicateEvidence, ...] = ()
     source_quality: tuple[SourceQuality, ...] = ()
     propositions: tuple[Proposition, ...] = ()
     comparisons: tuple[Comparison, ...] = ()
@@ -68,6 +71,7 @@ class SynthesisInput(Contract):
 
 
 class CriticInput(Contract):
+    duplicate_evidence: tuple[DuplicateEvidence, ...] = ()
     report: Report
     claims: tuple[Claim, ...]
     evidence: tuple[EvidenceItem, ...]
@@ -81,6 +85,8 @@ class CriticAssessment(Contract):
 
 class ResearchOptions(Contract):
     require_plan_approval: bool = False
+    live_web: StrictBool = False
+    live_energy: StrictBool = False
     analysis: AnalysisOptions = Field(default_factory=AnalysisOptions)
     node_timeout_seconds: Annotated[float, Field(gt=0, le=60, allow_inf_nan=False)] = 30.0
     max_response_bytes: Annotated[PositiveCount, Field(le=1_000_000)] = 100_000

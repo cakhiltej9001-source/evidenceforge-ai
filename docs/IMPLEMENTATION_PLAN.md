@@ -10,9 +10,13 @@ Workspace: C:/Users/AKHILTEJ/Documents/ChatGPT/AI Research agent. Initial inspec
 
 Available reference: C:/Users/AKHILTEJ/Downloads/CODEX_HANDOFF.md, specification 1.0, preserved as docs/CODEX_HANDOFF.md. This plan incorporates the review corrections without changing the original reference.
 
-Missing: original AI Research Agent.pdf, companion AGENTS.md/setup instructions, rubric and deadline. Filename searches covered the workspace, Downloads, Documents and Desktop. Likely Downloads archives were inspected by entry name, but no assignment PDF was established. It could exist elsewhere or under another filename.
-
-**All PDF page mappings and the reported 23-page count are handoff-only, unverified against the PDF.** Planning can proceed; assignment sign-off cannot. When the original is supplied, read every page and reconcile this matrix. Offline Phase 1 contracts need not wait for that reconciliation.
+At Phase 0 the original PDF was unavailable; filename/archive searches did not establish it.
+On 4 October 2026 the user supplied `AI Research Agent(1).pdf`. All 23 pages and
+its diagram were read; the page mappings are now verified against SHA-256
+`51ee3f8022090e5806cbd51ac48fc77c4bbde4bbf0d5fc8f82ccd08e8722840c`.
+See [original-PDF reconciliation](submission/ORIGINAL_PDF_RECONCILIATION.md) for the
+current implementation gaps. The PDF contains no rubric, deadline or requirement
+for companion AGENTS.md/setup files. Baseline feature completion remains partial.
 
 User instructions govern scope. Source documents supply reference requirements and proposals rather than independent authorization.
 
@@ -32,19 +36,22 @@ Proposed enhancements: claim graph visualization, contradiction follow-up, expla
 
 ## 3. Requirement traceability
 
-Every page reference below is **handoff-only**. Application paths are relative to src/evidenceforge/ unless otherwise stated. Files are proposed and created incrementally.
+The page references below were initially handoff-only and are now verified against
+the supplied 23-page PDF. This is the historical proposed-file matrix; the current
+implemented-file/status matrix is in submission/ORIGINAL_PDF_RECONCILIATION.md.
+Application paths are relative to src/evidenceforge/ unless otherwise stated.
 
 | ID | Requirement/guidance | Reported pages | Proposed files | Acceptance check |
 |---|---|---|---|---|
 | B01 | Focused subquestions | 2, 6, 8-9 | nodes/planner.py; schemas.py | Atomic questions, stable IDs and criteria |
-| B02 | Web, document, API/MCP paths | 2, 5-6, 10 | retrieval/base.py, fixtures.py, tavily.py, documents.py; later external adapter | Common results/errors; web/docs work; live MCP obligation confirmed |
+| B02 | Web, document, API/MCP paths | 2, 5-6, 10 | retrieval/base.py, fixtures.py, tavily.py, documents.py; later external adapter | Common results/errors and same-pipeline web/docs/external retrieval; API or MCP extension choice |
 | B03 | Manager coordinates Planner/Context initialization | 5, 8-9 | nodes/manager.py, context.py; graph/builder.py | Both branches finish; query generation once |
 | B04 | Source-specific queries | 9-10 | nodes/queries.py | Question/source links, bounded counts and repeats |
 | B05 | Extract relevant passages, deduplicate, provenance | 10-11 | evidence/extraction.py, deduplication.py | Exact spans, retained source/query links and rejection reasons |
 | B06 | Shared state and reducers | 7-8 | graph/state.py; schemas.py | Partial updates, replay-safe merges, serialization |
 | B07 | Missing coverage triggers follow-up | 11-12, 15 | nodes/coverage.py; graph/routing.py | Targeted second retrieval pass |
 | B08 | Iteration stop with incomplete disclosure | 12, 20 | services/budgets.py; graph/routing.py | Bounded stop preserves gaps |
-| B09 | Markdown Summary, Key Findings, Sources | 13 | nodes/synthesis.py; report renderer; cli.py | Deterministic citations; every factual sentence audited |
+| B09 | Markdown Summary, Key Findings, Sources | 13 | nodes/synthesis.py; report renderer; cli.py | 2-3 paragraph supported summary and per-source chunks; every factual sentence audited |
 | B10 | Critic requests revision | 13-16 | nodes/critic.py; graph/routing.py | Concrete brief, shared rewrite limit, partial result on exhaustion |
 | B11 | Trace factual claims to evidence | 14 | nodes/citations.py; schemas.py | ID validity, support, attribution and complete claim coverage |
 | B12 | Register/compile LangGraph | 14-16 | graph/builder.py, state.py, routing.py | Executable graph and routing tests |
@@ -52,7 +59,7 @@ Every page reference below is **handoff-only**. Application paths are relative t
 | P01 | Environment secrets | 3-4 | config.py; .env.example; .gitignore | Missing-key response; no secrets in logs/state/git |
 | P02 | Validate research input | 19 | guardrails/inputs.py | Rejection/clarification reason and explicit scope policy |
 | P03 | Observe execution/usage | 20 | services/events.py; observability/usage.py, tracing.py | Sanitized call/routing records and actual trace coverage |
-| P04 | Tool errors/provider fallback | 21 | model/retrieval adapters; retry policy | Bounded retry; configured permitted fallback |
+| P04 | Tool errors/search-provider fallback | 21 | retrieval adapters; retry policy | Structured failures; bounded, configured ordered search fallback after failure/empty result |
 | P05 | Bounded evidence/prior summaries | 21 | evidence/extraction.py; storage/reports.py | Byte/count caps, citation pinning, summaries as context |
 | P06 | Phase-specific tools | 22 | graph dependency construction; adapter contracts | Planning/critique cannot gain tools; retrieval read-only |
 
@@ -241,7 +248,7 @@ Code under src/evidenceforge/, tests under tests/, requirements/design/progress 
 |---|---|
 | Missing PDF/AGENTS/setup | Provisional mappings; read/reconcile supplied originals before assignment sign-off |
 | Rubric/deadline unknown | Gate A first; verify competition priorities when supplied |
-| Live MCP mandatory? | Interface/fixture provisional; move live adapter earlier if required |
+| API/MCP extension | PDF pages 2/10 allow APIs or MCP; no particular MCP server mandated. Full research live integration remains a gap |
 | Provider/budget/access unknown | Offline Phase 1; establish before live work |
 | Hallucinated citations/support | Stored spans, complete claim registry, human evaluation |
 | Runaway spend/rewrites | Reservations and limits with first calls; shared rewrite/no-progress stop |
@@ -285,3 +292,24 @@ usable, and the repaired workflow completed all nine model stages with an honest
 partial/pass-limit result. All 20 labels received a documented AI review.
 See evaluation/EXTENSION_REPORT.md and PHASE10.md. Persistent hosting, Tavily access,
 original PDF/rubric reconciliation and research-quality validation remain open.
+
+## Verified original reference — 4 October 2026
+
+All 23 supplied PDF pages are now mapped. The missing-original gate is closed;
+see submission/ORIGINAL_PDF_RECONCILIATION.md. Required baseline follow-up is full
+live-source integration, page-13 report presentation and cross-source passage
+deduplication. Production semantic guardrails, ordered search fallback, evidence
+eviction and tracing remain qualified. The PDF specifies no competition grading
+rubric or hosting target. Earlier missing-original statements describe history.
+
+## Original assignment runtime fixes — 5 October 2026
+
+The 23-page PDF is mapped and its identified runtime gaps have been addressed with
+explicit mixed-source research controls, supported summary paragraphs, per-source
+chunk lists and conservative literal working-set deduplication. Prior source records
+and citation audits remain authoritative. See the
+[implementation record](ASSIGNMENT_FIXES_2026-10-05.md) and updated
+[requirements](submission/REQUIREMENTS.md) for tested scope and remaining inputs.
+Actual live Tavily and persistent hosting are still unverified; P02–P05 production
+guidance and broader research-quality validation remain qualified. Earlier counts
+and baseline-gap statements are historical, not additional passing measurements.

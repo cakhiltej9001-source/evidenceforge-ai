@@ -8,8 +8,10 @@ LangGraph, SQLite and an optional Streamlit UI provide the workflow.
 The source is in a private GitHub repository; Phase 11 submission materials are prepared.
 All 20 Gemini one-shot responses are available, and the repaired workflow completed its
 model stages. Research-quality validation, persistent hosting, live Tavily access and
-original assignment PDF/rubric reconciliation remain open. Synthetic demonstrations
-show workflow behavior, not independently verified facts.
+the remaining production guidance need further verification. Explicit mixed-source
+research, paragraph summaries and conservative passage deduplication are implemented.
+The original 23-page PDF has been reviewed in the [reconciliation](docs/submission/ORIGINAL_PDF_RECONCILIATION.md).
+Synthetic demonstrations show workflow behavior, not independently verified facts.
 
 ## Start here — Windows PowerShell
 
@@ -55,20 +57,22 @@ Stop the replay server with Ctrl+C. It serves only the generated demo directory.
 | Feature | Implemented behavior |
 |---|---|
 | Planning | Structured questions/criteria; concurrent planner/context branches join once |
-| Evidence | Bounded retrieval, snapshots, exact locators, deduplication and provenance |
+| Evidence | Bounded retrieval, snapshots, exact locators; literal working-set deduplication with all original provenance retained |
 | Coverage | Follow-up questions with pass/search/model/time/byte limits |
-| Reports | Summary, findings, sources, disagreements and disclosed gaps |
+| Reports | 2–3 supported summary paragraphs where evidence permits; findings, per-source chunks, disagreements and disclosed gaps |
 | Citation checks | Exact quoted text and retained snapshot checks; bounded repair/omission |
 | Analysis | Heuristic ranking, source families and supported scoped numeric comparisons |
 | Persistence | Owner-scoped SQLite checkpoints and durable model/search receipts |
 | Documents | TXT/PDF/DOCX ingestion, page/paragraph/table locations; OCR unavailable |
 | Reasoning | Offline fixtures by default; configured Gemini structured stages |
-| Specialized API | Explicit read-only NESO half-hour GB generation mix acquisition |
+| Live sources | Explicit Tavily and read-only NESO GB half-hour shares, combined with selected documents in full research |
 
-The full research service uses local documents or synthetic retrieval. The NESO
-and Tavily adapters have explicit acquisition commands; they do not enable general
-live web research in the UI. Exact citation matches establish retained-text support,
-not source truth. See [limitations](docs/submission/LIMITATIONS.md).
+Full research can combine explicitly selected Tavily web search, the GB energy API,
+and supplied documents. The CLI uses `--live-web` and `--energy-api`; matching UI
+checkboxes are off by default. These choices survive approval/editing/reconnect.
+Missing search credentials fail before planning. `--offline` excludes live sources.
+Exact citation matches establish retained-text support, not source truth. See
+[limitations](docs/submission/LIMITATIONS.md).
 
 ## Local documents and restart
 
@@ -107,7 +111,8 @@ EVIDENCEFORGE_MODEL_API_KEY=YOUR_PRIVATE_KEY
 This is the model used in the recorded verification, not a claim about the newest
 available model or current availability. Gemini sends the question and relevant
 passages/context to Google. Select its UI mode or omit `--offline` from research
-commands using documents/an explicit demo. Configure call/token limits before paid
+commands using documents, an explicit demo or explicitly enabled live sources. Configure
+call/token limits before paid
 use. Completed responses can replay from durable receipts; failed/unconfirmed calls
 are not automatically retried. Dollar ceilings require a verified pricing policy.
 
@@ -161,5 +166,8 @@ endpoint have been created. [Deployment details](docs/PHASE10.md).
 - [Evaluation table](docs/submission/EVALUATION.md)
 - [Limitations and open gates](docs/submission/LIMITATIONS.md)
 
-The original assignment PDF and judging rubric have not been supplied. Requirement
-mapping follows the preserved handoff and cannot establish assignment compliance.
+The original 23-page PDF is now supplied and reviewed. Its graph/source/report
+requirements are mapped in the [original-PDF reconciliation](docs/submission/ORIGINAL_PDF_RECONCILIATION.md).
+Live web/API retrieval in the full research pipeline and the specified summary/source
+presentation remain incomplete. The PDF contains no grading rubric, deadline or
+hosting mandate; full assignment acceptance is not claimed.

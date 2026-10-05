@@ -85,8 +85,11 @@ class RetrievedSource(Contract):
             or (address is not None and not address.is_global)
         ):
             raise ValueError("source URL is not public")
-        if self.source_type != SourceType.WEB or self.owner_scope is not None:
-            raise ValueError("Phase 3 web results must be public web sources")
+        if (
+            self.source_type not in (SourceType.WEB, SourceType.API, SourceType.MCP)
+            or self.owner_scope is not None
+        ):
+            raise ValueError("External results must be public sources")
         return self
 
 

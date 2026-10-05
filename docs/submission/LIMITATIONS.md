@@ -20,9 +20,10 @@ at its three-pass limit; original provider failures remain recorded.
 
 ## Sources, documents and providers
 
-The full research service currently retrieves local documents or synthetic sources.
-Dedicated NESO/Tavily acquisition adapters are separate; they do not provide general
-live web research in the UI. NESO percentages are GB half-hour shares, including
+The full research service can combine explicitly enabled Tavily search, the GB energy
+API and selected documents. Mixed-source approval/edit/resume is verified with mocked
+HTTP; actual Tavily access still needs a configured credential. Default acquisition
+remains synthetic or local-document retrieval. NESO percentages are GB half-hour shares, including
 imports, not annual/global/absolute MWh output. API-derived prose is a deterministic
 projection of validated JSON, not a quotation of provider-authored sentences.
 
@@ -54,8 +55,8 @@ and a spending cap. Synthetic restore does not verify a future production backup
 |---|---|
 | Completed independent 20-case annotation review | Needed before calling labels human-validated |
 | Hosting account, access target and spending cap | Needed for persistent runtime/storage/security checks |
-| Tavily key configured here or explicitly authorized source | Needed for the dedicated live search check |
-| Original PDF and judging rubric | Needed for actual assignment/competition compliance |
+| Tavily key configured here or explicitly authorized source | Needed to verify actual live search in acquisition and full research |
+| Any separate grading/submission brief, if one exists | The reviewed original PDF provides no rubric, deadline or delivery format |
 | Deadline and submission format | Needed for final delivery/publishing decisions |
 
 Subsequent user delegation authorized 40 additional Gemini calls and the private
@@ -63,3 +64,18 @@ repository/upload/CI; these actions executed, with 28 additional calls reserved.
 Codex reviewed all 20 labels as AI without supplying a human attestation. Persistent
 hosting and live Tavily configuration remain pending. No award or provider
 outperformance is established by these checks.
+
+## Verified original-PDF differences
+
+The original 23-page PDF is supplied and fully reconciled in
+[ORIGINAL_PDF_RECONCILIATION.md](ORIGINAL_PDF_RECONCILIATION.md). The missing-file gate
+is closed. Full research now accepts explicit live source choices with documents, and
+reports contain supported summary paragraphs and per-source evidence chunks. Literal
+cross-source copies/contained passages are grouped for model input while original spans
+remain retained. Nonidentical partial overlaps and paraphrases are kept separate to
+preserve distinct facts and qualifiers; semantic deduplication is not established.
+If fewer than two supported summary claims exist, a shorter summary is disclosed.
+Production guidance also specifies semantic input classification, ordered search
+fallback and lowest-score evidence eviction, which are only partly implemented.
+The PDF describes API-or-MCP extension and replaceable search providers; it does
+not mandate a particular MCP server, hosting platform or human-reviewed benchmark.

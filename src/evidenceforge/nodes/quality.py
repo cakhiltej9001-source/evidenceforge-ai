@@ -6,6 +6,7 @@ from typing import TypeVar, cast
 
 from pydantic import JsonValue, ValidationError
 
+from evidenceforge.evidence.deduplication import working_evidence
 from evidenceforge.graph.state import ResearchState, StateSnapshot
 from evidenceforge.identity import stable_id
 from evidenceforge.nodes.common import Update, checked_patch, record_data
@@ -100,11 +101,13 @@ class CoverageEvaluator(QualityNode):
         if quality_remaining(s) <= 2:
             return quality_error(state, "coverage", "budget", s.quality_attempts)
         try:
+            working = working_evidence(s.evidence_store.values())
             result = await self.response(
                 self.model.evaluate_coverage(
                     CoverageInput(
                         questions=s.research_questions,
-                        evidence=tuple(s.evidence_store.values()),
+                        evidence=working.evidence,
+                        duplicate_evidence=working.duplicates,
                     )
                 ),
                 CoverageAssessment,
@@ -269,24 +272,17 @@ class Synthesis(QualityNode):
             return quality_error(state, "synthesis", "budget", s.quality_attempts)
         try:
             version = s.revision_count + 1
+            working = working_evidence(
+                s.evidence_store.values(),
+                {sid: ranking.score for sid, ranking in s.source_quality.items()},
+            )
             result = await self.response(
                 self.model.synthesize(
                     SynthesisInput(
                         request=s.request,
                         questions=s.research_questions,
-                        evidence=tuple(
-                            sorted(
-                                s.evidence_store.values(),
-                                key=lambda e: (
-                                    -(
-                                        s.source_quality[e.source_id].score
-                                        if e.source_id in s.source_quality
-                                        else 0.5
-                                    ),
-                                    e.id,
-                                ),
-                            )
-                        ),
+                        evidence=working.evidence,
+                        duplicate_evidence=working.duplicates,
                         source_quality=tuple(s.source_quality.values()),
                         propositions=tuple(s.propositions.values()),
                         comparisons=tuple(s.comparisons.values()),
@@ -306,15 +302,31 @@ class Synthesis(QualityNode):
                     draft.evidence_ids
                 ).issubset(s.evidence_store):
                     raise PlanningContractError("unknown draft reference")
+                evidence_ids = set(draft.evidence_ids)
+                # Add only independently auditable exact-copy occurrences. Containment
+                # alone never licenses citing a source missing the full quotation.
+                for item in s.evidence_store.values():
+                    if (
+                        any(
+                            s.evidence_store[eid].passage == item.passage
+                            for eid in draft.evidence_ids
+                        )
+                        and draft.statement == item.passage
+                        and set(draft.question_ids).issubset(item.question_ids)
+                    ):
+                        evidence_ids.add(item.id)
                 claim = Claim(
                     id=stable_id("claim", s.run_id, version, index),
-                    **draft.model_dump(exclude={"section"}),
+                    **draft.model_dump(exclude={"section", "evidence_ids"}),
+                    evidence_ids=tuple(sorted(evidence_ids)),
                 )
                 claims[claim.id] = record_data(claim)
                 placed.setdefault(draft.section, []).append(claim.id)
                 sources.update(s.evidence_store[eid].source_id for eid in claim.evidence_ids)
-            if not placed["summary"]:
-                placed["summary"] = [next(iter(claims))]
+            if len(placed["summary"]) < 2:
+                placed["summary"] = list(
+                    dict.fromkeys(placed["summary"] + placed["key_findings"] + list(claims))
+                )[:3]
             report = Report(
                 id=stable_id("report", s.run_id, version),
                 draft_version=version,
@@ -351,12 +363,14 @@ class Critic(QualityNode):
         if quality_remaining(s) <= 0:
             return quality_error(state, "critic", "budget", s.quality_attempts)
         try:
+            working = working_evidence(s.evidence_store.values())
             result = await self.response(
                 self.model.critique(
                     CriticInput(
                         report=s.draft_report,
                         claims=tuple(s.report_claims.values()),
-                        evidence=tuple(s.evidence_store.values()),
+                        evidence=working.evidence,
+                        duplicate_evidence=working.duplicates,
                         coverage=tuple(s.coverage_by_question.values()),
                     )
                 ),

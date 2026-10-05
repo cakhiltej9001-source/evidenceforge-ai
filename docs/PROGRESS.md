@@ -14,8 +14,11 @@ Updated: 4 October 2026, Asia/Calcutta.
 and delegated AI review are complete with disclosed failures and corpus limitations;
 research-quality sign-off remains open. Phase 10 local source/runtime and remote Docker
 CI passed; persistent hosting and live Tavily access need account configuration.
-Phase 11 materials and synthetic demo are prepared; original PDF/rubric reconciliation
-remains open. See `evaluation/EXTENSION_REPORT.md`, `PHASE10.md` and `PHASE11.md`.
+Phase 11 materials and synthetic demo are prepared. The original 23-page PDF has now
+been read and mapped: same-pipeline live sources, report presentation and cross-source
+passage deduplication remain baseline gaps; production guidance is partly implemented.
+See `submission/ORIGINAL_PDF_RECONCILIATION.md`, `evaluation/EXTENSION_REPORT.md` and
+`PHASE10.md`. Historical missing-file notes below are superseded by this review.
 
 ## Phase 0 history
 
@@ -713,3 +716,34 @@ Artifacts: `.evidenceforge/verification/gemini-resume/` (ignored local data).
 - Delegated AI review records decisions and reasons for all 20 cases. First 16 broad comparison questions need narrower wording or richer corpora for real quality evaluation. Two dispute and two empty-source labels are consistent with their fixtures. Human review is not claimed; the frozen dataset is unchanged.
 - Final repair checks: 24 affected offline tests passed (33.29 s); Ruff lint/format passed (131 files); strict mypy passed (71 source files). Remote CI repeats the complete checks on every pushed revision.
 - Persistent Render hosting, Tavily access and original assignment PDF/rubric remain unresolved inputs. Automatic approval review rejected a broad search for Tavily credentials in other projects; that search did not execute and no Tavily call occurred.
+
+## Original PDF reconciliation — 4 October 2026
+
+- User supplied `AI Research Agent(1).pdf` from Downloads: 23 pages, 1,078,834 bytes, SHA-256 `51ee3f8022090e5806cbd51ac48fc77c4bbde4bbf0d5fc8f82ccd08e8722840c`.
+- Read all pages and reviewed rendered pages, including the image-only pipeline on page 5. Preserved the PDF unmodified; extraction/manifest/renders are ignored local records.
+- Reconciled all 13 baseline mapping rows and six incremental production rows against source revision `93b320d65d87dd449905ddc65d91315ef0bf3303`.
+- Original-file/page-mapping gate is closed. Baseline feature completion remains partial: full research rejects live adapters, Markdown summary/source presentation differs from page 13, and cross-source overlapping passages are not merged.
+- Production differences explicitly recorded: deterministic input review, no ordered search-provider fallback, rejection rather than lowest-score eviction, allowlisted traces instead of full payload tracing, and unverified remote tracing/hosting.
+- API/MCP is an extensibility choice, not a requirement for a particular live MCP server. Tavily is replaceable. No grading rubric, submission deadline, benchmark/human-review mandate or hosting platform is stated in the PDF.
+- Current source CI passed 350 tests (14.68 s), strict types/lint/format and both Docker/Python jobs: https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/37170191649 . This audit changes documentation only; no new model/search calls or runtime source changes.
+- Read `submission/ORIGINAL_PDF_RECONCILIATION.md` for verified page references, source evidence and prioritized follow-up. Earlier historical missing-PDF notes are superseded.
+
+## Original assignment runtime implementation — 5 October 2026
+
+- Continued the user-authorized pending work after original-PDF reconciliation.
+- Added explicit Tavily/GB energy source choices to CLI/UI and full research;
+  selected documents share the same pipeline. Saved choices restore on reconnect.
+- Tested approval, editing/stale edits, owner isolation, receipt reuse, configuration
+  mismatch, provider failure/partial delivery and cancellation with mocked HTTP.
+- Added 2–3 audited summary paragraphs when evidence permits and per-source chunks
+  with exact locators. Insufficient summary support is disclosed without padding.
+- Added conservative literal working-set deduplication to coverage/synthesis/critic;
+  original spans/provenance remain retained and complete exact-copy citations are
+  separately audited. Different wording, qualifiers and question links are preserved.
+- 29 affected offline behavioral tests passed across focused runs; mypy passed for
+  72 source files; Ruff lint/format passed. Source privacy and 59 documentation links
+  passed. Full private CI will verify the pushed source revision.
+- Current project Tavily key and Render process credential remain absent. No new
+  Gemini/search/API call ran; original and extension ledgers remain 26/30 and 28/40.
+- Full production P02–P05, actual Tavily/host verification and independent research-
+  quality validation remain qualified. See ASSIGNMENT_FIXES_2026-10-05.md.

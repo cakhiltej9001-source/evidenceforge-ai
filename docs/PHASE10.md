@@ -161,8 +161,8 @@ image/runtime, constrained research, reconnect, fresh-volume backup/restore and
 UI health checks. Render account validation, actual platform disk ownership,
 capacity/load and authenticated remote access remain deployment gates. Synthetic
 container restore does not establish production disk backup reliability. No Render
-resources or public endpoint have been created. Original assignment reconciliation
-and research-quality validation also remain open.
+resources or public endpoint have been created. The original PDF has now been
+reconciled; live-source integration and research-quality validation remain open.
 
 
 
@@ -220,10 +220,26 @@ and passed UI health. These checks made no model calls. New pushes repeat CI.
 | Phase 9 execution | 20/20 one-shots available; 28/40 new calls; fresh repaired workflow partial/pass-limit without provider failure | Interpret the disclosed outcomes with richer or narrower versioned cases before research-quality sign-off |
 | Phase 9 review | All 20 cases reviewed by Codex as AI, with reasons | Independent human validation remains unclaimed; see AI_REVIEW.md |
 | Live Tavily | No key configured here; no call made | Configure EVIDENCEFORGE_TAVILY_API_KEY here or explicitly authorize a named credential source |
-| Assignment | Original PDF/rubric absent | Reconcile supplied originals before claiming assignment compliance |
+| Original reference | Supplied 23-page PDF read and mapped; no rubric/deadline/MCP-server mandate stated | Source-document gate closed; implement the recorded baseline differences before claiming full compliance |
 
 The [extension report](evaluation/EXTENSION_REPORT.md) preserves all original
 failures and source versions. The original Gemini ledger remains 26/30.
 Automatic approval review rejected searching unrelated project environments for a
 Tavily key; no such credential search executed. Hosting access and budget questions
 remain pending. No local OS changes or hosted Render resources were made.
+
+Original reference update: see [the PDF reconciliation](submission/ORIGINAL_PDF_RECONCILIATION.md).
+The tutorial describes web/documents/API-or-MCP in the same research pipeline;
+separate NESO/Tavily acquisition is useful but does not close that integration gap.
+
+## Original assignment runtime fixes — 5 October 2026
+
+The 23-page PDF is mapped and its identified runtime gaps have been addressed with
+explicit mixed-source research controls, supported summary paragraphs, per-source
+chunk lists and conservative literal working-set deduplication. Prior source records
+and citation audits remain authoritative. See the
+[implementation record](ASSIGNMENT_FIXES_2026-10-05.md) and updated
+[requirements](submission/REQUIREMENTS.md) for tested scope and remaining inputs.
+Actual live Tavily and persistent hosting are still unverified; P02–P05 production
+guidance and broader research-quality validation remain qualified. Earlier counts
+and baseline-gap statements are historical, not additional passing measurements.

@@ -15,3 +15,21 @@ This audit checks the work still open after Phase 11. It does not change the ben
 User decisions/input required to close gates: separately approve up to 40 additional Gemini attempts; identify an independent annotation reviewer; approve a private repository upload and hosted CI if desired; connect a hosting account/target; supply the original assignment PDF/rubric and Tavily credential if live Tavily is required. Credential values should be kept in local or connected account configuration.
 
 No extra Gemini calls, repository upload, Docker/OS changes, or hosted resources occurred in this audit. The existing synthetic and local tests remain as recorded in `PHASE11.md`; this audit does not add to those counts.
+
+## Original supplied later on 4 October 2026
+
+The 23-page `AI Research Agent(1).pdf` has now been read and reconciled in
+submission/ORIGINAL_PDF_RECONCILIATION.md. The original-file/page-reference gate is
+closed; same-pipeline live sources, report presentation and passage deduplication
+remain baseline differences. No grading rubric/deadline or specific MCP server
+mandate is present in this PDF. Earlier missing-file rows are historical.
+
+## Subsequent runtime fixes — 5 October 2026
+
+The supplied original PDF was fully reconciled. Runtime work now implements
+explicit mixed-source research, supported summary paragraphs, per-source evidence
+chunks and conservative literal working-set deduplication. See
+[ASSIGNMENT_FIXES_2026-10-05.md](ASSIGNMENT_FIXES_2026-10-05.md) and the current
+[requirements](submission/REQUIREMENTS.md). Earlier missing-integration/format
+statements describe older snapshots. Actual Tavily access, hosting and qualified
+production/research-quality checks remain pending; no new paid calls ran.

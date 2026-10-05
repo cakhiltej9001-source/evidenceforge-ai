@@ -46,7 +46,12 @@ Open `http://127.0.0.1:8503/`. Serve this demo directory only. Generated replay 
 
 ## Completion and remaining gates
 
-Phase 11's local submission materials and demonstration are prepared. Assignment acceptance remains unverified because the original PDF, rubric and deadline have not been supplied.
+Phase 11's local submission materials and demonstration are prepared. The original
+23-page PDF has now been read and reconciled in
+[ORIGINAL_PDF_RECONCILIATION.md](submission/ORIGINAL_PDF_RECONCILIATION.md).
+The source-document gate is closed. Baseline live-source/report/deduplication gaps
+remain; overall assignment acceptance is unclaimed. The PDF has no grading rubric
+or submission deadline.
 
 Following the user's delegation, all eight missing Gemini one-shots were recovered,
 for 20/20 usable cases. The extension plus repair diagnostics used 28/40 authorized
@@ -63,7 +68,31 @@ The provider repair also passed 24 affected offline tests, lint/format and stric
 types locally; CI repeats all checks on new pushes. Local Docker remains absent.
 
 Persistent hosting still needs an account/target, access path and spending cap.
-Live Tavily needs a configured key; original PDF/rubric reconciliation remains open.
+Live Tavily needs configured access. Original-PDF reconciliation is complete;
+remaining implementation differences are recorded in the verified checklist.
 No Render deployment or OS installation was performed.
 
 - Both distribution archives inspected (221 entries): no configured credentials, private runtime directories or local databases. Local demo HTTP 200 and synthetic label verified.
+
+## Supplied original and latest source checks
+
+The PDF's page-13 format adds a 2-3 paragraph summary and per-source evidence chunks;
+current Markdown uses quoted bullets and separate inspection/state evidence exports.
+The PDF's same-pipeline live web/external requirement is not fulfilled by standalone
+acquisition commands. The requirements checklist now records these as partial.
+The current runtime revision `93b320d65d87dd449905ddc65d91315ef0bf3303` passed
+350 tests (14.68 s), lint/format, strict types and both remote CI jobs:
+https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/37170191649 .
+This reconciliation changes documentation only and makes no provider calls.
+
+## Original assignment runtime fixes — 5 October 2026
+
+The 23-page PDF is mapped and its identified runtime gaps have been addressed with
+explicit mixed-source research controls, supported summary paragraphs, per-source
+chunk lists and conservative literal working-set deduplication. Prior source records
+and citation audits remain authoritative. See the
+[implementation record](ASSIGNMENT_FIXES_2026-10-05.md) and updated
+[requirements](submission/REQUIREMENTS.md) for tested scope and remaining inputs.
+Actual live Tavily and persistent hosting are still unverified; P02–P05 production
+guidance and broader research-quality validation remain qualified. Earlier counts
+and baseline-gap statements are historical, not additional passing measurements.

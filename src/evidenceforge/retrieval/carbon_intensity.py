@@ -14,7 +14,7 @@ from evidenceforge.retrieval.contracts import (
     RetrievalOptions,
     RetrievedSource,
 )
-from evidenceforge.schemas import Contract, SearchQuery
+from evidenceforge.schemas import Contract, SearchQuery, SourceType
 
 ENDPOINT = "https://api.carbonintensity.org.uk/generation"
 Fuel = Literal["gas", "coal", "biomass", "nuclear", "hydro", "imports", "other", "wind", "solar"]
@@ -56,7 +56,11 @@ class GenerationResponse(Contract):
         return self.data if isinstance(self.data, GenerationPeriod) else self.data[0]
 
 
-def as_batch(response: GenerationResponse, *, fixture: bool = False) -> RetrievalBatch:
+def as_batch(
+    response: GenerationResponse, *, fixture: bool = False, source_type: SourceType = SourceType.WEB
+) -> RetrievalBatch:
+    if source_type not in (SourceType.WEB, SourceType.API):
+        raise RetrievalFailure("schema")
     period = response.period
     interval = f"{period.start.isoformat()} to {period.end.isoformat()}"
     label = "Synthetic fixture: " if fixture else "API-derived record: "
@@ -80,6 +84,7 @@ def as_batch(response: GenerationResponse, *, fixture: bool = False) -> Retrieva
                 title=("Synthetic GB generation mix" if fixture else "NESO GB generation mix")
                 + f" ({interval})",
                 url=HttpUrl(ENDPOINT),
+                source_type=source_type,
                 publisher="Synthetic fixture" if fixture else "National Energy System Operator",
                 # The interval endpoint is not a verified publication timestamp.
                 publication_date=None,
@@ -133,7 +138,7 @@ class CarbonIntensityAdapter:
                         raise RetrievalFailure("schema")
                     body.extend(chunk)
             parsed = GenerationResponse.model_validate(json.loads(body))
-            batch = as_batch(parsed)
+            batch = as_batch(parsed, source_type=query.source_type)
             if len(batch.results[0].content.encode()) > options.max_source_bytes:
                 raise RetrievalFailure("schema")
             return batch
@@ -166,4 +171,5 @@ class CarbonIntensityFixture:
                 }
             ),
             fixture=True,
+            source_type=query.source_type,
         )

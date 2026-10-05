@@ -5,7 +5,7 @@ from tempfile import NamedTemporaryFile
 
 import streamlit as st
 
-from evidenceforge.config import load_settings
+from evidenceforge.config import ConfigurationError, load_settings
 from evidenceforge.evidence.projection import audit, project
 from evidenceforge.exports import report_export
 from evidenceforge.graph.state import ResearchState, StateSnapshot
@@ -278,8 +278,15 @@ def main() -> None:
             "Gemini sends the question and selected evidence to Google "
             "and uses your configured call/token allowances."
         )
+        live_web = st.checkbox("Search live web with Tavily", value=False)
+        live_energy = st.checkbox("Include GB half-hour energy API", value=False)
+        st.caption(
+            "Live search uses configured search credits; the energy API returns GB "
+            "generation shares, not annual/global output. Documents are searched "
+            "alongside selected live sources."
+        )
         demo = st.selectbox(
-            "Synthetic scenario (used when no documents are selected)",
+            "Synthetic scenario (used when no live sources or documents are selected)",
             ["second-pass", "immediate", "empty", "dispute"],
         )
         submitted = st.form_submit_button("Create plan", disabled=app.active(owner))
@@ -295,8 +302,12 @@ def main() -> None:
                 demo,
                 budget=load_settings().budget,
                 gemini=reasoning == "Gemini (configured)",
+                live_web=live_web,
+                live_energy=live_energy,
             )
             st.session_state.pop("selected_thread", None)
+        except ConfigurationError as exc:
+            st.error(str(exc))
         except Exception:
             st.error(
                 "Provide a specific research question and valid document IDs. "

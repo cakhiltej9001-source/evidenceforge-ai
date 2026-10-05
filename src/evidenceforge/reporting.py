@@ -6,6 +6,7 @@ from typing import cast
 
 from pydantic import JsonValue
 
+from evidenceforge.evidence.deduplication import working_evidence
 from evidenceforge.graph.state import ResearchState, StateSnapshot
 from evidenceforge.identity import stable_id
 from evidenceforge.nodes.common import Update, checked_patch, record_data
@@ -130,6 +131,12 @@ def render_report(state: ResearchState) -> str:
             )
             + " Retained quotations are checked; source truth is not independently verified."
         )
+    if any(event.kind == "live_retrieval" for event in s.events.values()):
+        notice = (
+            f"**Live retrieval with {'Gemini' if live_models else 'offline fixture'} reasoning.** "
+            "Evidence comes from explicitly selected live sources and any selected documents. "
+            "Retained quotations are checked; source truth is not independently verified."
+        )
     lines = [
         "# EvidenceForge research report",
         "",
@@ -152,6 +159,7 @@ def render_report(state: ResearchState) -> str:
         if name not in ("summary", "key_findings") and not sections.get(name):
             continue
         lines.extend([f"## {title}", ""])
+        rendered: list[str] = []
         for cid in sections.get(name, ()):
             claim = s.report_claims[cid]
             citations = sorted(
@@ -167,9 +175,20 @@ def render_report(state: ResearchState) -> str:
                 if locator.section is not None:
                     locations.append(escape(locator.section))
             suffix = " (" + "; ".join(sorted(set(locations))) + ")" if locations else ""
-            lines.append(
-                f'- "{escape(claim.statement)}" ' + " ".join(f"[{n}]" for n in citations) + suffix
+            rendered.append(
+                f'"{escape(claim.statement)}" ' + " ".join(f"[{n}]" for n in citations) + suffix
             )
+        if name == "summary" and rendered:
+            count = min(3, len(rendered))
+            for index in range(count):
+                start, end = index * len(rendered) // count, (index + 1) * len(rendered) // count
+                lines.extend([" ".join(rendered[start:end]), ""])
+            if count < 2:
+                lines.append(
+                    "Only one supported summary claim is available; the summary is shortened."
+                )
+        else:
+            lines.extend("- " + value for value in rendered)
         if not sections.get(name):
             lines.append("No supported claims are available for this section.")
         lines.append("")
@@ -191,6 +210,28 @@ def render_report(state: ResearchState) -> str:
                 f"  Document: `{source.document_id}`; "
                 f"SHA-256: `{source.document_hash}`; retrieved: " + ", ".join(dates)
             )
+        used_evidence = sorted(
+            {
+                eid
+                for claim in s.report_claims.values()
+                for eid in claim.evidence_ids
+                if s.evidence_store[eid].source_id == sid
+            }
+        )
+        for eid in used_evidence:
+            evidence = s.evidence_store[eid]
+            locator = evidence.locator
+            location = [f"offsets {locator.start_offset}-{locator.end_offset}"]
+            if locator.page is not None:
+                location.append(f"page {locator.page}")
+            if locator.paragraph is not None:
+                location.append(f"paragraph {locator.paragraph}")
+            lines.append(
+                f'  - Evidence `{eid}`: "{escape(evidence.passage)}" '
+                + "("
+                + "; ".join(location)
+                + ")."
+            )
     if not sources:
         lines.append("No retained sources support a final claim.")
     lines.extend(
@@ -208,6 +249,13 @@ def render_report(state: ResearchState) -> str:
             ),
         ]
     )
+    duplicates = working_evidence(s.evidence_store.values()).duplicates
+    if duplicates:
+        lines.append(
+            f"{len(duplicates)} literal duplicate/contained passages were grouped for model input. "
+            "Original source spans remain retained; copies do not establish "
+            "independent corroboration."
+        )
     comparisons = [
         c for c in s.comparisons.values() if c.relationship in {"contradicts", "not_comparable"}
     ]
@@ -231,14 +279,16 @@ def render_report(state: ResearchState) -> str:
                     str(source.url).replace("(", "%28").replace(")", "%29") if source.url else None
                 )
                 ref = f"[{escape(source.title)}]({url})" if url else escape(source.title)
-                location = (
+                comparison_location = (
                     f"; page {e.locator.page}"
                     if e.locator.page
                     else f"; paragraph {e.locator.paragraph}"
                     if e.locator.paragraph
                     else ""
                 )
-                lines.append(f'  - "{escape(p.quote)}" - {ref}{location}; evidence: `{e.id}`')
+                lines.append(
+                    f'  - "{escape(p.quote)}" - {ref}{comparison_location}; evidence: `{e.id}`'
+                )
     for gap in s.gaps:
         lines.append(f"- Unmet task criterion: {escape(gap.missing_aspect)}")
     if s.unresolved_audits:

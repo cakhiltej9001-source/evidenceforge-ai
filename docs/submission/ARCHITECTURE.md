@@ -53,14 +53,24 @@ flowchart LR
   GRAPH --> EXPORT[Markdown and JSON exports]
   MODEL[Fixture or Gemini adapter] <--> GRAPH
   ACQUIRE[Explicit energy or Tavily acquisition command] --> RETRIEVAL[RetrievalService]
-  RETRIEVAL --> API[Allowlisted external read-only endpoint]
+  APP --> RETRIEVAL
+  RETRIEVAL --> API[Explicit Tavily and GB energy endpoints]
+  RETRIEVAL --> DOC
   RETRIEVAL --> LEDGER
   RETRIEVAL --> SNAPSHOT
 ```
 
-The full research graph retrieves local documents or synthetic sources. External
-acquisition is a separate explicit workflow; it is not currently wired as general
-live web research in the UI. Prior reports are context/navigation, never admitted
+The full research graph can retrieve explicitly enabled Tavily web/API sources and
+scoped documents together. Default runs use synthetic retrieval or selected documents;
+standalone acquisition commands also remain available. Source options survive checkpoint
+reconnect, and factory-owned HTTP clients close after success, pause or failure.
+
+Coverage, synthesis and criticism receive a literal deduplicated working set plus
+member IDs, source/acquisition provenance and exact locators. Original passage records
+remain immutable; only complete exact-copy quotes gain additional cited occurrences.
+Containment never licenses quoting missing text. Distinct wording/question links are
+preserved; copied text is not an independent vote. Prior reports are context/navigation,
+never admitted
 as fresh evidence. Owner IDs are storage boundaries and must match requests,
 documents, checkpoints and exports; they do not authenticate users.
 

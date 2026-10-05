@@ -42,11 +42,15 @@ async def execute(
     pause_after: str | None = None,
     ranking_profile: RankingProfile | None = None,
     offline: bool = False,
+    live_web: bool = False,
+    live_energy: bool = False,
     require_approval: bool = False,
     decision: PlanDecision | None = None,
     edited_plan: PlanDraft | None = None,
     expected_version: int | None = None,
 ) -> tuple[str, Path, str]:
+    if (live_web or live_energy) and (offline or demo is not None):
+        raise ConfigurationError("Live sources cannot be combined with --offline or --demo.")
     settings = load_settings()
     data_dir = directory if directory is not None else settings.data_dir
     stored_profile = None
@@ -61,10 +65,10 @@ async def execute(
         provider = "gemini" if saved_gemini else "fixture"
     model = None
     if provider == "gemini":
-        if resume is None and not documents and demo is None:
+        if resume is None and not documents and demo is None and not (live_web or live_energy):
             raise ConfigurationError(
                 "Gemini requires --document DOCUMENT_ID or an explicit --demo. "
-                "Live web retrieval is not configured."
+                "Alternatively explicitly enable --live-web or --energy-api."
             )
         if settings.model_api_key is None:
             raise ConfigurationError("Configure the Gemini API key before resuming this workflow.")
@@ -81,6 +85,8 @@ async def execute(
     options = ResearchOptions(
         analysis=AnalysisOptions(ranking_profile=ranking_profile or "general"),
         require_plan_approval=require_approval,
+        live_web=live_web,
+        live_energy=live_energy,
     )
     if resume is not None:
         registration = CheckpointRepository(data_dir / "checkpoints", owner).load(resume)
@@ -97,8 +103,14 @@ async def execute(
             if profile.get("fixture_empty", {}).get("web")
             else "immediate"
         )
+    if offline and (options.live_web or options.live_energy):
+        raise ConfigurationError("A saved live-source workflow cannot resume with --offline.")
     retrieval = None
-    if demo in {"second-pass", "empty", "dispute"}:
+    if not (options.live_web or options.live_energy) and demo in {
+        "second-pass",
+        "empty",
+        "dispute",
+    }:
         adapter = (
             DisputeFixture()
             if demo == "dispute"
@@ -156,6 +168,16 @@ def main() -> int:
     parser.add_argument("question", nargs="?")
     parser.add_argument(
         "--offline", action="store_true", help="Use fixture reasoning without model calls."
+    )
+    parser.add_argument(
+        "--live-web",
+        action="store_true",
+        help="Use configured Tavily search; consumes search credits.",
+    )
+    parser.add_argument(
+        "--energy-api",
+        action="store_true",
+        help="Include public GB half-hour generation shares from NESO.",
     )
     parser.add_argument("--owner", default="local")
     parser.add_argument("--document", action="append", default=[])
@@ -220,6 +242,8 @@ def main() -> int:
                 pause_after=args.pause_after,
                 ranking_profile=args.ranking_profile,
                 offline=args.offline,
+                live_web=args.live_web,
+                live_energy=args.energy_api,
                 require_approval=args.require_approval,
                 edited_plan=edited_plan,
                 expected_version=args.plan_version,
