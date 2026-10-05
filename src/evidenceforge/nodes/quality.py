@@ -6,7 +6,7 @@ from typing import TypeVar, cast
 
 from pydantic import JsonValue, ValidationError
 
-from evidenceforge.evidence.deduplication import working_evidence
+from evidenceforge.evidence.deduplication import WorkingEvidence, working_evidence
 from evidenceforge.graph.state import ResearchState, StateSnapshot
 from evidenceforge.identity import stable_id
 from evidenceforge.nodes.common import Update, checked_patch, record_data
@@ -78,6 +78,15 @@ class QualityNode:
         self.model = model
         self.options = options
 
+    def working(self, s: StateSnapshot, *, ranked: bool = False) -> WorkingEvidence:
+        scores = {sid: ranking.score for sid, ranking in s.source_quality.items()} if ranked else {}
+        if self.options.quality_input_version == 1:
+            evidence = list(s.evidence_store.values())
+            if ranked:
+                evidence.sort(key=lambda item: (-scores.get(item.source_id, 0.5), item.id))
+            return WorkingEvidence(evidence=tuple(evidence), duplicates=())
+        return working_evidence(s.evidence_store.values(), scores)
+
     async def response(self, task: Awaitable[object], schema: type[T]) -> T:
         payload = await asyncio.wait_for(task, self.options.node_timeout_seconds)
         return parse_response(payload, schema, self.options.max_response_bytes)
@@ -101,7 +110,7 @@ class CoverageEvaluator(QualityNode):
         if quality_remaining(s) <= 2:
             return quality_error(state, "coverage", "budget", s.quality_attempts)
         try:
-            working = working_evidence(s.evidence_store.values())
+            working = self.working(s)
             result = await self.response(
                 self.model.evaluate_coverage(
                     CoverageInput(
@@ -272,10 +281,7 @@ class Synthesis(QualityNode):
             return quality_error(state, "synthesis", "budget", s.quality_attempts)
         try:
             version = s.revision_count + 1
-            working = working_evidence(
-                s.evidence_store.values(),
-                {sid: ranking.score for sid, ranking in s.source_quality.items()},
-            )
+            working = self.working(s, ranked=True)
             result = await self.response(
                 self.model.synthesize(
                     SynthesisInput(
@@ -305,7 +311,9 @@ class Synthesis(QualityNode):
                 evidence_ids = set(draft.evidence_ids)
                 # Add only independently auditable exact-copy occurrences. Containment
                 # alone never licenses citing a source missing the full quotation.
-                for item in s.evidence_store.values():
+                for item in (
+                    s.evidence_store.values() if self.options.quality_input_version == 2 else ()
+                ):
                     if (
                         any(
                             s.evidence_store[eid].passage == item.passage
@@ -323,7 +331,10 @@ class Synthesis(QualityNode):
                 claims[claim.id] = record_data(claim)
                 placed.setdefault(draft.section, []).append(claim.id)
                 sources.update(s.evidence_store[eid].source_id for eid in claim.evidence_ids)
-            if len(placed["summary"]) < 2:
+            if self.options.quality_input_version == 1:
+                if not placed["summary"]:
+                    placed["summary"] = [next(iter(claims))]
+            elif len(placed["summary"]) < 2:
                 placed["summary"] = list(
                     dict.fromkeys(placed["summary"] + placed["key_findings"] + list(claims))
                 )[:3]
@@ -363,7 +374,7 @@ class Critic(QualityNode):
         if quality_remaining(s) <= 0:
             return quality_error(state, "critic", "budget", s.quality_attempts)
         try:
-            working = working_evidence(s.evidence_store.values())
+            working = self.working(s)
             result = await self.response(
                 self.model.critique(
                     CriticInput(

@@ -154,3 +154,81 @@ def test_paid_plan_edit_approval_and_terminal_reconnect_across_services(tmp_path
     count = len(seen)
     assert asyncio.run(service().resume(paused["thread_id"])) == final
     assert len(seen) == count
+
+
+def test_legacy_quality_receipt_replays_after_restart_without_new_charge(tmp_path):
+    from evidenceforge.graph.state import StateSnapshot
+    from evidenceforge.retrieval.contracts import RetrievalBatch, RetrievedSource
+    from evidenceforge.retrieval.fixtures import FixtureRetrievalAdapter
+    from evidenceforge.schemas import SourceType
+    from evidenceforge.services.retrieval import RetrievalService
+    from evidenceforge.storage.checkpoints import CheckpointRepository
+
+    fixture = FixtureResearchModel(plan_output=PLAN)
+    seen, inputs = [], []
+    quote = "Synthetic fixture: solar output depends on sunlight."
+    batch = RetrievalBatch(
+        results=tuple(
+            RetrievedSource(
+                title="Synthetic copied source",
+                url=url,
+                content=quote,
+            )
+            for url in ("https://example.org/a", "https://example.org/b")
+        )
+    )
+
+    async def handler(request):
+        data = json.loads(request.content)
+        title = data["generationConfig"]["responseJsonSchema"]["title"]
+        value = json.loads(data["contents"][0]["parts"][0]["text"])
+        seen.append(title)
+        inputs.append(value)
+        if title == "PlanDraft":
+            result = await fixture.plan(ResearchRequest.model_validate(value), max_questions=8)
+        elif title == "QueryBatchDraft":
+            result = await fixture.generate_queries(QueryGenerationRequest.model_validate(value))
+        elif title == "CoverageAssessment":
+            result = await fixture.evaluate_coverage(CoverageInput.model_validate(value))
+        elif title == "ReportDraft":
+            result = await fixture.synthesize(SynthesisInput.model_validate(value))
+        else:
+            result = await fixture.critique(CriticInput.model_validate(value))
+        return httpx.Response(200, json=reply(result))
+
+    def service(options=None):
+        return ResearchService(
+            tmp_path,
+            model=adapter(handler),
+            options=options,
+            retrieval=RetrievalService(tmp_path, {SourceType.WEB: FixtureRetrievalAdapter(batch)}),
+        )
+
+    # Version 1 produces the exact historical profile and model request contract.
+    first = service(ResearchOptions(quality_input_version=1))
+    paused = asyncio.run(
+        first.run(ResearchRequest(question=QUESTION), pause_after="evidence_extractor")
+    )
+    registration = CheckpointRepository(tmp_path / "checkpoints", "local").load(paused["thread_id"])
+    assert "quality_input_version" not in json.loads(registration.profile)["research_options"]
+    snapshot = StateSnapshot.model_validate(paused)
+    assert len(snapshot.evidence_store) == 2
+    # Simulate a received/retained coverage response before its graph checkpoint commits.
+    request = CoverageInput(
+        questions=snapshot.research_questions, evidence=tuple(snapshot.evidence_store.values())
+    )
+    assert "duplicate_evidence" not in request.model_dump(mode="json")
+    asyncio.run(first.model.evaluate_coverage(request))
+    assert seen.count("CoverageAssessment") == 1
+    fresh = service()  # Defaults to the new policy; resume must restore the old one.
+    final = asyncio.run(fresh.resume(paused["thread_id"]))
+    assert final["run_status"] == "completed"
+    assert fresh.options.quality_input_version == 1
+    assert seen.count("CoverageAssessment") == 1
+    assert len(seen) == len(fresh.model.observations) == 5
+    assert len(final["report_claims"]) == 2
+    for value in inputs:
+        assert "duplicate_evidence" not in value
+    count = len(seen)
+    assert asyncio.run(service().resume(paused["thread_id"])) == final
+    assert len(seen) == count

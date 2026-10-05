@@ -152,3 +152,14 @@ uv build
 Offline tests block network access and use fabricated secrets. Type/lint/format
 checks are engineering checks, not research-quality measurements. See
 [Phase 11 verification](../PHASE11.md) for the executed results.
+
+
+## Quality-input checkpoint compatibility
+
+New runs register quality-input version 2 for literal working-set deduplication and
+multi-claim summary selection. Existing graph-version-8 profiles without that marker
+restore version 1: original evidence ordering, claim/summary selection and empty-field
+serialization are preserved for paid receipt hashes. Completed reconnect still makes
+no new provider call. Older runs retain their historical findings; start a new run to
+use the updated quality behavior. Graph versions predating 8 and paid runs without
+durable receipts retain their existing incompatibility checks.

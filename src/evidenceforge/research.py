@@ -39,7 +39,9 @@ class CoverageAssessment(Contract):
 
 
 class CoverageInput(Contract):
-    duplicate_evidence: tuple[DuplicateEvidence, ...] = ()
+    duplicate_evidence: tuple[DuplicateEvidence, ...] = Field(
+        default=(), exclude_if=lambda value: not value
+    )
     questions: tuple[ResearchQuestion, ...]
     evidence: tuple[EvidenceItem, ...]
 
@@ -58,7 +60,9 @@ class ReportDraft(Contract):
 
 
 class SynthesisInput(Contract):
-    duplicate_evidence: tuple[DuplicateEvidence, ...] = ()
+    duplicate_evidence: tuple[DuplicateEvidence, ...] = Field(
+        default=(), exclude_if=lambda value: not value
+    )
     source_quality: tuple[SourceQuality, ...] = ()
     propositions: tuple[Proposition, ...] = ()
     comparisons: tuple[Comparison, ...] = ()
@@ -71,7 +75,9 @@ class SynthesisInput(Contract):
 
 
 class CriticInput(Contract):
-    duplicate_evidence: tuple[DuplicateEvidence, ...] = ()
+    duplicate_evidence: tuple[DuplicateEvidence, ...] = Field(
+        default=(), exclude_if=lambda value: not value
+    )
     report: Report
     claims: tuple[Claim, ...]
     evidence: tuple[EvidenceItem, ...]
@@ -87,6 +93,7 @@ class ResearchOptions(Contract):
     require_plan_approval: bool = False
     live_web: StrictBool = False
     live_energy: StrictBool = False
+    quality_input_version: Literal[1, 2] = 2
     analysis: AnalysisOptions = Field(default_factory=AnalysisOptions)
     node_timeout_seconds: Annotated[float, Field(gt=0, le=60, allow_inf_nan=False)] = 30.0
     max_response_bytes: Annotated[PositiveCount, Field(le=1_000_000)] = 100_000

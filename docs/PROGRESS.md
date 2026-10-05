@@ -747,3 +747,12 @@ Artifacts: `.evidenceforge/verification/gemini-resume/` (ignored local data).
   Gemini/search/API call ran; original and extension ledgers remain 26/30 and 28/40.
 - Full production P02–P05, actual Tavily/host verification and independent research-
   quality validation remain qualified. See ASSIGNMENT_FIXES_2026-10-05.md.
+
+- Subsequent compatibility review preserved historical paid request hashes: new
+  quality-input version 2 is registered, while unmarked graph-8 profiles restore
+  version 1 ordering/summary/claim behavior. Empty duplicate metadata is omitted.
+- A retained coverage response replayed after a simulated pre-checkpoint restart
+  without a repeated mock charge (26.15 s). Corrected opt-in assertion passed
+  (5.14 s); 31 affected focused tests passed across runs. Initial CI passed 360
+  tests and failed only the obsolete message assertion; its Docker job passed.
+  Corrected complete CI rerun remains the verification gate.

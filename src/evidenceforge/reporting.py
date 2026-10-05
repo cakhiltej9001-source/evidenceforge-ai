@@ -250,7 +250,7 @@ def render_report(state: ResearchState) -> str:
         ]
     )
     duplicates = working_evidence(s.evidence_store.values()).duplicates
-    if duplicates:
+    if duplicates and any(e.kind == "working_evidence_enabled" for e in s.events.values()):
         lines.append(
             f"{len(duplicates)} literal duplicate/contained passages were grouped for model input. "
             "Original source spans remain retained; copies do not establish "

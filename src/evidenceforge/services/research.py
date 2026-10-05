@@ -169,13 +169,26 @@ class ResearchService:
                 },
                 "retrieval_options": retrieval.options.model_dump(mode="json"),
                 "research_options": {
-                    **self.options.model_dump(mode="json", exclude={"live_web", "live_energy"}),
+                    **self.options.model_dump(
+                        mode="json", exclude={"live_web", "live_energy", "quality_input_version"}
+                    ),
+                    **(
+                        {"quality_input_version": 2}
+                        if self.options.quality_input_version == 2
+                        else {}
+                    ),
                     **({"live_web": True} if self.options.live_web else {}),
                     **({"live_energy": True} if self.options.live_energy else {}),
                 },
             },
             sort_keys=True,
         )
+
+    def restore_quality_profile(self, profile: str) -> None:
+        version = json.loads(profile)["research_options"].get("quality_input_version", 1)
+        if type(version) is not int or version not in (1, 2):
+            raise CheckpointFailure("Unsupported research input contract version.")
+        self.options = self.options.model_copy(update={"quality_input_version": version})
 
     def cancel(self, thread_id: str, owner_scope: str = "local") -> None:
         """Request owner-scoped cooperative cancellation without taking the run lock."""
@@ -191,6 +204,13 @@ class ResearchService:
     ) -> ResearchState:
         request = require_research_request(request)
         state = initial_state(request, budget)
+        if self.options.quality_input_version == 2:
+            event = RunEvent(
+                id=stable_id("working_evidence", state["run_id"]),
+                kind="working_evidence_enabled",
+                message="Repeated literal passages are grouped; source provenance is retained.",
+            )
+            state = apply_update(state, {"events": {event.id: record_data(event)}})
         if isinstance(self.model, GeminiResearchModel):
             if self._live_started:
                 raise CheckpointFailure("Create a fresh model and service for each paid run.")
@@ -254,6 +274,7 @@ class ResearchService:
             raise CheckpointFailure("Edited plan exceeded the size allowance.")
         checkpoint = CheckpointRepository(self.data_dir / "checkpoints", owner_scope)
         registration = checkpoint.load(thread_id)
+        self.restore_quality_profile(registration.profile)
         initial = validate_state(registration.initial_state)
         try:
             retrieval = self.retrieval_for(ResearchRequest.model_validate(initial["request"]))
@@ -335,6 +356,7 @@ class ResearchService:
     ) -> ResearchState:
         checkpoint = CheckpointRepository(self.data_dir / "checkpoints", owner_scope)
         registration = checkpoint.load(thread_id)
+        self.restore_quality_profile(registration.profile)
         state = validate_state(registration.initial_state)
         try:
             retrieval = self.retrieval_for(ResearchRequest.model_validate(state["request"]))

@@ -214,7 +214,7 @@ def test_configured_gemini_needs_explicit_evidence_and_owned_resume(tmp_path, mo
         model_provider="gemini", model_id="gemini-3.8-flash", model_api_key=SecretStr(SECRET)
     )
     monkeypatch.setattr("evidenceforge.research_demo.load_settings", lambda: settings)
-    with pytest.raises(ConfigurationError, match="Live web retrieval"):
+    with pytest.raises(ConfigurationError, match="explicitly enable --live-web or --energy-api"):
         asyncio.run(execute(QUESTION, tmp_path, None))
     with pytest.raises(CheckpointFailure, match="unavailable"):
         asyncio.run(execute(None, tmp_path, None, resume="thread_fake"))
