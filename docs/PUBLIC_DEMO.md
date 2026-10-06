@@ -2,13 +2,17 @@
 
 The app has a Docker deployment configuration. A localhost URL such as
 `http://127.0.0.1:8511/` is accessible only on the computer running the server;
-it is not a public share link. No public deployment has been created yet.
+it is not a public share link. A separate public Streamlit fixture demo is now
+live at [EvidenceForge](https://evidenceforge-ai-akhiltej.streamlit.app/).
+See [verified Community Cloud deployment](STREAMLIT_CLOUD.md). The Render
+configurations below are optional alternatives and have not been applied.
 
 ## Available configurations
 
 | Configuration | Purpose | Saved research |
 | --- | --- | --- |
 | Local UI | Current selected deployment | Durable in the local `.evidenceforge` directory |
+| Streamlit Community Cloud | Deployed public fixture demonstration | Temporary, scoped to the current browser session |
 | [`render.free.yaml`](../render.free.yaml) | Optional login-protected public demonstration using synthetic fixtures | Temporary; lost on restart, redeploy or idle shutdown |
 | [`render.yaml`](../render.yaml) | Paid Render deployment with a persistent disk | Durable on the attached disk; requires a separately approved hosting budget |
 

@@ -2,7 +2,10 @@
 
 The user selected **local durable storage** after confirming a **₹5/month**
 hosting cap. Public Render deployment is deferred by that choice. No paid Render
-resource or public endpoint was created. The private repository remains private.
+resource was created. The owner subsequently requested a public Streamlit demo,
+now live at [EvidenceForge](https://evidenceforge-ai-akhiltej.streamlit.app/).
+It uses synthetic fixtures and temporary visitor-scoped storage; the full local
+workbench retains durable storage. The private repository remains private.
 
 ## Phase status
 
@@ -18,10 +21,18 @@ resource or public endpoint was created. The private repository remains private.
 | 7 | Guardrails, budgets, cancellation, durable receipts and tracing | Complete for local operation; production input review, fallback and retention controls implemented |
 | 8 | Streamlit UI, plan approval/editing, progress and exports | Complete for local use; container browser authentication verified in CI |
 | 9 | Frozen benchmark, Gemini comparison and delegated review | Completed controlled comparison and AI review; limitations below remain unclaimed research validation |
-| 10 | External energy source, container checks and deployment | Complete for the selected local deployment; remote Docker CI passed; public hosting deferred by user |
+| 10 | External energy source, container checks and deployment | Local durability and Docker CI verified; public Streamlit fixture demo deployed and exercised; paid Render hosting deferred |
 | 11 | Setup, architecture, demo, checklist and evaluation materials | Prepared and updated with measured results; external grading/submission acceptance is not asserted |
 
 ## Completed verification
+
+- Public Streamlit deployment completed a plan/approval/report flow with two
+  retrieval passes, two retained findings, two citation checks and no tool errors.
+  Public sharing was checked after saving. The public entrypoint uses no paid
+  providers or uploaded private data; visitors receive separate generated scopes.
+  [Runtime CI](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/37505393414)
+  passed on `6fb5241c1dd36e18a7ae86ba2b61fee41732fe0f`. See
+  [deployment details and screenshot](STREAMLIT_CLOUD.md).
 
 - [Private CI run](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/37485512573)
   passed both Python and Docker jobs on source

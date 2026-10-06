@@ -21,11 +21,12 @@ Docker persistence, backup/restore and authenticated gateway checks. The correct
 Gemini comparison saved 40 answers using 136 of 140 approved calls. These checks
 establish workflow behavior and retained-text support, not general research accuracy.
 
-**Demo access:** the full workbench runs locally with durable storage. A public
-[Streamlit fixture demonstration](docs/STREAMLIT_CLOUD.md) is being deployed with
-separate browser sessions and temporary storage, without document uploads or
-paid provider calls. The ₹5/month cap remains in force; paid Render deployment is
-deferred. Repository access is private.
+**Public demo:** [Open EvidenceForge on Streamlit](https://evidenceforge-ai-akhiltej.streamlit.app/).
+Choose **Create plan → Approve plan** to try the workflow. The public
+[fixture demonstration](docs/STREAMLIT_CLOUD.md) separates browser sessions and
+uses temporary storage without document uploads or paid provider calls. The
+full workbench runs locally with durable storage. The ₹5/month cap remains in
+force; paid Render deployment is deferred. Repository access is private.
 See [current phase status](docs/FINAL_STATUS_2026-10-06.md).
 
 ## ✨ Project at a glance
@@ -132,9 +133,11 @@ The Streamlit workbench supports question entry, plan editing and approval,
 progress/coverage inspection, cancellation, checkpoint reconnect, document upload,
 claim inspection and report downloads.
 
-**Screenshot status:** fresh capture was attempted on 6 October 2026, but the
-browser capture surface could not attach. Screenshots are not included in this
-revision. The walkthrough below uses implemented controls and saved fixture outputs.
+**Verified hosted screenshot:** the public Streamlit workflow completed on
+6 October 2026 with two retrieval passes, two citation checks and no tool errors.
+This is a synthetic demonstration, not real measurements.
+
+![Completed public Streamlit demonstration](docs/images/streamlit-public-demo.jpg)
 
 ### Run an offline demonstration
 
@@ -443,7 +446,8 @@ Report benchmark results with their sample size and synthetic scope.
 - Context summaries cannot substitute for new evidence or independent corroboration.
 - The local workbench uses a process executor, not persistent distributed jobs.
 - Independent human validation, remote LangSmith export and hosted durability are
-  unverified. Public hosting is deferred by the owner's local-storage choice.
+  unverified. The public fixture demo uses temporary storage; paid full-workbench
+  hosting remains deferred by the owner's local-storage choice.
 - Historical graph versions or paid runs without durable receipts cannot silently
   migrate. Completed reconnect does not authorize new provider work.
 
@@ -451,7 +455,7 @@ Report benchmark results with their sample size and synthetic scope.
 
 These are proposed extensions, not completed features:
 
-- [ ] Add fresh real application screenshots when the browser capture surface is available.
+- [x] Capture the real public Streamlit application and completed fixture report.
 - [ ] Improve planner scope adherence and measure it against a larger frozen corpus.
 - [ ] Build a broader independently reviewed real-source benchmark.
 - [ ] Add reviewed OCR and more demanding document/table extraction cases.
