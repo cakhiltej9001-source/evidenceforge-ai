@@ -21,11 +21,12 @@ Docker persistence, backup/restore and authenticated gateway checks. The correct
 Gemini comparison saved 40 answers using 136 of 140 approved calls. These checks
 establish workflow behavior and retained-text support, not general research accuracy.
 
-**Demo access:** local only. The owner selected durable local storage under a
-₹5/month hosting cap; public Render deployment is deferred. An optional
-[login-protected free demo configuration](docs/PUBLIC_DEMO.md) is prepared for
-review and uses temporary storage with synthetic fixtures. Repository access is
-private. See [current phase status](docs/FINAL_STATUS_2026-10-06.md).
+**Demo access:** the full workbench runs locally with durable storage. A public
+[Streamlit fixture demonstration](docs/STREAMLIT_CLOUD.md) is being deployed with
+separate browser sessions and temporary storage, without document uploads or
+paid provider calls. The ₹5/month cap remains in force; paid Render deployment is
+deferred. Repository access is private.
+See [current phase status](docs/FINAL_STATUS_2026-10-06.md).
 
 ## ✨ Project at a glance
 

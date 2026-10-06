@@ -1,7 +1,8 @@
 """Streamlit entry point for the local evidence workbench."""
 
 from pathlib import Path
-from tempfile import NamedTemporaryFile
+from tempfile import NamedTemporaryFile, gettempdir
+from uuid import uuid4
 
 import streamlit as st
 
@@ -260,7 +261,7 @@ def authenticated() -> bool:
     return False
 
 
-def main() -> None:
+def main(*, public_demo: bool = False) -> None:
     st.set_page_config(page_title="EvidenceForge", page_icon="🔎", layout="wide")
     if not authenticated():
         return
@@ -268,23 +269,36 @@ def main() -> None:
     if required(load_settings()) and st.sidebar.button("Sign out"):
         st.session_state.clear()
         st.rerun()
-    st.caption("Local evidence workbench | exact passages and inspectable citations")
-    st.info(
-        "Choose offline reasoning or configured Gemini. Saved Gemini workflows support "
-        "plan approval, editing and resume with durable call records. "
-        "Synthetic demos are examples; use documents for your own research."
-    )
-    app = workbench(str(load_settings().data_dir.resolve()))
-    owner = (
-        "hosted"
-        if required(load_settings())
-        else st.sidebar.text_input("Local workspace scope", value="local")
-    )
-    st.sidebar.caption(
-        "Hosted access uses one trusted owner account."
-        if required(load_settings())
-        else "Scope names separate local records. Local access is restricted to this computer."
-    )
+    if public_demo:
+        st.caption("Public demonstration | exact passages and inspectable citations")
+        st.info(
+            "Try the workflow with offline synthetic examples. No Gemini calls or search "
+            "credits are used. This is a demonstration, not a verified research answer. "
+            "Saved runs are temporary and belong to this browser session; download your "
+            "report before leaving. Use the local app for documents and live research."
+        )
+        directory = Path(gettempdir()) / "evidenceforge-community-demo"
+        owner = st.session_state.setdefault("public_demo_owner", "visitor_" + uuid4().hex)
+        st.sidebar.caption("Temporary storage for this browser session only.")
+    else:
+        st.caption("Local evidence workbench | exact passages and inspectable citations")
+        st.info(
+            "Choose offline reasoning or configured Gemini. Saved Gemini workflows support "
+            "plan approval, editing and resume with durable call records. "
+            "Synthetic demos are examples; use documents for your own research."
+        )
+        directory = load_settings().data_dir
+        owner = (
+            "hosted"
+            if required(load_settings())
+            else st.sidebar.text_input("Local workspace scope", value="local")
+        )
+        st.sidebar.caption(
+            "Hosted access uses one trusted owner account."
+            if required(load_settings())
+            else "Scope names separate local records. Local access is restricted to this computer."
+        )
+    app = workbench(str(directory.resolve()))
     try:
         ResearchRequest(question="Workspace selection", owner_scope=owner)
     except Exception:
@@ -294,42 +308,52 @@ def main() -> None:
         for key in ("active_job", "selected_thread", "document_ids"):
             st.session_state.pop(key, None)
         st.session_state["current_owner"] = owner
-    with st.expander("Add local evidence", expanded=False):
-        upload = st.file_uploader("PDF, DOCX or TXT, up to 4 MB", type=["pdf", "docx", "txt"])
-        if st.button("Import document", disabled=upload is None):
-            try:
-                assert upload is not None
-                record = ingest_upload(
-                    DocumentStore(app.data_dir / "documents"), owner, upload.name, upload.getvalue()
-                )
-                ids = st.session_state.setdefault("document_ids", [])
-                if record.id not in ids:
-                    ids.append(record.id)
-                st.success("Imported document: " + record.id)
-                if record.warnings:
-                    st.write(record.warnings)
-            except Exception:
-                st.error("Document import failed. Check format, text content and size.")
-        entered = st.text_area(
-            "Existing document IDs (one per line)",
-            value="\n".join(st.session_state.get("document_ids", [])),
-        )
+    entered = ""
+    if not public_demo:
+        with st.expander("Add local evidence", expanded=False):
+            upload = st.file_uploader("PDF, DOCX or TXT, up to 4 MB", type=["pdf", "docx", "txt"])
+            if st.button("Import document", disabled=upload is None):
+                try:
+                    assert upload is not None
+                    record = ingest_upload(
+                        DocumentStore(app.data_dir / "documents"),
+                        owner,
+                        upload.name,
+                        upload.getvalue(),
+                    )
+                    ids = st.session_state.setdefault("document_ids", [])
+                    if record.id not in ids:
+                        ids.append(record.id)
+                    st.success("Imported document: " + record.id)
+                    if record.warnings:
+                        st.write(record.warnings)
+                except Exception:
+                    st.error("Document import failed. Check format, text content and size.")
+            entered = st.text_area(
+                "Existing document IDs (one per line)",
+                value="\n".join(st.session_state.get("document_ids", [])),
+            )
     with st.form("new_research"):
         question = st.text_area(
             "Research question", value="Compare solar and wind electricity output."
         )
-        reasoning = st.selectbox("Reasoning provider", ["Offline", "Gemini (configured)"])
-        st.caption(
-            "Gemini sends the question and selected evidence to Google "
-            "and uses your configured call/token allowances."
+        reasoning = st.selectbox(
+            "Reasoning provider", ["Offline"] if public_demo else ["Offline", "Gemini (configured)"]
         )
-        live_web = st.checkbox("Search live web with Tavily", value=False)
-        live_energy = st.checkbox("Include GB half-hour energy API", value=False)
-        st.caption(
-            "Live search uses configured search credits; the energy API returns GB "
-            "generation shares, not annual/global output. Documents are searched "
-            "alongside selected live sources."
-        )
+        live_web = False
+        live_energy = False
+        if not public_demo:
+            st.caption(
+                "Gemini sends the question and selected evidence to Google "
+                "and uses your configured call/token allowances."
+            )
+            live_web = st.checkbox("Search live web with Tavily", value=False)
+            live_energy = st.checkbox("Include GB half-hour energy API", value=False)
+            st.caption(
+                "Live search uses configured search credits; the energy API returns GB "
+                "generation shares, not annual/global output. Documents are searched "
+                "alongside selected live sources."
+            )
         demo = st.selectbox(
             "Synthetic scenario (used when no live sources or documents are selected)",
             ["second-pass", "immediate", "empty", "dispute"],
