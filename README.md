@@ -1,149 +1,272 @@
-# EvidenceForge AI
+# 🔎 EvidenceForge AI
 
-A local research workbench that plans questions, retains source passages, follows
-coverage gaps and produces reports with inspectable claim support. Python,
-LangGraph, SQLite and an optional Streamlit UI provide the workflow.
+[![CI](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/workflows/ci.yml/badge.svg?branch=codex%2Fpending-verification)](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/workflows/ci.yml)
+![Python](https://img.shields.io/badge/Python-3.12–3.14-blue)
+![LangGraph](https://img.shields.io/badge/Workflow-LangGraph-teal)
+![SQLite](https://img.shields.io/badge/Storage-SQLite-blue)
+![Tests](https://img.shields.io/badge/Tests-373%20passed-brightgreen)
+![Demo](https://img.shields.io/badge/Demo-local-orange)
 
-**Status — 6 October 2026:** the selected local deliverable is prepared.
-[All phase statuses](docs/FINAL_STATUS_2026-10-06.md) include current verification
-and limits. Both private CI jobs passed **373 tests** and authenticated Docker
-checks. The corrected Gemini comparison saved **40 answers using 136/140 calls**,
-with a documented delegated AI review. Tavily access/recovery and actual Wikipedia
-fallback are verified. Production input review, ordered fallback, bounded evidence
-retention and local traces are implemented.
+> A local research workbench that plans questions, gathers inspectable evidence,
+> follows coverage gaps and produces reports with traceable quotations.
 
-The user selected **local durable storage** under a **₹5/month** hosting cap;
-public Render deployment is deferred. Saved research stays in `.evidenceforge`.
-No general research-accuracy, source-truth or independent human-validation claim is
-made. The original 23-page PDF is reconciled, and mixed-source research, supported
-paragraph summaries and conservative passage deduplication are implemented.
+EvidenceForge helps a reviewer inspect **how a report was produced**: which
+questions were investigated, which passages were retained, where claims came from,
+and why the workflow completed or stopped. Python, LangGraph, SQLite and Streamlit
+connect the research stages; offline fixtures support demonstrations and optional
+Gemini reasoning supports explicitly started provider runs.
 
-## Start here — Windows PowerShell
+**Verified on 6 October 2026:** 373 tests and both private CI jobs passed, including
+Docker persistence, backup/restore and authenticated gateway checks. The corrected
+Gemini comparison saved 40 answers using 136 of 140 approved calls. These checks
+establish workflow behavior and retained-text support, not general research accuracy.
 
-Use Python 3.12 and uv. The dependency lock is retained in `uv.lock`.
+**Demo access:** local only. The owner selected durable local storage under a
+₹5/month hosting cap; public Render deployment is deferred. Repository access is
+private. See [current phase status](docs/FINAL_STATUS_2026-10-06.md).
+
+## ✨ Project at a glance
+
+| Area | Details |
+| --- | --- |
+| Problem | Research answers are difficult to review when their evidence, gaps and execution history are hidden |
+| Intended users | Students, developers and reviewers exploring an inspectable research workflow |
+| Input | A research question, optionally selected PDF/DOCX/TXT documents and explicitly enabled live sources |
+| Output | Markdown/JSON report, retained source passages, claim inspection, usage and stop reasons |
+| Workflow | Plan → approve → retrieve → extract → evaluate coverage → synthesize → critique → audit |
+| Reasoning | Deterministic offline fixtures or configured Gemini structured generation |
+| Sources | Local documents, optional Tavily/Wikipedia web retrieval and NESO GB energy data |
+| Storage | Scoped SQLite checkpoints, durable call receipts and immutable source snapshots |
+| Interface | CLI plus optional Streamlit workbench |
+| Evaluation | Offline regression and a frozen 20-case, 40-answer controlled Gemini comparison |
+| Deployment | Durable local installation; constrained Docker and authenticated gateway verified in private CI |
+
+## 🧠 Architecture
+
+The manager starts planning and scoped-context lookup in parallel. Both branches
+finish before plan approval and query generation. Coverage gaps can trigger another
+retrieval pass; criticism and citation repair share one bounded rewrite allowance.
+
+```mermaid
+flowchart TD
+    ENTRY[Streamlit or CLI] --> REVIEW[Request validation]
+    REVIEW --> GUARD[Optional production Gemini input review]
+    GUARD -->|Accepted| M[Research manager]
+    GUARD -->|Rejected or clarify| F[Finalizer]
+    M --> P[Planner]
+    M --> C[Scoped context lookup]
+    P --> JOIN[Wait for both branches]
+    C --> JOIN
+    JOIN --> APPROVE[Plan approval or approved automatic path]
+    APPROVE --> Q[Query generator]
+    Q --> R[Source processor]
+    R --> E[Extract exact passages]
+    E --> A[Ranking and scoped numeric comparisons]
+    A --> COVER[Coverage evaluator]
+    COVER -->|Gap and remaining allowance| Q
+    COVER -->|Retained evidence and bounded stop| S[Synthesis]
+    COVER -->|No evidence| F
+    S --> K[Critic]
+    K -->|Revision and allowance| REWRITE[Reserve shared rewrite]
+    REWRITE --> S
+    K -->|Otherwise| AUDIT[Citation checker]
+    AUDIT -->|Repair and allowance| REWRITE
+    AUDIT -->|Audited or allowance exhausted| F
+    F --> OUTPUT[Persist report and inspection exports]
+```
+
+This summarizes healthy paths. Cancelled/error states route to finalization;
+synthesis failures use an existing draft only when one exists. The service also
+performs deterministic input checks before graph invocation. Semantic input review
+is enabled for production-policy Gemini runs, while offline/legacy paths preserve
+their behavior. [Full routing](src/evidenceforge/graph/research.py) and
+[detailed architecture](docs/submission/ARCHITECTURE.md) show these boundaries.
+
+### Storage and provider boundaries
+
+```mermaid
+flowchart LR
+    SERVICE[ResearchService] <--> GRAPH[LangGraph state]
+    GRAPH <--> CHECK[SQLite checkpoints]
+    GRAPH --> RECEIPT[Call reservations and receipts]
+    GRAPH --> SNAP[Immutable snapshots and passage locators]
+    GRAPH --> EXPORT[Reports and claim inspection]
+    SERVICE <--> DOC[Scoped documents and prior summaries]
+    GRAPH <--> MODEL[Fixture or Gemini model adapter]
+    GRAPH --> RETRIEVE[Explicit source adapters]
+    RETRIEVE --> WEB[Tavily then Wikipedia fallback]
+    RETRIEVE --> ENERGY[NESO fixed public GET]
+    RETRIEVE --> DOC
+```
+
+- **Before provider work:** reserve the operation against configured allowances.
+- **On restart:** reuse completed receipts; failed or uncertain paid outcomes block
+  automatic replay. Supported checkpoints preserve their registered options.
+- **At delivery:** keep audited claims and disclose unresolved criteria. Terminal
+  outcomes include completed, partial, insufficient evidence, failed and cancelled.
+- **At the network boundary:** live-source flags are separate from model selection.
+  Selecting Gemini does not automatically enable web search.
+- **For optional container access:** Caddy fronts loopback-only Streamlit. Health
+  remains public; configured browser routes require authentication. The future
+  Render template also requires the app's PBKDF2 login secret.
+
+### Code map
+
+| Responsibility | Files |
+| --- | --- |
+| UI and local launcher | [ui.py](src/evidenceforge/ui.py), [ui_launcher.py](src/evidenceforge/ui_launcher.py) |
+| Run lifecycle, checkpoints and reconnect | [services/research.py](src/evidenceforge/services/research.py) |
+| Routing and state reducers | [graph/research.py](src/evidenceforge/graph/research.py), [graph/reducers.py](src/evidenceforge/graph/reducers.py) |
+| Planning, queries and context | [nodes/planner.py](src/evidenceforge/nodes/planner.py), [nodes/queries.py](src/evidenceforge/nodes/queries.py), [nodes/context.py](src/evidenceforge/nodes/context.py) |
+| Retrieval and exact extraction | [nodes/sources.py](src/evidenceforge/nodes/sources.py), [nodes/extraction.py](src/evidenceforge/nodes/extraction.py) |
+| Coverage, criticism and citation checks | [nodes/quality.py](src/evidenceforge/nodes/quality.py) |
+| Provider reasoning | [models/gemini.py](src/evidenceforge/models/gemini.py) |
+| Evidence retention and reports | [evidence/retention.py](src/evidenceforge/evidence/retention.py), [reporting.py](src/evidenceforge/reporting.py) |
+
+## 📸 Working application
+
+The Streamlit workbench supports question entry, plan editing and approval,
+progress/coverage inspection, cancellation, checkpoint reconnect, document upload,
+claim inspection and report downloads.
+
+**Screenshot status:** fresh capture was attempted on 6 October 2026, but the
+browser capture surface could not attach. Screenshots are not included in this
+revision. The walkthrough below uses implemented controls and saved fixture outputs.
+
+### Run an offline demonstration
 
 ```powershell
-cd "C:\Users\AKHILTEJ\Documents\ChatGPT\AI Research agent"
 uv sync --locked --extra ui
-uv run --locked evidenceforge-research "Compare solar and wind electricity output." --demo second-pass --offline
 uv run --locked --extra ui evidenceforge-ui
 ```
 
-Open http://127.0.0.1:8501. Choose **offline** reasoning for the synthetic demo.
-The UI supports question entry, plan editing/approval, progress, cancellation,
-checkpoint reconnect, document upload, finding inspection and report downloads.
-Scope names isolate local storage; they are not login credentials.
+Open `http://127.0.0.1:8501` on the same computer. Select offline reasoning and the
+second-pass fixture, enter “Compare solar and wind electricity output,” then review
+and approve the current plan. Inspect the timeline, evidence passages, locators and
+final report. Keep live-source choices off for this demonstration.
 
-`--offline` forces fixture reasoning even when a private `.env` configures Gemini.
-The standalone planning/retrieval CLIs require fixture configuration; the research
-CLI and dedicated energy command have separate controls. See [setup](docs/submission/SETUP.md).
-
-## Four-minute demonstration
-
-Prepare an inspectable replay with no external provider calls:
+A separate captured replay demonstrates four **executed synthetic scenarios**:
 
 ```powershell
 uv run --locked python scripts/prepare_demo.py
 uv run --locked python -m http.server 8503 --bind 127.0.0.1 --directory .evidenceforge/demo/phase11
 ```
 
-Open http://127.0.0.1:8503. Four executed synthetic scenarios demonstrate a second
-retrieval pass, a numeric dispute, an unsupported draft repaired by the citation
-checker, and a partial answer at the pass limit. Click a finding for its exact
-passage, locator and selected support graph. The initial bad draft is deliberately
-scripted and labeled; final reports contain only retained supported quotations.
-Stop the replay server with Ctrl+C. It serves only the generated demo directory.
+Open `http://127.0.0.1:8503`. Click a finding to inspect its passage, source and
+selected support graph. The coverage scenario completes after two passes; the
+numeric dispute stays partial; a deliberately injected unsupported draft is repaired;
+a pass-limited run discloses its gap. Stop the replay server with Ctrl+C.
 
-[Demo script](docs/submission/DEMO.md) · [Architecture](docs/submission/ARCHITECTURE.md)
-· [Requirements checklist](docs/submission/REQUIREMENTS.md)
+See the [4 minute 30 second demo script](docs/submission/DEMO.md) and an actual
+[saved synthetic report](docs/examples/phase6/report.md). Fixture statements are
+examples, not measurements or verified facts. The replay serves only its generated
+directory, not the complete private data root.
 
-## Features and boundaries
+## 👋 Concepts explained
 
-| Feature | Implemented behavior |
-|---|---|
-| Planning | Structured questions/criteria; concurrent planner/context branches join once |
-| Evidence | Bounded retrieval, snapshots, exact locators; literal working-set deduplication with all original provenance retained |
-| Coverage | Follow-up questions with pass/search/model/time/byte limits |
-| Reports | 2–3 supported summary paragraphs where evidence permits; findings, per-source chunks, disagreements and disclosed gaps |
-| Citation checks | Exact quoted text and retained snapshot checks; bounded repair/omission |
-| Analysis | Heuristic ranking, source families and supported scoped numeric comparisons |
-| Persistence | Owner-scoped SQLite checkpoints and durable model/search receipts |
-| Documents | TXT/PDF/DOCX ingestion, page/paragraph/table locations; OCR unavailable |
-| Reasoning | Offline fixtures by default; configured Gemini structured stages |
-| Live sources | Explicit Tavily and read-only NESO GB half-hour shares, combined with selected documents in full research |
+| Concept | Plain explanation | How this project uses it |
+| --- | --- | --- |
+| Research planning | Turn a broad question into smaller questions and criteria | Structured planner output, editable before approval |
+| Retrieval-augmented generation | Give a model selected external passages before it writes | Gemini receives retained evidence rather than unrestricted search tools |
+| Adaptive coverage | Check which criteria have evidence and investigate remaining gaps | Bounded follow-up retrieval passes |
+| Snapshot and locator | Save the text and where a passage came from | Content hash plus exact offsets/page/paragraph metadata |
+| Citation audit | Check that the quoted claim exists in retained evidence | Exact text, IDs, locator and snapshot validation |
+| Checkpoint | Save graph execution state so a process can reconnect | SQLite run registration and thread checkpoints |
+| Durable receipt | Save whether a provider operation ran and what it returned | Completed-response reuse and uncertain-call protection |
+| Prior context | Earlier summaries can help orient a new run | Summaries are context; they are not admitted as fresh evidence |
+| Claim graph | Show selected claims and their supporting records | A projection for inspection, not a second truth database |
 
-Full research can combine explicitly selected Tavily web search, the GB energy API,
-and supplied documents. The CLI uses `--live-web` and `--energy-api`; matching UI
-checkboxes are off by default. These choices survive approval/editing/reconnect.
-Missing search credentials fail before planning. `--offline` excludes live sources.
-Exact citation matches establish retained-text support, not source truth. See
-[limitations](docs/submission/LIMITATIONS.md).
+A node is a function, not necessarily a separate AI agent or paid model request.
+Context lookup, extraction and citation checks use application code. The successful
+production factor workflows in the comparison used six model stages, including
+semantic input review; their other nodes did not add model calls.
 
-## Local documents and restart
+**What citations prove:** a checked snapshot contains the retained quotation.
+They do not prove that the original source is true, independent or complete.
+Ranking, lexical relevance and numeric dispute rules remain inspectable heuristics.
+
+## 🛠️ Technology choices
+
+| Technology | Why it is used | Tradeoff |
+| --- | --- | --- |
+| Python / Pydantic | Typed contracts, parsing and validated structured responses | Validation cannot establish semantic truth |
+| LangGraph | Explicit branches, joins, loops and resumable execution | Graph changes need checkpoint compatibility controls |
+| SQLite | Local checkpoints, scoped storage and durable operation receipts | Designed here for a trusted local workbench, not a distributed service |
+| uv and uv.lock | Reproducible dependency installation and packaging | Use supported Python versions and the retained lock |
+| Streamlit | A small service-backed interface for inspecting runs | Jobs execute in-process; restarting can interrupt active work |
+| Gemini | Optional structured planning, coverage, synthesis and criticism | Availability, latency and usage limits vary |
+| HTTPX / source adapters | Bounded streamed responses, typed failures and explicit endpoints | Live access and research quality require separate checks |
+| pypdf / python-docx | Located PDF/DOCX extraction alongside TXT | Scanned/textless PDF OCR is unavailable |
+| Docker / Caddy | Repeatable constrained execution and protected container routes | Hosted persistence must still be verified on an actual platform |
+
+Document lookup is lexical. Coverage loops, exact evidence records and durable
+research execution are the main workflow mechanics.
+
+## 💻 Local setup
+
+Use Python 3.12 for the tested setup; package metadata permits 3.12 through 3.14.
+An authorized GitHub account is required to clone this private repository.
 
 ```powershell
+git clone https://github.com/cakhiltej9001-source/evidenceforge-ai.git
+cd evidenceforge-ai
+uv sync --locked --extra ui
+if (-not (Test-Path .env)) { Copy-Item .env.example .env }
+uv run --locked evidenceforge-check
+uv run --locked --extra ui evidenceforge-ui
+```
+
+The example dotenv defaults to fixtures. The conditional copy preserves existing
+private configuration. Environment variables override dotenv settings. Diagnostic
+commands omit credential values.
+
+### CLI, documents and restart
+
+```powershell
+uv run --locked evidenceforge-research "Compare solar and wind electricity output." --demo second-pass --offline
 uv run --locked evidenceforge-ingest tests/fixtures/documents/energy.txt --owner demo
 uv run --locked evidenceforge-research "Compare solar and wind electricity output." --owner demo --document DOCUMENT_ID --offline
 uv run --locked evidenceforge-research "Compare solar and wind electricity output." --demo second-pass --require-approval --offline
 uv run --locked evidenceforge-research --resume THREAD_ID --approve-plan 1 --offline
 ```
 
-Replace `DOCUMENT_ID` and `THREAD_ID` with the preceding command outputs. Keep the
-same owner/data directory on reconnect. Plan edits create a new version requiring
-renewed approval. Supported current checkpoints use graph version 8; earlier graph
-versions and historical paid runs without receipts cannot silently migrate.
+Replace IDs with the preceding command outputs. Use the same owner and data
+folder on reconnect. A plan edit creates a new version needing approval. Save the
+whole ignored `.evidenceforge` directory when backing up this local installation.
+Stopping/restarting the UI preserves saved research, though active work may be
+interrupted. Owner scopes isolate storage; they are not login identities.
 
-## Optional source and Gemini access
+### Optional Gemini and live sources
 
-```powershell
-uv run --locked evidenceforge-energy
-uv run --locked evidenceforge-energy --live
-```
-
-The first is synthetic. The second performs one public NESO GET, needs no API key
-and makes no Gemini calls. It retains evidence and state rather than generating a
-research report. Its percentages describe Great Britain's returned half-hour mix,
-including imports; they do not measure global or annual output in MWh.
-
-To configure Gemini, save the following privately in `.env`:
+Privately configure `.env` only when using provider-backed runs:
 
 ```dotenv
 EVIDENCEFORGE_MODEL_PROVIDER=gemini
 EVIDENCEFORGE_MODEL_ID=gemini-3.5-flash-lite
-EVIDENCEFORGE_MODEL_API_KEY=YOUR_PRIVATE_KEY
+EVIDENCEFORGE_MODEL_API_KEY=YOUR_PRIVATE_GEMINI_KEY
+EVIDENCEFORGE_TAVILY_API_KEY=YOUR_PRIVATE_TAVILY_KEY
 ```
 
-This is the model used in the recorded verification, not a claim about the newest
-available model or current availability. Gemini sends the question and relevant
-passages/context to Google. Select its UI mode or omit `--offline` from research
-commands using documents, an explicit demo or explicitly enabled live sources. Configure
-call/token limits before paid
-use. Completed responses can replay from durable receipts; failed/unconfirmed calls
-are not automatically retried. Dollar ceilings require a verified pricing policy.
+The model above is the authorized fallback used in recorded checks, not a claim
+about the latest available model. Gemini receives the question and selected
+passages/context. Explicit live-source choices enable acquisition separately:
 
-`.env`, `.evidenceforge`, documents, databases and traces are ignored by Git.
-Never include local private data in a submission or Docker build context.
+```powershell
+uv run --locked evidenceforge-research "Compare solar and wind electricity output, distinguishing GB half-hour shares from annual output." --live-web --energy-api --require-approval
+uv run --locked evidenceforge-energy --live
+```
 
-## Measured evaluation
+The first command can consume Gemini calls and Tavily credits with the configured
+provider. Set budgets before starting it. The second makes one public NESO GET,
+requires no key and makes no Gemini calls; it retains acquisition evidence rather
+than generating a report. GB half-hour percentages, including imports, are not
+annual/global/absolute MWh measurements. `--offline` excludes live sources.
 
-The [corrected Gemini comparison](docs/evaluation/V2_COMPARISON_REPORT_2026-10-06.md)
-used the same frozen synthetic corpus for 20 single responses and 20 workflows.
-All 136 provider calls succeeded. Both approaches retained both stated factors in
-16/16 cases, marked both conflicts and abstained in both empty-source cases.
-Workflow outcomes were 16 completed, two partial and two insufficient-evidence.
+Never publish `.env`, local documents, databases, receipts or payload traces.
+[Setup and recovery details](docs/submission/SETUP.md) include mixed-source and
+checkpoint-compatible commands.
 
-The baseline used 20 calls/5,292 tokens; the workflow used 116 calls/139,795 tokens.
-The workflow preserves complete quotations and richer provenance, while the baseline
-uses supported minimal spans. Strict reference-string scores do not establish a
-factual-quality advantage. Workflow case 18 shows planning scope drift; the
-[AI review](docs/evaluation/V2_AI_REVIEW_2026-10-06.json) records it explicitly.
-
-Historical ledgers remain **26/30** and **28/40**, separate from the corrected
-**136/140** allowance. [Submission evaluation](docs/submission/EVALUATION.md)
-preserves earlier failures and unknown cost. No blind held-out or provider superiority
-claim follows from these synthetic cases.
-
-## Development and deployment
+## ✅ Tests and evaluation
 
 ```powershell
 uv run --locked pytest -q
@@ -153,47 +276,198 @@ uv run --locked mypy
 uv build
 ```
 
-Tests use synthetic credentials and block ordinary network connections. Optional
-UI checks need `--extra ui` in the installation. [Phase 11](docs/PHASE11.md) records
-final verification; [progress](docs/PROGRESS.md) preserves earlier executed results.
+[CI on 6 October](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/37489134491)
+passed **373 tests in 19.37 seconds**, lint/format/types, package build, official
+Render schema and offline deployment smoke. Docker checks passed nonroot UID 10001,
+512 MB/half-CPU execution, fresh-container persistence, fresh-volume synthetic
+backup/restore, health and authenticated gateway access. Tests block ordinary
+network connections and use fabricated secrets. Local Docker is not installed;
+container verification ran in the private repository's CI.
 
-Docker, localhost Compose and a private Render template are prepared. The Docker
-image now places a Caddy Basic Auth gateway in front of loopback-only Streamlit;
-Render health checks remain available and all other routes can require the gateway
-secret. The
-[private repository](https://github.com/cakhiltej9001-source/evidenceforge-ai) has a
-[successful CI run](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/37485512573)
-covering **373 tests**, strict typing/lint/format, package build and Render schema.
-Docker build, UID 10001, research/reconnect, fresh-volume synthetic backup/restore
-under 512 MB and half-CPU limits, UI health and authenticated gateway checks also passed. This run verified
-source `0f070d134491e2b2a161ecdfdaf987daec2ac904`; source pushes repeat the checks.
-Public hosting is deferred by the user’s local-storage choice. No Render resources
-or public endpoint have been created. [Deployment details](docs/PHASE10.md).
+### Corrected controlled Gemini comparison
 
-## Submission materials
+Both variants received the same frozen corpus for 20 cases. These are inspected
+synthetic cases, not a blind test of real-source research quality.
 
-- [Setup guide](docs/submission/SETUP.md)
-- [Architecture and data boundaries](docs/submission/ARCHITECTURE.md)
-- [3–5 minute demo](docs/submission/DEMO.md)
-- [Requirement traceability](docs/submission/REQUIREMENTS.md)
-- [Evaluation table](docs/submission/EVALUATION.md)
-- [Limitations and open gates](docs/submission/LIMITATIONS.md)
+| Measurement | Single response | One-pass workflow |
+| --- | ---: | ---: |
+| Saved answers | 20 | 20 |
+| Provider calls | 20 | 116 |
+| Known total tokens | 5,292 | 139,795 |
+| Mean elapsed time per case | 6.852 s | 31.106 s |
+| Both stated factors retained | 16/16 | 16/16 |
+| Conflict flagged | 2/2 | 2/2 |
+| Empty-source abstention | 2/2 | 2/2 |
+| Terminal outcomes | 20 completed responses, including two abstentions | 16 completed, two partial, two insufficient-evidence |
 
-The original 23-page PDF is now supplied and reviewed. Its graph/source/report
-requirements are mapped in the [original-PDF reconciliation](docs/submission/ORIGINAL_PDF_RECONCILIATION.md).
-Live web/API retrieval in the full research pipeline and the specified supported
-summary/source presentation are implemented within the documented limits. The PDF contains no grading rubric, deadline or
-hosting mandate; full assignment acceptance is not claimed.
+All **136/140 approved calls** returned HTTP 200 and locally validated responses.
+Original 26/30 and 28/40 ledgers remain separate. Dollar cost is N/A without a
+verified pricing policy. Latencies include local/provider/network delay.
 
+Workflow quotations preserve complete passages and richer provenance. Baseline
+minimal spans omit fixture labels and sometimes punctuation; strict string scores
+penalize those omissions without demonstrating a factual-factor failure. Both
+conflict workflows retain unresolved values; one also adds unrequested monthly
+planning criteria. Review plans before approving them.
 
-## Quality-input checkpoint compatibility
+Read the [complete comparison](docs/evaluation/V2_COMPARISON_REPORT_2026-10-06.md),
+[40-row AI review](docs/evaluation/V2_AI_REVIEW_2026-10-06.json) and
+[historical evaluation](docs/submission/EVALUATION.md). Delegated AI review is not
+independent human validation, and no general superiority claim follows from this set.
 
-New runs register quality-input version 2 for literal working-set deduplication and
-multi-claim summary selection. Existing graph-version-8 profiles without that marker
-restore version 1: original evidence ordering, claim/summary selection and empty-field
-serialization are preserved for paid receipt hashes. Completed reconnect still makes
-no new provider call. Older runs retain their historical findings; start a new run to
-use the updated quality behavior. Graph versions predating 8 and paid runs without
-durable receipts retain their existing incompatibility checks.
+Actual Tavily acquisition/full-pipeline recovery and a real Wikipedia fallback
+were checked separately. Their successful access does not establish the semantic
+quality of a combined live Gemini/web report.
 
-[Original assignment fixes and verification](docs/ASSIGNMENT_FIXES_2026-10-05.md).
+## 🔧 Common issues and resolutions
+
+| Symptom | Likely cause | Action |
+| --- | --- | --- |
+| UI dependency missing | Optional UI packages were not installed | Run `uv sync --locked --extra ui` |
+| Address already in use | Another local service occupies the port | Stop that service or run `evidenceforge-ui --port 8504` through uv |
+| Fixture answer appears for a real question | Offline/demo source choices are selected | Use supplied documents or explicitly selected live sources with appropriate configuration |
+| Gemini HTTP 503/429 | Provider availability or quota | Inspect the sanitized failure and configured model/budgets; do not repeatedly resume uncertain paid calls |
+| Paid resume is blocked | Failed/unconfirmed receipt or incompatible historical checkpoint | Inspect saved receipts and use the documented recovery path; do not delete the ledger to repeat a charge |
+| Tavily is not configured | Live web selected without a current project key | Configure the private key before planning, or use offline/local-document mode |
+| Report is partial | Unresolved criteria, conflict or an exhausted allowance | Inspect stop reasons, evidence and gaps; review the plan rather than treating partial as complete |
+| Document is unavailable under an owner | Scope or document ID does not match | Use the ingestion ID and same owner/data directory |
+| Scanned PDF has no extracted text | OCR is not implemented | Supply a text-bearing PDF/TXT/DOCX version |
+| Another person cannot open localhost | Localhost points to their own computer | Run their authorized local installation; no public demo is deployed |
+
+For a provider-free persistence check, run the following twice from separate
+processes with the same data directory:
+
+```powershell
+uv run --locked python scripts/deployment_smoke.py --data-dir .evidenceforge/verification/my-smoke
+uv run --locked python scripts/deployment_smoke.py --data-dir .evidenceforge/verification/my-smoke --reconnect
+```
+
+## 🗂️ Project structure and reading order
+
+```text
+src/evidenceforge/
+  graph/          State, reducers and research routing
+  nodes/          Planning, retrieval, evidence and quality stages
+  models/         Fixture and Gemini reasoning adapters
+  retrieval/      Documents, web, fallback and energy adapters
+  evidence/       Deduplication, ranking, numeric comparisons and retention
+  storage/        Checkpoints, snapshots, context and provider receipts
+  services/       Application lifecycle, observability and tracing
+  ui.py           Streamlit workbench
+scripts/          Demo, comparison and deployment verification
+tests/           Offline contract and workflow regression tests
+docs/             Phase records, setup, architecture and measured results
+.env.example      Configuration placeholders; no real keys
+uv.lock           Locked dependencies
+Dockerfile        Nonroot image with Caddy gateway
+```
+
+Start with [the architecture](docs/submission/ARCHITECTURE.md), then follow
+[ResearchService](src/evidenceforge/services/research.py),
+[graph routing](src/evidenceforge/graph/research.py),
+[quality nodes](src/evidenceforge/nodes/quality.py) and
+[provider receipts](src/evidenceforge/storage/model_calls.py). Compare each stage
+with its tests and the retained synthetic examples.
+
+## 🎤 Interview questions and sample answers
+
+**1. How does this differ from a basic RAG chatbot?**
+It plans subquestions, tracks coverage, can retrieve again within bounds, critiques
+its draft, audits quotations and preserves execution records for inspection.
+
+**2. Why LangGraph?**
+The workflow has parallel initialization, conditional loops, approval interrupts
+and persistent state. Explicit graph edges make those paths testable.
+
+**3. What prevents duplicate work after a crash?**
+Durable receipts reserve before calls and retain completed responses. Checkpoint
+reconnect can reuse them; uncertain outcomes block automatic paid replay.
+
+**4. Does an exact citation prove the claim is true?**
+It proves the retained snapshot supports that quotation. Independent source truth,
+semantic completeness and source quality require additional evaluation.
+
+**5. Why SQLite?**
+It provides simple local persistence without another server. Distributed jobs and
+multi-user scaling would need a different operational design.
+
+**6. How are hallucinations and spending bounded?**
+Structured contracts, scoped evidence IDs, exact quote audits, supported-only
+finalization and shared rewrite/search/model/pass/token allowances constrain runs.
+They do not guarantee correct planning or source truth.
+
+**7. How did you evaluate the project?**
+373 offline tests and constrained Docker checks verify engineering behavior. A
+20-case, 40-answer Gemini comparison records support, scope, disputes, abstentions,
+calls, tokens and latency with explicit synthetic/AI-review limitations.
+
+**8. What did the comparison show?**
+Both variants kept the supplied factors and handled the controlled conflict/empty
+cases. The workflow retained more inspectable provenance at greater measured usage;
+it did not establish general factual-quality superiority.
+
+**9. What is the main observed reasoning limitation?**
+A planner added monthly criteria to an annual disagreement question. Plan review,
+partial outcomes and disclosed gaps expose the issue, while citation audits alone
+cannot validate planning scope.
+
+**10. What would you improve next?**
+A broader independently reviewed real-source evaluation, tighter planning-scope
+controls, reviewed OCR and an operational design for persistent multi-user jobs.
+
+## 🎓 Five-minute reviewer walkthrough
+
+1. Read project scope and architecture above.
+2. Run the offline second-pass demo and review its plan.
+3. Inspect one finding's exact passage, locator and support graph.
+4. Use the captured replay to compare completed, disputed, repaired and partial outcomes.
+5. Review the 40-answer comparison and its usage/quality limitations.
+
+**Portfolio summary:** built a Python/LangGraph research workbench with scoped
+retrieval, adaptive coverage, inspected quotations, numeric disputes, SQLite
+checkpoints, durable provider receipts, plan approval and a Streamlit interface.
+Report benchmark results with their sample size and synthetic scope.
+
+## ⚠️ Known limitations
+
+- Lexical document lookup and relevance scores are heuristics; no embedding/vector
+  retrieval or calibrated truth probabilities are implemented.
+- Exact text audits do not establish source truth or detect every planning-scope error.
+- Numeric contradiction handling uses explicit supported scopes, dates, units and
+  grammar; broad semantic contradictions remain outside that rule set.
+- Scanned/textless PDF OCR is unavailable.
+- Context summaries cannot substitute for new evidence or independent corroboration.
+- The local workbench uses a process executor, not persistent distributed jobs.
+- Independent human validation, remote LangSmith export and hosted durability are
+  unverified. Public hosting is deferred by the owner's local-storage choice.
+- Historical graph versions or paid runs without durable receipts cannot silently
+  migrate. Completed reconnect does not authorize new provider work.
+
+## 🗺️ Future roadmap
+
+These are proposed extensions, not completed features:
+
+- [ ] Add fresh real application screenshots when the browser capture surface is available.
+- [ ] Improve planner scope adherence and measure it against a larger frozen corpus.
+- [ ] Build a broader independently reviewed real-source benchmark.
+- [ ] Add reviewed OCR and more demanding document/table extraction cases.
+- [ ] Evaluate semantic support beyond exact retained quotations.
+- [ ] Design persistent job queues and authentication/authorization for multi-user operation.
+- [ ] Verify hosted durability, backup and access only with a future approved hosting budget.
+
+## 📖 Further documentation
+
+- [Final phase status](docs/FINAL_STATUS_2026-10-06.md)
+- [Setup and recovery](docs/submission/SETUP.md)
+- [Detailed architecture](docs/submission/ARCHITECTURE.md)
+- [Requirement mapping](docs/submission/REQUIREMENTS.md)
+- [Demo walkthrough](docs/submission/DEMO.md)
+- [Corrected Gemini comparison](docs/evaluation/V2_COMPARISON_REPORT_2026-10-06.md)
+- [Evaluation history](docs/submission/EVALUATION.md)
+- [Limitations](docs/submission/LIMITATIONS.md)
+- [Original 23-page PDF reconciliation](docs/submission/ORIGINAL_PDF_RECONCILIATION.md)
+- [Deployment and CI history](docs/PHASE10.md)
+
+The original PDF describes source/graph/report/persistence mechanics and incremental
+production guidance. It does not specify a grading rubric, deadline or hosting
+mandate. External submission acceptance is not claimed.

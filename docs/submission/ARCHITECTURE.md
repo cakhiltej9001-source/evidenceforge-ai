@@ -1,13 +1,17 @@
 # Architecture
 
-This diagram follows the implemented Phase 8 graph and service boundary.
-The input review runs before graph invocation. Provider clients, repository
+This diagram follows the current graph and service boundary. Deterministic input
+checks run before graph invocation. Production-policy Gemini runs additionally
+execute semantic input review inside the graph, before the manager. Provider clients, repository
 connections and runtime workers are injected outside serialized state.
 
 ```mermaid
 flowchart TD
   UI[Streamlit UI or CLI] --> SERVICE[ResearchService input review]
-  SERVICE -->|Accepted request| M[Manager]
+  SERVICE -->|Fixture or legacy path| M[Manager]
+  SERVICE -->|Production Gemini path| GUARD[Semantic input review]
+  GUARD -->|Accepted| M
+  GUARD -->|Rejected or clarify| F[Finalizer]
   SERVICE -->|Clarify or reject| HELP[Bounded input decision]
   M --> P[Planner]
   M --> C[Context manager]
@@ -54,7 +58,7 @@ flowchart LR
   MODEL[Fixture or Gemini adapter] <--> GRAPH
   ACQUIRE[Explicit energy or Tavily acquisition command] --> RETRIEVAL[RetrievalService]
   APP --> RETRIEVAL
-  RETRIEVAL --> API[Explicit Tavily and GB energy endpoints]
+  RETRIEVAL --> API[Explicit Tavily, Wikipedia fallback and GB energy endpoints]
   RETRIEVAL --> DOC
   RETRIEVAL --> LEDGER
   RETRIEVAL --> SNAPSHOT
