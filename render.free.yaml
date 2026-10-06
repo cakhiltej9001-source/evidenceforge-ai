@@ -1,0 +1,33 @@
+# Optional public demonstration. Apply only after accepting temporary storage.
+# Local saved research is not copied here. This service uses synthetic fixtures.
+# Both login hashes must be supplied privately before hosted access can work.
+services:
+  - type: web
+    name: evidenceforge-free-demo
+    runtime: docker
+    plan: free
+    healthCheckPath: /_stcore/health
+    numInstances: 1
+    autoDeployTrigger: "off"
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: EVIDENCEFORGE_AUTH_REQUIRED
+        value: "true"
+      - key: EVIDENCEFORGE_AUTH_USERNAME
+        value: admin
+      - key: EVIDENCEFORGE_AUTH_PASSWORD_HASH
+        sync: false
+      - key: CADDY_AUTH_REQUIRED
+        value: "true"
+      - key: CADDY_AUTH_USERNAME
+        value: admin
+      - key: CADDY_AUTH_PASSWORD_HASH
+        sync: false
+      - key: PORT
+        value: "8501"
+      - key: EVIDENCEFORGE_DATA_DIR
+        value: /data/evidenceforge-demo
+      - key: EVIDENCEFORGE_MODEL_PROVIDER
+        value: fixture
+      - key: EVIDENCEFORGE_TRACING_ENABLED
+        value: "false"

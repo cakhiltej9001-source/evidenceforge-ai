@@ -28,6 +28,7 @@ jobs:
         run: |
           curl --fail --silent --show-error --location --max-time 30 https://render.com/schema/render.yaml.json -o /tmp/render-schema.json
           uv run --locked --extra ui python scripts/validate_render.py --schema /tmp/render-schema.json
+          uv run --locked --extra ui python scripts/validate_render.py --blueprint render.free.yaml --schema /tmp/render-schema.json
       - run: uv build
       - run: uv run --locked python scripts/deployment_smoke.py --data-dir .evidenceforge/ci-smoke
   container:

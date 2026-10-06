@@ -22,7 +22,9 @@ Gemini comparison saved 40 answers using 136 of 140 approved calls. These checks
 establish workflow behavior and retained-text support, not general research accuracy.
 
 **Demo access:** local only. The owner selected durable local storage under a
-₹5/month hosting cap; public Render deployment is deferred. Repository access is
+₹5/month hosting cap; public Render deployment is deferred. An optional
+[login-protected free demo configuration](docs/PUBLIC_DEMO.md) is prepared for
+review and uses temporary storage with synthetic fixtures. Repository access is
 private. See [current phase status](docs/FINAL_STATUS_2026-10-06.md).
 
 ## ✨ Project at a glance
@@ -333,6 +335,7 @@ quality of a combined live Gemini/web report.
 | Document is unavailable under an owner | Scope or document ID does not match | Use the ingestion ID and same owner/data directory |
 | Scanned PDF has no extracted text | OCR is not implemented | Supply a text-bearing PDF/TXT/DOCX version |
 | Another person cannot open localhost | Localhost points to their own computer | Run their authorized local installation; no public demo is deployed |
+| Browser shows `ERR_CONNECTION_REFUSED` locally | The UI server is stopped or the port is wrong | Restart `evidenceforge-ui` on the selected port and keep it running; see [local access and public deployment](docs/PUBLIC_DEMO.md) |
 
 For a provider-free persistence check, run the following twice from separate
 processes with the same data directory:

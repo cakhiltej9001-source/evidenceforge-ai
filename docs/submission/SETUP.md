@@ -146,7 +146,9 @@ it. Local Docker prerequisites are unmet on the current host; remote Docker CI
 has passed in the private repository. Persistent Render
 deployment is deferred by the user’s local durable-storage choice. No public endpoint
 is configured. Keep the entire `.evidenceforge` directory for local backups; restarting
-the UI preserves saved research.
+the UI preserves saved research. An optional [free public demo](../PUBLIC_DEMO.md)
+configuration is prepared with login protection and temporary storage; it has not
+been applied.
 
 ## Final checks
 
