@@ -1,7 +1,7 @@
 # Corrected v2 comparison rubric
 
 This rubric is for reviewing saved answers in
-`.evidenceforge/evaluation/phase9_v2_gemini/` if the paid comparison can run.
+`.evidenceforge/evaluation/phase9_v2_gemini/` following the completed paid comparison. See [the report](V2_COMPARISON_REPORT_2026-10-06.md).
 It does not assign factual truth to the synthetic corpus.
 
 For each case and variant, record:

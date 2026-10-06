@@ -1,57 +1,46 @@
-# Pending-work repair — 6 October 2026
+# Pending-work completion — 6 October 2026
 
-This record captures the continuation after the user approved browser login
-protection and up to 140 additional Gemini calls for a corrected comparison.
+The [final phase status](FINAL_STATUS_2026-10-06.md) is authoritative. The
+user selected local durable storage under a ₹5/month hosting cap; public hosting
+is deferred. The 40-row corrected Gemini comparison and delegated AI review are
+complete (136/140 calls, all HTTP 200). Historical ledgers remain 26/30 and 28/40.
+Both private CI jobs passed 373 tests and authenticated Docker checks on runtime
+source `0f070d134491e2b2a161ecdfdaf987daec2ac904`.
 
-## Completed locally
+## Completed
 
-- Added a semantic input classifier before the production Gemini manager. It
-  accepts research questions and returns bounded guidance for gibberish,
-  non-research, manipulation and vague inputs. Rejected inputs make no search
-  calls.
-- Added ordered Tavily-to-Wikipedia fallback with per-provider budget receipts,
-  typed failures, bounded response sizes and source-provider provenance.
-- Added lowest-score evidence eviction at the configured evidence limit while
-  retaining immutable snapshots, acquisition records and pinned report claims.
-- Added bounded local node traces and optional payload capture. Default traces
-  contain metadata only and never export to a remote tracing service.
-- Added a Caddy gateway to the Docker image. Render's health path is public for
-  health checks; all other routes can require Basic Auth. Streamlit listens only
-  on loopback behind Caddy. The gateway's bcrypt hash is a Render secret.
-- Added a six-stage semantic-acceptance/replay test. Ruff, formatting and mypy
-  pass; the new test passes. The offline v2 comparison completed 40 rows (20
-  single-response and 20 workflow) with zero provider calls.
+- Production semantic input review, ordered Tavily/Wikipedia fallback, lowest-score
+  bounded retention with pinned claims, and bounded local traces with opt-in payload
+  capture. Library defaults and legacy checkpoint behavior are preserved.
+- Corrected container launcher arguments and process supervision; future Render
+  configuration requires both Caddy bcrypt and app PBKDF2 login secrets.
+- Python/Docker CI: 373 tests, lint/format/types, package build, Render schema,
+  constrained nonroot execution, persistence, backup/restore, health and gateway
+  authentication (including `RENDER=true`).
+- Corrected offline benchmark: 40 rows, zero provider calls. Corrected Gemini
+  benchmark: all 40 rows saved, 136/140 approved calls, no provider failure.
+- [Comparison and AI review](evaluation/V2_COMPARISON_REPORT_2026-10-06.md), with
+  quotation-rubric differences, partial conflicts and case 18 planning scope drift.
+- One real Wikipedia fallback GET after a simulated primary failure: five sources,
+  seven passages, completed report, zero Gemini/Tavily calls.
+- Local research/export and separate-process reconnect, with no provider calls.
 
-## External gates
+## Decisions and qualifications
 
-- Gemini comparison: **not run**. The user approved 140 calls, but the Codex
-  approval service rejected the network execution before the command ran because
-  the environment approval-credit limit was exhausted. No new Gemini call or
-  charge occurred; the earlier 26/30 and 28/40 ledgers remain separate.
-- Hosted deployment: **staged, not created**. Render API access is verified,
-  but the monthly spending cap and repository-to-Render connection are still
-  absent. No paid Render resource was created.
-- Independent human benchmark review: **still pending**. Codex's delegated AI
-  review is recorded and is not represented as human sign-off.
+No paid Render service was created. Browser login protection is prepared and
+CI-tested for future hosting; the selected local app retains data in `.evidenceforge`.
+The earlier approval-credit rejection was temporary and is superseded by successful
+execution. No additional allowance or missing credential blocks this local delivery.
 
-## Reproduction
+Independent human validation, broader real-source accuracy, remote tracing, OCR and
+hosted durability remain unclaimed or optional extensions. Human review and hosted
+deployment are not required by the supplied PDF. See the final status for limits.
 
-```powershell
-.venv\Scripts\python.exe -X utf8 scripts/run_corrected_benchmark.py `
-  --mode fixture `
-  --output .evidenceforge/evaluation/phase9_v2_fixture `
-  --execute
-```
-
-The paid command is intentionally documented but not executed in this run:
+## Provider-free reproduction
 
 ```powershell
-.venv\Scripts\python.exe -X utf8 scripts/run_corrected_benchmark.py `
-  --mode gemini `
-  --output .evidenceforge/evaluation/phase9_v2_gemini `
-  --execute
+uv run --locked python scripts/run_corrected_benchmark.py --mode fixture --output .evidenceforge/evaluation/my-fixture-review --execute
 ```
 
-It uses the configured `gemini-3.5-flash-lite` model and enforces a durable
-140-call cap. A fresh output directory is required; an interrupted case is
-marked for review rather than retried automatically.
+Preserve existing paid outputs and receipts. A new paid comparison requires a new
+allowance; do not reset historical ledgers.

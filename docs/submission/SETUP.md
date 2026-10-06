@@ -117,8 +117,9 @@ locators. Literal copies/contained passages are grouped for model input; all ori
 records remain retained. Distinct facts, qualifiers and uncovered question links are
 preserved. Grouping does not establish independent corroboration.
 
-The mixed-source path is verified with mocked HTTP; actual Tavily access remains
-unverified until a search credential is configured. No paid call ran for this fix.
+The mixed-source path is verified with mocked HTTP. Actual Tavily acquisition/full
+pipeline/recovery passed on 5 October; a live Wikipedia fallback passed on 6 October
+after a simulated primary failure. These checks do not establish semantic source truth.
 
 ## Files and storage
 
@@ -138,9 +139,14 @@ For Docker, persistent storage, private Render setup and verification dependenci
 see [Phase 10](../PHASE10.md). The image places Caddy in front of loopback-only
 Streamlit; set `CADDY_AUTH_REQUIRED=true`, `CADDY_AUTH_USERNAME` and a bcrypt
 `CADDY_AUTH_PASSWORD_HASH` to protect all browser routes while keeping the health
-path available. Local Docker prerequisites are unmet on the current host; remote Docker CI
+path available. The future Render template additionally requires
+`EVIDENCEFORGE_AUTH_REQUIRED=true` and a PBKDF2
+`EVIDENCEFORGE_AUTH_PASSWORD_HASH` for in-app login; hosted checks fail closed without
+it. Local Docker prerequisites are unmet on the current host; remote Docker CI
 has passed in the private repository. Persistent Render
-deployment remains unverified. No public endpoint is configured.
+deployment is deferred by the user’s local durable-storage choice. No public endpoint
+is configured. Keep the entire `.evidenceforge` directory for local backups; restarting
+the UI preserves saved research.
 
 ## Final checks
 

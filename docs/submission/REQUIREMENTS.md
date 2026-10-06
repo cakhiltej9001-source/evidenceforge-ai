@@ -7,7 +7,8 @@ update below supersedes that snapshot's live-source/report/deduplication gaps.
 source hash, interpretations and concrete gaps. The PDF contains no scored rubric
 or deadline. Baseline mechanics are implemented conservatively; actual Tavily access
 and full research are [verified with deterministic reasoning](../TAVILY_VERIFICATION_2026-10-05.md).
-Research-quality validation remains open. Paths below are
+The controlled comparison and delegated AI review are complete; general research
+accuracy remains unclaimed. See [final status](../FINAL_STATUS_2026-10-06.md). Paths below are
 relative to `src/evidenceforge/` unless marked otherwise.
 
 ## Baseline traceability
@@ -26,11 +27,11 @@ relative to `src/evidenceforge/` unless marked otherwise.
 | B10 | Critic and shared revision budget | `nodes/quality.py`; critic/citation allowance tests | Implemented; exhausted repairs cannot manufacture completion |
 | B11 | Trace claims to evidence | `nodes/quality.py`, `evidence/projection.py`; audit/support tests | Exact quotations and snapshot integrity verified; independent source truth/semantic accuracy not established |
 | B12 | Registered compiled LangGraph | `graph/research.py`, `graph/builder.py`; planning/research tests | Implemented and executed |
-| B13 | SQLite thread checkpoints and restart | `storage/checkpoints.py`, `services/research.py`; persistence/Phase 8 tests | Local process restart and scoped reconnect verified; hosted durability unverified |
+| B13 | SQLite thread checkpoints and restart | `storage/checkpoints.py`, `services/research.py`; persistence/Phase 8 tests | Local process restart and scoped reconnect verified; public hosting deferred by the user’s local-storage choice |
 | P01 | Secrets/environment configuration | `config.py`; config tests and Git/Docker excludes | Keys private/redacted; optional provider requests require explicit configuration |
 | P02 | Input validation/clarification (PDF 19) | `nodes/input_review.py`, `tests/test_production_controls.py` | Implemented for production Gemini runs: semantic categories, bounded guidance and pre-manager rejection; fixture/library legacy paths remain unchanged |
 | P03 | Progress, usage and traces (PDF 20) | `services/node_trace.py`, model-call ledger and `tests/test_production_controls.py` | Local bounded metadata tracing and durable usage/receipts implemented; payload capture is opt-in and remote tracing remains unverified |
-| P04 | Typed errors and ordered search fallback (PDF 21) | `retrieval/fallback.py`, `retrieval/wikipedia.py`, `nodes/sources.py` | Implemented as an ordered provider chain with per-provider budget receipts and provenance; live secondary-provider operation still needs hosted/live verification |
+| P04 | Typed errors and ordered search fallback (PDF 21) | `retrieval/fallback.py`, `retrieval/wikipedia.py`, `nodes/sources.py` | Implemented as an ordered provider chain with per-provider budget receipts and provenance; actual Wikipedia fallback after simulated primary failure verified on 6 October with five sources/seven passages and zero Gemini/Tavily calls |
 | P05 | Bounded evidence and prior context (PDF 21) | `evidence/retention.py`, `nodes/extraction.py`, `storage/local_context.py` | Implemented lowest-score eviction with pinned-claim protection and immutable source/acquisition retention; quality remains heuristic |
 | P06 | Phase-specific read-only tools | Model/retrieval contracts and service dependency injection | No arbitrary write/code-execution tool offered to research models |
 
@@ -43,8 +44,8 @@ relative to `src/evidenceforge/` unless marked otherwise.
 | Dispute/unit/date/source-family handling | Evidence intelligence tests and synthetic dispute replay | Explicit supported numeric grammar; broad semantic contradictions not covered |
 | Gemini durable receipts | Gemini/resume tests and recorded five-stage Phase 8 run | Historical models may be unavailable; unknown outcomes block repeats |
 | Specialized public API | Phase 10 live acquisition and mixed-source graph tests | GB half-hour shares only; now explicitly selectable in full research |
-| Docker/Render/CI | Private GitHub CI, image/nonroot/constrained research/reconnect/restore/health; official Render schema | Container execution verified; persistent hosted runtime remains open |
-| Corrected benchmark and comparison runner | Frozen v2 dataset, 40 offline matched rows, durable 140-call Gemini cap and versioned rubric | Paid comparison was blocked before execution by the environment approval-credit limit; independent human review remains unclaimed |
+| Docker/Render/CI | Private GitHub CI, image/nonroot/constrained research/reconnect/restore/health; official Render schema | Container execution and authenticated gateway verified; persistent public hosting deferred by user |
+| Corrected benchmark and comparison runner | Frozen v2 dataset, 40 offline matched rows, durable 140-call Gemini cap and versioned rubric | All 40 corrected Gemini answers saved with 136/140 approved calls; delegated AI review records quotation differences, partial conflicts and planner scope drift; human validation remains unclaimed |
 
 ## Submission readiness
 
@@ -54,14 +55,14 @@ relative to `src/evidenceforge/` unless marked otherwise.
 - [x] Measured evaluation table with N/A and failure qualifications.
 - [x] Private data exclusions and local source/bundle verification workflow.
 - [x] Delegated AI review of all 20 draft annotations and completed bounded Gemini execution; [5 October re-review](../evaluation/DELEGATED_REVIEW_2026-10-05.md) verifies all 40 saved fixture rows and proposes 16 narrower questions.
-- [ ] Independent human validation and a defensible research-quality comparison (the approved paid run is blocked before execution by the environment approval-credit limit).
+- [x] Corrected same-corpus Gemini comparison and delegated 40-row AI review, with research-quality limits disclosed. Independent human validation is not claimed.
 - [x] Private source repository and Docker runtime/remote CI verification.
-- [ ] Persistent hosted storage/auth/access/capacity verification.
+- Public hosting is deferred by the user’s local durable-storage choice; authenticated container access is CI-verified.
 - [x] Read all 23 original-PDF pages and verify requirement/page mapping.
 - [x] Implement original-PDF mixed-source/report/literal deduplication mechanics.
 - [x] Verify actual live Tavily full pipeline with configured credential, one search, exact quotation checks and fresh-service recovery (deterministic reasoning).
 - [x] Implement selected incremental production guidance; remote operation remains qualified.
-- [ ] Any separate competition/instructor delivery rules, if applicable; none are stated in this PDF.
+- Any separate competition/instructor delivery rules remain external inputs, if applicable; none are stated in this PDF.
 
 The final engineering check result is recorded in [Phase 11](../PHASE11.md).
 Older audit counts are historical and overlap; they must not be added together.

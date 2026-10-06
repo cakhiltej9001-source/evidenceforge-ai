@@ -4,22 +4,19 @@ A local research workbench that plans questions, retains source passages, follow
 coverage gaps and produces reports with inspectable claim support. Python,
 LangGraph, SQLite and an optional Streamlit UI provide the workflow.
 
-**Status:** local workflows, public energy acquisition and remote Docker CI are verified.
-The source is in a private GitHub repository; Phase 11 submission materials are prepared.
-All 20 Gemini one-shot responses are available, and the repaired workflow completed its
-model stages. [Live Tavily access and the full pipeline](docs/TAVILY_VERIFICATION_2026-10-05.md)
-are verified with deterministic reasoning and one search. Research-quality validation
-and persistent hosting need further verification. Semantic input review, ordered
-fallback, bounded evidence eviction and local traces are implemented behind the
-production policy. Explicit mixed-source
-research, paragraph summaries and conservative passage deduplication are implemented.
-The original 23-page PDF has been reviewed in the [reconciliation](docs/submission/ORIGINAL_PDF_RECONCILIATION.md).
-Synthetic demonstrations show workflow behavior, not independently verified facts.
+**Status — 6 October 2026:** the selected local deliverable is prepared.
+[All phase statuses](docs/FINAL_STATUS_2026-10-06.md) include current verification
+and limits. Both private CI jobs passed **373 tests** and authenticated Docker
+checks. The corrected Gemini comparison saved **40 answers using 136/140 calls**,
+with a documented delegated AI review. Tavily access/recovery and actual Wikipedia
+fallback are verified. Production input review, ordered fallback, bounded evidence
+retention and local traces are implemented.
 
-The corrected v2 offline comparison completed 40 matched rows with zero provider
-calls. The separately approved 140-call Gemini comparison remains staged because
-the environment approval service blocked the network command before execution;
-no new paid call ran. See [the pending-work record](docs/PENDING_FIXES_2026-10-06.md).
+The user selected **local durable storage** under a **₹5/month** hosting cap;
+public Render deployment is deferred. Saved research stays in `.evidenceforge`.
+No general research-accuracy, source-truth or independent human-validation claim is
+made. The original 23-page PDF is reconciled, and mixed-source research, supported
+paragraph summaries and conservative passage deduplication are implemented.
 
 ## Start here — Windows PowerShell
 
@@ -129,19 +126,22 @@ Never include local private data in a submission or Docker build context.
 
 ## Measured evaluation
 
-[Results and interpretation](docs/submission/EVALUATION.md) separates synthetic
-workflow scores from provider outcomes. All 40 fixture variants ran. Full-agent
-aspect coverage was 1.0 in both partitions; one-pass coverage was 0.5 development
-and 0.6667 held out. These are exact-string measures on draft synthetic labels.
+The [corrected Gemini comparison](docs/evaluation/V2_COMPARISON_REPORT_2026-10-06.md)
+used the same frozen synthetic corpus for 20 single responses and 20 workflows.
+All 136 provider calls succeeded. Both approaches retained both stated factors in
+16/16 cases, marked both conflicts and abstained in both empty-source cases.
+Workflow outcomes were 16 completed, two partial and two insufficient-evidence.
 
-The original Gemini evaluation reserved 26/30 calls. The separately authorized
-extension and repair checks used 28/40 additional calls, recovering the eight missing
-responses for 20/20 usable one-shot cases. A fresh repaired workflow made nine
-successful calls and returned two cited claims, partial at the three-pass limit.
-All 20 annotations received an [AI review](docs/evaluation/AI_REVIEW.md); the draft
-labels remain qualified for synthetic workflow checks. Research-quality validation
-is still open. [Extension results](docs/evaluation/EXTENSION_REPORT.md) retain every
-failure and disclose unknown usage/cost.
+The baseline used 20 calls/5,292 tokens; the workflow used 116 calls/139,795 tokens.
+The workflow preserves complete quotations and richer provenance, while the baseline
+uses supported minimal spans. Strict reference-string scores do not establish a
+factual-quality advantage. Workflow case 18 shows planning scope drift; the
+[AI review](docs/evaluation/V2_AI_REVIEW_2026-10-06.json) records it explicitly.
+
+Historical ledgers remain **26/30** and **28/40**, separate from the corrected
+**136/140** allowance. [Submission evaluation](docs/submission/EVALUATION.md)
+preserves earlier failures and unknown cost. No blind held-out or provider superiority
+claim follows from these synthetic cases.
 
 ## Development and deployment
 
@@ -162,13 +162,13 @@ image now places a Caddy Basic Auth gateway in front of loopback-only Streamlit;
 Render health checks remain available and all other routes can require the gateway
 secret. The
 [private repository](https://github.com/cakhiltej9001-source/evidenceforge-ai) has a
-[successful CI run](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/37253453020)
-covering **362 tests**, strict typing/lint/format, package build and Render schema.
+[successful CI run](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/37485512573)
+covering **373 tests**, strict typing/lint/format, package build and Render schema.
 Docker build, UID 10001, research/reconnect, fresh-volume synthetic backup/restore
-under 512 MB and half-CPU limits, and UI health also passed. This run verified
-source `36d1e44a414bbc9ced7a74fa151b30faffd53593`; source pushes repeat the checks.
-Persistent hosted storage/access remains unverified. No Render resources or public
-endpoint have been created. [Deployment details](docs/PHASE10.md).
+under 512 MB and half-CPU limits, UI health and authenticated gateway checks also passed. This run verified
+source `0f070d134491e2b2a161ecdfdaf987daec2ac904`; source pushes repeat the checks.
+Public hosting is deferred by the user’s local-storage choice. No Render resources
+or public endpoint have been created. [Deployment details](docs/PHASE10.md).
 
 ## Submission materials
 
@@ -181,8 +181,8 @@ endpoint have been created. [Deployment details](docs/PHASE10.md).
 
 The original 23-page PDF is now supplied and reviewed. Its graph/source/report
 requirements are mapped in the [original-PDF reconciliation](docs/submission/ORIGINAL_PDF_RECONCILIATION.md).
-Live web/API retrieval in the full research pipeline and the specified summary/source
-presentation remain incomplete. The PDF contains no grading rubric, deadline or
+Live web/API retrieval in the full research pipeline and the specified supported
+summary/source presentation are implemented within the documented limits. The PDF contains no grading rubric, deadline or
 hosting mandate; full assignment acceptance is not claimed.
 
 

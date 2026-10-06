@@ -1,5 +1,10 @@
 # EvidenceForge AI implementation plan
 
+> Current execution status: [final status, 6 October 2026](FINAL_STATUS_2026-10-06.md).
+> The plan and dated amendments below preserve historical proposals and decisions;
+> their old pending notes do not override the completed comparison, supplied PDF,
+> verified providers or the user’s choice of local durable storage.
+
 Prepared: 30 September 2026, Asia/Calcutta. Phase 0: planning.
 
 ## 1. Source authority and repository inspection

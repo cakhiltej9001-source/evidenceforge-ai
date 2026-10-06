@@ -12,12 +12,11 @@ families are inspectable heuristics, not calibrated trust probabilities.
 The replay and fixture benchmark use synthetic content and scripted reasoning.
 The repair replay deliberately injects one incorrect first draft. Its real audit
 and bounded rewrite demonstrate control flow, not a measured hallucination rate.
-The 20 evaluation labels have a documented Codex AI review; independent human
-validation is not claimed. The corrected offline v2 comparison has 40 saved rows
-and zero provider calls. The approved paid comparison did not start because the
-environment approval service rejected the network command after exhausting its
-review credits. Broader synthetic questions and short dependency corpora do not
-establish source truth or a matched research-quality comparison.
+The corrected comparison saved 40 Gemini answers using 136/140 approved calls,
+all HTTP 200 and validated. The [AI review](../evaluation/V2_COMPARISON_REPORT_2026-10-06.md)
+preserves complete-sentence/minimal-span quotation differences and planner scope drift
+in workflow case 18. Both conflict workflows remain partial. Independent human
+validation, general factual accuracy and source truth remain unclaimed.
 
 ## Sources, documents and providers
 
@@ -50,24 +49,23 @@ nonroot UID, constrained research/reconnect, fresh-volume synthetic restore and
 UI health. Official Render schema and local restart checks also passed. No
 persistent Render instance or authenticated remote access path has been verified.
 The local PC still lacks Docker. Render API/account access is [verified](../RENDER_ACCESS_VERIFICATION_2026-10-05.md).
-Actual hosting still requires repository access verification, a deployment/access
-choice and an approved spending cap. Synthetic restore does not verify a future production backup.
+The user selected local durable storage under a ₹5/month cap; public hosting is
+deferred. Authenticated Docker gateway checks passed in CI, including anonymous
+browser/upload/media/WebSocket rejection and `RENDER=true` app login configuration.
+Keep the complete local `.evidenceforge` directory for backup/recovery. Synthetic
+restore verifies mechanics, not a future production backup of real user data.
 
-## Remaining external inputs
+## Optional future validation
 
-| Input | Why it is required |
+| Work | Current boundary |
 |---|---|
-| Benchmark corrections and semantic comparison | Corrected v2 questions and offline protocol are complete; the approved paid run was blocked before execution by the environment approval-credit limit. Independent human validation is not claimed |
-| Hosting deployment/access choice and spending cap | Render API access verified; repository connection and actual persistent runtime/storage/security checks remain pending |
-| Tavily | Credential/acquisition/full pipeline gate closed; combined real Gemini/Tavily semantic research quality remains unverified |
-| Any separate grading/submission brief, if one exists | The reviewed original PDF provides no rubric, deadline or delivery format |
-| Deadline and submission format | Needed for final delivery/publishing decisions |
+| Independent human review / real-source benchmark | Delegated AI review is complete; broader research validation is not established |
+| Public hosted deployment | Deferred by the user’s selected local-storage scope; no paid resource created |
+| Combined real Gemini/Tavily research-quality study | Tavily access and Gemini structured execution passed separately; synthetic results do not establish combined semantic quality |
+| Separate grading/submission rules | The supplied PDF has no scored rubric, deadline or delivery format |
 
-Subsequent user delegation authorized 40 additional Gemini calls and the private
-repository/upload/CI; these actions executed, with 28 additional calls reserved.
-Codex reviewed all 20 labels as AI without supplying a human attestation. Persistent
-hosting remains pending. Tavily configuration and a bounded live full pipeline check are complete. No award or provider
-outperformance is established by these checks.
+No missing credential, Gemini allowance or hosting decision blocks the selected
+local deliverable. Original paid failures and ledgers remain preserved.
 
 ## Verified original-PDF differences
 
@@ -81,7 +79,7 @@ preserve distinct facts and qualifiers; semantic deduplication is not establishe
 If fewer than two supported summary claims exist, a shorter summary is disclosed.
 Production guidance now includes semantic input classification, ordered search
 fallback, lowest-score evidence eviction and bounded local tracing. These are
-locally tested; remote provider diversity, remote tracing and hosted operation
-remain unverified.
+locally tested; a real Wikipedia fallback after simulated primary failure also
+passed. Remote tracing and hosted operation remain unverified or deferred.
 The PDF describes API-or-MCP extension and replaceable search providers; it does
 not mandate a particular MCP server, hosting platform or human-reviewed benchmark.

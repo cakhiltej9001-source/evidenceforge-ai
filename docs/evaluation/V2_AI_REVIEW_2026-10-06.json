@@ -1,0 +1,1300 @@
+{
+  "reviewer": "Codex, primary agent; delegated AI review on behalf of the user",
+  "date": "2026-10-06",
+  "human_attestation": false,
+  "source_commit": "0f070d134491e2b2a161ecdfdaf987daec2ac904",
+  "dataset_sha256": "36dce5628b62dce34e5d5543839f6995c581f6b11121fdc38811c9ddbec092f7",
+  "results_sha256": "5bb1d9b8fe881f50cdda7427dda82585504c553547d083041effba2a6dfd11e1",
+  "ledger_statuses": {
+    "http_200": 136
+  },
+  "rubric": "V2_SEMANTIC_RUBRIC.md",
+  "limitations": [
+    "Synthetic frozen corpora; no blind held-out generalization claim.",
+    "The full-sentence rubric is stricter than the baseline prompt\u2019s supported-minimal-span instruction.",
+    "Workflow case 18 has planner scope drift; no model-accuracy guarantee follows from exact citation checks.",
+    "No additional paid request was made during this review."
+  ],
+  "reviews": [
+    {
+      "case_id": "diverse_01",
+      "variant": "single_response",
+      "status": "completed",
+      "stop_reason": null,
+      "dimensions": {
+        "scope": {
+          "decision": "pass",
+          "reason": "Both supplied factors/values retained, or explicit abstention for the empty corpus."
+        },
+        "citation_identity": {
+          "decision": "pass",
+          "reason": "Every baseline source ID belongs to its supplied corpus; every workflow evidence ID exists in retained state and its completed claim audit supports the quote."
+        },
+        "quotation_fidelity": {
+          "decision": "revise",
+          "reason": "Supported minimal substring quotations omit the Synthetic fixture label; eight cases also omit the final period. Revise under this rubric\u2019s complete-sentence rule, without treating these as false factors."
+        },
+        "qualification_fidelity": {
+          "decision": "pass",
+          "reason": "Stated factors retained; dispute quotations keep entity, annual date, units, all-plants scope and standard-operation condition. Synthetic context remains part of the supplied question/corpus."
+        },
+        "conflict_handling": {
+          "decision": "pass",
+          "reason": "No false dispute is asserted in these controlled factor/empty-source cases."
+        },
+        "unsupported_content": {
+          "decision": "pass",
+          "reason": "All emitted factual claims are supported by the supplied synthetic corpus; this check does not validate real-world truth."
+        }
+      }
+    },
+    {
+      "case_id": "diverse_01",
+      "variant": "workflow",
+      "status": "completed",
+      "stop_reason": "sufficient",
+      "dimensions": {
+        "scope": {
+          "decision": "pass",
+          "reason": "Both supplied factors/values retained, or explicit abstention for the empty corpus."
+        },
+        "citation_identity": {
+          "decision": "pass",
+          "reason": "Every baseline source ID belongs to its supplied corpus; every workflow evidence ID exists in retained state and its completed claim audit supports the quote."
+        },
+        "quotation_fidelity": {
+          "decision": "pass",
+          "reason": "Complete retained sentences copied, or no claims for an empty corpus."
+        },
+        "qualification_fidelity": {
+          "decision": "pass",
+          "reason": "Stated factors retained; dispute quotations keep entity, annual date, units, all-plants scope and standard-operation condition. Synthetic context remains part of the supplied question/corpus."
+        },
+        "conflict_handling": {
+          "decision": "pass",
+          "reason": "No false dispute is asserted in these controlled factor/empty-source cases."
+        },
+        "unsupported_content": {
+          "decision": "pass",
+          "reason": "All emitted factual claims are supported by the supplied synthetic corpus; this check does not validate real-world truth."
+        }
+      }
+    },
+    {
+      "case_id": "diverse_02",
+      "variant": "single_response",
+      "status": "completed",
+      "stop_reason": null,
+      "dimensions": {
+        "scope": {
+          "decision": "pass",
+          "reason": "Both supplied factors/values retained, or explicit abstention for the empty corpus."
+        },
+        "citation_identity": {
+          "decision": "pass",
+          "reason": "Every baseline source ID belongs to its supplied corpus; every workflow evidence ID exists in retained state and its completed claim audit supports the quote."
+        },
+        "quotation_fidelity": {
+          "decision": "revise",
+          "reason": "Supported minimal substring quotations omit the Synthetic fixture label; eight cases also omit the final period. Revise under this rubric\u2019s complete-sentence rule, without treating these as false factors."
+        },
+        "qualification_fidelity": {
+          "decision": "pass",
+          "reason": "Stated factors retained; dispute quotations keep entity, annual date, units, all-plants scope and standard-operation condition. Synthetic context remains part of the supplied question/corpus."
+        },
+        "conflict_handling": {
+          "decision": "pass",
+          "reason": "No false dispute is asserted in these controlled factor/empty-source cases."
+        },
+        "unsupported_content": {
+          "decision": "pass",
+          "reason": "All emitted factual claims are supported by the supplied synthetic corpus; this check does not validate real-world truth."
+        }
+      }
+    },
+    {
+      "case_id": "diverse_02",
+      "variant": "workflow",
+      "status": "completed",
+      "stop_reason": "sufficient",
+      "dimensions": {
+        "scope": {
+          "decision": "pass",
+          "reason": "Both supplied factors/values retained, or explicit abstention for the empty corpus."
+        },
+        "citation_identity": {
+          "decision": "pass",
+          "reason": "Every baseline source ID belongs to its supplied corpus; every workflow evidence ID exists in retained state and its completed claim audit supports the quote."
+        },
+        "quotation_fidelity": {
+          "decision": "pass",
+          "reason": "Complete retained sentences copied, or no claims for an empty corpus."
+        },
+        "qualification_fidelity": {
+          "decision": "pass",
+          "reason": "Stated factors retained; dispute quotations keep entity, annual date, units, all-plants scope and standard-operation condition. Synthetic context remains part of the supplied question/corpus."
+        },
+        "conflict_handling": {
+          "decision": "pass",
+          "reason": "No false dispute is asserted in these controlled factor/empty-source cases."
+        },
+        "unsupported_content": {
+          "decision": "pass",
+          "reason": "All emitted factual claims are supported by the supplied synthetic corpus; this check does not validate real-world truth."
+        }
+      }
+    },
+    {
+      "case_id": "diverse_03",
+      "variant": "single_response",
+      "status": "completed",
+      "stop_reason": null,
+      "dimensions": {
+        "scope": {
+          "decision": "pass",
+          "reason": "Both supplied factors/values retained, or explicit abstention for the empty corpus."
+        },
+        "citation_identity": {
+          "decision": "pass",
+          "reason": "Every baseline source ID belongs to its supplied corpus; every workflow evidence ID exists in retained state and its completed claim audit supports the quote."
+        },
+        "quotation_fidelity": {
+          "decision": "revise",
+          "reason": "Supported minimal substring quotations omit the Synthetic fixture label; eight cases also omit the final period. Revise under this rubric\u2019s complete-sentence rule, without treating these as false factors."
+        },
+        "qualification_fidelity": {
+          "decision": "pass",
+          "reason": "Stated factors retained; dispute quotations keep entity, annual date, units, all-plants scope and standard-operation condition. Synthetic context remains part of the supplied question/corpus."
+        },
+        "conflict_handling": {
+          "decision": "pass",
+          "reason": "No false dispute is asserted in these controlled factor/empty-source cases."
+        },
+        "unsupported_content": {
+          "decision": "pass",
+          "reason": "All emitted factual claims are supported by the supplied synthetic corpus; this check does not validate real-world truth."
+        }
+      }
+    },
+    {
+      "case_id": "diverse_03",
+      "variant": "workflow",
+      "status": "completed",
+      "stop_reason": "sufficient",
+      "dimensions": {
+        "scope": {
+          "decision": "pass",
+          "reason": "Both supplied factors/values retained, or explicit abstention for the empty corpus."
+        },
+        "citation_identity": {
+          "decision": "pass",
+          "reason": "Every baseline source ID belongs to its supplied corpus; every workflow evidence ID exists in retained state and its completed claim audit supports the quote."
+        },
+        "quotation_fidelity": {
+          "decision": "pass",
+          "reason": "Complete retained sentences copied, or no claims for an empty corpus."
+        },
+        "qualification_fidelity": {
+          "decision": "pass",
+          "reason": "Stated factors retained; dispute quotations keep entity, annual date, units, all-plants scope and standard-operation condition. Synthetic context remains part of the supplied question/corpus."
+        },
+        "conflict_handling": {
+          "decision": "pass",
+          "reason": "No false dispute is asserted in these controlled factor/empty-source cases."
+        },
+        "unsupported_content": {
+          "decision": "pass",
+          "reason": "All emitted factual claims are supported by the supplied synthetic corpus; this check does not validate real-world truth."
+        }
+      }
+    },
+    {
+      "case_id": "diverse_04",
+      "variant": "single_response",
+      "status": "completed",
+      "stop_reason": null,
+      "dimensions": {
+        "scope": {
+          "decision": "pass",
+          "reason": "Both supplied factors/values retained, or explicit abstention for the empty corpus."
+        },
+        "citation_identity": {
+          "decision": "pass",
+          "reason": "Every baseline source ID belongs to its supplied corpus; every workflow evidence ID exists in retained state and its completed claim audit supports the quote."
+        },
+        "quotation_fidelity": {
+          "decision": "revise",
+          "reason": "Supported minimal substring quotations omit the Synthetic fixture label; eight cases also omit the final period. Revise under this rubric\u2019s complete-sentence rule, without treating these as false factors."
+        },
+        "qualification_fidelity": {
+          "decision": "pass",
+          "reason": "Stated factors retained; dispute quotations keep entity, annual date, units, all-plants scope and standard-operation condition. Synthetic context remains part of the supplied question/corpus."
+        },
+        "conflict_handling": {
+          "decision": "pass",
+          "reason": "No false dispute is asserted in these controlled factor/empty-source cases."
+        },
+        "unsupported_content": {
+          "decision": "pass",
+          "reason": "All emitted factual claims are supported by the supplied synthetic corpus; this check does not validate real-world truth."
+        }
+      }
+    },
+    {
+      "case_id": "diverse_04",
+      "variant": "workflow",
+      "status": "completed",
+      "stop_reason": "sufficient",
+      "dimensions": {
+        "scope": {
+          "decision": "pass",
+          "reason": "Both supplied factors/values retained, or explicit abstention for the empty corpus."
+        },
+        "citation_identity": {
+          "decision": "pass",
+          "reason": "Every baseline source ID belongs to its supplied corpus; every workflow evidence ID exists in retained state and its completed claim audit supports the quote."
+        },
+        "quotation_fidelity": {
+          "decision": "pass",
+          "reason": "Complete retained sentences copied, or no claims for an empty corpus."
+        },
+        "qualification_fidelity": {
+          "decision": "pass",
+          "reason": "Stated factors retained; dispute quotations keep entity, annual date, units, all-plants scope and standard-operation condition. Synthetic context remains part of the supplied question/corpus."
+        },
+        "conflict_handling": {
+          "decision": "pass",
+          "reason": "No false dispute is asserted in these controlled factor/empty-source cases."
+        },
+        "unsupported_content": {
+          "decision": "pass",
+          "reason": "All emitted factual claims are supported by the supplied synthetic corpus; this check does not validate real-world truth."
+        }
+      }
+    },
+    {
+      "case_id": "diverse_05",
+      "variant": "single_response",
+      "status": "completed",
+      "stop_reason": null,
+      "dimensions": {
+        "scope": {
+          "decision": "pass",
+          "reason": "Both supplied factors/values retained, or explicit abstention for the empty corpus."
+        },
+        "citation_identity": {
+          "decision": "pass",
+          "reason": "Every baseline source ID belongs to its supplied corpus; every workflow evidence ID exists in retained state and its completed claim audit supports the quote."
+        },
+        "quotation_fidelity": {
+          "decision": "revise",
+          "reason": "Supported minimal substring quotations omit the Synthetic fixture label; eight cases also omit the final period. Revise under this rubric\u2019s complete-sentence rule, without treating these as false factors."
+        },
+        "qualification_fidelity": {
+          "decision": "pass",
+          "reason": "Stated factors retained; dispute quotations keep entity, annual date, units, all-plants scope and standard-operation condition. Synthetic context remains part of the supplied question/corpus."
+        },
+        "conflict_handling": {
+          "decision": "pass",
+          "reason": "No false dispute is asserted in these controlled factor/empty-source cases."
+        },
+        "unsupported_content": {
+          "decision": "pass",
+          "reason": "All emitted factual claims are supported by the supplied synthetic corpus; this check does not validate real-world truth."
+        }
+      }
+    },
+    {
+      "case_id": "diverse_05",
+      "variant": "workflow",
+      "status": "completed",
+      "stop_reason": "sufficient",
+      "dimensions": {
+        "scope": {
+          "decision": "pass",
+          "reason": "Both supplied factors/values retained, or explicit abstention for the empty corpus."
+        },
+        "citation_identity": {
+          "decision": "pass",
+          "reason": "Every baseline source ID belongs to its supplied corpus; every workflow evidence ID exists in retained state and its completed claim audit supports the quote."
+        },
+        "quotation_fidelity": {
+          "decision": "pass",
+          "reason": "Complete retained sentences copied, or no claims for an empty corpus."
+        },
+        "qualification_fidelity": {
+          "decision": "pass",
+          "reason": "Stated factors retained; dispute quotations keep entity, annual date, units, all-plants scope and standard-operation condition. Synthetic context remains part of the supplied question/corpus."
+        },
+        "conflict_handling": {
+          "decision": "pass",
+          "reason": "No false dispute is asserted in these controlled factor/empty-source cases."
+        },
+        "unsupported_content": {
+          "decision": "pass",
+          "reason": "All emitted factual claims are supported by the supplied synthetic corpus; this check does not validate real-world truth."
+        }
+      }
+    },
+    {
+      "case_id": "diverse_06",
+      "variant": "single_response",
+      "status": "completed",
+      "stop_reason": null,
+      "dimensions": {
+        "scope": {
+          "decision": "pass",
+          "reason": "Both supplied factors/values retained, or explicit abstention for the empty corpus."
+        },
+        "citation_identity": {
+          "decision": "pass",
+          "reason": "Every baseline source ID belongs to its supplied corpus; every workflow evidence ID exists in retained state and its completed claim audit supports the quote."
+        },
+        "quotation_fidelity": {
+          "decision": "revise",
+          "reason": "Supported minimal substring quotations omit the Synthetic fixture label; eight cases also omit the final period. Revise under this rubric\u2019s complete-sentence rule, without treating these as false factors."
+        },
+        "qualification_fidelity": {
+          "decision": "pass",
+          "reason": "Stated factors retained; dispute quotations keep entity, annual date, units, all-plants scope and standard-operation condition. Synthetic context remains part of the supplied question/corpus."
+        },
+        "conflict_handling": {
+          "decision": "pass",
+          "reason": "No false dispute is asserted in these controlled factor/empty-source cases."
+        },
+        "unsupported_content": {
+          "decision": "pass",
+          "reason": "All emitted factual claims are supported by the supplied synthetic corpus; this check does not validate real-world truth."
+        }
+      }
+    },
+    {
+      "case_id": "diverse_06",
+      "variant": "workflow",
+      "status": "completed",
+      "stop_reason": "sufficient",
+      "dimensions": {
+        "scope": {
+          "decision": "pass",
+          "reason": "Both supplied factors/values retained, or explicit abstention for the empty corpus."
+        },
+        "citation_identity": {
+          "decision": "pass",
+          "reason": "Every baseline source ID belongs to its supplied corpus; every workflow evidence ID exists in retained state and its completed claim audit supports the quote."
+        },
+        "quotation_fidelity": {
+          "decision": "pass",
+          "reason": "Complete retained sentences copied, or no claims for an empty corpus."
+        },
+        "qualification_fidelity": {
+          "decision": "pass",
+          "reason": "Stated factors retained; dispute quotations keep entity, annual date, units, all-plants scope and standard-operation condition. Synthetic context remains part of the supplied question/corpus."
+        },
+        "conflict_handling": {
+          "decision": "pass",
+          "reason": "No false dispute is asserted in these controlled factor/empty-source cases."
+        },
+        "unsupported_content": {
+          "decision": "pass",
+          "reason": "All emitted factual claims are supported by the supplied synthetic corpus; this check does not validate real-world truth."
+        }
+      }
+    },
+    {
+      "case_id": "diverse_07",
+      "variant": "single_response",
+      "status": "completed",
+      "stop_reason": null,
+      "dimensions": {
+        "scope": {
+          "decision": "pass",
+          "reason": "Both supplied factors/values retained, or explicit abstention for the empty corpus."
+        },
+        "citation_identity": {
+          "decision": "pass",
+          "reason": "Every baseline source ID belongs to its supplied corpus; every workflow evidence ID exists in retained state and its completed claim audit supports the quote."
+        },
+        "quotation_fidelity": {
+          "decision": "revise",
+          "reason": "Supported minimal substring quotations omit the Synthetic fixture label; eight cases also omit the final period. Revise under this rubric\u2019s complete-sentence rule, without treating these as false factors."
+        },
+        "qualification_fidelity": {
+          "decision": "pass",
+          "reason": "Stated factors retained; dispute quotations keep entity, annual date, units, all-plants scope and standard-operation condition. Synthetic context remains part of the supplied question/corpus."
+        },
+        "conflict_handling": {
+          "decision": "pass",
+          "reason": "No false dispute is asserted in these controlled factor/empty-source cases."
+        },
+        "unsupported_content": {
+          "decision": "pass",
+          "reason": "All emitted factual claims are supported by the supplied synthetic corpus; this check does not validate real-world truth."
+        }
+      }
+    },
+    {
+      "case_id": "diverse_07",
+      "variant": "workflow",
+      "status": "completed",
+      "stop_reason": "sufficient",
+      "dimensions": {
+        "scope": {
+          "decision": "pass",
+          "reason": "Both supplied factors/values retained, or explicit abstention for the empty corpus."
+        },
+        "citation_identity": {
+          "decision": "pass",
+          "reason": "Every baseline source ID belongs to its supplied corpus; every workflow evidence ID exists in retained state and its completed claim audit supports the quote."
+        },
+        "quotation_fidelity": {
+          "decision": "pass",
+          "reason": "Complete retained sentences copied, or no claims for an empty corpus."
+        },
+        "qualification_fidelity": {
+          "decision": "pass",
+          "reason": "Stated factors retained; dispute quotations keep entity, annual date, units, all-plants scope and standard-operation condition. Synthetic context remains part of the supplied question/corpus."
+        },
+        "conflict_handling": {
+          "decision": "pass",
+          "reason": "No false dispute is asserted in these controlled factor/empty-source cases."
+        },
+        "unsupported_content": {
+          "decision": "pass",
+          "reason": "All emitted factual claims are supported by the supplied synthetic corpus; this check does not validate real-world truth."
+        }
+      }
+    },
+    {
+      "case_id": "diverse_08",
+      "variant": "single_response",
+      "status": "completed",
+      "stop_reason": null,
+      "dimensions": {
+        "scope": {
+          "decision": "pass",
+          "reason": "Both supplied factors/values retained, or explicit abstention for the empty corpus."
+        },
+        "citation_identity": {
+          "decision": "pass",
+          "reason": "Every baseline source ID belongs to its supplied corpus; every workflow evidence ID exists in retained state and its completed claim audit supports the quote."
+        },
+        "quotation_fidelity": {
+          "decision": "revise",
+          "reason": "Supported minimal substring quotations omit the Synthetic fixture label; eight cases also omit the final period. Revise under this rubric\u2019s complete-sentence rule, without treating these as false factors."
+        },
+        "qualification_fidelity": {
+          "decision": "pass",
+          "reason": "Stated factors retained; dispute quotations keep entity, annual date, units, all-plants scope and standard-operation condition. Synthetic context remains part of the supplied question/corpus."
+        },
+        "conflict_handling": {
+          "decision": "pass",
+          "reason": "No false dispute is asserted in these controlled factor/empty-source cases."
+        },
+        "unsupported_content": {
+          "decision": "pass",
+          "reason": "All emitted factual claims are supported by the supplied synthetic corpus; this check does not validate real-world truth."
+        }
+      }
+    },
+    {
+      "case_id": "diverse_08",
+      "variant": "workflow",
+      "status": "completed",
+      "stop_reason": "sufficient",
+      "dimensions": {
+        "scope": {
+          "decision": "pass",
+          "reason": "Both supplied factors/values retained, or explicit abstention for the empty corpus."
+        },
+        "citation_identity": {
+          "decision": "pass",
+          "reason": "Every baseline source ID belongs to its supplied corpus; every workflow evidence ID exists in retained state and its completed claim audit supports the quote."
+        },
+        "quotation_fidelity": {
+          "decision": "pass",
+          "reason": "Complete retained sentences copied, or no claims for an empty corpus."
+        },
+        "qualification_fidelity": {
+          "decision": "pass",
+          "reason": "Stated factors retained; dispute quotations keep entity, annual date, units, all-plants scope and standard-operation condition. Synthetic context remains part of the supplied question/corpus."
+        },
+        "conflict_handling": {
+          "decision": "pass",
+          "reason": "No false dispute is asserted in these controlled factor/empty-source cases."
+        },
+        "unsupported_content": {
+          "decision": "pass",
+          "reason": "All emitted factual claims are supported by the supplied synthetic corpus; this check does not validate real-world truth."
+        }
+      }
+    },
+    {
+      "case_id": "diverse_09",
+      "variant": "single_response",
+      "status": "completed",
+      "stop_reason": null,
+      "dimensions": {
+        "scope": {
+          "decision": "pass",
+          "reason": "Both supplied factors/values retained, or explicit abstention for the empty corpus."
+        },
+        "citation_identity": {
+          "decision": "pass",
+          "reason": "Every baseline source ID belongs to its supplied corpus; every workflow evidence ID exists in retained state and its completed claim audit supports the quote."
+        },
+        "quotation_fidelity": {
+          "decision": "revise",
+          "reason": "Supported minimal substring quotations omit the Synthetic fixture label; eight cases also omit the final period. Revise under this rubric\u2019s complete-sentence rule, without treating these as false factors."
+        },
+        "qualification_fidelity": {
+          "decision": "pass",
+          "reason": "Stated factors retained; dispute quotations keep entity, annual date, units, all-plants scope and standard-operation condition. Synthetic context remains part of the supplied question/corpus."
+        },
+        "conflict_handling": {
+          "decision": "pass",
+          "reason": "No false dispute is asserted in these controlled factor/empty-source cases."
+        },
+        "unsupported_content": {
+          "decision": "pass",
+          "reason": "All emitted factual claims are supported by the supplied synthetic corpus; this check does not validate real-world truth."
+        }
+      }
+    },
+    {
+      "case_id": "diverse_09",
+      "variant": "workflow",
+      "status": "completed",
+      "stop_reason": "sufficient",
+      "dimensions": {
+        "scope": {
+          "decision": "pass",
+          "reason": "Both supplied factors/values retained, or explicit abstention for the empty corpus."
+        },
+        "citation_identity": {
+          "decision": "pass",
+          "reason": "Every baseline source ID belongs to its supplied corpus; every workflow evidence ID exists in retained state and its completed claim audit supports the quote."
+        },
+        "quotation_fidelity": {
+          "decision": "pass",
+          "reason": "Complete retained sentences copied, or no claims for an empty corpus."
+        },
+        "qualification_fidelity": {
+          "decision": "pass",
+          "reason": "Stated factors retained; dispute quotations keep entity, annual date, units, all-plants scope and standard-operation condition. Synthetic context remains part of the supplied question/corpus."
+        },
+        "conflict_handling": {
+          "decision": "pass",
+          "reason": "No false dispute is asserted in these controlled factor/empty-source cases."
+        },
+        "unsupported_content": {
+          "decision": "pass",
+          "reason": "All emitted factual claims are supported by the supplied synthetic corpus; this check does not validate real-world truth."
+        }
+      }
+    },
+    {
+      "case_id": "diverse_10",
+      "variant": "single_response",
+      "status": "completed",
+      "stop_reason": null,
+      "dimensions": {
+        "scope": {
+          "decision": "pass",
+          "reason": "Both supplied factors/values retained, or explicit abstention for the empty corpus."
+        },
+        "citation_identity": {
+          "decision": "pass",
+          "reason": "Every baseline source ID belongs to its supplied corpus; every workflow evidence ID exists in retained state and its completed claim audit supports the quote."
+        },
+        "quotation_fidelity": {
+          "decision": "revise",
+          "reason": "Supported minimal substring quotations omit the Synthetic fixture label; eight cases also omit the final period. Revise under this rubric\u2019s complete-sentence rule, without treating these as false factors."
+        },
+        "qualification_fidelity": {
+          "decision": "pass",
+          "reason": "Stated factors retained; dispute quotations keep entity, annual date, units, all-plants scope and standard-operation condition. Synthetic context remains part of the supplied question/corpus."
+        },
+        "conflict_handling": {
+          "decision": "pass",
+          "reason": "No false dispute is asserted in these controlled factor/empty-source cases."
+        },
+        "unsupported_content": {
+          "decision": "pass",
+          "reason": "All emitted factual claims are supported by the supplied synthetic corpus; this check does not validate real-world truth."
+        }
+      }
+    },
+    {
+      "case_id": "diverse_10",
+      "variant": "workflow",
+      "status": "completed",
+      "stop_reason": "sufficient",
+      "dimensions": {
+        "scope": {
+          "decision": "pass",
+          "reason": "Both supplied factors/values retained, or explicit abstention for the empty corpus."
+        },
+        "citation_identity": {
+          "decision": "pass",
+          "reason": "Every baseline source ID belongs to its supplied corpus; every workflow evidence ID exists in retained state and its completed claim audit supports the quote."
+        },
+        "quotation_fidelity": {
+          "decision": "pass",
+          "reason": "Complete retained sentences copied, or no claims for an empty corpus."
+        },
+        "qualification_fidelity": {
+          "decision": "pass",
+          "reason": "Stated factors retained; dispute quotations keep entity, annual date, units, all-plants scope and standard-operation condition. Synthetic context remains part of the supplied question/corpus."
+        },
+        "conflict_handling": {
+          "decision": "pass",
+          "reason": "No false dispute is asserted in these controlled factor/empty-source cases."
+        },
+        "unsupported_content": {
+          "decision": "pass",
+          "reason": "All emitted factual claims are supported by the supplied synthetic corpus; this check does not validate real-world truth."
+        }
+      }
+    },
+    {
+      "case_id": "diverse_11",
+      "variant": "single_response",
+      "status": "completed",
+      "stop_reason": null,
+      "dimensions": {
+        "scope": {
+          "decision": "pass",
+          "reason": "Both supplied factors/values retained, or explicit abstention for the empty corpus."
+        },
+        "citation_identity": {
+          "decision": "pass",
+          "reason": "Every baseline source ID belongs to its supplied corpus; every workflow evidence ID exists in retained state and its completed claim audit supports the quote."
+        },
+        "quotation_fidelity": {
+          "decision": "revise",
+          "reason": "Supported minimal substring quotations omit the Synthetic fixture label; eight cases also omit the final period. Revise under this rubric\u2019s complete-sentence rule, without treating these as false factors."
+        },
+        "qualification_fidelity": {
+          "decision": "pass",
+          "reason": "Stated factors retained; dispute quotations keep entity, annual date, units, all-plants scope and standard-operation condition. Synthetic context remains part of the supplied question/corpus."
+        },
+        "conflict_handling": {
+          "decision": "pass",
+          "reason": "No false dispute is asserted in these controlled factor/empty-source cases."
+        },
+        "unsupported_content": {
+          "decision": "pass",
+          "reason": "All emitted factual claims are supported by the supplied synthetic corpus; this check does not validate real-world truth."
+        }
+      }
+    },
+    {
+      "case_id": "diverse_11",
+      "variant": "workflow",
+      "status": "completed",
+      "stop_reason": "sufficient",
+      "dimensions": {
+        "scope": {
+          "decision": "pass",
+          "reason": "Both supplied factors/values retained, or explicit abstention for the empty corpus."
+        },
+        "citation_identity": {
+          "decision": "pass",
+          "reason": "Every baseline source ID belongs to its supplied corpus; every workflow evidence ID exists in retained state and its completed claim audit supports the quote."
+        },
+        "quotation_fidelity": {
+          "decision": "pass",
+          "reason": "Complete retained sentences copied, or no claims for an empty corpus."
+        },
+        "qualification_fidelity": {
+          "decision": "pass",
+          "reason": "Stated factors retained; dispute quotations keep entity, annual date, units, all-plants scope and standard-operation condition. Synthetic context remains part of the supplied question/corpus."
+        },
+        "conflict_handling": {
+          "decision": "pass",
+          "reason": "No false dispute is asserted in these controlled factor/empty-source cases."
+        },
+        "unsupported_content": {
+          "decision": "pass",
+          "reason": "All emitted factual claims are supported by the supplied synthetic corpus; this check does not validate real-world truth."
+        }
+      }
+    },
+    {
+      "case_id": "diverse_12",
+      "variant": "single_response",
+      "status": "completed",
+      "stop_reason": null,
+      "dimensions": {
+        "scope": {
+          "decision": "pass",
+          "reason": "Both supplied factors/values retained, or explicit abstention for the empty corpus."
+        },
+        "citation_identity": {
+          "decision": "pass",
+          "reason": "Every baseline source ID belongs to its supplied corpus; every workflow evidence ID exists in retained state and its completed claim audit supports the quote."
+        },
+        "quotation_fidelity": {
+          "decision": "revise",
+          "reason": "Supported minimal substring quotations omit the Synthetic fixture label; eight cases also omit the final period. Revise under this rubric\u2019s complete-sentence rule, without treating these as false factors."
+        },
+        "qualification_fidelity": {
+          "decision": "pass",
+          "reason": "Stated factors retained; dispute quotations keep entity, annual date, units, all-plants scope and standard-operation condition. Synthetic context remains part of the supplied question/corpus."
+        },
+        "conflict_handling": {
+          "decision": "pass",
+          "reason": "No false dispute is asserted in these controlled factor/empty-source cases."
+        },
+        "unsupported_content": {
+          "decision": "pass",
+          "reason": "All emitted factual claims are supported by the supplied synthetic corpus; this check does not validate real-world truth."
+        }
+      }
+    },
+    {
+      "case_id": "diverse_12",
+      "variant": "workflow",
+      "status": "completed",
+      "stop_reason": "sufficient",
+      "dimensions": {
+        "scope": {
+          "decision": "pass",
+          "reason": "Both supplied factors/values retained, or explicit abstention for the empty corpus."
+        },
+        "citation_identity": {
+          "decision": "pass",
+          "reason": "Every baseline source ID belongs to its supplied corpus; every workflow evidence ID exists in retained state and its completed claim audit supports the quote."
+        },
+        "quotation_fidelity": {
+          "decision": "pass",
+          "reason": "Complete retained sentences copied, or no claims for an empty corpus."
+        },
+        "qualification_fidelity": {
+          "decision": "pass",
+          "reason": "Stated factors retained; dispute quotations keep entity, annual date, units, all-plants scope and standard-operation condition. Synthetic context remains part of the supplied question/corpus."
+        },
+        "conflict_handling": {
+          "decision": "pass",
+          "reason": "No false dispute is asserted in these controlled factor/empty-source cases."
+        },
+        "unsupported_content": {
+          "decision": "pass",
+          "reason": "All emitted factual claims are supported by the supplied synthetic corpus; this check does not validate real-world truth."
+        }
+      }
+    },
+    {
+      "case_id": "diverse_13",
+      "variant": "single_response",
+      "status": "completed",
+      "stop_reason": null,
+      "dimensions": {
+        "scope": {
+          "decision": "pass",
+          "reason": "Both supplied factors/values retained, or explicit abstention for the empty corpus."
+        },
+        "citation_identity": {
+          "decision": "pass",
+          "reason": "Every baseline source ID belongs to its supplied corpus; every workflow evidence ID exists in retained state and its completed claim audit supports the quote."
+        },
+        "quotation_fidelity": {
+          "decision": "revise",
+          "reason": "Supported minimal substring quotations omit the Synthetic fixture label; eight cases also omit the final period. Revise under this rubric\u2019s complete-sentence rule, without treating these as false factors."
+        },
+        "qualification_fidelity": {
+          "decision": "pass",
+          "reason": "Stated factors retained; dispute quotations keep entity, annual date, units, all-plants scope and standard-operation condition. Synthetic context remains part of the supplied question/corpus."
+        },
+        "conflict_handling": {
+          "decision": "pass",
+          "reason": "No false dispute is asserted in these controlled factor/empty-source cases."
+        },
+        "unsupported_content": {
+          "decision": "pass",
+          "reason": "All emitted factual claims are supported by the supplied synthetic corpus; this check does not validate real-world truth."
+        }
+      }
+    },
+    {
+      "case_id": "diverse_13",
+      "variant": "workflow",
+      "status": "completed",
+      "stop_reason": "sufficient",
+      "dimensions": {
+        "scope": {
+          "decision": "pass",
+          "reason": "Both supplied factors/values retained, or explicit abstention for the empty corpus."
+        },
+        "citation_identity": {
+          "decision": "pass",
+          "reason": "Every baseline source ID belongs to its supplied corpus; every workflow evidence ID exists in retained state and its completed claim audit supports the quote."
+        },
+        "quotation_fidelity": {
+          "decision": "pass",
+          "reason": "Complete retained sentences copied, or no claims for an empty corpus."
+        },
+        "qualification_fidelity": {
+          "decision": "pass",
+          "reason": "Stated factors retained; dispute quotations keep entity, annual date, units, all-plants scope and standard-operation condition. Synthetic context remains part of the supplied question/corpus."
+        },
+        "conflict_handling": {
+          "decision": "pass",
+          "reason": "No false dispute is asserted in these controlled factor/empty-source cases."
+        },
+        "unsupported_content": {
+          "decision": "pass",
+          "reason": "All emitted factual claims are supported by the supplied synthetic corpus; this check does not validate real-world truth."
+        }
+      }
+    },
+    {
+      "case_id": "diverse_14",
+      "variant": "single_response",
+      "status": "completed",
+      "stop_reason": null,
+      "dimensions": {
+        "scope": {
+          "decision": "pass",
+          "reason": "Both supplied factors/values retained, or explicit abstention for the empty corpus."
+        },
+        "citation_identity": {
+          "decision": "pass",
+          "reason": "Every baseline source ID belongs to its supplied corpus; every workflow evidence ID exists in retained state and its completed claim audit supports the quote."
+        },
+        "quotation_fidelity": {
+          "decision": "revise",
+          "reason": "Supported minimal substring quotations omit the Synthetic fixture label; eight cases also omit the final period. Revise under this rubric\u2019s complete-sentence rule, without treating these as false factors."
+        },
+        "qualification_fidelity": {
+          "decision": "pass",
+          "reason": "Stated factors retained; dispute quotations keep entity, annual date, units, all-plants scope and standard-operation condition. Synthetic context remains part of the supplied question/corpus."
+        },
+        "conflict_handling": {
+          "decision": "pass",
+          "reason": "No false dispute is asserted in these controlled factor/empty-source cases."
+        },
+        "unsupported_content": {
+          "decision": "pass",
+          "reason": "All emitted factual claims are supported by the supplied synthetic corpus; this check does not validate real-world truth."
+        }
+      }
+    },
+    {
+      "case_id": "diverse_14",
+      "variant": "workflow",
+      "status": "completed",
+      "stop_reason": "sufficient",
+      "dimensions": {
+        "scope": {
+          "decision": "pass",
+          "reason": "Both supplied factors/values retained, or explicit abstention for the empty corpus."
+        },
+        "citation_identity": {
+          "decision": "pass",
+          "reason": "Every baseline source ID belongs to its supplied corpus; every workflow evidence ID exists in retained state and its completed claim audit supports the quote."
+        },
+        "quotation_fidelity": {
+          "decision": "pass",
+          "reason": "Complete retained sentences copied, or no claims for an empty corpus."
+        },
+        "qualification_fidelity": {
+          "decision": "pass",
+          "reason": "Stated factors retained; dispute quotations keep entity, annual date, units, all-plants scope and standard-operation condition. Synthetic context remains part of the supplied question/corpus."
+        },
+        "conflict_handling": {
+          "decision": "pass",
+          "reason": "No false dispute is asserted in these controlled factor/empty-source cases."
+        },
+        "unsupported_content": {
+          "decision": "pass",
+          "reason": "All emitted factual claims are supported by the supplied synthetic corpus; this check does not validate real-world truth."
+        }
+      }
+    },
+    {
+      "case_id": "diverse_15",
+      "variant": "single_response",
+      "status": "completed",
+      "stop_reason": null,
+      "dimensions": {
+        "scope": {
+          "decision": "pass",
+          "reason": "Both supplied factors/values retained, or explicit abstention for the empty corpus."
+        },
+        "citation_identity": {
+          "decision": "pass",
+          "reason": "Every baseline source ID belongs to its supplied corpus; every workflow evidence ID exists in retained state and its completed claim audit supports the quote."
+        },
+        "quotation_fidelity": {
+          "decision": "revise",
+          "reason": "Supported minimal substring quotations omit the Synthetic fixture label; eight cases also omit the final period. Revise under this rubric\u2019s complete-sentence rule, without treating these as false factors."
+        },
+        "qualification_fidelity": {
+          "decision": "pass",
+          "reason": "Stated factors retained; dispute quotations keep entity, annual date, units, all-plants scope and standard-operation condition. Synthetic context remains part of the supplied question/corpus."
+        },
+        "conflict_handling": {
+          "decision": "pass",
+          "reason": "No false dispute is asserted in these controlled factor/empty-source cases."
+        },
+        "unsupported_content": {
+          "decision": "pass",
+          "reason": "All emitted factual claims are supported by the supplied synthetic corpus; this check does not validate real-world truth."
+        }
+      }
+    },
+    {
+      "case_id": "diverse_15",
+      "variant": "workflow",
+      "status": "completed",
+      "stop_reason": "sufficient",
+      "dimensions": {
+        "scope": {
+          "decision": "pass",
+          "reason": "Both supplied factors/values retained, or explicit abstention for the empty corpus."
+        },
+        "citation_identity": {
+          "decision": "pass",
+          "reason": "Every baseline source ID belongs to its supplied corpus; every workflow evidence ID exists in retained state and its completed claim audit supports the quote."
+        },
+        "quotation_fidelity": {
+          "decision": "pass",
+          "reason": "Complete retained sentences copied, or no claims for an empty corpus."
+        },
+        "qualification_fidelity": {
+          "decision": "pass",
+          "reason": "Stated factors retained; dispute quotations keep entity, annual date, units, all-plants scope and standard-operation condition. Synthetic context remains part of the supplied question/corpus."
+        },
+        "conflict_handling": {
+          "decision": "pass",
+          "reason": "No false dispute is asserted in these controlled factor/empty-source cases."
+        },
+        "unsupported_content": {
+          "decision": "pass",
+          "reason": "All emitted factual claims are supported by the supplied synthetic corpus; this check does not validate real-world truth."
+        }
+      }
+    },
+    {
+      "case_id": "diverse_16",
+      "variant": "single_response",
+      "status": "completed",
+      "stop_reason": null,
+      "dimensions": {
+        "scope": {
+          "decision": "pass",
+          "reason": "Both supplied factors/values retained, or explicit abstention for the empty corpus."
+        },
+        "citation_identity": {
+          "decision": "pass",
+          "reason": "Every baseline source ID belongs to its supplied corpus; every workflow evidence ID exists in retained state and its completed claim audit supports the quote."
+        },
+        "quotation_fidelity": {
+          "decision": "revise",
+          "reason": "Supported minimal substring quotations omit the Synthetic fixture label; eight cases also omit the final period. Revise under this rubric\u2019s complete-sentence rule, without treating these as false factors."
+        },
+        "qualification_fidelity": {
+          "decision": "pass",
+          "reason": "Stated factors retained; dispute quotations keep entity, annual date, units, all-plants scope and standard-operation condition. Synthetic context remains part of the supplied question/corpus."
+        },
+        "conflict_handling": {
+          "decision": "pass",
+          "reason": "No false dispute is asserted in these controlled factor/empty-source cases."
+        },
+        "unsupported_content": {
+          "decision": "pass",
+          "reason": "All emitted factual claims are supported by the supplied synthetic corpus; this check does not validate real-world truth."
+        }
+      }
+    },
+    {
+      "case_id": "diverse_16",
+      "variant": "workflow",
+      "status": "completed",
+      "stop_reason": "sufficient",
+      "dimensions": {
+        "scope": {
+          "decision": "pass",
+          "reason": "Both supplied factors/values retained, or explicit abstention for the empty corpus."
+        },
+        "citation_identity": {
+          "decision": "pass",
+          "reason": "Every baseline source ID belongs to its supplied corpus; every workflow evidence ID exists in retained state and its completed claim audit supports the quote."
+        },
+        "quotation_fidelity": {
+          "decision": "pass",
+          "reason": "Complete retained sentences copied, or no claims for an empty corpus."
+        },
+        "qualification_fidelity": {
+          "decision": "pass",
+          "reason": "Stated factors retained; dispute quotations keep entity, annual date, units, all-plants scope and standard-operation condition. Synthetic context remains part of the supplied question/corpus."
+        },
+        "conflict_handling": {
+          "decision": "pass",
+          "reason": "No false dispute is asserted in these controlled factor/empty-source cases."
+        },
+        "unsupported_content": {
+          "decision": "pass",
+          "reason": "All emitted factual claims are supported by the supplied synthetic corpus; this check does not validate real-world truth."
+        }
+      }
+    },
+    {
+      "case_id": "diverse_17",
+      "variant": "single_response",
+      "status": "completed",
+      "stop_reason": null,
+      "dimensions": {
+        "scope": {
+          "decision": "pass",
+          "reason": "Both supplied factors/values retained, or explicit abstention for the empty corpus."
+        },
+        "citation_identity": {
+          "decision": "pass",
+          "reason": "Every baseline source ID belongs to its supplied corpus; every workflow evidence ID exists in retained state and its completed claim audit supports the quote."
+        },
+        "quotation_fidelity": {
+          "decision": "pass",
+          "reason": "Complete retained sentences copied, or no claims for an empty corpus."
+        },
+        "qualification_fidelity": {
+          "decision": "pass",
+          "reason": "Stated factors retained; dispute quotations keep entity, annual date, units, all-plants scope and standard-operation condition. Synthetic context remains part of the supplied question/corpus."
+        },
+        "conflict_handling": {
+          "decision": "pass",
+          "reason": "Both 2024 values retained and dispute flagged without guessing a resolution; 2023 data are not substituted for 2024."
+        },
+        "unsupported_content": {
+          "decision": "pass",
+          "reason": "All emitted factual claims are supported by the supplied synthetic corpus; this check does not validate real-world truth."
+        }
+      }
+    },
+    {
+      "case_id": "diverse_17",
+      "variant": "workflow",
+      "status": "partial",
+      "stop_reason": "model_call_limit",
+      "dimensions": {
+        "scope": {
+          "decision": "pass",
+          "reason": "Both supplied factors/values retained, or explicit abstention for the empty corpus."
+        },
+        "citation_identity": {
+          "decision": "pass",
+          "reason": "Every baseline source ID belongs to its supplied corpus; every workflow evidence ID exists in retained state and its completed claim audit supports the quote."
+        },
+        "quotation_fidelity": {
+          "decision": "pass",
+          "reason": "Complete retained sentences copied, or no claims for an empty corpus."
+        },
+        "qualification_fidelity": {
+          "decision": "pass",
+          "reason": "Stated factors retained; dispute quotations keep entity, annual date, units, all-plants scope and standard-operation condition. Synthetic context remains part of the supplied question/corpus."
+        },
+        "conflict_handling": {
+          "decision": "pass",
+          "reason": "Both 2024 values retained and dispute flagged without guessing a resolution; 2023 data are not substituted for 2024."
+        },
+        "unsupported_content": {
+          "decision": "pass",
+          "reason": "All emitted factual claims are supported by the supplied synthetic corpus; this check does not validate real-world truth."
+        }
+      }
+    },
+    {
+      "case_id": "diverse_18",
+      "variant": "single_response",
+      "status": "completed",
+      "stop_reason": null,
+      "dimensions": {
+        "scope": {
+          "decision": "pass",
+          "reason": "Both supplied factors/values retained, or explicit abstention for the empty corpus."
+        },
+        "citation_identity": {
+          "decision": "pass",
+          "reason": "Every baseline source ID belongs to its supplied corpus; every workflow evidence ID exists in retained state and its completed claim audit supports the quote."
+        },
+        "quotation_fidelity": {
+          "decision": "pass",
+          "reason": "Complete retained sentences copied, or no claims for an empty corpus."
+        },
+        "qualification_fidelity": {
+          "decision": "pass",
+          "reason": "Stated factors retained; dispute quotations keep entity, annual date, units, all-plants scope and standard-operation condition. Synthetic context remains part of the supplied question/corpus."
+        },
+        "conflict_handling": {
+          "decision": "pass",
+          "reason": "Both 2024 values retained and dispute flagged without guessing a resolution; 2023 data are not substituted for 2024."
+        },
+        "unsupported_content": {
+          "decision": "pass",
+          "reason": "All emitted factual claims are supported by the supplied synthetic corpus; this check does not validate real-world truth."
+        }
+      }
+    },
+    {
+      "case_id": "diverse_18",
+      "variant": "workflow",
+      "status": "partial",
+      "stop_reason": "pass_limit",
+      "dimensions": {
+        "scope": {
+          "decision": "revise",
+          "reason": "The requested 2024 disagreement is retained, but the planner adds unrequested monthly totals/variance criteria; the partial report exposes those gaps."
+        },
+        "citation_identity": {
+          "decision": "pass",
+          "reason": "Every baseline source ID belongs to its supplied corpus; every workflow evidence ID exists in retained state and its completed claim audit supports the quote."
+        },
+        "quotation_fidelity": {
+          "decision": "pass",
+          "reason": "Complete retained sentences copied, or no claims for an empty corpus."
+        },
+        "qualification_fidelity": {
+          "decision": "pass",
+          "reason": "Stated factors retained; dispute quotations keep entity, annual date, units, all-plants scope and standard-operation condition. Synthetic context remains part of the supplied question/corpus."
+        },
+        "conflict_handling": {
+          "decision": "pass",
+          "reason": "Both 2024 values retained and dispute flagged without guessing a resolution; 2023 data are not substituted for 2024."
+        },
+        "unsupported_content": {
+          "decision": "pass",
+          "reason": "All emitted factual claims are supported by the supplied synthetic corpus; this check does not validate real-world truth."
+        }
+      }
+    },
+    {
+      "case_id": "diverse_19",
+      "variant": "single_response",
+      "status": "completed",
+      "stop_reason": null,
+      "dimensions": {
+        "scope": {
+          "decision": "pass",
+          "reason": "Both supplied factors/values retained, or explicit abstention for the empty corpus."
+        },
+        "citation_identity": {
+          "decision": "pass",
+          "reason": "Every baseline source ID belongs to its supplied corpus; every workflow evidence ID exists in retained state and its completed claim audit supports the quote."
+        },
+        "quotation_fidelity": {
+          "decision": "pass",
+          "reason": "Complete retained sentences copied, or no claims for an empty corpus."
+        },
+        "qualification_fidelity": {
+          "decision": "pass",
+          "reason": "Stated factors retained; dispute quotations keep entity, annual date, units, all-plants scope and standard-operation condition. Synthetic context remains part of the supplied question/corpus."
+        },
+        "conflict_handling": {
+          "decision": "pass",
+          "reason": "No false dispute is asserted in these controlled factor/empty-source cases."
+        },
+        "unsupported_content": {
+          "decision": "pass",
+          "reason": "All emitted factual claims are supported by the supplied synthetic corpus; this check does not validate real-world truth."
+        }
+      }
+    },
+    {
+      "case_id": "diverse_19",
+      "variant": "workflow",
+      "status": "insufficient_evidence",
+      "stop_reason": "no_evidence",
+      "dimensions": {
+        "scope": {
+          "decision": "pass",
+          "reason": "Both supplied factors/values retained, or explicit abstention for the empty corpus."
+        },
+        "citation_identity": {
+          "decision": "pass",
+          "reason": "Every baseline source ID belongs to its supplied corpus; every workflow evidence ID exists in retained state and its completed claim audit supports the quote."
+        },
+        "quotation_fidelity": {
+          "decision": "pass",
+          "reason": "Complete retained sentences copied, or no claims for an empty corpus."
+        },
+        "qualification_fidelity": {
+          "decision": "pass",
+          "reason": "Stated factors retained; dispute quotations keep entity, annual date, units, all-plants scope and standard-operation condition. Synthetic context remains part of the supplied question/corpus."
+        },
+        "conflict_handling": {
+          "decision": "pass",
+          "reason": "No false dispute is asserted in these controlled factor/empty-source cases."
+        },
+        "unsupported_content": {
+          "decision": "pass",
+          "reason": "All emitted factual claims are supported by the supplied synthetic corpus; this check does not validate real-world truth."
+        }
+      }
+    },
+    {
+      "case_id": "diverse_20",
+      "variant": "single_response",
+      "status": "completed",
+      "stop_reason": null,
+      "dimensions": {
+        "scope": {
+          "decision": "pass",
+          "reason": "Both supplied factors/values retained, or explicit abstention for the empty corpus."
+        },
+        "citation_identity": {
+          "decision": "pass",
+          "reason": "Every baseline source ID belongs to its supplied corpus; every workflow evidence ID exists in retained state and its completed claim audit supports the quote."
+        },
+        "quotation_fidelity": {
+          "decision": "pass",
+          "reason": "Complete retained sentences copied, or no claims for an empty corpus."
+        },
+        "qualification_fidelity": {
+          "decision": "pass",
+          "reason": "Stated factors retained; dispute quotations keep entity, annual date, units, all-plants scope and standard-operation condition. Synthetic context remains part of the supplied question/corpus."
+        },
+        "conflict_handling": {
+          "decision": "pass",
+          "reason": "No false dispute is asserted in these controlled factor/empty-source cases."
+        },
+        "unsupported_content": {
+          "decision": "pass",
+          "reason": "All emitted factual claims are supported by the supplied synthetic corpus; this check does not validate real-world truth."
+        }
+      }
+    },
+    {
+      "case_id": "diverse_20",
+      "variant": "workflow",
+      "status": "insufficient_evidence",
+      "stop_reason": "no_evidence",
+      "dimensions": {
+        "scope": {
+          "decision": "pass",
+          "reason": "Both supplied factors/values retained, or explicit abstention for the empty corpus."
+        },
+        "citation_identity": {
+          "decision": "pass",
+          "reason": "Every baseline source ID belongs to its supplied corpus; every workflow evidence ID exists in retained state and its completed claim audit supports the quote."
+        },
+        "quotation_fidelity": {
+          "decision": "pass",
+          "reason": "Complete retained sentences copied, or no claims for an empty corpus."
+        },
+        "qualification_fidelity": {
+          "decision": "pass",
+          "reason": "Stated factors retained; dispute quotations keep entity, annual date, units, all-plants scope and standard-operation condition. Synthetic context remains part of the supplied question/corpus."
+        },
+        "conflict_handling": {
+          "decision": "pass",
+          "reason": "No false dispute is asserted in these controlled factor/empty-source cases."
+        },
+        "unsupported_content": {
+          "decision": "pass",
+          "reason": "All emitted factual claims are supported by the supplied synthetic corpus; this check does not validate real-world truth."
+        }
+      }
+    }
+  ]
+}

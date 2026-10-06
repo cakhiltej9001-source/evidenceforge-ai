@@ -1,26 +1,27 @@
 # Evaluation summary for submission
 
-These values are copied from the measured Phase 9 audit, not new experiments.
-The full protocol and repairs are in [PHASE9_REPORT.md](../evaluation/PHASE9_REPORT.md).
-Labels remain a Codex draft requiring independent human review. The saved-answer
-review dimensions are defined in [V2_SEMANTIC_RUBRIC.md](../evaluation/V2_SEMANTIC_RUBRIC.md).
+## Current corrected comparison — 6 October 2026
 
-## Corrected v2 comparison status — 6 October 2026
+The [corrected Gemini report](../evaluation/V2_COMPARISON_REPORT_2026-10-06.md)
+records all 40 answers for 20 frozen cases on `gemini-3.5-flash-lite`, using
+**136/140 approved calls**, all HTTP 200 and validated. Both approaches preserve
+the stated factors in 16/16 cases, flag two conflicts and abstain for two empty
+corpora. The workflow has 16 completed, two partial and two insufficient outcomes.
+The baseline has 20 completed structured responses, including two abstentions.
 
-The corrected dataset is `docs/evaluation/dataset_v2.json` (SHA-256
-`36dce5628b62dce34e5d5543839f6995c581f6b11121fdc38811c9ddbec092f7`). It keeps
-the synthetic corpus frozen and narrows the first 16 questions to the stated
-passage factors. The offline matched runner completed 40 rows: 20 controlled
-single-response baselines and 20 one-pass workflows. It used zero provider calls;
-36 rows completed, two ended partial and two ended insufficient-evidence under
-the fixture's bounded evidence rules. These outcomes verify protocol and replay
-mechanics only, not source truth or model quality.
+Baseline usage: 20 calls/5,292 known tokens, mean 6.852 seconds. Workflow usage:
+116 calls/139,795 known tokens, mean 31.106 seconds. Cost remains N/A. Full-sentence
+quotation rules penalize baseline minimal spans; this does not establish worse
+factor accuracy. Workflow case 18 adds unrequested monthly criteria and receives
+scope revision in the [40-row AI review](../evaluation/V2_AI_REVIEW_2026-10-06.json).
 
-The user approved up to 140 Gemini calls for the same comparison. The paid run
-was prepared with a durable global cap but did not start: the environment
-approval service rejected the network command after exhausting its review
-credits. No new Gemini call ran, and the historical 26/30 and 28/40 ledgers were
-not modified. The configured model remains `gemini-3.5-flash-lite`.
+The [rubric](../evaluation/V2_SEMANTIC_RUBRIC.md) and report define denominators and
+limitations. This is delegated Codex AI review, not independent human validation,
+source truth or a blind held-out generalization experiment. Original ledgers remain
+26/30 and 28/40; all earlier outcomes below are preserved as historical measurements.
+The temporary approval-credit block is superseded by the successful corrected run.
+
+## Historical v1 measurements
 
 ## Synthetic comparison
 
@@ -82,8 +83,8 @@ EvidenceForge outperforms another model is supported by these measurements.
 4. Interpret actual provider outcomes, including partial/failed runs and known denominators.
 
 The checklist above describes the original v1 freeze. The corrected v2 offline
-protocol and its blocked paid execution are recorded near the top of this file;
-the independent human review gate remains open.
+protocol and completed paid execution are recorded near the top of this file.
+Independent human validation remains unclaimed and is not required by the PDF.
 
 The authorized extension and repair checks have now executed, as recorded below.
 Original provider failures and draft labels remain preserved.

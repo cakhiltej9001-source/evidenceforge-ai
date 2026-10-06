@@ -1,22 +1,22 @@
 # Phase 10: specialized source and deployment preparation
 
-## Continuation update — 6 October 2026
+## Current completion — 6 October 2026
 
-The container now uses Caddy as an edge gateway. Streamlit binds to
-`127.0.0.1:8502`; Caddy listens on Render's `PORT`, exposes only
-`/_stcore/health` without credentials, and protects all other paths with Basic
-Auth when `CADDY_AUTH_REQUIRED=true`. The bcrypt value is supplied as the
-`CADDY_AUTH_PASSWORD_HASH` Render secret. The blueprint remains a
-staged template: no Render resource was created because the monthly spending cap
-and repository connection are still missing.
+The [final phase status](FINAL_STATUS_2026-10-06.md) is authoritative. The
+user selected local durable storage under a ₹5/month hosting cap; public hosting
+is deferred. The 40-row corrected Gemini comparison and delegated AI review are
+complete (136/140 calls, all HTTP 200). Historical ledgers remain 26/30 and 28/40.
+Both private CI jobs passed 373 tests and authenticated Docker checks on runtime
+source `0f070d134491e2b2a161ecdfdaf987daec2ac904`.
 
-Status updated 4 October 2026: local source/runtime and remote Docker CI verified;
-persistent hosted deployment remains unverified. No Render resources have been created.
-The sections below retain the phase's earlier local checks; the latest execution
-results and dependencies are recorded at the end.
-The user authorized moving to Phase 10 on 4 October 2026. Phase 9 remains open
-for independent annotation review and a successful matched Gemini comparison.
-The original paid ledger remains 26/30; this phase makes no Gemini calls.
+Today's local checkpoint/export and separate-process reconnect passed. Live Tavily
+verification is complete; a real Wikipedia fallback also completed after a simulated
+primary failure. Gateway health remains public; all other routes are protected when
+configured. Streamlit uses loopback behind Caddy. Both gateway and in-app credentials
+are required by the future Render template. No public deployment was created.
+
+The following sections preserve earlier implementation and verification history;
+their old missing-input/pending notes are superseded by the final status.
 
 ## Delivered source extension
 

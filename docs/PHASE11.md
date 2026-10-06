@@ -1,21 +1,22 @@
 # Phase 11 — submission and demonstration
 
-## Continuation update — 6 October 2026
+## Current completion — 6 October 2026
 
-The pending production controls are implemented locally and recorded in
-[PENDING_FIXES_2026-10-06.md](PENDING_FIXES_2026-10-06.md). The Docker image now
-places Caddy in front of loopback-only Streamlit: `/_stcore/health` remains
-available for platform checks and other routes require the configured bcrypt
-gateway secret when `CADDY_AUTH_REQUIRED=true`.
+The [final phase status](FINAL_STATUS_2026-10-06.md) is authoritative. The
+user selected local durable storage under a ₹5/month hosting cap; public hosting
+is deferred. The 40-row corrected Gemini comparison and delegated AI review are
+complete (136/140 calls, all HTTP 200). Historical ledgers remain 26/30 and 28/40.
+Both private CI jobs passed 373 tests and authenticated Docker checks on runtime
+source `0f070d134491e2b2a161ecdfdaf987daec2ac904`.
 
-The corrected offline v2 comparison finished 40 rows with zero provider calls.
-The approved 140-call Gemini comparison was prepared but could not start because
-the environment approval service exhausted its review credits before execution;
-no new Gemini call ran. Render deployment remains staged pending a monthly budget
-and repository connection. Codex AI review remains distinct from independent
-human review.
+Today's local checkpoint/export and separate-process reconnect passed. Live Tavily
+verification is complete; a real Wikipedia fallback also completed after a simulated
+primary failure. Gateway health remains public; all other routes are protected when
+configured. Streamlit uses loopback behind Caddy. Both gateway and in-app credentials
+are required by the future Render template. No public deployment was created.
 
-Prepared on 4 October 2026 (Asia/Calcutta), following the user's instruction to continue to the next phase.
+The following sections preserve earlier implementation and verification history;
+their old missing-input/pending notes are superseded by the final status.
 
 ## Delivered
 
@@ -24,7 +25,7 @@ Prepared on 4 October 2026 (Asia/Calcutta), following the user's instruction to 
 - [Setup guide](submission/SETUP.md): installation, offline UI, approvals, provider configuration and persistence checks.
 - [Demo script](submission/DEMO.md): a 4 minute 30 second walkthrough.
 - [Requirements checklist](submission/REQUIREMENTS.md): B01–B13/P01–P06 implementation evidence and qualifications.
-- [Evaluation table](submission/EVALUATION.md): measured fixture results and incomplete Gemini comparison.
+- [Evaluation table](submission/EVALUATION.md): historical fixture results plus the completed corrected Gemini comparison.
 - [Limitations](submission/LIMITATIONS.md): outstanding validation and operational constraints.
 - `scripts/prepare_demo.py`: fresh service runs and clickable local report/evidence replay.
 
@@ -50,7 +51,7 @@ uv run --locked python -m http.server 8503 --bind 127.0.0.1 --directory .evidenc
 
 Open `http://127.0.0.1:8503/`. Serve this demo directory only. Generated replay and local research data remain ignored by Git.
 
-## Final checks
+## Historical checks — 4 October 2026
 
 - Full regression: **349 passed in 694.19 seconds**.
 - Ruff lint: all checks passed.
@@ -59,7 +60,7 @@ Open `http://127.0.0.1:8503/`. Serve this demo directory only. Generated replay 
 - Wheel and source distribution build passed.
 - Checked 53 local documentation/replay links: zero missing; all four saved replay states verified.
 
-## Completion and remaining gates
+## Historical completion record — 4 October 2026
 
 Phase 11's local submission materials and demonstration are prepared. The original
 23-page PDF has now been read and reconciled in

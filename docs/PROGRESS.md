@@ -1,43 +1,25 @@
 # EvidenceForge AI progress
 
-## Pending-work repair — 6 October 2026
-
-- Implemented the PDF's P02–P05 controls behind the opt-in production policy:
-  semantic input classification, ordered provider fallback, lowest-score
-  evidence eviction and bounded local node tracing. Library defaults preserve
-  legacy checkpoint behavior; CLI/workbench production runs opt in.
-- Added a Caddy gateway with loopback-only Streamlit. Health is exempt for Render
-  checks; all other routes can require a bcrypt Basic Auth secret. No Render
-  service was created.
-- Added the corrected v2 benchmark runner and completed its offline execution:
-  40 rows, 20 cases in each matched variant, zero provider calls. The saved
-  summary reports 36 completed, two partial and two insufficient-evidence fixture
-  outcomes; it is not a source-truth or human-quality score.
-- The separately approved 140-call Gemini comparison did not start because the
-  environment approval service exhausted review credits before the network
-  command executed. No new paid call ran; historical 26/30 and 28/40 ledgers are
-  unchanged. Render budget, repository connection and independent human review
-  remain open.
-
-
-
-Updated: 4 October 2026, Asia/Calcutta.
-
-
+Updated: 6 October 2026, Asia/Calcutta.
 
 ## Current milestone
 
+The [final phase status](FINAL_STATUS_2026-10-06.md) is authoritative. The
+user selected local durable storage under a ₹5/month hosting cap; public hosting
+is deferred. The 40-row corrected Gemini comparison and delegated AI review are
+complete (136/140 calls, all HTTP 200). Historical ledgers remain 26/30 and 28/40.
+Both private CI jobs passed 373 tests and authenticated Docker checks on runtime
+source `0f070d134491e2b2a161ecdfdaf987daec2ac904`.
 
+The original PDF and baseline mixed-source/report/deduplication mechanics are
+addressed within their documented limits. Tavily access/recovery and today's real
+Wikipedia fallback passed. Fresh-process local reconnect passed without provider
+calls. Production P02–P05 controls are implemented. Phase 9 results disclose partial
+conflicts, strict quotation differences and planner scope drift; no general research
+accuracy or independent human validation is claimed.
 
-**Phases 0–8 are complete for the local foundation.** Phase 9 engineering runs
-and delegated AI review are complete with disclosed failures and corpus limitations;
-research-quality sign-off remains open. Phase 10 local source/runtime and remote Docker
-CI passed; persistent hosting and live Tavily access need account configuration.
-Phase 11 materials and synthetic demo are prepared. The original 23-page PDF has now
-been read and mapped: same-pipeline live sources, report presentation and cross-source
-passage deduplication remain baseline gaps; production guidance is partly implemented.
-See `submission/ORIGINAL_PDF_RECONCILIATION.md`, `evaluation/EXTENSION_REPORT.md` and
-`PHASE10.md`. Historical missing-file notes below are superseded by this review.
+All sections below preserve historical execution records. Their then-pending notes
+are superseded by the final status above.
 
 ## Phase 0 history
 
