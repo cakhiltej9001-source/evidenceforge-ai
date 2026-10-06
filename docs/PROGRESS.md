@@ -1,5 +1,24 @@
 # EvidenceForge AI progress
 
+## Pending-work repair — 6 October 2026
+
+- Implemented the PDF's P02–P05 controls behind the opt-in production policy:
+  semantic input classification, ordered provider fallback, lowest-score
+  evidence eviction and bounded local node tracing. Library defaults preserve
+  legacy checkpoint behavior; CLI/workbench production runs opt in.
+- Added a Caddy gateway with loopback-only Streamlit. Health is exempt for Render
+  checks; all other routes can require a bcrypt Basic Auth secret. No Render
+  service was created.
+- Added the corrected v2 benchmark runner and completed its offline execution:
+  40 rows, 20 cases in each matched variant, zero provider calls. The saved
+  summary reports 36 completed, two partial and two insufficient-evidence fixture
+  outcomes; it is not a source-truth or human-quality score.
+- The separately approved 140-call Gemini comparison did not start because the
+  environment approval service exhausted review credits before the network
+  command executed. No new paid call ran; historical 26/30 and 28/40 ledgers are
+  unchanged. Render budget, repository connection and independent human review
+  remain open.
+
 
 
 Updated: 4 October 2026, Asia/Calcutta.
@@ -782,3 +801,34 @@ The original PDF/page mapping and the identified baseline engineering mechanics
 are addressed within the conservative limits above. Actual Tavily access, persistent
 hosting, independent research-quality validation and P02–P05 production guidance
 remain open. No new real model/search/API request ran for these fixes.
+
+
+## Tavily gate closed — 5 October 2026, 08:04 IST
+
+The [live verification record](TAVILY_VERIFICATION_2026-10-05.md) supersedes earlier
+missing-credential/unverified-Tavily notes. One full pipeline search returned five
+sources and 34 retained passages; all 34 quotation checks passed. Fresh-service
+checkpoint recovery and terminal reopening reused saved results. One Tavily credit,
+zero Gemini calls. Reasoning was deterministic; boilerplate in the report means
+semantic research quality remains open. Hosting, independent review and remaining
+production guidance are still pending.
+
+
+## Hosting access update — 5 October 2026
+
+[Render API access](RENDER_ACCESS_VERIFICATION_2026-10-05.md) is verified (HTTP 200).
+Together with the completed Tavily check, this supersedes earlier credentials and
+hosting-access pending notes. Actual deployment remains pending: repository
+connection, user hosting budget/access choice and persistent runtime checks.
+Independent benchmark review and remaining production improvements remain open.
+
+
+## Benchmark review completed on behalf of the user — 5 October 2026
+
+The [delegated review](evaluation/DELEGATED_REVIEW_2026-10-05.md) is complete:
+20 cases reviewed, 40 saved fixture rows and four aggregate summaries matched,
+124 artifact integrity checks and 62 passage locators passed. Sixteen questions
+need narrower scope; two dispute and two abstention labels are retained. This is
+Codex AI review, not independent human validation. Benchmark correction/fair semantic
+comparison and production improvements remain open; hosting still needs budget,
+access choice, repository connection and actual deployment checks. No paid calls ran.

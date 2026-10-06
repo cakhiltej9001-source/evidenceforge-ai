@@ -23,6 +23,11 @@ class Settings(BaseSettings):
         validate_default=True,
     )
 
+    auth_required: bool = False
+    auth_username: str = "admin"
+    auth_password_hash: SecretStr | None = Field(default=None, exclude=True, repr=False)
+    trace_payloads: bool = False
+
     model_provider: Literal["fixture", "gemini", "openai", "anthropic", "groq"] = "fixture"
     model_id: str | None = None
     model_api_key: SecretStr | None = Field(default=None, exclude=True, repr=False)

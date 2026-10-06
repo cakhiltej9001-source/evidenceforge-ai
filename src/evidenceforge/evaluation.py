@@ -36,8 +36,8 @@ class EvaluationCase(Contract):
 
 
 class EvaluationDataset(Contract):
-    version: Literal[1] = 1
-    annotation_status: Literal["draft_requires_human_review", "human_reviewed"]
+    version: Literal[1, 2] = 1
+    annotation_status: Literal["draft_requires_human_review", "human_reviewed", "ai_reviewed"]
     annotation_author: str
     reviewed_by: str | None = None
     reviewed_at: date | None = None
@@ -45,7 +45,7 @@ class EvaluationDataset(Contract):
 
     @model_validator(mode="after")
     def require_review_record(self) -> "EvaluationDataset":
-        if self.annotation_status == "human_reviewed" and not (
+        if self.annotation_status in {"human_reviewed", "ai_reviewed"} and not (
             self.reviewed_by and self.reviewed_by.strip() and self.reviewed_at
         ):
             raise ValueError("Human-reviewed labels require reviewer and review date.")

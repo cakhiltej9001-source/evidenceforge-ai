@@ -5,6 +5,10 @@
 !pyproject.toml
 !uv.lock
 !README.md
+!Caddyfile.public
+!Caddyfile.auth
+!scripts/
+!scripts/container_entrypoint.sh
 !src/
 !src/**
 src/**/__pycache__/

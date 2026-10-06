@@ -1,5 +1,20 @@
 # Phase 11 — submission and demonstration
 
+## Continuation update — 6 October 2026
+
+The pending production controls are implemented locally and recorded in
+[PENDING_FIXES_2026-10-06.md](PENDING_FIXES_2026-10-06.md). The Docker image now
+places Caddy in front of loopback-only Streamlit: `/_stcore/health` remains
+available for platform checks and other routes require the configured bcrypt
+gateway secret when `CADDY_AUTH_REQUIRED=true`.
+
+The corrected offline v2 comparison finished 40 rows with zero provider calls.
+The approved 140-call Gemini comparison was prepared but could not start because
+the environment approval service exhausted its review credits before execution;
+no new Gemini call ran. Render deployment remains staged pending a monthly budget
+and repository connection. Codex AI review remains distinct from independent
+human review.
+
 Prepared on 4 October 2026 (Asia/Calcutta), following the user's instruction to continue to the next phase.
 
 ## Delivered
@@ -122,3 +137,34 @@ The original PDF/page mapping and the identified baseline engineering mechanics
 are addressed within the conservative limits above. Actual Tavily access, persistent
 hosting, independent research-quality validation and P02–P05 production guidance
 remain open. No new real model/search/API request ran for these fixes.
+
+
+## Tavily gate closed — 5 October 2026, 08:04 IST
+
+The [live verification record](TAVILY_VERIFICATION_2026-10-05.md) supersedes earlier
+missing-credential/unverified-Tavily notes. One full pipeline search returned five
+sources and 34 retained passages; all 34 quotation checks passed. Fresh-service
+checkpoint recovery and terminal reopening reused saved results. One Tavily credit,
+zero Gemini calls. Reasoning was deterministic; boilerplate in the report means
+semantic research quality remains open. Hosting, independent review and remaining
+production guidance are still pending.
+
+
+## Hosting access update — 5 October 2026
+
+[Render API access](RENDER_ACCESS_VERIFICATION_2026-10-05.md) is verified (HTTP 200).
+Together with the completed Tavily check, this supersedes earlier credentials and
+hosting-access pending notes. Actual deployment remains pending: repository
+connection, user hosting budget/access choice and persistent runtime checks.
+Independent benchmark review and remaining production improvements remain open.
+
+
+## Benchmark review completed on behalf of the user — 5 October 2026
+
+The [delegated review](evaluation/DELEGATED_REVIEW_2026-10-05.md) is complete:
+20 cases reviewed, 40 saved fixture rows and four aggregate summaries matched,
+124 artifact integrity checks and 62 passage locators passed. Sixteen questions
+need narrower scope; two dispute and two abstention labels are retained. This is
+Codex AI review, not independent human validation. Benchmark correction/fair semantic
+comparison and production improvements remain open; hosting still needs budget,
+access choice, repository connection and actual deployment checks. No paid calls ran.

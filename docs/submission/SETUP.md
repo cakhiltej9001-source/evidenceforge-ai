@@ -135,8 +135,11 @@ uv run --locked python scripts/deployment_smoke.py --data-dir .evidenceforge/ver
 ```
 
 For Docker, persistent storage, private Render setup and verification dependencies,
-see [Phase 10](../PHASE10.md). Local Docker prerequisites are unmet on the current
-host; remote Docker CI has passed in the private repository. Persistent Render
+see [Phase 10](../PHASE10.md). The image places Caddy in front of loopback-only
+Streamlit; set `CADDY_AUTH_REQUIRED=true`, `CADDY_AUTH_USERNAME` and a bcrypt
+`CADDY_AUTH_PASSWORD_HASH` to protect all browser routes while keeping the health
+path available. Local Docker prerequisites are unmet on the current host; remote Docker CI
+has passed in the private repository. Persistent Render
 deployment remains unverified. No public endpoint is configured.
 
 ## Final checks

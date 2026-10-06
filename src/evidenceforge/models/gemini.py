@@ -105,6 +105,7 @@ class GeminiResearchModel:
         self._reserved_tokens = 0
         self.observations: list[dict[str, object]] = []
         self._ledger: ModelCallLedger | None = None
+        self.trace_payloads = False
 
     def bind_budget(self, budget: BudgetLimits) -> None:
         """Bind the run allowance before any paid call."""
@@ -171,6 +172,13 @@ class GeminiResearchModel:
             )
         ):
             raise ModelUnavailable("Gemini call or token allowance reached.")
+        if self.trace_payloads and self._ledger is not None:
+            try:
+                trace = self._ledger.path.parent / "payload_traces" / self._ledger.path.stem
+                trace.mkdir(parents=True, exist_ok=True)
+                (trace / (sha256(body).hexdigest() + ".json")).write_bytes(body)
+            except OSError:
+                pass  # Optional local diagnostics must not trigger repeated provider work.
         observation: dict[str, object] = {
             "role": role,
             "model": self.model_id,

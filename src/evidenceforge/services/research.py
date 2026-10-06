@@ -37,8 +37,10 @@ from evidenceforge.research import ResearchModel, ResearchOptions
 from evidenceforge.retrieval.carbon_intensity import CarbonIntensityAdapter
 from evidenceforge.retrieval.contracts import CallReceipt, RetrievalAdapter, RetrievalBatch
 from evidenceforge.retrieval.documents import DocumentRetrievalAdapter
+from evidenceforge.retrieval.fallback import OrderedSearch
 from evidenceforge.retrieval.fixtures import FixtureRetrievalAdapter
 from evidenceforge.retrieval.tavily import TavilyAdapter
+from evidenceforge.retrieval.wikipedia import WikipediaAdapter
 from evidenceforge.schemas import (
     BudgetLimits,
     ResearchQuestion,
@@ -48,6 +50,7 @@ from evidenceforge.schemas import (
     utc_now,
 )
 from evidenceforge.services.cancellation import RunCancellation
+from evidenceforge.services.node_trace import NodeTrace
 from evidenceforge.services.observability import TraceSink, public_progress, trace_phase
 from evidenceforge.services.retrieval import RetrievalService
 from evidenceforge.services.usage import PriceTable, usage_summary
@@ -96,7 +99,9 @@ class ResearchService:
         self.options = options or ResearchOptions()
         self.trace_sink = trace_sink
         self.prices = prices
-        self._owned_live_adapters: list[TavilyAdapter | CarbonIntensityAdapter] = []
+        self._owned_live_adapters: list[
+            TavilyAdapter | CarbonIntensityAdapter | WikipediaAdapter
+        ] = []
         if retrieval:
             for kind, adapter in retrieval.adapters.items():
                 enabled = (kind == SourceType.WEB and self.options.live_web) or (
@@ -124,6 +129,10 @@ class ResearchService:
                 web = TavilyAdapter(key)
                 adapters[SourceType.WEB] = web
                 self._owned_live_adapters.append(web)
+                if self.options.production_policy_version:
+                    fallback = WikipediaAdapter()
+                    self._owned_live_adapters.append(fallback)
+                    adapters[SourceType.WEB] = OrderedSearch((web, fallback))
             if self.options.live_energy:
                 energy = CarbonIntensityAdapter()
                 adapters[SourceType.API] = energy
@@ -161,6 +170,20 @@ class ResearchService:
                     kind.value: type(adapter).__module__ + "." + type(adapter).__qualname__
                     for kind, adapter in retrieval.adapters.items()
                 },
+                **(
+                    {
+                        "fallback_providers": {
+                            kind.value: [
+                                type(p).__module__ + "." + type(p).__qualname__
+                                for p in adapter.providers
+                            ]
+                            for kind, adapter in retrieval.adapters.items()
+                            if isinstance(adapter, OrderedSearch)
+                        }
+                    }
+                    if any(isinstance(a, OrderedSearch) for a in retrieval.adapters.values())
+                    else {}
+                ),
                 "fixture_empty": {
                     kind.value: isinstance(adapter, FixtureRetrievalAdapter)
                     and isinstance(adapter.response, RetrievalBatch)
@@ -170,11 +193,22 @@ class ResearchService:
                 "retrieval_options": retrieval.options.model_dump(mode="json"),
                 "research_options": {
                     **self.options.model_dump(
-                        mode="json", exclude={"live_web", "live_energy", "quality_input_version"}
+                        mode="json",
+                        exclude={
+                            "live_web",
+                            "live_energy",
+                            "quality_input_version",
+                            "production_policy_version",
+                        },
                     ),
                     **(
                         {"quality_input_version": 2}
                         if self.options.quality_input_version == 2
+                        else {}
+                    ),
+                    **(
+                        {"production_policy_version": 1}
+                        if self.options.production_policy_version
                         else {}
                     ),
                     **({"live_web": True} if self.options.live_web else {}),
@@ -188,7 +222,12 @@ class ResearchService:
         version = json.loads(profile)["research_options"].get("quality_input_version", 1)
         if type(version) is not int or version not in (1, 2):
             raise CheckpointFailure("Unsupported research input contract version.")
-        self.options = self.options.model_copy(update={"quality_input_version": version})
+        policy = json.loads(profile)["research_options"].get("production_policy_version", 0)
+        if type(policy) is not int or policy not in (0, 1):
+            raise CheckpointFailure("Unsupported production policy version.")
+        self.options = self.options.model_copy(
+            update={"quality_input_version": version, "production_policy_version": policy}
+        )
 
     def cancel(self, thread_id: str, owner_scope: str = "local") -> None:
         """Request owner-scoped cooperative cancellation without taking the run lock."""
@@ -332,7 +371,11 @@ class ResearchService:
                         self.model,
                         self.repository,
                         SourceProcessor(retrieval.adapters, artifacts, ledger, retrieval.options),
-                        EvidenceExtractor(artifacts, retrieval.options),
+                        EvidenceExtractor(
+                            artifacts,
+                            retrieval.options,
+                            evict_lowest=bool(self.options.production_policy_version),
+                        ),
                         artifacts,
                         self.options,
                         checkpointer=saver,
@@ -406,6 +449,15 @@ class ResearchService:
         pause_after: str | None = None,
     ) -> ResearchState:
         artifacts, ledger = retrieval.components(initial)
+        trace_settings = load_settings()
+        node_trace = (
+            NodeTrace(
+                self.data_dir / "traces" / (initial["run_id"] + ".jsonl"),
+                payloads=trace_settings.trace_payloads,
+            )
+            if trace_settings.tracing_enabled or self.options.production_policy_version
+            else None
+        )
         config: RunnableConfig = {
             "recursion_limit": self.options.recursion_limit,
             "configurable": {"thread_id": initial["thread_id"]},
@@ -427,6 +479,7 @@ class ResearchService:
             with checkpoint.exclusive(initial["thread_id"]):
                 if isinstance(self.model, GeminiResearchModel):
                     try:
+                        self.model.trace_payloads = trace_settings.trace_payloads
                         self.model.bind_run(
                             self.data_dir / "model_calls",
                             initial["owner_scope"],
@@ -449,11 +502,16 @@ class ResearchService:
                                 initial["thread_id"]
                             ),
                         ),
-                        EvidenceExtractor(artifacts, retrieval.options),
+                        EvidenceExtractor(
+                            artifacts,
+                            retrieval.options,
+                            evict_lowest=bool(self.options.production_policy_version),
+                        ),
                         artifacts,
                         self.options,
                         checkpointer=saver,
                         pause_after=pause_after,
+                        node_trace=node_trace,
                     )
                     last = initial
                     graph_input: ResearchState | Command[object] | None = (
@@ -536,6 +594,20 @@ class ResearchService:
                     if last["run_status"] != "running":
                         emit("final", last)
                         self.deliver(last, trace_metrics)
+                        if node_trace is not None:
+                            atomic_write(
+                                self.report_path(last).with_name("local_trace_coverage.json"),
+                                json.dumps(
+                                    {
+                                        "nodes_written": node_trace.written,
+                                        "write_failures": node_trace.failed,
+                                        "omitted_at_size_cap": node_trace.omitted,
+                                        "payloads_enabled": node_trace.payloads,
+                                        "remote_export": False,
+                                    },
+                                    indent=2,
+                                ),
+                            )
                     return last
 
     def reconcile_calls(self, state: ResearchState, ledger: object) -> ResearchState:

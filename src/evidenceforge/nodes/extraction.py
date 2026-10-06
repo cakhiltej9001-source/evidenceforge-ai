@@ -35,8 +35,11 @@ def spans(text: str, size: int) -> Iterator[tuple[int, int]]:
 
 
 class EvidenceExtractor:
-    def __init__(self, artifacts: ArtifactStore, options: RetrievalOptions) -> None:
+    def __init__(
+        self, artifacts: ArtifactStore, options: RetrievalOptions, *, evict_lowest: bool = False
+    ) -> None:
         self.artifacts, self.options = artifacts, options
+        self.evict_lowest = evict_lowest
 
     def __call__(self, state: ResearchState) -> Update:
         snapshot = StateSnapshot.model_validate(state)
@@ -114,10 +117,14 @@ class EvidenceExtractor:
                     )
                     continue
                 old = snapshot.evidence_store.get(identifier)
-                if old is None and (
-                    total_count >= snapshot.budget.max_evidence_count
-                    or total_bytes + len(passage.encode("utf-8"))
-                    > snapshot.budget.max_evidence_bytes
+                if (
+                    old is None
+                    and not self.evict_lowest
+                    and (
+                        total_count >= snapshot.budget.max_evidence_count
+                        or total_bytes + len(passage.encode("utf-8"))
+                        > snapshot.budget.max_evidence_bytes
+                    )
                 ):
                     reject(
                         identifier,
@@ -184,11 +191,17 @@ class EvidenceExtractor:
                 f"Admitted or merged {len(evidence)} passages; recorded {len(rejected)} rejections."
             ),
         )
+        from evidenceforge.evidence.retention import select_evidence
+
+        retained = (
+            select_evidence(state, evidence, rejected)
+            if self.evict_lowest
+            else {"evidence_store": evidence, "rejected_evidence": rejected}
+        )
         return checked_patch(
             state,
             {
-                "evidence_store": evidence,
-                "rejected_evidence": rejected,
+                **retained,
                 "events": {event.id: state["events"].get(event.id) or record_data(event)},
             },
         )

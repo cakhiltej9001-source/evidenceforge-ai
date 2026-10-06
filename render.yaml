@@ -1,14 +1,25 @@
-# Reviewable PRIVATE service template. Applying this creates paid resources.
-# No public URL or authentication gateway is provisioned by this template.
+# Reviewable single-owner service. Applying this creates paid resources.
+# The Caddy gateway refuses hosted access until its bcrypt password hash is configured.
 services:
-  - type: pserv
+  - type: web
     name: evidenceforge-demo
     runtime: docker
     plan: 0.5c-512mb
+    healthCheckPath: /_stcore/health
     numInstances: 1
     autoDeployTrigger: "off"
     dockerfilePath: ./Dockerfile
     envVars:
+      - key: EVIDENCEFORGE_AUTH_REQUIRED
+        value: "true"
+      - key: EVIDENCEFORGE_AUTH_PASSWORD_HASH
+        sync: false
+      - key: CADDY_AUTH_REQUIRED
+        value: "true"
+      - key: CADDY_AUTH_USERNAME
+        value: admin
+      - key: CADDY_AUTH_PASSWORD_HASH
+        sync: false
       - key: PORT
         value: "8501"
       - key: EVIDENCEFORGE_DATA_DIR

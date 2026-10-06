@@ -9,7 +9,7 @@ priority runtime gaps; the original PDF remains unmodified and outside source up
 
 | PDF mapping | Change | Verification boundary |
 |---|---|---|
-| B02, pages 2/5–6/10 | Opt-in Tavily web + GB energy API + selected documents in full research; CLI/UI controls; saved source choices | Real adapters with mocked HTTP exercise approval, edit, restart, owner isolation, receipt reuse, partial failure and cancellation; actual Tavily access remains unverified |
+| B02, pages 2/5–6/10 | Opt-in Tavily web + GB energy API + selected documents in full research; CLI/UI controls; saved source choices | Real adapters with mocked HTTP exercise approval, edit, restart, owner isolation, receipt reuse, partial failure and cancellation; actual Tavily access/full pipeline/reconnect subsequently verified with deterministic reasoning; see live verification below |
 | B09, page 13 | 2–3 supported summary paragraphs, per-source evidence chunks/locators | Exact retained quotations remain audited; fewer supported claims produce a disclosed shorter summary |
 | B05, pages 10–11 | Conservative literal working-set deduplication with source/acquisition/locator member metadata | Copies/full containment collapse only when question links are represented; complete exact-copy citations audited separately; distinct wording/qualifiers/partial overlaps preserved |
 | Resource lifecycle | Factory-owned HTTP ports close on pause/completion, stale edit, resume mismatch and failure | Mock clients assert closed; caller-owned injected ports remain caller-owned |
@@ -45,8 +45,8 @@ measure this updated implementation.
 
 ## Remaining work
 
-- Configure a Tavily credential here to verify actual live search/full research.
-- Supply hosting account/target and spending cap for persistent deployment checks.
+- Tavily credential and full pipeline gates are closed by the [5 October live check](TAVILY_VERIFICATION_2026-10-05.md); semantic research quality remains open.
+- Render API access is verified; confirm deployment/access choice and spending cap, then verify repository connection and persistent deployment checks.
 - Independent human validation and a defensible real research-quality comparison.
 - Incremental production P02–P05: semantic input classification, ordered alternative
   search-provider fallback, lowest-score evidence eviction, and verified trace policy.
@@ -112,3 +112,23 @@ The original PDF/page mapping and the identified baseline engineering mechanics
 are addressed within the conservative limits above. Actual Tavily access, persistent
 hosting, independent research-quality validation and P02–P05 production guidance
 remain open. No new real model/search/API request ran for these fixes.
+
+
+## Tavily gate closed — 5 October 2026, 08:04 IST
+
+The [live verification record](TAVILY_VERIFICATION_2026-10-05.md) supersedes earlier
+missing-credential/unverified-Tavily notes. One full pipeline search returned five
+sources and 34 retained passages; all 34 quotation checks passed. Fresh-service
+checkpoint recovery and terminal reopening reused saved results. One Tavily credit,
+zero Gemini calls. Reasoning was deterministic; boilerplate in the report means
+semantic research quality remains open. Hosting, independent review and remaining
+production guidance are still pending.
+
+
+## Hosting access update — 5 October 2026
+
+[Render API access](RENDER_ACCESS_VERIFICATION_2026-10-05.md) is verified (HTTP 200).
+Together with the completed Tavily check, this supersedes earlier credentials and
+hosting-access pending notes. Actual deployment remains pending: repository
+connection, user hosting budget/access choice and persistent runtime checks.
+Independent benchmark review and remaining production improvements remain open.

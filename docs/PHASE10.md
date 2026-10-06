@@ -1,5 +1,15 @@
 # Phase 10: specialized source and deployment preparation
 
+## Continuation update — 6 October 2026
+
+The container now uses Caddy as an edge gateway. Streamlit binds to
+`127.0.0.1:8502`; Caddy listens on Render's `PORT`, exposes only
+`/_stcore/health` without credentials, and protects all other paths with Basic
+Auth when `CADDY_AUTH_REQUIRED=true`. The bcrypt value is supplied as the
+`CADDY_AUTH_PASSWORD_HASH` Render secret. The blueprint remains a
+staged template: no Render resource was created because the monthly spending cap
+and repository connection are still missing.
+
 Status updated 4 October 2026: local source/runtime and remote Docker CI verified;
 persistent hosted deployment remains unverified. No Render resources have been created.
 The sections below retain the phase's earlier local checks; the latest execution
@@ -64,8 +74,9 @@ attribution and the period when sharing derived records.
   SQLite databases, traces, generated evaluation records and Git metadata.
 - `compose.yaml`: localhost-only port, named `/data` volume, dropped capabilities,
   no privilege escalation. Defaults to fixture reasoning.
-- `render.yaml`: reviewable paid private service configuration with a 1 GB disk;
-  automatic deploys disabled. No public browser URL or authentication gateway.
+- `render.yaml`: reviewable paid web service configuration with a 1 GB disk;
+  automatic deploys disabled. Caddy protects browser routes with a Render
+  bcrypt secret while leaving the health path available to the platform.
 - `.github/workflows/ci.yml`: locked install, checks/tests/package build, offline
   resume/export smoke, Docker build, cross-container persistence and health smoke.
   [Remote CI passed](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/37169054208) on source commit
@@ -269,3 +280,23 @@ The original PDF/page mapping and the identified baseline engineering mechanics
 are addressed within the conservative limits above. Actual Tavily access, persistent
 hosting, independent research-quality validation and P02–P05 production guidance
 remain open. No new real model/search/API request ran for these fixes.
+
+
+## Tavily gate closed — 5 October 2026, 08:04 IST
+
+The [live verification record](TAVILY_VERIFICATION_2026-10-05.md) supersedes earlier
+missing-credential/unverified-Tavily notes. One full pipeline search returned five
+sources and 34 retained passages; all 34 quotation checks passed. Fresh-service
+checkpoint recovery and terminal reopening reused saved results. One Tavily credit,
+zero Gemini calls. Reasoning was deterministic; boilerplate in the report means
+semantic research quality remains open. Hosting, independent review and remaining
+production guidance are still pending.
+
+
+## Hosting access update — 5 October 2026
+
+[Render API access](RENDER_ACCESS_VERIFICATION_2026-10-05.md) is verified (HTTP 200).
+Together with the completed Tavily check, this supersedes earlier credentials and
+hosting-access pending notes. Actual deployment remains pending: repository
+connection, user hosting budget/access choice and persistent runtime checks.
+Independent benchmark review and remaining production improvements remain open.

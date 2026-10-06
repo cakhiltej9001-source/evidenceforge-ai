@@ -116,6 +116,7 @@ class SupportVerdict(StrEnum):
 
 
 class StopReason(StrEnum):
+    INPUT_REJECTED = "input_rejected"
     SUFFICIENT = "sufficient"
     PASS_LIMIT = "pass_limit"
     SEARCH_LIMIT = "search_limit"

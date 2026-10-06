@@ -493,8 +493,12 @@ def apply_update(state: ResearchState, update: dict[str, object]) -> ResearchSta
         if key in _IMMUTABLE and value != current[key]:
             raise ValueError(f"immutable run field: {key}")
         if isinstance(value, Overwrite):
-            if key not in {"messages", "events", "tool_errors"}:
+            if key not in {"messages", "events", "tool_errors", "evidence_store"}:
                 raise ValueError("explicit reset is only allowed for archived diagnostic logs")
+            if key == "evidence_store":
+                from evidenceforge.graph.reducers import merge_evidence
+
+                merge_evidence(cast(RecordMap, current[key]), cast(RecordMap, value.value))
             current[key] = deepcopy(value.value)
         elif key in _MERGES:
             current[key] = _MERGES[key](cast(RecordMap, current[key]), cast(RecordMap, value))

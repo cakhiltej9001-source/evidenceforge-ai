@@ -1,0 +1,680 @@
+{
+  "proposal_schema_version": 1,
+  "review_kind": "delegated_ai_review",
+  "reviewed_by": "Codex, acting on the user request of 5 October 2026",
+  "reviewed_at": "2026-10-05T02:52:53.034603+00:00",
+  "source_dataset_sha256": "5e5c012fd1a612513a934e30469ba5a20b532e909732cfd47500f8453cdf4e89",
+  "human_review_completed": false,
+  "original_dataset_changed": false,
+  "benchmark_results_reused": true,
+  "new_provider_calls": 0,
+  "decision": "revise question scope before research-quality sign-off; retain four fixture labels",
+  "checks": {
+    "saved_fixture_runs_checked": 40,
+    "aggregate_partitions_checked": 4,
+    "artifact_integrity_checks": 124,
+    "passage_locator_checks": 62,
+    "new_provider_calls": 0,
+    "decisions": {
+      "revise_question_scope": 16,
+      "approve_fixture_label": 4
+    },
+    "original_dataset_changed": false
+  },
+  "cases": [
+    {
+      "case_id": "diverse_01",
+      "split": "development",
+      "decision": "revise_question_scope",
+      "reference_passages_verified": true,
+      "references": [
+        "Synthetic fixture: solar output depends on sunlight.",
+        "Synthetic fixture: wind output depends on wind speed."
+      ],
+      "proposed_question": "According to the supplied synthetic passages, what stated factors affect solar and wind output?",
+      "scenario": "custom_two_pass",
+      "expected_dispute": false,
+      "expected_abstention": false,
+      "saved_runs": [
+        {
+          "variant": "one_pass",
+          "status": "partial",
+          "aspect_coverage": 0.5,
+          "claims": 1,
+          "scores_recomputed": true
+        },
+        {
+          "variant": "full_agent",
+          "status": "completed",
+          "aspect_coverage": 1.0,
+          "claims": 2,
+          "scores_recomputed": true
+        }
+      ],
+      "review_notes": "The passages identify sunlight and wind speed. They contain no electricity amount, capacity factor, location or interval; the broad outputs question invites a quantitative plan the corpus cannot answer.",
+      "reference_label_value_changed": false,
+      "proposed_question_is_unexecuted": true
+    },
+    {
+      "case_id": "diverse_02",
+      "split": "development",
+      "decision": "revise_question_scope",
+      "reference_passages_verified": true,
+      "references": [
+        "Synthetic fixture: hydro output depends on water flow.",
+        "Synthetic fixture: geothermal output depends on subsurface heat."
+      ],
+      "proposed_question": "According to the supplied synthetic passages, what stated factors affect hydro and geothermal output?",
+      "scenario": "custom_two_pass",
+      "expected_dispute": false,
+      "expected_abstention": false,
+      "saved_runs": [
+        {
+          "variant": "one_pass",
+          "status": "partial",
+          "aspect_coverage": 0.5,
+          "claims": 1,
+          "scores_recomputed": true
+        },
+        {
+          "variant": "full_agent",
+          "status": "completed",
+          "aspect_coverage": 1.0,
+          "claims": 2,
+          "scores_recomputed": true
+        }
+      ],
+      "review_notes": "Water flow and subsurface heat are explicit dependencies. No generation quantities or comparative efficiency are supplied.",
+      "reference_label_value_changed": false,
+      "proposed_question_is_unexecuted": true
+    },
+    {
+      "case_id": "diverse_03",
+      "split": "development",
+      "decision": "revise_question_scope",
+      "reference_passages_verified": true,
+      "references": [
+        "Synthetic fixture: battery storage output depends on charge cycles.",
+        "Synthetic fixture: hydrogen storage output depends on conversion efficiency."
+      ],
+      "proposed_question": "According to the supplied synthetic passages, what stated factors affect battery storage and hydrogen storage output?",
+      "scenario": "custom_two_pass",
+      "expected_dispute": false,
+      "expected_abstention": false,
+      "saved_runs": [
+        {
+          "variant": "one_pass",
+          "status": "partial",
+          "aspect_coverage": 0.5,
+          "claims": 1,
+          "scores_recomputed": true
+        },
+        {
+          "variant": "full_agent",
+          "status": "completed",
+          "aspect_coverage": 1.0,
+          "claims": 2,
+          "scores_recomputed": true
+        }
+      ],
+      "review_notes": "Charge cycles and conversion efficiency are retained statements. Stored energy, discharge power and conversion yield are distinct outputs and need a stated metric for real research.",
+      "reference_label_value_changed": false,
+      "proposed_question_is_unexecuted": true
+    },
+    {
+      "case_id": "diverse_04",
+      "split": "development",
+      "decision": "revise_question_scope",
+      "reference_passages_verified": true,
+      "references": [
+        "Synthetic fixture: rail output depends on route electrification.",
+        "Synthetic fixture: bus output depends on fleet scheduling."
+      ],
+      "proposed_question": "According to the supplied synthetic passages, what stated factors affect rail and bus output?",
+      "scenario": "custom_two_pass",
+      "expected_dispute": false,
+      "expected_abstention": false,
+      "saved_runs": [
+        {
+          "variant": "one_pass",
+          "status": "partial",
+          "aspect_coverage": 0.5,
+          "claims": 1,
+          "scores_recomputed": true
+        },
+        {
+          "variant": "full_agent",
+          "status": "completed",
+          "aspect_coverage": 1.0,
+          "claims": 2,
+          "scores_recomputed": true
+        }
+      ],
+      "review_notes": "Electrification and fleet scheduling are explicit fixture dependencies. Rail and bus outputs lack a common outcome or unit; these labels only test retrieval of two statements.",
+      "reference_label_value_changed": false,
+      "proposed_question_is_unexecuted": true
+    },
+    {
+      "case_id": "diverse_05",
+      "split": "development",
+      "decision": "revise_question_scope",
+      "reference_passages_verified": true,
+      "references": [
+        "Synthetic fixture: LED lighting output depends on electrical supply.",
+        "Synthetic fixture: heat pumps output depends on ambient temperature."
+      ],
+      "proposed_question": "According to the supplied synthetic passages, what stated factors affect LED lighting and heat pumps output?",
+      "scenario": "custom_two_pass",
+      "expected_dispute": false,
+      "expected_abstention": false,
+      "saved_runs": [
+        {
+          "variant": "one_pass",
+          "status": "partial",
+          "aspect_coverage": 0.5,
+          "claims": 1,
+          "scores_recomputed": true
+        },
+        {
+          "variant": "full_agent",
+          "status": "completed",
+          "aspect_coverage": 1.0,
+          "claims": 2,
+          "scores_recomputed": true
+        }
+      ],
+      "review_notes": "Electrical supply and ambient temperature appear in the corpus. Lighting and heat-pump outputs have different units, so this is a dependency comparison only.",
+      "reference_label_value_changed": false,
+      "proposed_question_is_unexecuted": true
+    },
+    {
+      "case_id": "diverse_06",
+      "split": "development",
+      "decision": "revise_question_scope",
+      "reference_passages_verified": true,
+      "references": [
+        "Synthetic fixture: desalination output depends on membrane pressure.",
+        "Synthetic fixture: water recycling output depends on treatment stages."
+      ],
+      "proposed_question": "According to the supplied synthetic passages, what stated factors affect desalination and water recycling output?",
+      "scenario": "custom_two_pass",
+      "expected_dispute": false,
+      "expected_abstention": false,
+      "saved_runs": [
+        {
+          "variant": "one_pass",
+          "status": "partial",
+          "aspect_coverage": 0.5,
+          "claims": 1,
+          "scores_recomputed": true
+        },
+        {
+          "variant": "full_agent",
+          "status": "completed",
+          "aspect_coverage": 1.0,
+          "claims": 2,
+          "scores_recomputed": true
+        }
+      ],
+      "review_notes": "Membrane pressure and treatment stages are stated. Water yield, quality and recovery rate are absent; the corpus supports the two qualitative statements only.",
+      "reference_label_value_changed": false,
+      "proposed_question_is_unexecuted": true
+    },
+    {
+      "case_id": "diverse_07",
+      "split": "development",
+      "decision": "revise_question_scope",
+      "reference_passages_verified": true,
+      "references": [
+        "Synthetic fixture: insulation output depends on thermal resistance.",
+        "Synthetic fixture: reflective roofing output depends on surface reflectance."
+      ],
+      "proposed_question": "According to the supplied synthetic passages, what stated factors affect insulation and reflective roofing output?",
+      "scenario": "custom_two_pass",
+      "expected_dispute": false,
+      "expected_abstention": false,
+      "saved_runs": [
+        {
+          "variant": "one_pass",
+          "status": "partial",
+          "aspect_coverage": 0.5,
+          "claims": 1,
+          "scores_recomputed": true
+        },
+        {
+          "variant": "full_agent",
+          "status": "completed",
+          "aspect_coverage": 1.0,
+          "claims": 2,
+          "scores_recomputed": true
+        }
+      ],
+      "review_notes": "Thermal resistance and surface reflectance are stated. No temperature or energy-saving comparison can be inferred.",
+      "reference_label_value_changed": false,
+      "proposed_question_is_unexecuted": true
+    },
+    {
+      "case_id": "diverse_08",
+      "split": "development",
+      "decision": "revise_question_scope",
+      "reference_passages_verified": true,
+      "references": [
+        "Synthetic fixture: radar output depends on signal reflections.",
+        "Synthetic fixture: satellite sensing output depends on orbital coverage."
+      ],
+      "proposed_question": "According to the supplied synthetic passages, what stated factors affect radar and satellite sensing output?",
+      "scenario": "custom_two_pass",
+      "expected_dispute": false,
+      "expected_abstention": false,
+      "saved_runs": [
+        {
+          "variant": "one_pass",
+          "status": "partial",
+          "aspect_coverage": 0.5,
+          "claims": 1,
+          "scores_recomputed": true
+        },
+        {
+          "variant": "full_agent",
+          "status": "completed",
+          "aspect_coverage": 1.0,
+          "claims": 2,
+          "scores_recomputed": true
+        }
+      ],
+      "review_notes": "Signal reflections and orbital coverage are stated. These do not establish comparable sensing accuracy, spatial resolution or output quantity.",
+      "reference_label_value_changed": false,
+      "proposed_question_is_unexecuted": true
+    },
+    {
+      "case_id": "diverse_09",
+      "split": "development",
+      "decision": "revise_question_scope",
+      "reference_passages_verified": true,
+      "references": [
+        "Synthetic fixture: tree planting output depends on canopy growth.",
+        "Synthetic fixture: cool pavement output depends on surface material."
+      ],
+      "proposed_question": "According to the supplied synthetic passages, what stated factors affect tree planting and cool pavement output?",
+      "scenario": "custom_two_pass",
+      "expected_dispute": false,
+      "expected_abstention": false,
+      "saved_runs": [
+        {
+          "variant": "one_pass",
+          "status": "partial",
+          "aspect_coverage": 0.5,
+          "claims": 1,
+          "scores_recomputed": true
+        },
+        {
+          "variant": "full_agent",
+          "status": "completed",
+          "aspect_coverage": 1.0,
+          "claims": 2,
+          "scores_recomputed": true
+        }
+      ],
+      "review_notes": "Canopy growth and surface material are stated. No cooling magnitude, period or urban context is supplied.",
+      "reference_label_value_changed": false,
+      "proposed_question_is_unexecuted": true
+    },
+    {
+      "case_id": "diverse_10",
+      "split": "development",
+      "decision": "revise_question_scope",
+      "reference_passages_verified": true,
+      "references": [
+        "Synthetic fixture: fiber networks output depends on cable capacity.",
+        "Synthetic fixture: wireless networks output depends on radio spectrum."
+      ],
+      "proposed_question": "According to the supplied synthetic passages, what stated factors affect fiber networks and wireless networks output?",
+      "scenario": "custom_two_pass",
+      "expected_dispute": false,
+      "expected_abstention": false,
+      "saved_runs": [
+        {
+          "variant": "one_pass",
+          "status": "partial",
+          "aspect_coverage": 0.5,
+          "claims": 1,
+          "scores_recomputed": true
+        },
+        {
+          "variant": "full_agent",
+          "status": "completed",
+          "aspect_coverage": 1.0,
+          "claims": 2,
+          "scores_recomputed": true
+        }
+      ],
+      "review_notes": "Cable capacity and radio spectrum are stated. Throughput, latency and operating conditions are absent.",
+      "reference_label_value_changed": false,
+      "proposed_question_is_unexecuted": true
+    },
+    {
+      "case_id": "diverse_11",
+      "split": "development",
+      "decision": "revise_question_scope",
+      "reference_passages_verified": true,
+      "references": [
+        "Synthetic fixture: composting output depends on organic feedstock.",
+        "Synthetic fixture: landfill disposal output depends on waste containment."
+      ],
+      "proposed_question": "According to the supplied synthetic passages, what stated factors affect composting and landfill disposal output?",
+      "scenario": "custom_two_pass",
+      "expected_dispute": false,
+      "expected_abstention": false,
+      "saved_runs": [
+        {
+          "variant": "one_pass",
+          "status": "partial",
+          "aspect_coverage": 0.5,
+          "claims": 1,
+          "scores_recomputed": true
+        },
+        {
+          "variant": "full_agent",
+          "status": "completed",
+          "aspect_coverage": 1.0,
+          "claims": 2,
+          "scores_recomputed": true
+        }
+      ],
+      "review_notes": "Organic feedstock and waste containment are stated. The question does not define whether output means material, emissions or disposal performance.",
+      "reference_label_value_changed": false,
+      "proposed_question_is_unexecuted": true
+    },
+    {
+      "case_id": "diverse_12",
+      "split": "development",
+      "decision": "revise_question_scope",
+      "reference_passages_verified": true,
+      "references": [
+        "Synthetic fixture: tidal output depends on tidal range.",
+        "Synthetic fixture: wave output depends on wave motion."
+      ],
+      "proposed_question": "According to the supplied synthetic passages, what stated factors affect tidal and wave output?",
+      "scenario": "custom_two_pass",
+      "expected_dispute": false,
+      "expected_abstention": false,
+      "saved_runs": [
+        {
+          "variant": "one_pass",
+          "status": "partial",
+          "aspect_coverage": 0.5,
+          "claims": 1,
+          "scores_recomputed": true
+        },
+        {
+          "variant": "full_agent",
+          "status": "completed",
+          "aspect_coverage": 1.0,
+          "claims": 2,
+          "scores_recomputed": true
+        }
+      ],
+      "review_notes": "Tidal range and wave motion are stated. No electricity generation or capacity comparison is available.",
+      "reference_label_value_changed": false,
+      "proposed_question_is_unexecuted": true
+    },
+    {
+      "case_id": "diverse_13",
+      "split": "held_out",
+      "decision": "revise_question_scope",
+      "reference_passages_verified": true,
+      "references": [
+        "Synthetic fixture: drip irrigation output depends on delivery pressure.",
+        "Synthetic fixture: flood irrigation output depends on field runoff."
+      ],
+      "proposed_question": "According to the supplied synthetic passages, what stated factors affect drip irrigation and flood irrigation output?",
+      "scenario": "custom_two_pass",
+      "expected_dispute": false,
+      "expected_abstention": false,
+      "saved_runs": [
+        {
+          "variant": "one_pass",
+          "status": "partial",
+          "aspect_coverage": 0.5,
+          "claims": 1,
+          "scores_recomputed": true
+        },
+        {
+          "variant": "full_agent",
+          "status": "completed",
+          "aspect_coverage": 1.0,
+          "claims": 2,
+          "scores_recomputed": true
+        }
+      ],
+      "review_notes": "Delivery pressure and field runoff are stated. Yield, water delivery and efficiency are unspecified; the live planner expanded beyond these two references.",
+      "reference_label_value_changed": false,
+      "proposed_question_is_unexecuted": true
+    },
+    {
+      "case_id": "diverse_14",
+      "split": "held_out",
+      "decision": "revise_question_scope",
+      "reference_passages_verified": true,
+      "references": [
+        "Synthetic fixture: local caching output depends on cache freshness.",
+        "Synthetic fixture: remote queries output depends on network latency."
+      ],
+      "proposed_question": "According to the supplied synthetic passages, what stated factors affect local caching and remote queries output?",
+      "scenario": "custom_two_pass",
+      "expected_dispute": false,
+      "expected_abstention": false,
+      "saved_runs": [
+        {
+          "variant": "one_pass",
+          "status": "partial",
+          "aspect_coverage": 0.5,
+          "claims": 1,
+          "scores_recomputed": true
+        },
+        {
+          "variant": "full_agent",
+          "status": "completed",
+          "aspect_coverage": 1.0,
+          "claims": 2,
+          "scores_recomputed": true
+        }
+      ],
+      "review_notes": "Cache freshness and network latency are stated. Result correctness and response performance are different metrics, and no measured values are supplied.",
+      "reference_label_value_changed": false,
+      "proposed_question_is_unexecuted": true
+    },
+    {
+      "case_id": "diverse_15",
+      "split": "held_out",
+      "decision": "revise_question_scope",
+      "reference_passages_verified": true,
+      "references": [
+        "Synthetic fixture: retrieval output depends on indexed sources.",
+        "Synthetic fixture: fine-tuning output depends on training data."
+      ],
+      "proposed_question": "According to the supplied synthetic passages, what stated factors affect retrieval and fine-tuning output?",
+      "scenario": "custom_two_pass",
+      "expected_dispute": false,
+      "expected_abstention": false,
+      "saved_runs": [
+        {
+          "variant": "one_pass",
+          "status": "partial",
+          "aspect_coverage": 0.5,
+          "claims": 1,
+          "scores_recomputed": true
+        },
+        {
+          "variant": "full_agent",
+          "status": "completed",
+          "aspect_coverage": 1.0,
+          "claims": 2,
+          "scores_recomputed": true
+        }
+      ],
+      "review_notes": "Indexed sources and training data are stated. The corpus cannot compare answer quality or define equivalent retrieval and fine-tuning outputs.",
+      "reference_label_value_changed": false,
+      "proposed_question_is_unexecuted": true
+    },
+    {
+      "case_id": "diverse_16",
+      "split": "held_out",
+      "decision": "revise_question_scope",
+      "reference_passages_verified": true,
+      "references": [
+        "Synthetic fixture: ventilation output depends on air exchange.",
+        "Synthetic fixture: filtration output depends on filter media."
+      ],
+      "proposed_question": "According to the supplied synthetic passages, what stated factors affect ventilation and filtration output?",
+      "scenario": "custom_two_pass",
+      "expected_dispute": false,
+      "expected_abstention": false,
+      "saved_runs": [
+        {
+          "variant": "one_pass",
+          "status": "partial",
+          "aspect_coverage": 0.5,
+          "claims": 1,
+          "scores_recomputed": true
+        },
+        {
+          "variant": "full_agent",
+          "status": "completed",
+          "aspect_coverage": 1.0,
+          "claims": 2,
+          "scores_recomputed": true
+        }
+      ],
+      "review_notes": "Air exchange and filter media are stated. No comparable pollutant removal or airflow figures are provided.",
+      "reference_label_value_changed": false,
+      "proposed_question_is_unexecuted": true
+    },
+    {
+      "case_id": "diverse_17",
+      "split": "held_out",
+      "decision": "approve_fixture_label",
+      "reference_passages_verified": true,
+      "references": [
+        "Northfield solar electricity output was 100 GWh in 2024 for all plants under standard operation.",
+        "Northfield solar electricity output was 120 GWh in 2024 for all plants under standard operation."
+      ],
+      "proposed_question": "Compare Northfield solar electricity output reported by two synthetic sources.",
+      "scenario": "dispute",
+      "expected_dispute": true,
+      "expected_abstention": false,
+      "saved_runs": [
+        {
+          "variant": "one_pass",
+          "status": "partial",
+          "aspect_coverage": 1.0,
+          "claims": 2,
+          "scores_recomputed": true
+        },
+        {
+          "variant": "full_agent",
+          "status": "partial",
+          "aspect_coverage": 1.0,
+          "claims": 5,
+          "scores_recomputed": true
+        }
+      ],
+      "review_notes": "The two independent synthetic sources report 100 and 120 GWh for the same entity, year, population and condition: a valid numeric dispute. 100000 MWh equals 100 GWh; 900 GWh concerns 2023; the copied 100 GWh source is not independent.",
+      "reference_label_value_changed": false,
+      "proposed_question_is_unexecuted": false
+    },
+    {
+      "case_id": "diverse_18",
+      "split": "held_out",
+      "decision": "approve_fixture_label",
+      "reference_passages_verified": true,
+      "references": [
+        "Northfield solar electricity output was 100 GWh in 2024 for all plants under standard operation.",
+        "Northfield solar electricity output was 120 GWh in 2024 for all plants under standard operation."
+      ],
+      "proposed_question": "Investigate disagreement in Northfield solar electricity output for 2024.",
+      "scenario": "dispute",
+      "expected_dispute": true,
+      "expected_abstention": false,
+      "saved_runs": [
+        {
+          "variant": "one_pass",
+          "status": "partial",
+          "aspect_coverage": 1.0,
+          "claims": 2,
+          "scores_recomputed": true
+        },
+        {
+          "variant": "full_agent",
+          "status": "partial",
+          "aspect_coverage": 1.0,
+          "claims": 5,
+          "scores_recomputed": true
+        }
+      ],
+      "review_notes": "The same 100 versus 120 GWh conflict supports the dispute label. Unit conversion, different-year evidence and copied-source provenance must retain their separate relationships.",
+      "reference_label_value_changed": false,
+      "proposed_question_is_unexecuted": false
+    },
+    {
+      "case_id": "diverse_19",
+      "split": "held_out",
+      "decision": "approve_fixture_label",
+      "reference_passages_verified": true,
+      "references": [],
+      "proposed_question": "Compare battery and hydrogen output without any available source.",
+      "scenario": "empty",
+      "expected_dispute": false,
+      "expected_abstention": true,
+      "saved_runs": [
+        {
+          "variant": "one_pass",
+          "status": "insufficient_evidence",
+          "aspect_coverage": null,
+          "claims": 0,
+          "scores_recomputed": true
+        },
+        {
+          "variant": "full_agent",
+          "status": "insufficient_evidence",
+          "aspect_coverage": null,
+          "claims": 0,
+          "scores_recomputed": true
+        }
+      ],
+      "review_notes": "The fixture returns no source. Empty references and abstention are consistent for evidence-grounded output; a general-knowledge answer has no retained-source support.",
+      "reference_label_value_changed": false,
+      "proposed_question_is_unexecuted": false
+    },
+    {
+      "case_id": "diverse_20",
+      "split": "held_out",
+      "decision": "approve_fixture_label",
+      "reference_passages_verified": true,
+      "references": [],
+      "proposed_question": "Compare rainfall and river flow without any available source.",
+      "scenario": "empty",
+      "expected_dispute": false,
+      "expected_abstention": true,
+      "saved_runs": [
+        {
+          "variant": "one_pass",
+          "status": "insufficient_evidence",
+          "aspect_coverage": null,
+          "claims": 0,
+          "scores_recomputed": true
+        },
+        {
+          "variant": "full_agent",
+          "status": "insufficient_evidence",
+          "aspect_coverage": null,
+          "claims": 0,
+          "scores_recomputed": true
+        }
+      ],
+      "review_notes": "The fixture returns no source. Empty references and abstention are consistent; no rainfall or river-flow facts can be verified from this corpus.",
+      "reference_label_value_changed": false,
+      "proposed_question_is_unexecuted": false
+    }
+  ]
+}

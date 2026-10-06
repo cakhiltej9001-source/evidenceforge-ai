@@ -25,6 +25,7 @@ from evidenceforge.retrieval.contracts import (
     RetrievalOptions,
     RetrievedDocument,
 )
+from evidenceforge.retrieval.fallback import OrderedSearch
 from evidenceforge.schemas import (
     ArtifactReference,
     BudgetReservation,
@@ -116,43 +117,48 @@ class SourceProcessor:
         adapter = self.adapters.get(query.source_type)
         if adapter is None:
             return Outcome(query, category="provider")
+        providers = adapter.providers if isinstance(adapter, OrderedSearch) else (adapter,)
         receipts: list[CallReceipt] = []
-        for attempt in range(
-            1, StateSnapshot.model_validate(state).budget.max_attempts_per_call + 1
-        ):
-            if self.cancellation_requested():
-                raise RunCancellation()
-            outcome = await self._attempt(state, query, attempt)
-            if outcome.receipt is not None:
-                receipts.append(outcome.receipt)
-            outcome.prior_receipts = tuple(
-                receipts[:-1] if outcome.receipt is not None else receipts
-            )
-            outcome.attempts = attempt
-            if outcome.category is None:
-                return outcome
-            delay = retry_delay(
-                outcome.category, attempt, query.id, adapter, outcome.retry_after_seconds
-            )
-            if (
-                delay is None
-                or attempt >= StateSnapshot.model_validate(state).budget.max_attempts_per_call
-            ):
-                return outcome
-            remaining = (
-                StateSnapshot.model_validate(state).budget.max_elapsed_seconds
-                - (utc_now() - StateSnapshot.model_validate(state).started_at).total_seconds()
-            )
-            if remaining <= delay:
-                return outcome
-            await asyncio.sleep(delay)
-        raise AssertionError("retry loop exhausted")
+        maximum = StateSnapshot.model_validate(state).budget.max_attempts_per_call
+        for provider_index, provider in enumerate(providers):
+            for attempt in range(1, maximum + 1):
+                if self.cancellation_requested():
+                    raise RunCancellation()
+                outcome = await self._attempt(state, query, attempt, provider, provider_index)
+                if outcome.receipt is not None:
+                    receipts.append(outcome.receipt)
+                outcome.prior_receipts = tuple(receipts[:-1] if outcome.receipt else receipts)
+                outcome.attempts = len(receipts) or attempt
+                if outcome.category in {"internal", "budget"}:
+                    return outcome
+                if outcome.category is None:
+                    if outcome.batch and any(r.content.strip() for r in outcome.batch.results):
+                        return outcome
+                    break
+                delay = retry_delay(
+                    outcome.category, attempt, query.id, provider, outcome.retry_after_seconds
+                )
+                remaining = (
+                    StateSnapshot.model_validate(state).budget.max_elapsed_seconds
+                    - (utc_now() - StateSnapshot.model_validate(state).started_at).total_seconds()
+                )
+                if delay is None or attempt >= maximum or remaining <= delay:
+                    break
+                await asyncio.sleep(delay)
+        return outcome
 
-    async def _attempt(self, state: ResearchState, query: SearchQuery, attempt: int) -> Outcome:
+    async def _attempt(
+        self,
+        state: ResearchState,
+        query: SearchQuery,
+        attempt: int,
+        provider: RetrievalAdapter | None = None,
+        provider_index: int = 0,
+    ) -> Outcome:
         if self.cancellation_requested():
             raise RunCancellation()
         snapshot = StateSnapshot.model_validate(state)
-        adapter = self.adapters.get(query.source_type)
+        adapter = provider or self.adapters.get(query.source_type)
         if adapter is None:
             return Outcome(query, category="provider")
         if (
@@ -162,7 +168,11 @@ class SourceProcessor:
             return Outcome(query)
         elapsed = max(0.0, (utc_now() - snapshot.started_at).total_seconds())
         remaining = snapshot.budget.max_elapsed_seconds - elapsed
-        identifier = stable_id("call", snapshot.run_id, query.id, attempt)
+        identifier = (
+            stable_id("call", snapshot.run_id, query.id, attempt)
+            if provider_index == 0
+            else stable_id("call", snapshot.run_id, query.id, "fallback", provider_index, attempt)
+        )
         request_hash = hashlib.sha256(
             json.dumps(
                 {

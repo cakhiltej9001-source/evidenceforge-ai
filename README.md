@@ -7,11 +7,19 @@ LangGraph, SQLite and an optional Streamlit UI provide the workflow.
 **Status:** local workflows, public energy acquisition and remote Docker CI are verified.
 The source is in a private GitHub repository; Phase 11 submission materials are prepared.
 All 20 Gemini one-shot responses are available, and the repaired workflow completed its
-model stages. Research-quality validation, persistent hosting, live Tavily access and
-the remaining production guidance need further verification. Explicit mixed-source
+model stages. [Live Tavily access and the full pipeline](docs/TAVILY_VERIFICATION_2026-10-05.md)
+are verified with deterministic reasoning and one search. Research-quality validation
+and persistent hosting need further verification. Semantic input review, ordered
+fallback, bounded evidence eviction and local traces are implemented behind the
+production policy. Explicit mixed-source
 research, paragraph summaries and conservative passage deduplication are implemented.
 The original 23-page PDF has been reviewed in the [reconciliation](docs/submission/ORIGINAL_PDF_RECONCILIATION.md).
 Synthetic demonstrations show workflow behavior, not independently verified facts.
+
+The corrected v2 offline comparison completed 40 matched rows with zero provider
+calls. The separately approved 140-call Gemini comparison remains staged because
+the environment approval service blocked the network command before execution;
+no new paid call ran. See [the pending-work record](docs/PENDING_FIXES_2026-10-06.md).
 
 ## Start here — Windows PowerShell
 
@@ -149,7 +157,10 @@ Tests use synthetic credentials and block ordinary network connections. Optional
 UI checks need `--extra ui` in the installation. [Phase 11](docs/PHASE11.md) records
 final verification; [progress](docs/PROGRESS.md) preserves earlier executed results.
 
-Docker, localhost Compose and a private Render template are prepared. The
+Docker, localhost Compose and a private Render template are prepared. The Docker
+image now places a Caddy Basic Auth gateway in front of loopback-only Streamlit;
+Render health checks remain available and all other routes can require the gateway
+secret. The
 [private repository](https://github.com/cakhiltej9001-source/evidenceforge-ai) has a
 [successful CI run](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/37253453020)
 covering **362 tests**, strict typing/lint/format, package build and Render schema.

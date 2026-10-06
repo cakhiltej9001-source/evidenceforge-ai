@@ -58,10 +58,34 @@ jobs:
           done
           docker logs evidenceforge-ci-ui
           exit 1
+      - name: Authenticated gateway smoke
+        run: |
+          auth_hash=$(docker run --rm --entrypoint caddy evidenceforge-ci hash-password --plaintext ci-password-long-enough)
+          app_hash=$(docker run --rm --entrypoint python evidenceforge-ci -c "from evidenceforge.auth import password_hash; print(password_hash('ci-password-long-enough'))")
+          docker run -d --memory 512m --cpus 0.5 --name evidenceforge-ci-auth -p 127.0.0.1:8502:8501 -v evidenceforge-ci-data:/data \
+            -e RENDER=true \
+            -e EVIDENCEFORGE_AUTH_REQUIRED=true \
+            -e EVIDENCEFORGE_AUTH_PASSWORD_HASH="$app_hash" \
+            -e CADDY_AUTH_REQUIRED=true \
+            -e CADDY_AUTH_USERNAME=admin \
+            -e CADDY_AUTH_PASSWORD_HASH="$auth_hash" \
+            evidenceforge-ci
+          for attempt in $(seq 1 60); do
+            if curl --fail --silent http://127.0.0.1:8502/_stcore/health; then break; fi
+            sleep 2
+          done
+          test "$(curl --silent --output /dev/null --write-out '%{http_code}' http://127.0.0.1:8502/)" = 401
+          test "$(curl --silent --output /dev/null --write-out '%{http_code}' --user admin:ci-password-long-enough http://127.0.0.1:8502/)" = 200
+          for path in /media/test-file /_stcore/upload_file /_stcore/stream; do
+            test "$(curl --silent --output /dev/null --write-out '%{http_code}' http://127.0.0.1:8502$path)" = 401
+          done
+          test "$(curl --silent --output /dev/null --write-out '%{http_code}' --user admin:wrong http://127.0.0.1:8502/)" = 401
+          test "$(curl --silent --output /dev/null --write-out '%{http_code}' http://127.0.0.1:8502/_stcore/health)" = 200
+          docker logs evidenceforge-ci-auth
       - name: Clean up CI containers
         if: always()
         run: |
-          docker rm -f evidenceforge-ci-ui || true
+          docker rm -f evidenceforge-ci-ui evidenceforge-ci-auth || true
           docker volume rm evidenceforge-ci-data evidenceforge-ci-restored || true
 
 

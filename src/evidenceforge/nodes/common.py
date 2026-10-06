@@ -17,7 +17,12 @@ def record_data(record: Contract) -> RecordData:
 
 def checked_patch(state: ResearchState, update: Update) -> Update:
     validated = dict(apply_update(state, update))
-    return {key: validated[key] for key in update}
+    from langgraph.types import Overwrite
+
+    return {
+        key: Overwrite(validated[key]) if isinstance(update[key], Overwrite) else validated[key]
+        for key in update
+    }
 
 
 def event_patch(state: ResearchState, role: str, kind: str, message: str) -> Update:

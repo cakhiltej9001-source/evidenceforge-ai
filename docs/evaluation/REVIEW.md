@@ -44,3 +44,15 @@ decision and reason for every case in [AI_REVIEW.md](AI_REVIEW.md) and
 [AI_REVIEW.json](AI_REVIEW.json). This is AI review; the frozen dataset status and
 hash are unchanged. The first 16 questions need tighter scope or richer corpora
 for real quality evaluation. No human name, attestation or approval was fabricated.
+
+
+## Delegated review completed — 5 October 2026
+
+The user again asked Codex to review on their behalf. The
+[completed review](DELEGATED_REVIEW_2026-10-05.md) covers all 20 cases, all 40
+saved fixture runs, four aggregate summaries, 124 artifact integrity checks and
+62 exact passage-offset checks. All recomputed scores match. Sixteen question scopes
+need revision; two dispute and two abstention fixture labels are retained. Proposed
+questions are concrete and unexecuted. No original labels/results, provider ledgers
+or human attestations were changed. This closes the delegated review task;
+research-quality validation and independent human-validation claims remain unestablished.

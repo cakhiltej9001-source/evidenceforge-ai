@@ -31,3 +31,15 @@ The reference labels are internally consistent for synthetic workflow checks. Th
 | diverse_20 | abstention_label_supported_by_empty_fixture | The fixture returns no source. Empty references and abstention are consistent; no rainfall or river-flow facts can be verified from this corpus. |
 
 Exact-string reference matching measures recovered quotations, not semantic truth. The general-knowledge one-shot baseline and a corpus-bound agent have different access to evidence; citation and support scores need their stated denominators and qualifications. No provider superiority or assignment compliance is established by this review.
+
+
+## Delegated review completed — 5 October 2026
+
+The user again asked Codex to review on their behalf. The
+[completed review](DELEGATED_REVIEW_2026-10-05.md) covers all 20 cases, all 40
+saved fixture runs, four aggregate summaries, 124 artifact integrity checks and
+62 exact passage-offset checks. All recomputed scores match. Sixteen question scopes
+need revision; two dispute and two abstention fixture labels are retained. Proposed
+questions are concrete and unexecuted. No original labels/results, provider ledgers
+or human attestations were changed. This closes the delegated review task;
+research-quality validation and independent human-validation claims remain unestablished.

@@ -12,17 +12,20 @@ families are inspectable heuristics, not calibrated trust probabilities.
 The replay and fixture benchmark use synthetic content and scripted reasoning.
 The repair replay deliberately injects one incorrect first draft. Its real audit
 and bounded rewrite demonstrate control flow, not a measured hallucination rate.
-The 20 evaluation labels remain draft and have a documented AI review; only the
-retrieval-loop ablation is measured. All 20 Gemini one-shots are now usable, but
-broader synthetic questions and short dependency corpora do not establish a
-matched research-quality comparison. The final repaired workflow stopped partial
-at its three-pass limit; original provider failures remain recorded.
+The 20 evaluation labels have a documented Codex AI review; independent human
+validation is not claimed. The corrected offline v2 comparison has 40 saved rows
+and zero provider calls. The approved paid comparison did not start because the
+environment approval service rejected the network command after exhausting its
+review credits. Broader synthetic questions and short dependency corpora do not
+establish source truth or a matched research-quality comparison.
 
 ## Sources, documents and providers
 
 The full research service can combine explicitly enabled Tavily search, the GB energy
 API and selected documents. Mixed-source approval/edit/resume is verified with mocked
-HTTP; actual Tavily access still needs a configured credential. Default acquisition
+HTTP. Actual Tavily access/full pipeline/reconnect are verified with deterministic
+reasoning; [measured scope](../TAVILY_VERIFICATION_2026-10-05.md) includes retained
+boilerplate, so semantic research quality is still open. Default acquisition
 remains synthetic or local-document retrieval. NESO percentages are GB half-hour shares, including
 imports, not annual/global/absolute MWh output. API-derived prose is a deterministic
 projection of validated JSON, not a quotation of provider-authored sentences.
@@ -46,23 +49,24 @@ Docker execution passed in the private repository's remote CI: image build,
 nonroot UID, constrained research/reconnect, fresh-volume synthetic restore and
 UI health. Official Render schema and local restart checks also passed. No
 persistent Render instance or authenticated remote access path has been verified.
-The local PC still lacks Docker. Actual hosting requires account/target access
-and a spending cap. Synthetic restore does not verify a future production backup.
+The local PC still lacks Docker. Render API/account access is [verified](../RENDER_ACCESS_VERIFICATION_2026-10-05.md).
+Actual hosting still requires repository access verification, a deployment/access
+choice and an approved spending cap. Synthetic restore does not verify a future production backup.
 
 ## Remaining external inputs
 
 | Input | Why it is required |
 |---|---|
-| Completed independent 20-case annotation review | Needed before calling labels human-validated |
-| Hosting account, access target and spending cap | Needed for persistent runtime/storage/security checks |
-| Tavily key configured here or explicitly authorized source | Needed to verify actual live search in acquisition and full research |
+| Benchmark corrections and semantic comparison | Corrected v2 questions and offline protocol are complete; the approved paid run was blocked before execution by the environment approval-credit limit. Independent human validation is not claimed |
+| Hosting deployment/access choice and spending cap | Render API access verified; repository connection and actual persistent runtime/storage/security checks remain pending |
+| Tavily | Credential/acquisition/full pipeline gate closed; combined real Gemini/Tavily semantic research quality remains unverified |
 | Any separate grading/submission brief, if one exists | The reviewed original PDF provides no rubric, deadline or delivery format |
 | Deadline and submission format | Needed for final delivery/publishing decisions |
 
 Subsequent user delegation authorized 40 additional Gemini calls and the private
 repository/upload/CI; these actions executed, with 28 additional calls reserved.
 Codex reviewed all 20 labels as AI without supplying a human attestation. Persistent
-hosting and live Tavily configuration remain pending. No award or provider
+hosting remains pending. Tavily configuration and a bounded live full pipeline check are complete. No award or provider
 outperformance is established by these checks.
 
 ## Verified original-PDF differences
@@ -75,7 +79,9 @@ cross-source copies/contained passages are grouped for model input while origina
 remain retained. Nonidentical partial overlaps and paraphrases are kept separate to
 preserve distinct facts and qualifiers; semantic deduplication is not established.
 If fewer than two supported summary claims exist, a shorter summary is disclosed.
-Production guidance also specifies semantic input classification, ordered search
-fallback and lowest-score evidence eviction, which are only partly implemented.
+Production guidance now includes semantic input classification, ordered search
+fallback, lowest-score evidence eviction and bounded local tracing. These are
+locally tested; remote provider diversity, remote tracing and hosted operation
+remain unverified.
 The PDF describes API-or-MCP extension and replaceable search providers; it does
 not mandate a particular MCP server, hosting platform or human-reviewed benchmark.

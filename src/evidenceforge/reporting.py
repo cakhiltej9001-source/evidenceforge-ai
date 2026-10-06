@@ -147,6 +147,9 @@ def render_report(state: ResearchState) -> str:
         f"Retrieval passes: {s.iteration_count} | Rewrites: {s.revision_count}",
         "",
     ]
+    for event in s.events.values():
+        if event.kind.startswith("input_review_") and event.kind != "input_review_research":
+            lines.extend(["Input guidance: " + escape(event.message), ""])
     report = s.final_report
     sources = {sid: index + 1 for index, sid in enumerate(report.source_ids if report else ())}
     sections = {section.name: section.claim_ids for section in report.sections} if report else {}

@@ -22,7 +22,13 @@ def manager(state: ResearchState) -> Update:
         or state["analysis_limited"]
         or state["last_analysis_pass"] is not None
         or state["evidence_store"]
-        or state["planning_attempts"]
+        or (
+            state["planning_attempts"]
+            and not (
+                state["planning_attempts"] == 1
+                and any(e["kind"] == "input_review_research" for e in state["events"].values())
+            )
+        )
         or state["plan_version"]
         or state["iteration_count"]
         or state["revision_count"]

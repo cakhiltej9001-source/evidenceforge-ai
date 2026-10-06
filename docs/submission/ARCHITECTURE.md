@@ -73,6 +73,9 @@ preserved; copied text is not an independent vote. Prior reports are context/nav
 never admitted
 as fresh evidence. Owner IDs are storage boundaries and must match requests,
 documents, checkpoints and exports; they do not authenticate users.
+Hosted Docker traffic is handled by Caddy before Streamlit: the health route is
+kept available for platform checks and all other routes can require Basic Auth.
+Streamlit binds to loopback, so the gateway is the externally reachable listener.
 
 ## Where behavior lives
 
@@ -87,6 +90,7 @@ documents, checkpoints and exports; they do not authenticate users.
 | Evidence graph/comparisons | `evidence/`, `nodes/intelligence.py` |
 | Call/restart persistence | `storage/checkpoints.py`, `storage/calls.py`, `storage/model_calls.py` |
 | UI and worker facade | `ui.py`, `workbench.py`, `ui_launcher.py` |
+| Hosted route authentication | `Caddyfile.auth`, `scripts/container_entrypoint.sh` |
 | Gemini reasoning | `models/gemini.py` |
 | GB energy acquisition | `retrieval/carbon_intensity.py`, `energy_demo.py` |
 | Evaluation | `evaluation.py`, `evaluation_paid.py`, `evaluation_extension.py` |

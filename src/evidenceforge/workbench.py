@@ -138,7 +138,12 @@ class LocalWorkbench:
             demo = "immediate"
         service = self.service(
             demo,
-            ResearchOptions(require_plan_approval=True, live_web=live_web, live_energy=live_energy),
+            ResearchOptions(
+                require_plan_approval=True,
+                live_web=live_web,
+                live_energy=live_energy,
+                production_policy_version=1,
+            ),
             gemini=gemini,
         )
         return self.submit(

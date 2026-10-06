@@ -2,7 +2,25 @@
 
 These values are copied from the measured Phase 9 audit, not new experiments.
 The full protocol and repairs are in [PHASE9_REPORT.md](../evaluation/PHASE9_REPORT.md).
-Labels remain a Codex draft requiring independent human review.
+Labels remain a Codex draft requiring independent human review. The saved-answer
+review dimensions are defined in [V2_SEMANTIC_RUBRIC.md](../evaluation/V2_SEMANTIC_RUBRIC.md).
+
+## Corrected v2 comparison status — 6 October 2026
+
+The corrected dataset is `docs/evaluation/dataset_v2.json` (SHA-256
+`36dce5628b62dce34e5d5543839f6995c581f6b11121fdc38811c9ddbec092f7`). It keeps
+the synthetic corpus frozen and narrows the first 16 questions to the stated
+passage factors. The offline matched runner completed 40 rows: 20 controlled
+single-response baselines and 20 one-pass workflows. It used zero provider calls;
+36 rows completed, two ended partial and two ended insufficient-evidence under
+the fixture's bounded evidence rules. These outcomes verify protocol and replay
+mechanics only, not source truth or model quality.
+
+The user approved up to 140 Gemini calls for the same comparison. The paid run
+was prepared with a durable global cap but did not start: the environment
+approval service rejected the network command after exhausting its review
+credits. No new Gemini call ran, and the historical 26/30 and 28/40 ledgers were
+not modified. The configured model remains `gemini-3.5-flash-lite`.
 
 ## Synthetic comparison
 
@@ -55,13 +73,17 @@ compared with the fixture full variant's three passes/12 calls. They are incompl
 diagnostic probes, not a matched quality comparison. No claim that Gemini or
 EvidenceForge outperforms another model is supported by these measurements.
 
-## What remains before benchmark sign-off
+## Historical pre-v2 sign-off checklist
 
 1. A person reviews all 20 annotations using [the packet](../evaluation/ANNOTATION_PACKET.md)
    and records decisions, name, date and dataset hash.
 2. Preserve a reviewed dataset version and freeze settings before reruns.
 3. Improve question/corpus scope in a new frozen version before meaningful quality reruns.
 4. Interpret actual provider outcomes, including partial/failed runs and known denominators.
+
+The checklist above describes the original v1 freeze. The corrected v2 offline
+protocol and its blocked paid execution are recorded near the top of this file;
+the independent human review gate remains open.
 
 The authorized extension and repair checks have now executed, as recorded below.
 Original provider failures and draft labels remain preserved.

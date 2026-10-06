@@ -1,0 +1,17 @@
+{
+    admin off
+    auto_https off
+}
+
+:{$PORT} {
+    @health path /_stcore/health
+    handle @health {
+        reverse_proxy 127.0.0.1:{$EVIDENCEFORGE_STREAMLIT_PORT}
+    }
+    handle {
+        basic_auth {
+            {env.CADDY_AUTH_USERNAME} {env.CADDY_AUTH_PASSWORD_HASH}
+        }
+        reverse_proxy 127.0.0.1:{$EVIDENCEFORGE_STREAMLIT_PORT}
+    }
+}

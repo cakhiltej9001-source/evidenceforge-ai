@@ -83,6 +83,7 @@ async def execute(
     elif provider != "fixture":
         raise ConfigurationError("This research CLI supports fixture or Gemini models.")
     options = ResearchOptions(
+        production_policy_version=1,
         analysis=AnalysisOptions(ranking_profile=ranking_profile or "general"),
         require_plan_approval=require_approval,
         live_web=live_web,

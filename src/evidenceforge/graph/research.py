@@ -9,6 +9,7 @@ from evidenceforge.models.gemini import GeminiResearchModel
 from evidenceforge.nodes.approval import after_approval, approve_plan, prepare_approval
 from evidenceforge.nodes.context import ContextManager
 from evidenceforge.nodes.extraction import EvidenceExtractor
+from evidenceforge.nodes.input_review import InputGuardrail
 from evidenceforge.nodes.intelligence import EvidenceIntelligence
 from evidenceforge.nodes.manager import manager
 from evidenceforge.nodes.planner import Planner
@@ -26,6 +27,7 @@ from evidenceforge.nodes.sources import SourceProcessor
 from evidenceforge.planning import PlanningOptions
 from evidenceforge.reporting import finalize
 from evidenceforge.research import ResearchModel, ResearchOptions
+from evidenceforge.services.node_trace import NodeTrace
 from evidenceforge.storage.artifacts import ArtifactStore
 from evidenceforge.storage.context import ContextRepository
 
@@ -76,22 +78,29 @@ def build_research_graph(
     options: ResearchOptions,
     checkpointer: BaseCheckpointSaver[str] | None = None,
     pause_after: str | None = None,
+    node_trace: NodeTrace | None = None,
 ) -> CompiledStateGraph[ResearchState, None, ResearchState, ResearchState]:
     if model.is_fixture is not True and not isinstance(model, GeminiResearchModel):
         raise ValueError("Unsupported live research model.")
     planning = PlanningOptions(available_source_types=tuple(processor.adapters))
     graph = StateGraph(ResearchState)
-    graph.add_node("manager", manager)
-    graph.add_node("planner", Planner(model, planning))
-    graph.add_node("context_manager", ContextManager(repository, planning))
-    graph.add_node(
+    from collections.abc import Callable
+    from typing import Any
+
+    def add_node(name: str, action: Callable[..., Any]) -> None:
+        graph.add_node(name, node_trace.wrap(name, action) if node_trace else action)
+
+    add_node("manager", manager)
+    add_node("planner", Planner(model, planning))
+    add_node("context_manager", ContextManager(repository, planning))
+    add_node(
         "prepare_approval", lambda state: prepare_approval(state, options.require_plan_approval)
     )
-    graph.add_node("plan_approval", approve_plan)
-    graph.add_node("query_generator", QueryGenerator(model, planning))
-    graph.add_node("source_processor", processor)
-    graph.add_node("evidence_extractor", extractor)
-    graph.add_node("evidence_intelligence", EvidenceIntelligence(options.analysis))
+    add_node("plan_approval", approve_plan)
+    add_node("query_generator", QueryGenerator(model, planning))
+    add_node("source_processor", processor)
+    add_node("evidence_extractor", extractor)
+    add_node("evidence_intelligence", EvidenceIntelligence(options.analysis))
     evaluator = CoverageEvaluator(model, options)
 
     async def coverage(state: ResearchState) -> dict[str, object]:
@@ -106,13 +115,21 @@ def build_research_graph(
             update["stop_reason"] = reason
         return checked_patch(state, update)
 
-    graph.add_node("coverage_evaluator", coverage)
-    graph.add_node("synthesis", Synthesis(model, options))
-    graph.add_node("critic", Critic(model, options))
-    graph.add_node("citation_checker", CitationChecker(artifacts))
-    graph.add_node("reserve_rewrite", reserve_rewrite)
-    graph.add_node("finalizer", finalize)
-    graph.add_edge(START, "manager")
+    add_node("coverage_evaluator", coverage)
+    add_node("synthesis", Synthesis(model, options))
+    add_node("critic", Critic(model, options))
+    add_node("citation_checker", CitationChecker(artifacts))
+    add_node("reserve_rewrite", reserve_rewrite)
+    add_node("finalizer", finalize)
+    if options.production_policy_version and isinstance(model, GeminiResearchModel):
+        add_node("input_guardrail", InputGuardrail(model))
+        graph.add_edge(START, "input_guardrail")
+        graph.add_conditional_edges(
+            "input_guardrail",
+            lambda state: "manager" if state["run_status"] == "created" else "finalizer",
+        )
+    else:
+        graph.add_edge(START, "manager")
     graph.add_edge("manager", "planner")
     graph.add_edge("manager", "context_manager")
     graph.add_edge(["planner", "context_manager"], "prepare_approval")

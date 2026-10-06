@@ -1,0 +1,307 @@
+{
+  "version": 2,
+  "annotation_status": "ai_reviewed",
+  "annotation_author": "Codex corrected scope; source and labels are synthetic",
+  "cases": [
+    {
+      "id": "diverse_01",
+      "split": "development",
+      "question": "According to the supplied synthetic passages, what stated factors affect solar and wind output?",
+      "scenario": "custom_two_pass",
+      "corpus_passages": [
+        "Synthetic fixture: solar output depends on sunlight.",
+        "Synthetic fixture: wind output depends on wind speed."
+      ],
+      "reference_passages": [
+        "Synthetic fixture: solar output depends on sunlight.",
+        "Synthetic fixture: wind output depends on wind speed."
+      ],
+      "expected_dispute": false,
+      "expected_abstention": false
+    },
+    {
+      "id": "diverse_02",
+      "split": "development",
+      "question": "According to the supplied synthetic passages, what stated factors affect hydro and geothermal output?",
+      "scenario": "custom_two_pass",
+      "corpus_passages": [
+        "Synthetic fixture: hydro output depends on water flow.",
+        "Synthetic fixture: geothermal output depends on subsurface heat."
+      ],
+      "reference_passages": [
+        "Synthetic fixture: hydro output depends on water flow.",
+        "Synthetic fixture: geothermal output depends on subsurface heat."
+      ],
+      "expected_dispute": false,
+      "expected_abstention": false
+    },
+    {
+      "id": "diverse_03",
+      "split": "development",
+      "question": "According to the supplied synthetic passages, what stated factors affect battery storage and hydrogen storage output?",
+      "scenario": "custom_two_pass",
+      "corpus_passages": [
+        "Synthetic fixture: battery storage output depends on charge cycles.",
+        "Synthetic fixture: hydrogen storage output depends on conversion efficiency."
+      ],
+      "reference_passages": [
+        "Synthetic fixture: battery storage output depends on charge cycles.",
+        "Synthetic fixture: hydrogen storage output depends on conversion efficiency."
+      ],
+      "expected_dispute": false,
+      "expected_abstention": false
+    },
+    {
+      "id": "diverse_04",
+      "split": "development",
+      "question": "According to the supplied synthetic passages, what stated factors affect rail and bus output?",
+      "scenario": "custom_two_pass",
+      "corpus_passages": [
+        "Synthetic fixture: rail output depends on route electrification.",
+        "Synthetic fixture: bus output depends on fleet scheduling."
+      ],
+      "reference_passages": [
+        "Synthetic fixture: rail output depends on route electrification.",
+        "Synthetic fixture: bus output depends on fleet scheduling."
+      ],
+      "expected_dispute": false,
+      "expected_abstention": false
+    },
+    {
+      "id": "diverse_05",
+      "split": "development",
+      "question": "According to the supplied synthetic passages, what stated factors affect LED lighting and heat pumps output?",
+      "scenario": "custom_two_pass",
+      "corpus_passages": [
+        "Synthetic fixture: LED lighting output depends on electrical supply.",
+        "Synthetic fixture: heat pumps output depends on ambient temperature."
+      ],
+      "reference_passages": [
+        "Synthetic fixture: LED lighting output depends on electrical supply.",
+        "Synthetic fixture: heat pumps output depends on ambient temperature."
+      ],
+      "expected_dispute": false,
+      "expected_abstention": false
+    },
+    {
+      "id": "diverse_06",
+      "split": "development",
+      "question": "According to the supplied synthetic passages, what stated factors affect desalination and water recycling output?",
+      "scenario": "custom_two_pass",
+      "corpus_passages": [
+        "Synthetic fixture: desalination output depends on membrane pressure.",
+        "Synthetic fixture: water recycling output depends on treatment stages."
+      ],
+      "reference_passages": [
+        "Synthetic fixture: desalination output depends on membrane pressure.",
+        "Synthetic fixture: water recycling output depends on treatment stages."
+      ],
+      "expected_dispute": false,
+      "expected_abstention": false
+    },
+    {
+      "id": "diverse_07",
+      "split": "development",
+      "question": "According to the supplied synthetic passages, what stated factors affect insulation and reflective roofing output?",
+      "scenario": "custom_two_pass",
+      "corpus_passages": [
+        "Synthetic fixture: insulation output depends on thermal resistance.",
+        "Synthetic fixture: reflective roofing output depends on surface reflectance."
+      ],
+      "reference_passages": [
+        "Synthetic fixture: insulation output depends on thermal resistance.",
+        "Synthetic fixture: reflective roofing output depends on surface reflectance."
+      ],
+      "expected_dispute": false,
+      "expected_abstention": false
+    },
+    {
+      "id": "diverse_08",
+      "split": "development",
+      "question": "According to the supplied synthetic passages, what stated factors affect radar and satellite sensing output?",
+      "scenario": "custom_two_pass",
+      "corpus_passages": [
+        "Synthetic fixture: radar output depends on signal reflections.",
+        "Synthetic fixture: satellite sensing output depends on orbital coverage."
+      ],
+      "reference_passages": [
+        "Synthetic fixture: radar output depends on signal reflections.",
+        "Synthetic fixture: satellite sensing output depends on orbital coverage."
+      ],
+      "expected_dispute": false,
+      "expected_abstention": false
+    },
+    {
+      "id": "diverse_09",
+      "split": "development",
+      "question": "According to the supplied synthetic passages, what stated factors affect tree planting and cool pavement output?",
+      "scenario": "custom_two_pass",
+      "corpus_passages": [
+        "Synthetic fixture: tree planting output depends on canopy growth.",
+        "Synthetic fixture: cool pavement output depends on surface material."
+      ],
+      "reference_passages": [
+        "Synthetic fixture: tree planting output depends on canopy growth.",
+        "Synthetic fixture: cool pavement output depends on surface material."
+      ],
+      "expected_dispute": false,
+      "expected_abstention": false
+    },
+    {
+      "id": "diverse_10",
+      "split": "development",
+      "question": "According to the supplied synthetic passages, what stated factors affect fiber networks and wireless networks output?",
+      "scenario": "custom_two_pass",
+      "corpus_passages": [
+        "Synthetic fixture: fiber networks output depends on cable capacity.",
+        "Synthetic fixture: wireless networks output depends on radio spectrum."
+      ],
+      "reference_passages": [
+        "Synthetic fixture: fiber networks output depends on cable capacity.",
+        "Synthetic fixture: wireless networks output depends on radio spectrum."
+      ],
+      "expected_dispute": false,
+      "expected_abstention": false
+    },
+    {
+      "id": "diverse_11",
+      "split": "development",
+      "question": "According to the supplied synthetic passages, what stated factors affect composting and landfill disposal output?",
+      "scenario": "custom_two_pass",
+      "corpus_passages": [
+        "Synthetic fixture: composting output depends on organic feedstock.",
+        "Synthetic fixture: landfill disposal output depends on waste containment."
+      ],
+      "reference_passages": [
+        "Synthetic fixture: composting output depends on organic feedstock.",
+        "Synthetic fixture: landfill disposal output depends on waste containment."
+      ],
+      "expected_dispute": false,
+      "expected_abstention": false
+    },
+    {
+      "id": "diverse_12",
+      "split": "development",
+      "question": "According to the supplied synthetic passages, what stated factors affect tidal and wave output?",
+      "scenario": "custom_two_pass",
+      "corpus_passages": [
+        "Synthetic fixture: tidal output depends on tidal range.",
+        "Synthetic fixture: wave output depends on wave motion."
+      ],
+      "reference_passages": [
+        "Synthetic fixture: tidal output depends on tidal range.",
+        "Synthetic fixture: wave output depends on wave motion."
+      ],
+      "expected_dispute": false,
+      "expected_abstention": false
+    },
+    {
+      "id": "diverse_13",
+      "split": "held_out",
+      "question": "According to the supplied synthetic passages, what stated factors affect drip irrigation and flood irrigation output?",
+      "scenario": "custom_two_pass",
+      "corpus_passages": [
+        "Synthetic fixture: drip irrigation output depends on delivery pressure.",
+        "Synthetic fixture: flood irrigation output depends on field runoff."
+      ],
+      "reference_passages": [
+        "Synthetic fixture: drip irrigation output depends on delivery pressure.",
+        "Synthetic fixture: flood irrigation output depends on field runoff."
+      ],
+      "expected_dispute": false,
+      "expected_abstention": false
+    },
+    {
+      "id": "diverse_14",
+      "split": "held_out",
+      "question": "According to the supplied synthetic passages, what stated factors affect local caching and remote queries output?",
+      "scenario": "custom_two_pass",
+      "corpus_passages": [
+        "Synthetic fixture: local caching output depends on cache freshness.",
+        "Synthetic fixture: remote queries output depends on network latency."
+      ],
+      "reference_passages": [
+        "Synthetic fixture: local caching output depends on cache freshness.",
+        "Synthetic fixture: remote queries output depends on network latency."
+      ],
+      "expected_dispute": false,
+      "expected_abstention": false
+    },
+    {
+      "id": "diverse_15",
+      "split": "held_out",
+      "question": "According to the supplied synthetic passages, what stated factors affect retrieval and fine-tuning output?",
+      "scenario": "custom_two_pass",
+      "corpus_passages": [
+        "Synthetic fixture: retrieval output depends on indexed sources.",
+        "Synthetic fixture: fine-tuning output depends on training data."
+      ],
+      "reference_passages": [
+        "Synthetic fixture: retrieval output depends on indexed sources.",
+        "Synthetic fixture: fine-tuning output depends on training data."
+      ],
+      "expected_dispute": false,
+      "expected_abstention": false
+    },
+    {
+      "id": "diverse_16",
+      "split": "held_out",
+      "question": "According to the supplied synthetic passages, what stated factors affect ventilation and filtration output?",
+      "scenario": "custom_two_pass",
+      "corpus_passages": [
+        "Synthetic fixture: ventilation output depends on air exchange.",
+        "Synthetic fixture: filtration output depends on filter media."
+      ],
+      "reference_passages": [
+        "Synthetic fixture: ventilation output depends on air exchange.",
+        "Synthetic fixture: filtration output depends on filter media."
+      ],
+      "expected_dispute": false,
+      "expected_abstention": false
+    },
+    {
+      "id": "diverse_17",
+      "split": "held_out",
+      "question": "Compare Northfield solar electricity output reported by two synthetic sources.",
+      "scenario": "dispute",
+      "reference_passages": [
+        "Northfield solar electricity output was 100 GWh in 2024 for all plants under standard operation.",
+        "Northfield solar electricity output was 120 GWh in 2024 for all plants under standard operation."
+      ],
+      "expected_dispute": true,
+      "expected_abstention": false
+    },
+    {
+      "id": "diverse_18",
+      "split": "held_out",
+      "question": "Investigate disagreement in Northfield solar electricity output for 2024.",
+      "scenario": "dispute",
+      "reference_passages": [
+        "Northfield solar electricity output was 100 GWh in 2024 for all plants under standard operation.",
+        "Northfield solar electricity output was 120 GWh in 2024 for all plants under standard operation."
+      ],
+      "expected_dispute": true,
+      "expected_abstention": false
+    },
+    {
+      "id": "diverse_19",
+      "split": "held_out",
+      "question": "Compare battery and hydrogen output without any available source.",
+      "scenario": "empty",
+      "reference_passages": [],
+      "expected_dispute": false,
+      "expected_abstention": true
+    },
+    {
+      "id": "diverse_20",
+      "split": "held_out",
+      "question": "Compare rainfall and river flow without any available source.",
+      "scenario": "empty",
+      "reference_passages": [],
+      "expected_dispute": false,
+      "expected_abstention": true
+    }
+  ],
+  "reviewed_by": "Codex, delegated AI review",
+  "reviewed_at": "2026-10-06"
+}

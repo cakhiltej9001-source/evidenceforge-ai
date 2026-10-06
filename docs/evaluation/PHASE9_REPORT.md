@@ -116,3 +116,15 @@ The original paid count remains 26 of 30; no new Gemini calls were made in this 
 Only the retrieval-loop ablation has measured benchmark results. Contradiction,
 ranking, and repair behavior have component tests but no separate Phase 9 ablation
 measurements; no quantitative improvement is claimed for those components.
+
+
+## Delegated review completed — 5 October 2026
+
+The user again asked Codex to review on their behalf. The
+[completed review](DELEGATED_REVIEW_2026-10-05.md) covers all 20 cases, all 40
+saved fixture runs, four aggregate summaries, 124 artifact integrity checks and
+62 exact passage-offset checks. All recomputed scores match. Sixteen question scopes
+need revision; two dispute and two abstention fixture labels are retained. Proposed
+questions are concrete and unexecuted. No original labels/results, provider ledgers
+or human attestations were changed. This closes the delegated review task;
+research-quality validation and independent human-validation claims remain unestablished.

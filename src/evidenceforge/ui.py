@@ -5,6 +5,7 @@ from tempfile import NamedTemporaryFile
 
 import streamlit as st
 
+from evidenceforge.auth import LoginGate, fingerprint, required
 from evidenceforge.config import ConfigurationError, load_settings
 from evidenceforge.evidence.projection import audit, project
 from evidenceforge.exports import report_export
@@ -76,6 +77,8 @@ def show_report(state: ResearchState) -> None:
 
 @st.fragment(run_every=2.0)  # type: ignore[untyped-decorator]
 def run_panel(app: LocalWorkbench, owner: str) -> None:
+    if not authenticated():
+        return
     try:
         job = st.session_state.get("active_job")
         if job:
@@ -226,9 +229,45 @@ def run_panel(app: LocalWorkbench, owner: str) -> None:
         st.session_state.pop("active_job", None)
 
 
+@st.cache_resource  # type: ignore[untyped-decorator]
+def login_gate() -> LoginGate:
+    return LoginGate()
+
+
+def authenticated() -> bool:
+    settings = load_settings()
+    if not required(settings):
+        return True
+    try:
+        identity = fingerprint(settings)
+    except ConfigurationError:
+        st.error("Hosted login is not configured. Ask the owner to complete setup.")
+        return False
+    if st.session_state.get("login_identity") == identity:
+        return True
+    st.subheader("Sign in to EvidenceForge")
+    with st.form("hosted_login", clear_on_submit=True):
+        username = st.text_input("Username")
+        password = st.text_input("Password", type="password")
+        submitted = st.form_submit_button("Sign in")
+    if submitted:
+        if login_gate().check(username, password, settings):
+            st.session_state["login_identity"] = identity
+            st.rerun()
+        st.error(
+            "Sign-in failed or temporarily limited. Check your details and try again in a minute."
+        )
+    return False
+
+
 def main() -> None:
     st.set_page_config(page_title="EvidenceForge", page_icon="🔎", layout="wide")
+    if not authenticated():
+        return
     st.title("EvidenceForge research workbench")
+    if required(load_settings()) and st.sidebar.button("Sign out"):
+        st.session_state.clear()
+        st.rerun()
     st.caption("Local evidence workbench | exact passages and inspectable citations")
     st.info(
         "Choose offline reasoning or configured Gemini. Saved Gemini workflows support "
@@ -236,9 +275,15 @@ def main() -> None:
         "Synthetic demos are examples; use documents for your own research."
     )
     app = workbench(str(load_settings().data_dir.resolve()))
-    owner = st.sidebar.text_input("Local workspace scope", value="local")
+    owner = (
+        "hosted"
+        if required(load_settings())
+        else st.sidebar.text_input("Local workspace scope", value="local")
+    )
     st.sidebar.caption(
-        "Scope names separate local records; they are not login credentials. Run on localhost only."
+        "Hosted access uses one trusted owner account."
+        if required(load_settings())
+        else "Scope names separate local records. Local access is restricted to this computer."
     )
     try:
         ResearchRequest(question="Workspace selection", owner_scope=owner)
