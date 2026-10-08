@@ -138,3 +138,60 @@ def test_explicit_hourly_phrases_are_still_rejected(added):
     draft = PlanDraft.model_validate(plan([added]))
     with pytest.raises(PlanScopeError):
         validate_plan_scope(ResearchRequest(question=QUESTION), draft)
+
+
+@pytest.mark.parametrize(
+    "question, added",
+    [
+        ("What was solar output in January 2024?", "Daily output"),
+        ("What was solar output in 2024-01?", "Hourly measurements"),
+        ("What was solar output on 2024-01-01?", "Hourly measurements"),
+        ("How did seasonal solar output change in 2024?", "Daily output"),
+        ("Compare annual 2024 output, including January.", "Quarterly variance"),
+        ("What was solar output in May 2024?", "Output each week"),
+    ],
+)
+def test_dated_or_seasonal_context_does_not_allow_every_breakdown(question, added):
+    draft = PlanDraft.model_validate(plan([added]))
+    with pytest.raises(PlanScopeError, match="unrequested temporal breakdown"):
+        validate_plan_scope(ResearchRequest(question=question), draft)
+
+
+@pytest.mark.parametrize(
+    "question",
+    [
+        "What was solar output on 2024-01-01?",
+        "What was solar output on January 1, 2024?",
+        "What was solar output on 1 January 2024?",
+    ],
+)
+def test_explicit_day_scope_preserves_daily_measurements(question):
+    draft = PlanDraft.model_validate(plan(["Daily output"]))
+    validate_plan_scope(ResearchRequest(question=question), draft)
+
+
+def test_dated_request_preserves_explicit_hourly_preference():
+    draft = PlanDraft.model_validate(plan(["Hourly measurements"]))
+    validate_plan_scope(
+        ResearchRequest(
+            question="What was solar output in January 2024?",
+            preferences=("Include hourly measurements.",),
+        ),
+        draft,
+    )
+
+
+def test_chronology_context_is_not_a_breakdown_requirement():
+    draft = PlanDraft.model_validate(
+        plan(["Record publication dates and confirm coverage of 365 days and 12 months."])
+    )
+    validate_plan_scope(ResearchRequest(question=QUESTION), draft)
+
+
+def test_dated_scope_rejection_stops_before_query_generation():
+    question = "What was solar output in January 2024?"
+    model = FixturePlanningModel(plan_output=plan(["Daily output"], question))
+    state = asyncio.run(PlanningService(model).plan(ResearchRequest(question=question)))
+    assert state["planning_status"] == state["run_status"] == "failed"
+    assert state["research_questions"] == state["search_queries"] == []
+    assert model.plan_calls == 1 and model.query_calls == 0

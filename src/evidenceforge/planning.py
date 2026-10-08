@@ -66,12 +66,16 @@ class PlanDraft(Contract):
         return self
 
 
-_TEMPORAL_BREAKDOWNS = (
-    r"\b(?:hourly|hour[- ]by[- ]hour|(?:per|each|every|by)\s+hours?)\b",
-    r"\b(?:daily|days?|day[- ]by[- ]day|per day)\b",
-    r"\b(?:weekly|weeks?|week[- ]by[- ]week|per week)\b",
-    r"\b(?:monthly|months?|month[- ]by[- ]month|per month)\b",
-    r"\b(?:quarterly|quarters?|quarter[- ]by[- ]quarter|per quarter)\b",
+_TEMPORAL_BREAKDOWNS = {
+    "hour": r"\b(?:hourly|hour[- ]by[- ]hour|(?:per|each|every|by)\s+hours?)\b",
+    "day": r"\b(?:daily|day[- ]by[- ]day|(?:per|each|every|by)\s+days?)\b",
+    "week": r"\b(?:weekly|week[- ]by[- ]week|(?:per|each|every|by)\s+weeks?)\b",
+    "month": r"\b(?:monthly|month[- ]by[- ]month|(?:per|each|every|by)\s+months?)\b",
+    "quarter": r"\b(?:quarterly|quarter[- ]by[- ]quarter|(?:per|each|every|by)\s+quarters?)\b",
+}
+_MONTH_NAME = (
+    r"(?:january|february|march|april|may(?=\s+\d)|june|july|august|"
+    r"september|october|november|december)"
 )
 
 
@@ -85,21 +89,30 @@ def validate_plan_scope(request: ResearchRequest, plan: PlanDraft) -> None:
     requested = normalized(" ".join((request.question, *request.preferences)))
     if not re.search(r"\b(?:19\d{2}|20\d{2}|annual|annually|yearly)\b", requested):
         return
-    # A dated or seasonal request may need a temporal breakdown to address its scope.
+    allowed = {
+        unit for unit, pattern in _TEMPORAL_BREAKDOWNS.items() if re.search(pattern, requested)
+    }
+    # Month/date and seasonal context permit monthly supporting measurements,
+    # not every possible finer breakdown. Bare chronology nouns are not criteria.
     if re.search(
-        r"\b(?:\d{4}-\d{2}(?:-\d{2})?|january|february|march|april|june|july|"
-        r"august|september|october|november|december|may\s+\d|seasonal|seasonally|seasons)\b",
+        rf"\b(?:\d{{4}}-\d{{2}}(?:-\d{{2}})?|{_MONTH_NAME}|seasonal|seasonally|seasons)\b",
         requested,
     ):
-        return
+        allowed.add("month")
+    if re.search(r"\b\d{4}-\d{2}-\d{2}\b", requested) or re.search(
+        rf"\b(?:{_MONTH_NAME}\s+\d{{1,2}}(?:st|nd|rd|th)?(?:\s*,\s*|\s+)\d{{4}}|"
+        rf"\d{{1,2}}(?:st|nd|rd|th)?\s+{_MONTH_NAME}\s+\d{{4}})\b",
+        requested,
+    ):
+        allowed.add("day")
     proposed = " ".join(
         text
         for question in plan.questions
         for text in (question.question, *question.acceptance_criteria)
     ).casefold()
     if any(
-        re.search(pattern, proposed) and not re.search(pattern, requested)
-        for pattern in _TEMPORAL_BREAKDOWNS
+        re.search(pattern, proposed) and unit not in allowed
+        for unit, pattern in _TEMPORAL_BREAKDOWNS.items()
     ):
         raise PlanScopeError("unrequested temporal breakdown")
 

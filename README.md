@@ -271,7 +271,8 @@ the worker again. Expired leases require explicit recovery; see
 
 Generated plans for annual requests or requests naming a year reject newly added
 subannual requirements. Explicit breakdown preferences remain allowed. Date and
-seasonal exemptions keep this a limited safeguard; review the plan's full scope.
+season context authorize only relevant measurements; finer added breakdowns stay
+guarded. Other scope changes still need plan review.
 
 ### Optional Gemini and live sources
 

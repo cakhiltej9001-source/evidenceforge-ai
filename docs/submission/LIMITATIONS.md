@@ -19,15 +19,17 @@ in workflow case 18. Both conflict workflows remain partial. Independent human
 validation, general factual accuracy and source truth remain unclaimed.
 
 Generated-plan guards reject added subannual requirements for annual/year requests
-and respect explicit preferences. Date/seasonal exemptions and phrase matching
-limit coverage; other entity, metric or population drift still needs plan review.
+and respect explicit preferences. Date/season context authorizes relevant supporting
+measurements without exempting finer unrequested breakdowns. Phrase matching limits
+coverage; other entity, metric or population drift still needs plan review.
 Numeric extraction also remains limited to explicit supported scopes and wording,
 including electricity generation with "is", "totaled" and "totalled".
 
 Retained public-source replay uses up to five integrity-checked WEB/API snapshots,
 scripted reasoning and duplicate/missing/empty controls. Exact locators and citation
-support measure mechanics in one energy corpus. Independent semantic validation,
-source truth and live LLM quality remain open.
+support measure mechanics in two energy-related retained corpora: EIA/Utility Dive
+full text and Wikipedia search excerpts. [Nine checks passed](../evaluation/RETAINED_CORPORA_2026-10-08.md), including correctly partial status for absent wind evidence.
+Independent semantic validation, source truth and live LLM quality remain open.
 
 ## Sources, documents and providers
 

@@ -1,0 +1,136 @@
+{
+  "evaluation": "retained_distinct_corpora_mechanical_check",
+  "question": "What do the retained sources say about solar and wind electricity output?",
+  "criteria": [
+    "solar",
+    "wind"
+  ],
+  "cases": [
+    {
+      "input_results": 5,
+      "run_status": "completed",
+      "stop_reason": "sufficient",
+      "claims": 30,
+      "sources": 5,
+      "evidence": 30,
+      "exact_locator_passages": 30,
+      "citation_precision_against_retained_text": 1.0,
+      "citation_coverage": 1.0,
+      "gaps": 0,
+      "quantitative_conflicts_reported": 0,
+      "provider_calls": 0,
+      "scripted_model_stages": 5,
+      "latency_seconds": 5.8845,
+      "independent_semantic_validation": false,
+      "source_access_scope_preserved": true,
+      "claims_stay_within_corpus_snapshots": true,
+      "corpus_id": "corpus_1",
+      "input_state_sha256": "fbb850ae05d02398433f87c2228f82414f99d2dfa73be199b65dc46ed955d2ae",
+      "retained_snapshots": 5,
+      "full_text_sources": 5,
+      "search_excerpt_sources": 0,
+      "source_family_signals": 2,
+      "absent_whole_word_aspects": [],
+      "substring_only_wind_occurrences": 0,
+      "corpus": [
+        {
+          "title": "Wind and solar generated a record 17% of U.S. electricity in 2025 -\r\n\t\tU.S. Energy Information Administration (EIA)",
+          "url": "https://www.eia.gov/todayinenergy/detail.php?id=67367",
+          "snapshot_sha256": "cef010b611bdef2bb6e89a290e3f2180f465f312479271810095c8d0642bad1b"
+        },
+        {
+          "title": "Utility-scale solar and wind hit a record 17% of US generation in 2025: EIA",
+          "url": "https://www.utilitydive.com/news/solar-wind-generation-2025-eia/815666",
+          "snapshot_sha256": "64e3b5867a1eb3ef5f19fe7bc0984b8ec7f8bc6e410bd954592f0027dfba432c"
+        },
+        {
+          "title": "U.S. energy facts explained - consumption and production - U.S. Energy Information Administration (EIA)",
+          "url": "https://www.eia.gov/energyexplained/us-energy-facts",
+          "snapshot_sha256": "b15857269c117f336216aa64b9dc2d696c08b21551e7e64288e87e95e86e55f7"
+        },
+        {
+          "title": "The United States set record energy production in 2025, again -\r\n\t\tU.S. Energy Information Administration (EIA)",
+          "url": "https://www.eia.gov/todayinenergy/detail.php?id=67684",
+          "snapshot_sha256": "ab43e44808b1a4fd36469dff56d48ee4aefaa518ef7fca38ce81cfb70a4019ac"
+        },
+        {
+          "title": "Electricity generation, capacity, and sales in the United States - U.S. Energy Information Administration (EIA)",
+          "url": "https://www.eia.gov/energyexplained/electricity/electricity-in-the-us-generation-capacity-and-sales.php",
+          "snapshot_sha256": "dcac8bddbd604420faca4d3c1c18b9b62403139de44094a6a4e599cf23d665c7"
+        }
+      ]
+    },
+    {
+      "input_results": 5,
+      "run_status": "partial",
+      "stop_reason": "pass_limit",
+      "claims": 9,
+      "sources": 5,
+      "evidence": 9,
+      "exact_locator_passages": 9,
+      "citation_precision_against_retained_text": 1.0,
+      "citation_coverage": 1.0,
+      "gaps": 1,
+      "quantitative_conflicts_reported": 0,
+      "provider_calls": 0,
+      "scripted_model_stages": 5,
+      "latency_seconds": 7.7114,
+      "independent_semantic_validation": false,
+      "source_access_scope_preserved": true,
+      "claims_stay_within_corpus_snapshots": true,
+      "corpus_id": "corpus_2",
+      "input_state_sha256": "a27edd8c25052fc19802a2c011d03715d47f68d3afdcbec3a55004c7510bf4b0",
+      "retained_snapshots": 5,
+      "full_text_sources": 0,
+      "search_excerpt_sources": 5,
+      "source_family_signals": 1,
+      "absent_whole_word_aspects": [
+        "wind"
+      ],
+      "substring_only_wind_occurrences": 1,
+      "corpus": [
+        {
+          "title": "Primary energy",
+          "url": "https://en.wikipedia.org/wiki/Primary_energy",
+          "snapshot_sha256": "6840c98d295b9edd3f91608ffc0ced6a8bfe6429f0f903323eb629e6524e2862"
+        },
+        {
+          "title": "Solar generator",
+          "url": "https://en.wikipedia.org/wiki/Solar_generator",
+          "snapshot_sha256": "61e0db410db373528c6ee805a5c976e9d5ea6326e28d3fbc2132e5dfe02268ed"
+        },
+        {
+          "title": "Solar power in Australia",
+          "url": "https://en.wikipedia.org/wiki/Solar_power_in_Australia",
+          "snapshot_sha256": "d3d278dcd72658fd020fcfa098321855ccaaa7079ccac7e7a773490f5d6ff2f7"
+        },
+        {
+          "title": "Ivanpah Solar Power Facility",
+          "url": "https://en.wikipedia.org/wiki/Ivanpah_Solar_Power_Facility",
+          "snapshot_sha256": "55cdefa1c058492903f74b9a8975687b2afac49e02ce3d9ad4775fe7ff185a04"
+        },
+        {
+          "title": "Solar power by country",
+          "url": "https://en.wikipedia.org/wiki/Solar_power_by_country",
+          "snapshot_sha256": "19c0f7846698fef194b04e2124c5511a889f3371b3369e33ab62c10109334e58"
+        }
+      ]
+    }
+  ],
+  "checks": {
+    "distinct_saved_states": true,
+    "snapshot_sets_disjoint": true,
+    "all_exact_locators": true,
+    "all_cited_claims_supported": true,
+    "actual_absent_aspect_exercised": true,
+    "absent_aspect_not_completed": true,
+    "source_access_scope_preserved": true,
+    "corpora_do_not_mix": true,
+    "no_provider_calls": true
+  },
+  "provider_calls": 0,
+  "source_truth_verified": false,
+  "independent_semantic_validation": false,
+  "independent_human_review": false,
+  "scope": "two energy-related corpora; scripted reasoning; no topical accuracy generalization"
+}

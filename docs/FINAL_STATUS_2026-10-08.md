@@ -37,8 +37,9 @@ The default Render blueprint also selects free compute without a persistent disk
 ## Implemented additions
 
 Generated plans reject new subannual requirements for annual/year requests while
-respecting explicit breakdown preferences. Date/seasonal exemptions keep this a
-bounded scope check. Numeric extraction accepts explicit electricity-generation
+respecting explicit breakdown preferences. Date/season context allows relevant
+supporting measurements without exempting unrelated finer breakdowns. This remains
+a bounded scope check. Numeric extraction accepts explicit electricity-generation
 wording while preserving entity, timeframe, population, condition and unit checks.
 
 Optional PDF OCR requires Python 3.12 and the `ocr` extra; retained quotations
@@ -66,6 +67,12 @@ See the [measured replay report](evaluation/RETAINED_PUBLIC_REPLAY_2026-10-07.md
 and [raw JSON](evaluation/RETAINED_PUBLIC_REPLAY_2026-10-07.json).
 Scripted reasoning over one corpus establishes neither source truth, general
 research accuracy nor independent human validation.
+
+## Additional free verification - 8 October 2026
+
+- The dated/seasonal planning correction passed **35 targeted tests in 2.37 seconds**. Date context no longer bypasses all temporal scope checks; explicit preferences and chronology wording remain supported.
+- [Two retained corpora](evaluation/RETAINED_CORPORA_2026-10-08.md) passed **all nine checks** with zero provider calls. EIA/Utility Dive full text retained 30 exact cited claims and completed; Wikipedia search excerpts retained nine exact cited claims and correctly stayed partial with a wind-evidence gap. Excerpt scope and corpus isolation were preserved.
+- These measurements do not establish broad semantic accuracy or independent human review.
 
 ## Remaining external checks and broader extensions
 

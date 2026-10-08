@@ -15,7 +15,7 @@ relative to `src/evidenceforge/` unless marked otherwise.
 
 | ID | Requirement | Implementation/evidence | Status and qualification |
 |---|---|---|---|
-| B01 | Focused subquestions and criteria | `nodes/planner.py`, `planning.py`, `schemas.py`; planning/scope tests | Baseline implemented and locally tested; current guard rejects new subannual requirements for annual/year requests and respects explicit preferences. Date/seasonal exemptions limit coverage |
+| B01 | Focused subquestions and criteria | `nodes/planner.py`, `planning.py`, `schemas.py`; planning/scope tests | Baseline implemented and locally tested; current guard rejects new subannual requirements for annual/year requests and respects explicit preferences. Date/season context authorizes relevant measurements without bypassing finer breakdown checks; phrase matching limits coverage |
 | B02 | Web/document/external source paths (PDF 2, 5-6, 10) | `retrieval/tavily.py`, `retrieval/documents.py`, `retrieval/carbon_intensity.py`, `services/research.py` | Implemented explicit mixed-source full graph, CLI/UI flags, approval/edit/reconnect and HTTP cleanup; mocked web/API/document integration verified. Actual Tavily acquisition/full research/reconnect verified on 5 October with one search and deterministic reasoning; semantic quality remains open. No particular MCP server is mandated |
 | B03 | Manager coordinates planning/context | `graph/research.py`, `nodes/manager.py`, `nodes/context.py`; planning tests | Implemented all-predecessor join; one downstream initialization |
 | B04 | Source-specific bounded queries | `nodes/queries.py`; `tests/test_planning_queries.py` | Implemented, including follow-up queries |
@@ -58,7 +58,7 @@ test-pass, browser-download, human-review or remote-trace claim.
 | Local PDF OCR opt-in | `storage/ocr.py`, `storage/ocr_worker.py`, `storage/documents.py`; OCR regressions | Python 3.12 and `ocr` extra; bounded local child process; quotations refer to transcripts and require original-page checks |
 | DOCX table row retention | `storage/documents.py`; document regressions | Cell alignment and row locators retained; merged cells and layout remain qualified |
 | Durable offline local queue | `storage/job_queue.py`, `services/job_worker.py`, `offline_jobs.py`; queue regressions | Local SQLite leases; explicit approval/recovery; fixture jobs only; no hosted scheduler |
-| Retained public-source replay | `evaluation_retained.py`; retained-replay regressions | Up to five integrity-checked sources; scripted citation/provenance controls; no new provider calls or independent semantic validation |
+| Retained public-source replay | `evaluation_retained.py`, `scripts/run_retained_corpora_check.py`; retained-replay regressions | Two distinct energy corpora passed nine checks, preserving full-text/excerpt scope and missing-aspect partial outcomes; no new provider calls or independent semantic validation |
 | Broader explicit numeric wording | `evidence/propositions.py`; evidence intelligence tests | Generation synonyms and explicit verbs; ambiguous/unmatched scopes remain unclassified |
 | Synthetic trace receipt verification | `trace_verification.py`, `services/observability.py`; trace regressions | Fixed synthetic payload/project and explicit `--execute`; synthetic delivery/readback verified on 8 October |
 

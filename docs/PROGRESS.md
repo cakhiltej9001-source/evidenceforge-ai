@@ -13,8 +13,9 @@ regression verification passed all 445 tests and both CI jobs; one synthetic Lan
 
 The corrected comparison remains 136/140 calls; historical ledgers remain
 26/30 and 28/40. New additions used zero Gemini/Tavily calls. The retained public
-snapshot replay passed all five mechanical checks for one energy corpus;
-general research accuracy and independent human review are not claimed.
+snapshot replay now covers two distinct energy corpora, with all nine scope,
+citation and missing-aspect checks passed. General research accuracy and
+independent human review are not claimed.
 
 All sections below preserve historical execution records. Their then-pending
 notes are superseded by the current status above.

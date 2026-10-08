@@ -1,0 +1,46 @@
+name: public demo browser verification
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: public-demo-browser-verification
+  cancel-in-progress: false
+
+jobs:
+  fixture-downloads:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      EVIDENCEFORGE_MODEL_PROVIDER: fixture
+      EVIDENCEFORGE_MODEL_API_KEY: ""
+      EVIDENCEFORGE_TAVILY_API_KEY: ""
+      EVIDENCEFORGE_TRACING_ENABLED: "false"
+      LANGSMITH_TRACING: "false"
+      LANGSMITH_API_KEY: ""
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install isolated pinned browser tooling
+        run: |
+          python -m venv /tmp/evidenceforge-browser
+          /tmp/evidenceforge-browser/bin/python -m pip install --disable-pip-version-check playwright==1.63.0
+          /tmp/evidenceforge-browser/bin/python -m playwright install --with-deps chromium
+      - name: Verify fixed free synthetic demo and actual downloads
+        run: |
+          timeout 360s /tmp/evidenceforge-browser/bin/python scripts/verify_public_downloads.py --output-dir .evidenceforge/verification/public-downloads
+      - name: Retain sanitized result and masked screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: public-demo-browser-verification
+          path: |
+            .evidenceforge/verification/public-downloads/result.json
+            .evidenceforge/verification/public-downloads/*.png
+          if-no-files-found: warn
+          retention-days: 7
