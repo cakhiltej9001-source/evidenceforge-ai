@@ -85,7 +85,10 @@ def check_fixture_controls(page: Frame) -> None:
     )
     provider = page.get_by_role("combobox", name="Reasoning provider", exact=True)
     check(provider.is_visible(), "provider_control_missing")
-    check(provider.inner_text().strip() == "Offline", "provider_is_not_offline")
+    # BaseWeb exposes an input as the combobox; its inner text is empty.
+    # The selected value is rendered in the surrounding labeled Streamlit field.
+    field = provider.locator('xpath=ancestor::*[@data-testid="stSelectbox"][1]')
+    check(field.get_by_text("Offline", exact=True).is_visible(), "provider_is_not_offline")
     check(page.get_by_role("checkbox").count() == 0, "live_controls_present")
     check(page.locator('input[type="file"]').count() == 0, "upload_control_present")
 
