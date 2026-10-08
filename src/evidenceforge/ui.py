@@ -47,8 +47,12 @@ def show_report(state: ResearchState) -> None:
     st.subheader("Research report")
     st.markdown(render_report(state))
     st.caption("Downloads include selected document/source passages. Review before sharing.")
-    st.download_button("Download Markdown", render_report(state), "report.md", "text/markdown")
-    st.download_button("Download JSON", report_export(state), "report.json", "application/json")
+    st.download_button(
+        "Download Markdown", render_report(state), "report.md", "text/markdown", on_click="ignore"
+    )
+    st.download_button(
+        "Download JSON", report_export(state), "report.json", "application/json", on_click="ignore"
+    )
     with st.expander("Audit results, source ranking and disputes"):
         st.json(audit(state))
     st.subheader("Inspect a finding")

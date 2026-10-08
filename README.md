@@ -5,7 +5,7 @@
 ![LangGraph](https://img.shields.io/badge/Workflow-LangGraph-teal)
 ![SQLite](https://img.shields.io/badge/Storage-SQLite-blue)
 ![Tests](https://img.shields.io/badge/Tests-373%20passed-brightgreen)
-![Demo](https://img.shields.io/badge/Demo-local-orange)
+![Demo](https://img.shields.io/badge/Demo-public%20Streamlit-green)
 
 > A local research workbench that plans questions, gathers inspectable evidence,
 > follows coverage gaps and produces reports with traceable quotations.
@@ -27,7 +27,7 @@ Choose **Create plan → Approve plan** to try the workflow. The public
 uses temporary storage without document uploads or paid provider calls. The
 full workbench runs locally with durable storage. The ₹5/month cap remains in
 force; paid Render deployment is deferred. Repository access is private.
-See [current phase status](docs/FINAL_STATUS_2026-10-06.md).
+See [current phase status](docs/FINAL_STATUS_2026-10-08.md).
 
 ## ✨ Project at a glance
 
@@ -43,7 +43,7 @@ See [current phase status](docs/FINAL_STATUS_2026-10-06.md).
 | Storage | Scoped SQLite checkpoints, durable call receipts and immutable source snapshots |
 | Interface | CLI plus optional Streamlit workbench |
 | Evaluation | Offline regression and a frozen 20-case, 40-answer controlled Gemini comparison |
-| Deployment | Durable local installation; constrained Docker and authenticated gateway verified in private CI |
+| Deployment | Public offline Streamlit demo; durable local installation; constrained Docker and authenticated gateway verified in private CI |
 
 ## 🧠 Architecture
 
@@ -199,10 +199,10 @@ Ranking, lexical relevance and numeric dispute rules remain inspectable heuristi
 | LangGraph | Explicit branches, joins, loops and resumable execution | Graph changes need checkpoint compatibility controls |
 | SQLite | Local checkpoints, scoped storage and durable operation receipts | Designed here for a trusted local workbench, not a distributed service |
 | uv and uv.lock | Reproducible dependency installation and packaging | Use supported Python versions and the retained lock |
-| Streamlit | A small service-backed interface for inspecting runs | Jobs execute in-process; restarting can interrupt active work |
+| Streamlit | A small service-backed interface for inspecting runs | UI jobs execute in-process; a separate CLI queues durable offline jobs |
 | Gemini | Optional structured planning, coverage, synthesis and criticism | Availability, latency and usage limits vary |
 | HTTPX / source adapters | Bounded streamed responses, typed failures and explicit endpoints | Live access and research quality require separate checks |
-| pypdf / python-docx | Located PDF/DOCX extraction alongside TXT | Scanned/textless PDF OCR is unavailable |
+| pypdf / python-docx | Located PDF/DOCX extraction alongside TXT; optional local OCR | OCR requires Python 3.12 and original-page checks |
 | Docker / Caddy | Repeatable constrained execution and protected container routes | Hosted persistence must still be verified on an actual platform |
 
 Document lookup is lexical. Coverage loops, exact evidence records and durable
@@ -241,6 +241,37 @@ folder on reconnect. A plan edit creates a new version needing approval. Save th
 whole ignored `.evidenceforge` directory when backing up this local installation.
 Stopping/restarting the UI preserves saved research, though active work may be
 interrupted. Owner scopes isolate storage; they are not login identities.
+
+### Optional local PDF OCR and offline jobs
+
+For textless PDF pages, use Python 3.12 and opt in to local OCR:
+
+```powershell
+uv sync --locked --python 3.12 --extra ui --extra ocr
+uv run --locked --python 3.12 --extra ocr evidenceforge-ingest "path/to/scan.pdf" --owner demo --ocr
+```
+
+OCR runs in a bounded CPU child process. Defaults allow five pages, four million
+pixels per page, 120 seconds and 200 KB of text. OCR quotations refer to a labeled
+machine transcript; check wording, numbers and layout against the PDF page image.
+DOCX table rows retain cell alignment and row locators.
+
+The separate SQLite queue persists offline fixture jobs in the local data folder:
+
+```powershell
+uv run --locked python -m evidenceforge.offline_jobs --data-dir .evidenceforge --owner demo enqueue "Compare solar and wind electricity output." --demo second-pass
+uv run --locked python -m evidenceforge.offline_jobs --data-dir .evidenceforge --owner demo worker
+uv run --locked python -m evidenceforge.offline_jobs --data-dir .evidenceforge --owner demo status JOB_ID
+```
+
+Each worker claims one job and exits. Review the returned thread's plan in the
+local workbench before using `approve JOB_ID --plan-version VERSION`, then invoke
+the worker again. Expired leases require explicit recovery; see
+[setup commands](docs/submission/SETUP.md). Workers reject paid/live profiles.
+
+Generated plans for annual requests or requests naming a year reject newly added
+subannual requirements. Explicit breakdown preferences remain allowed. Date and
+seasonal exemptions keep this a limited safeguard; review the plan's full scope.
 
 ### Optional Gemini and live sources
 
@@ -290,6 +321,31 @@ backup/restore, health and authenticated gateway access. Tests block ordinary
 network connections and use fabricated secrets. Local Docker is not installed;
 container verification ran in the private repository's CI.
 
+### Retained public-source replay and synthetic tracing
+
+Keep the saved state with its matching artifact folder, then replay retained public
+WEB/API snapshots without new search or model-provider calls:
+
+```powershell
+uv run --locked python -m evidenceforge.evaluation_retained --state ".evidenceforge/reports/RUN_ID/state.json" --output ".evidenceforge/evaluation/retained-public"
+uv run --locked python -m evidenceforge.trace_verification
+```
+
+The replay uses up to five sources and scripted reasoning to check exact locators,
+citation support and duplicate/missing/empty controls. It measures mechanics for
+one retained corpus; source truth and independent semantic validation remain open.
+
+The tracing command above checks readiness without uploading. Privately configure
+`LANGSMITH_API_KEY`, then explicitly opt in to one synthetic counter span:
+
+```powershell
+uv run --locked python -m evidenceforge.trace_verification --execute --output ".evidenceforge/verification/synthetic-trace.json"
+```
+
+The probe uses a fixed project and allowlisted counters, excluding research
+questions, documents and graph payloads. Remote delivery remains unverified until
+an exact completed-span readback succeeds.
+
 ### Corrected controlled Gemini comparison
 
 Both variants received the same frozen corpus for 20 cases. These are inspected
@@ -337,8 +393,8 @@ quality of a combined live Gemini/web report.
 | Tavily is not configured | Live web selected without a current project key | Configure the private key before planning, or use offline/local-document mode |
 | Report is partial | Unresolved criteria, conflict or an exhausted allowance | Inspect stop reasons, evidence and gaps; review the plan rather than treating partial as complete |
 | Document is unavailable under an owner | Scope or document ID does not match | Use the ingestion ID and same owner/data directory |
-| Scanned PDF has no extracted text | OCR is not implemented | Supply a text-bearing PDF/TXT/DOCX version |
-| Another person cannot open localhost | Localhost points to their own computer | Run their authorized local installation; no public demo is deployed |
+| Scanned PDF has no extracted text | OCR is disabled, unavailable or exceeded a limit | Use Python 3.12 with the `ocr` extra and `--ocr`; inspect ingestion warnings and the page image |
+| Another person cannot open localhost | Localhost points to their own computer | Open the [public offline demo](https://evidenceforge-ai-akhiltej.streamlit.app/), or run an authorized local installation for live research |
 | Browser shows `ERR_CONNECTION_REFUSED` locally | The UI server is stopped or the port is wrong | Restart `evidenceforge-ui` on the selected port and keep it running; see [local access and public deployment](docs/PUBLIC_DEMO.md) |
 
 For a provider-free persistence check, run the following twice from separate
@@ -415,12 +471,12 @@ it did not establish general factual-quality superiority.
 
 **9. What is the main observed reasoning limitation?**
 A planner added monthly criteria to an annual disagreement question. Plan review,
-partial outcomes and disclosed gaps expose the issue, while citation audits alone
-cannot validate planning scope.
+partial outcomes and disclosed gaps exposed the issue. Current guards reject new
+subannual criteria for annual/year requests; other scope drift still needs review.
 
 **10. What would you improve next?**
 A broader independently reviewed real-source evaluation, tighter planning-scope
-controls, reviewed OCR and an operational design for persistent multi-user jobs.
+controls, independent OCR accuracy review and an operational design for hosted jobs.
 
 ## 🎓 Five-minute reviewer walkthrough
 
@@ -442,9 +498,11 @@ Report benchmark results with their sample size and synthetic scope.
 - Exact text audits do not establish source truth or detect every planning-scope error.
 - Numeric contradiction handling uses explicit supported scopes, dates, units and
   grammar; broad semantic contradictions remain outside that rule set.
-- Scanned/textless PDF OCR is unavailable.
+- Optional OCR requires Python 3.12 and the `ocr` extra; transcript quotations need
+  checks against the original PDF image.
 - Context summaries cannot substitute for new evidence or independent corroboration.
-- The local workbench uses a process executor, not persistent distributed jobs.
+- UI jobs use a process executor. The separate durable CLI queue runs offline jobs
+  on one local filesystem; hosted scheduling and distributed jobs remain open.
 - Independent human validation, remote LangSmith export and hosted durability are
   unverified. The public fixture demo uses temporary storage; paid full-workbench
   hosting remains deferred by the owner's local-storage choice.
@@ -458,14 +516,14 @@ These are proposed extensions, not completed features:
 - [x] Capture the real public Streamlit application and completed fixture report.
 - [ ] Improve planner scope adherence and measure it against a larger frozen corpus.
 - [ ] Build a broader independently reviewed real-source benchmark.
-- [ ] Add reviewed OCR and more demanding document/table extraction cases.
+- [ ] Expand independent OCR accuracy review and document/table extraction cases.
 - [ ] Evaluate semantic support beyond exact retained quotations.
-- [ ] Design persistent job queues and authentication/authorization for multi-user operation.
+- [ ] Extend the local offline queue to hosted operation with authentication/authorization.
 - [ ] Verify hosted durability, backup and access only with a future approved hosting budget.
 
 ## 📖 Further documentation
 
-- [Final phase status](docs/FINAL_STATUS_2026-10-06.md)
+- [Final phase status](docs/FINAL_STATUS_2026-10-08.md)
 - [Setup and recovery](docs/submission/SETUP.md)
 - [Detailed architecture](docs/submission/ARCHITECTURE.md)
 - [Requirement mapping](docs/submission/REQUIREMENTS.md)

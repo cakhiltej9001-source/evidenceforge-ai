@@ -1,11 +1,12 @@
 """The public demo completes a real run without exposing it to another visitor."""
 
+import json
 from pathlib import Path
 
 import pytest
 
 pytest.importorskip("streamlit")
-from streamlit.testing.v1 import AppTest
+from streamlit.testing.v1 import AppTest, app_test
 
 from evidenceforge import ui
 from evidenceforge.storage.checkpoints import CheckpointFailure
@@ -27,6 +28,15 @@ def test_public_demo_completes_and_isolates_visitors(tmp_path, monkeypatch):
     monkeypatch.setattr(ui, "gettempdir", lambda: str(tmp_path))
     original = LocalWorkbench.submit
     apps = []
+    media_stores = []
+    original_storage = app_test.MemoryMediaFileStorage
+
+    def capture_storage(endpoint):
+        storage = original_storage(endpoint)
+        media_stores.append(storage)
+        return storage
+
+    monkeypatch.setattr(app_test, "MemoryMediaFileStorage", capture_storage)
 
     def completed_submit(self, owner, key, operation):
         apps.append(self)
@@ -58,6 +68,25 @@ def test_public_demo_completes_and_isolates_visitors(tmp_path, monkeypatch):
             "Download Markdown",
             "Download JSON",
         }
+        downloads = {b.label: b for b in first.get("download_button")}
+        markdown_file = media_stores[-1].get_file(
+            Path(downloads["Download Markdown"].proto.url).name
+        )
+        json_file = media_stores[-1].get_file(Path(downloads["Download JSON"].proto.url).name)
+        assert markdown_file.filename == "report.md"
+        assert json_file.filename == "report.json"
+        assert all(button.proto.ignore_rerun for button in downloads.values())
+        markdown = markdown_file.content.decode("utf-8")
+        exported = json.loads(json_file.content)
+        assert "Offline synthetic fixture demonstration" in markdown
+        assert "Synthetic fixture: solar electricity output depends on sunlight" in markdown
+        assert "Synthetic fixture: wind electricity output depends on wind speed" in markdown
+        assert exported["evidence_mode"] == "synthetic_fixture"
+        assert exported["progress"]["run_status"] == "completed"
+        assert exported["report"] is not None
+        assert "model_api_key" not in json_file.content.decode("utf-8")
+        (tmp_path / "downloaded-report.md").write_bytes(markdown_file.content)
+        (tmp_path / "downloaded-report.json").write_bytes(json_file.content)
         thread = first.session_state["selected_thread"]
         app = apps[0]
         assert app.snapshot(first_owner, thread)["run_status"] == "completed"

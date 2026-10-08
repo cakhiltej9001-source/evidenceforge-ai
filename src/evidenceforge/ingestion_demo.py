@@ -8,7 +8,7 @@ from pathlib import Path
 from pydantic import ValidationError
 
 from evidenceforge.config import ConfigurationError, load_settings
-from evidenceforge.storage.documents import DocumentFailure, DocumentStore
+from evidenceforge.storage.documents import DocumentFailure, DocumentOptions, DocumentStore
 
 
 def main() -> int:
@@ -18,10 +18,17 @@ def main() -> int:
     parser.add_argument("path", type=Path)
     parser.add_argument("--owner", default="local")
     parser.add_argument("--data-dir", type=Path)
+    parser.add_argument(
+        "--ocr",
+        action="store_true",
+        help="Opt in to local OCR for textless PDF pages (Python 3.12, ocr extra).",
+    )
     args = parser.parse_args()
     try:
         directory = args.data_dir if args.data_dir is not None else load_settings().data_dir
-        record = DocumentStore(directory / "documents").ingest(args.path, args.owner)
+        record = DocumentStore(
+            directory / "documents", DocumentOptions(enable_ocr=args.ocr)
+        ).ingest(args.path, args.owner)
     except (DocumentFailure, ConfigurationError) as exc:
         print(str(exc))
         return 1

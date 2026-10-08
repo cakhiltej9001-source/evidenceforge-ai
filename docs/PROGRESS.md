@@ -1,25 +1,23 @@
 # EvidenceForge AI progress
 
-Updated: 6 October 2026, Asia/Calcutta.
+Updated: 8 October 2026, Asia/Calcutta.
 
 ## Current milestone
 
-The [final phase status](FINAL_STATUS_2026-10-06.md) is authoritative. The
-user selected local durable storage under a ₹5/month hosting cap; public hosting
-is deferred. The 40-row corrected Gemini comparison and delegated AI review are
-complete (136/140 calls, all HTTP 200). Historical ledgers remain 26/30 and 28/40.
-Both private CI jobs passed 373 tests and authenticated Docker checks on runtime
-source `0f070d134491e2b2a161ecdfdaf987daec2ac904`.
+The [8 October status](FINAL_STATUS_2026-10-08.md) is authoritative. The public
+Streamlit fixture demo is deployed; the full workbench retains local durable
+storage. Paid Render hosting remains deferred under the selected INR 5/month cap.
+OCR, document table rows, annual plan scope checks, offline queue recovery,
+export-byte verification and synthetic trace readback have been added. Current
+regression verification is still being completed; one synthetic LangSmith span and its exact remote readback passed on 8 October.
 
-The original PDF and baseline mixed-source/report/deduplication mechanics are
-addressed within their documented limits. Tavily access/recovery and today's real
-Wikipedia fallback passed. Fresh-process local reconnect passed without provider
-calls. Production P02–P05 controls are implemented. Phase 9 results disclose partial
-conflicts, strict quotation differences and planner scope drift; no general research
-accuracy or independent human validation is claimed.
+The corrected comparison remains 136/140 calls; historical ledgers remain
+26/30 and 28/40. New additions used zero Gemini/Tavily calls. The retained public
+snapshot replay passed all five mechanical checks for one energy corpus;
+general research accuracy and independent human review are not claimed.
 
-All sections below preserve historical execution records. Their then-pending notes
-are superseded by the final status above.
+All sections below preserve historical execution records. Their then-pending
+notes are superseded by the current status above.
 
 ## Phase 0 history
 

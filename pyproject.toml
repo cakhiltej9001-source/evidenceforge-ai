@@ -34,6 +34,10 @@ evidenceforge-energy = "evidenceforge.energy_demo:main"
 ui = [
     "streamlit>=1.50,<2",
 ]
+ocr = [
+    "rapidocr-onnxruntime==1.4.4; python_version < '3.13'",
+    "pypdfium2>=4.30,<5; python_version < '3.13'",
+]
 
 [dependency-groups]
 dev = ["pytest", "ruff", "mypy", "build", "hatchling"]

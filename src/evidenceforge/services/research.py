@@ -51,7 +51,12 @@ from evidenceforge.schemas import (
 )
 from evidenceforge.services.cancellation import RunCancellation
 from evidenceforge.services.node_trace import NodeTrace
-from evidenceforge.services.observability import TraceSink, public_progress, trace_phase
+from evidenceforge.services.observability import (
+    LangSmithTraceSink,
+    TraceSink,
+    public_progress,
+    trace_phase,
+)
 from evidenceforge.services.retrieval import RetrievalService
 from evidenceforge.services.usage import PriceTable, usage_summary
 from evidenceforge.storage.checkpoints import CheckpointFailure, CheckpointRepository
@@ -690,6 +695,14 @@ class ResearchService:
             json.dumps(public_progress(state).as_dict(), ensure_ascii=False, indent=2),
         )
         if trace_metrics is not None or not path.with_name("trace_coverage.json").exists():
+            delivery: dict[str, int | bool] = {"remote_delivery_verified": False}
+            if trace_metrics is not None and isinstance(self.trace_sink, LangSmithTraceSink):
+                try:
+                    delivery = self.trace_sink.verify_delivery()
+                except Exception:
+                    pass
+                if trace_metrics["failed"]:
+                    delivery["remote_delivery_verified"] = False
             atomic_write(
                 path.with_name("trace_coverage.json"),
                 json.dumps(
@@ -697,7 +710,7 @@ class ResearchService:
                         "custom_sink": self.trace_sink is not None,
                         "local_emissions": trace_metrics
                         or {"attempted": 0, "accepted_by_sink": 0, "failed": 0},
-                        "remote_delivery_verified": False,
+                        **delivery,
                         "raw_graph_tracing_disabled": True,
                     },
                     indent=2,

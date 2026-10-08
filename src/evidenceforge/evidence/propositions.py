@@ -13,8 +13,9 @@ from evidenceforge.schemas import EvidenceItem
 # Deliberately narrow; ordinary prose is left unclassified, never called consistent.
 PATTERN = re.compile(
     r"(?P<entity>[^.\n;]{1,120}?)\s+"
-    r"(?P<metric>electricity output|energy output|installed capacity|capacity factor)"
-    r"\s+was\s+(?P<value>-?\d{1,15}(?:\.\d{1,9})?)\s+"
+    r"(?P<metric>electricity output|electricity generation|energy output|installed capacity|"
+    r"capacity factor)"
+    r"\s+(?:was|is|totaled|totalled)\s+(?P<value>-?\d{1,15}(?:\.\d{1,9})?)\s+"
     r"(?P<unit>TWh|GWh|MWh|kWh|Wh|GW|MW|kW|W|%)\s+in\s+"
     r"(?P<time>\d{4}(?:-\d{2}-\d{2})?)\s+for\s+"
     r"(?P<population>[^.\n;]{1,120}?)\s+under\s+(?P<conditions>[^.\n;]{1,120})"
@@ -63,7 +64,11 @@ def extract(item: EvidenceItem) -> tuple[Proposition, ...]:
                 end_offset=end,
                 quote=item.passage[start:end],
                 entity=norm(match["entity"]),
-                metric=norm(match["metric"]),
+                metric=(
+                    "electricity output"
+                    if norm(match["metric"]) == "electricity generation"
+                    else norm(match["metric"])
+                ),
                 timeframe=match["time"],
                 population=norm(match["population"]),
                 conditions=norm(match["conditions"]),

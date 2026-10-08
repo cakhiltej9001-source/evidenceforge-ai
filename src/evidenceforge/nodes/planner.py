@@ -20,10 +20,12 @@ from evidenceforge.planning import (
     PlanDraft,
     PlanningContractError,
     PlanningOptions,
+    PlanScopeError,
     normalized,
     parse_response,
+    validate_plan_scope,
 )
-from evidenceforge.schemas import ResearchQuestion
+from evidenceforge.schemas import ResearchQuestion, ToolError
 
 
 class Planner:
@@ -57,6 +59,7 @@ class Planner:
             plan = parse_response(response, PlanDraft, self.options.max_response_bytes)
             if len(plan.questions) > snapshot.budget.max_subquestions:
                 raise PlanningContractError("subquestion allowance exceeded")
+            validate_plan_scope(snapshot.request, plan)
             questions = [
                 ResearchQuestion(
                     id=stable_id(
@@ -85,6 +88,33 @@ class Planner:
                         f"Structured plan validated with {len(questions)} focused questions.",
                     ),
                 },
+            )
+        except PlanScopeError:
+            patch = failed("schema")
+            message = (
+                "Plan added an unrequested temporal breakdown. "
+                "Revise the research question if that breakdown is intended, "
+                "then create a new plan."
+            )
+            # Error records are immutable. Add a dedicated scope error without
+            # rewriting prior errors that checked_patch merged into this update.
+            error_id = stable_id("error", snapshot.run_id, "planner", "scope")
+            patch["tool_errors"] = {
+                error_id: state["tool_errors"].get(error_id)
+                or record_data(
+                    ToolError(
+                        id=error_id,
+                        provider="planner",
+                        category="schema",
+                        retryable=False,
+                        attempt=1,
+                        message=message,
+                    )
+                )
+            }
+            return checked_patch(
+                state,
+                {**patch, **event_patch(state, "planner", "plan_scope_rejected", message)},
             )
         except (ValidationError, PlanningContractError):
             return failed("schema")

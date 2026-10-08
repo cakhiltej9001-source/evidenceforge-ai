@@ -1,6 +1,7 @@
 """Phase 2 planning contracts; IDs are assigned by nodes, never by model output."""
 
 import json
+import re
 from typing import Annotated, Self
 
 from pydantic import BaseModel, Field, StrictBool, StringConstraints, model_validator
@@ -22,6 +23,10 @@ from evidenceforge.schemas import (
 
 class PlanningContractError(ValueError):
     """Expected malformed/unusable planning output; never include raw output in diagnostics."""
+
+
+class PlanScopeError(PlanningContractError):
+    """A bounded scope rule rejected a model's added acceptance requirement."""
 
 
 class ModelUnavailable(RuntimeError):
@@ -59,6 +64,44 @@ class PlanDraft(Contract):
         if len(names) != len(set(names)):
             raise ValueError("duplicate focused questions")
         return self
+
+
+_TEMPORAL_BREAKDOWNS = (
+    r"\b(?:hourly|hour[- ]by[- ]hour|(?:per|each|every|by)\s+hours?)\b",
+    r"\b(?:daily|days?|day[- ]by[- ]day|per day)\b",
+    r"\b(?:weekly|weeks?|week[- ]by[- ]week|per week)\b",
+    r"\b(?:monthly|months?|month[- ]by[- ]month|per month)\b",
+    r"\b(?:quarterly|quarters?|quarter[- ]by[- ]quarter|per quarter)\b",
+)
+
+
+def validate_plan_scope(request: ResearchRequest, plan: PlanDraft) -> None:
+    """Reject added subannual requirements in an explicitly year-scoped request.
+
+    This is a narrow deterministic safeguard for the observed annual-to-monthly
+    drift, not a semantic judgment of every possible research scope. Explicitly
+    requested breakdowns remain allowed; nothing is silently removed or rewritten.
+    """
+    requested = normalized(" ".join((request.question, *request.preferences)))
+    if not re.search(r"\b(?:19\d{2}|20\d{2}|annual|annually|yearly)\b", requested):
+        return
+    # A dated or seasonal request may need a temporal breakdown to address its scope.
+    if re.search(
+        r"\b(?:\d{4}-\d{2}(?:-\d{2})?|january|february|march|april|june|july|"
+        r"august|september|october|november|december|may\s+\d|seasonal|seasonally|seasons)\b",
+        requested,
+    ):
+        return
+    proposed = " ".join(
+        text
+        for question in plan.questions
+        for text in (question.question, *question.acceptance_criteria)
+    ).casefold()
+    if any(
+        re.search(pattern, proposed) and not re.search(pattern, requested)
+        for pattern in _TEMPORAL_BREAKDOWNS
+    ):
+        raise PlanScopeError("unrequested temporal breakdown")
 
 
 class QueryDraft(Contract):

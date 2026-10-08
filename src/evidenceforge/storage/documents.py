@@ -30,6 +30,9 @@ from evidenceforge.schemas import (
     Text,
     utc_now,
 )
+from evidenceforge.storage.ocr import LocalOcrFailure, OcrLimits, transcribe_pdf
+
+PARSER_VERSION = "located_document_v2"
 
 
 class DocumentFailure(ValueError):
@@ -46,6 +49,8 @@ class DocumentOptions(Contract):
     overlap_chars: Count = 100
     max_zip_bytes: PositiveCount = 16_000_000
     max_owner_bytes: PositiveCount = 32_000_000
+    enable_ocr: bool = False
+    ocr: OcrLimits = Field(default_factory=OcrLimits)
 
     @model_validator(mode="after")
     def overlap_bound(self) -> Self:
@@ -141,7 +146,13 @@ class DocumentStore:
             ) from exc
         digest = hashlib.sha256(data).hexdigest()
         identifier = stable_id(
-            "document", owner_scope, digest, kind, self.options.model_dump_json()
+            "document",
+            owner_scope,
+            digest,
+            kind,
+            PARSER_VERSION,
+            self.options.model_dump_json(),
+            hashlib.sha256(json.dumps(units, ensure_ascii=False).encode()).hexdigest(),
         )
         text_parts: list[str] = []
         chunks: list[DocumentChunk] = []
@@ -191,6 +202,7 @@ class DocumentStore:
             binary_hash=digest,
             text_hash=hashlib.sha256(canonical.encode()).hexdigest(),
             byte_count=len(data),
+            parser_version=PARSER_VERSION,
             ingested_at=utc_now(),
             status=cast(Literal["ready", "partial", "textless"], status),
             warnings=tuple(warnings),
@@ -247,6 +259,7 @@ class DocumentStore:
                 )
             if len(reader.pages) > self.options.max_pages:
                 raise DocumentFailure("PDF page limit exceeded.")
+            textless_pages: list[int] = []
             for index, page in enumerate(reader.pages):
                 stream = page.get_contents()
                 if stream is not None and len(stream.get_data()) > self.options.max_zip_bytes:
@@ -255,10 +268,44 @@ class DocumentStore:
                 if text.strip():
                     units.append((text, index + 1, None, None))
                 else:
-                    warnings.append(
-                        f"Page {index + 1} has no extractable text; "
-                        "it may be scanned or blank. OCR is unavailable."
+                    textless_pages.append(index + 1)
+            ocr_pages: dict[int, str] = {}
+            ocr_failure: str | None = None
+            if textless_pages and self.options.enable_ocr:
+                try:
+                    ocr_pages = transcribe_pdf(
+                        data,
+                        tuple(textless_pages[: self.options.ocr.max_pages]),
+                        self.options.ocr,
+                        self.root,
                     )
+                except LocalOcrFailure as exc:
+                    ocr_failure = str(exc)
+            for number in textless_pages:
+                text = ocr_pages.get(number, "")
+                if text.strip():
+                    units.append((text, number, None, "local OCR transcription"))
+                    warnings.append(
+                        f"Page {number} was transcribed by local OCR. Quotations and offsets "
+                        "refer to the OCR transcript, not embedded PDF text; verify "
+                        "wording, numbers and layout against the original page image."
+                    )
+                elif not self.options.enable_ocr:
+                    warnings.append(
+                        f"Page {number} has no extractable text; "
+                        "it may be scanned or blank. OCR is unavailable unless enabled "
+                        "with the local ocr extra and --ocr."
+                    )
+                elif ocr_failure:
+                    warnings.append(f"Page {number} was not indexed. {ocr_failure}")
+                elif number not in ocr_pages:
+                    warnings.append(f"Page {number} was not indexed; OCR page limit exceeded.")
+                else:
+                    warnings.append(
+                        f"Page {number} has no retained OCR text; it may be blank, "
+                        "unreadable or below the recognition confidence threshold."
+                    )
+            units.sort(key=lambda unit: unit[1] or 0)
         else:
             with ZipFile(io.BytesIO(data)) as archive:
                 if (
@@ -269,26 +316,32 @@ class DocumentStore:
                     raise DocumentFailure("DOCX expanded archive limit exceeded.")
             document = Document(io.BytesIO(data))
             paragraph = 0
+            table_number = 0
             for block in document.iter_inner_content():
                 if isinstance(block, Table):
+                    table_number += 1
                     for row_index, row in enumerate(block.rows):
-                        for col_index, cell in enumerate(row.cells):
-                            paragraph += 1
-                            if cell.text.strip():
-                                units.append(
-                                    (
-                                        cell.text,
-                                        None,
-                                        paragraph,
-                                        f"table row {row_index + 1}, column {col_index + 1}",
-                                    )
+                        paragraph += 1
+                        # Keep a row together so retrieval retains which value
+                        # belongs to which entity. Empty cells preserve alignment.
+                        text = " | ".join(cell.text for cell in row.cells)
+                        if any(cell.text.strip() for cell in row.cells):
+                            units.append(
+                                (
+                                    text,
+                                    None,
+                                    paragraph,
+                                    f"table {table_number}, row {row_index + 1}, "
+                                    f"columns 1-{len(row.cells)}",
                                 )
+                            )
                 else:
                     paragraph += 1
                     if block.text.strip():
                         units.append((block.text, None, paragraph, None))
             warnings.append(
-                "DOCX indexes body paragraphs and table cells; headers, footers, "
+                "DOCX indexes body paragraphs and table rows (cells separated by |); "
+                "headers, footers, "
                 "drawings and tracked changes are not indexed."
             )
         if not units and not warnings:

@@ -12,7 +12,29 @@ from evidenceforge.identity import stable_id
 from evidenceforge.nodes.common import Update, checked_patch, record_data
 from evidenceforge.nodes.quality import quality_remaining
 from evidenceforge.nodes.quality_common import quality_event
-from evidenceforge.schemas import Report, ReportSection, utc_now
+from evidenceforge.schemas import EvidenceItem, Report, ReportSection, SourceType, utc_now
+
+OCR_TRANSCRIPT_LIMITATION = (
+    "Local OCR evidence is a machine-generated transcript. Quotation checks and offsets "
+    "refer to that transcript; verify wording, numbers and layout against the original "
+    "PDF page image."
+)
+
+
+def ocr_transcripts(snapshot: StateSnapshot) -> tuple[EvidenceItem, ...]:
+    """Identify retained OCR passages from their immutable document locators."""
+    return tuple(
+        sorted(
+            (
+                evidence
+                for evidence in snapshot.evidence_store.values()
+                if evidence.locator.section == "local OCR transcription"
+                and evidence.source_id in snapshot.source_records
+                and snapshot.source_records[evidence.source_id].source_type == SourceType.DOCUMENT
+            ),
+            key=lambda evidence: evidence.id,
+        )
+    )
 
 
 def finalize(state: ResearchState) -> Update:
@@ -229,6 +251,8 @@ def render_report(state: ResearchState) -> str:
                 location.append(f"page {locator.page}")
             if locator.paragraph is not None:
                 location.append(f"paragraph {locator.paragraph}")
+            if locator.section is not None:
+                location.append(escape(locator.section))
             lines.append(
                 f'  - Evidence `{eid}`: "{escape(evidence.passage)}" '
                 + "("
@@ -252,6 +276,8 @@ def render_report(state: ResearchState) -> str:
             ),
         ]
     )
+    if ocr_transcripts(s):
+        lines.extend(["", OCR_TRANSCRIPT_LIMITATION])
     duplicates = working_evidence(s.evidence_store.values()).duplicates
     if duplicates and any(e.kind == "working_evidence_enabled" for e in s.events.values()):
         lines.append(

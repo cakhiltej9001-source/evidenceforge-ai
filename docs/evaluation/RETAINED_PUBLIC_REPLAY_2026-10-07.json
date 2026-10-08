@@ -1,0 +1,114 @@
+{
+  "evaluation": "retained_public_snapshot_mechanical_replay",
+  "input_state_sha256": "fbb850ae05d02398433f87c2228f82414f99d2dfa73be199b65dc46ed955d2ae",
+  "corpus_sources": 5,
+  "corpus": [
+    {
+      "title": "Wind and solar generated a record 17% of U.S. electricity in 2025 -\r\n\t\tU.S. Energy Information Administration (EIA)",
+      "url": "https://www.eia.gov/todayinenergy/detail.php?id=67367",
+      "snapshot_sha256": "cef010b611bdef2bb6e89a290e3f2180f465f312479271810095c8d0642bad1b"
+    },
+    {
+      "title": "Utility-scale solar and wind hit a record 17% of US generation in 2025: EIA",
+      "url": "https://www.utilitydive.com/news/solar-wind-generation-2025-eia/815666",
+      "snapshot_sha256": "64e3b5867a1eb3ef5f19fe7bc0984b8ec7f8bc6e410bd954592f0027dfba432c"
+    },
+    {
+      "title": "U.S. energy facts explained - consumption and production - U.S. Energy Information Administration (EIA)",
+      "url": "https://www.eia.gov/energyexplained/us-energy-facts",
+      "snapshot_sha256": "b15857269c117f336216aa64b9dc2d696c08b21551e7e64288e87e95e86e55f7"
+    },
+    {
+      "title": "The United States set record energy production in 2025, again -\r\n\t\tU.S. Energy Information Administration (EIA)",
+      "url": "https://www.eia.gov/todayinenergy/detail.php?id=67684",
+      "snapshot_sha256": "ab43e44808b1a4fd36469dff56d48ee4aefaa518ef7fca38ce81cfb70a4019ac"
+    },
+    {
+      "title": "Electricity generation, capacity, and sales in the United States - U.S. Energy Information Administration (EIA)",
+      "url": "https://www.eia.gov/energyexplained/electricity/electricity-in-the-us-generation-capacity-and-sales.php",
+      "snapshot_sha256": "dcac8bddbd604420faca4d3c1c18b9b62403139de44094a6a4e599cf23d665c7"
+    }
+  ],
+  "source_truth_verified": false,
+  "independent_human_review": false,
+  "model": "scripted scoped fixture reasoning over real retained text",
+  "provider_calls": 0,
+  "cases": {
+    "available_snapshots": {
+      "input_results": 5,
+      "run_status": "completed",
+      "stop_reason": "sufficient",
+      "claims": 30,
+      "sources": 5,
+      "evidence": 30,
+      "exact_locator_passages": 30,
+      "citation_precision_against_retained_text": 1.0,
+      "citation_coverage": 1.0,
+      "gaps": 0,
+      "quantitative_conflicts_reported": 0,
+      "provider_calls": 0,
+      "scripted_model_stages": 5,
+      "latency_seconds": 37.2074,
+      "independent_semantic_validation": false
+    },
+    "duplicate_snapshot_control": {
+      "input_results": 6,
+      "run_status": "completed",
+      "stop_reason": "sufficient",
+      "claims": 30,
+      "sources": 5,
+      "evidence": 30,
+      "exact_locator_passages": 30,
+      "citation_precision_against_retained_text": 1.0,
+      "citation_coverage": 1.0,
+      "gaps": 0,
+      "quantitative_conflicts_reported": 0,
+      "provider_calls": 0,
+      "scripted_model_stages": 5,
+      "latency_seconds": 29.9752,
+      "independent_semantic_validation": false
+    },
+    "missing_aspect_control": {
+      "input_results": 5,
+      "run_status": "partial",
+      "stop_reason": "pass_limit",
+      "claims": 20,
+      "sources": 5,
+      "evidence": 20,
+      "exact_locator_passages": 20,
+      "citation_precision_against_retained_text": 1.0,
+      "citation_coverage": 1.0,
+      "gaps": 1,
+      "quantitative_conflicts_reported": 0,
+      "provider_calls": 0,
+      "scripted_model_stages": 5,
+      "latency_seconds": 43.1968,
+      "independent_semantic_validation": false
+    },
+    "empty_corpus_control": {
+      "input_results": 0,
+      "run_status": "insufficient_evidence",
+      "stop_reason": "no_evidence",
+      "claims": 0,
+      "sources": 0,
+      "evidence": 0,
+      "exact_locator_passages": 0,
+      "citation_precision_against_retained_text": null,
+      "citation_coverage": null,
+      "gaps": 2,
+      "quantitative_conflicts_reported": 0,
+      "provider_calls": 0,
+      "scripted_model_stages": 3,
+      "latency_seconds": 34.8539,
+      "independent_semantic_validation": false
+    }
+  },
+  "checks": {
+    "available_has_supported_citations": true,
+    "duplicates_do_not_inflate_evidence": true,
+    "missing_aspect_is_not_completed": true,
+    "empty_has_no_claims": true,
+    "all_locators_exact": true
+  },
+  "scope": "one energy corpus; controlled replay; no live search or LLM comparison"
+}

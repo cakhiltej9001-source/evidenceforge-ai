@@ -34,6 +34,22 @@ class Settings(BaseSettings):
     tavily_api_key: SecretStr | None = Field(default=None, exclude=True, repr=False)
     data_dir: Path = Path(".evidenceforge")
     tracing_enabled: bool = False
+
+    # Standard LangSmith settings are accepted/redacted for interoperability.
+    # They never enable automatic graph export; only an explicitly injected sink
+    # or the --execute synthetic verification command may send counter spans.
+    langsmith_api_key: SecretStr | None = Field(
+        default=None, validation_alias="LANGSMITH_API_KEY", exclude=True, repr=False
+    )
+    langsmith_project: str | None = Field(
+        default=None, validation_alias="LANGSMITH_PROJECT", exclude=True, repr=False
+    )
+    langsmith_endpoint: str | None = Field(
+        default=None, validation_alias="LANGSMITH_ENDPOINT", exclude=True, repr=False
+    )
+    langsmith_tracing: bool = Field(
+        default=False, validation_alias="LANGSMITH_TRACING", exclude=True, repr=False
+    )
     budget: BudgetLimits = Field(default_factory=BudgetLimits)
 
     @field_validator("model_id", "model_api_key", "tavily_api_key", mode="before")

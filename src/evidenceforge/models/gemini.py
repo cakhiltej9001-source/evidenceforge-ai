@@ -283,7 +283,12 @@ class GeminiResearchModel:
             request,
             PlanDraft,
             f"Create at most {max_questions} focused, distinct research questions. "
-            "Use short measurable acceptance criteria. Do not answer the question.",
+            "Use short measurable acceptance criteria. Preserve the user's entities, "
+            "metrics, population and timeframe. Every acceptance criterion must be "
+            "necessary to answer the supplied question; do not invent extra analyses. "
+            "For an annual total or disagreement in a named year, do not require "
+            "monthly totals, daily variation or other subannual breakdowns unless "
+            "the request explicitly asks for them. Do not answer the question.",
         )
 
     async def generate_queries(self, request: QueryGenerationRequest) -> object:
@@ -295,7 +300,9 @@ class GeminiResearchModel:
             "and the supplied question IDs. For local documents use short keywords from "
             "the questions. Prefer one query linked to all applicable questions. "
             "Set purpose to support, counter_evidence or primary_source. "
-            "Investigate supplied gaps; do not repeat previously attempted queries.",
+            "Investigate supplied gaps within the original request's scope; preserve "
+            "its entities, metrics, population and timeframe. Do not introduce extra "
+            "acceptance requirements or repeat previously attempted queries.",
         )
 
     async def evaluate_coverage(self, request: CoverageInput) -> object:

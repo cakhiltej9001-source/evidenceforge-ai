@@ -5,6 +5,7 @@ import json
 from evidenceforge.evidence.deduplication import WorkingEvidence, working_evidence
 from evidenceforge.evidence.projection import audit, project
 from evidenceforge.graph.state import ResearchState, StateSnapshot
+from evidenceforge.reporting import OCR_TRANSCRIPT_LIMITATION, ocr_transcripts
 from evidenceforge.services.observability import public_progress
 from evidenceforge.services.usage import usage_summary
 
@@ -19,6 +20,7 @@ def report_export(state: ResearchState) -> str:
         if deduplication_enabled
         else WorkingEvidence(evidence=tuple(s.evidence_store.values()), duplicates=())
     )
+    transcripts = ocr_transcripts(s)
     data = {
         "export_version": 1,
         "run_id": s.run_id,
@@ -43,10 +45,20 @@ def report_export(state: ResearchState) -> str:
             "duplicates": [d.model_dump(mode="json") for d in working.duplicates],
             "limitation": "Literal copies/containment do not establish independent corroboration.",
         },
+        "ocr_transcripts": [
+            {
+                "evidence_id": evidence.id,
+                "document_id": s.source_records[evidence.source_id].document_id,
+                "page": evidence.locator.page,
+                "section": evidence.locator.section,
+            }
+            for evidence in transcripts
+        ],
         "usage": usage_summary(state),
         "limitations": [
             "Exact passage checks do not independently establish source truth.",
             "Export contains selected source and document passages.",
+            *([OCR_TRANSCRIPT_LIMITATION] if transcripts else []),
         ],
     }
     return json.dumps(data, ensure_ascii=False, indent=2)

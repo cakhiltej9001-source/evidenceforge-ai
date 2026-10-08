@@ -54,7 +54,27 @@ uv run --locked evidenceforge-inspect "ABSOLUTE_STATE_JSON_PATH" --owner demo --
 Use the ingestion output's document ID and the saved report directory's state path.
 Claim IDs are in `inspection.md`/`state.json`. The owner must match. Ingestion stores
 a content version; it does not grant an authenticated identity. PDF/DOCX/TXT input
-is bounded; scanned/textless PDFs disclose unavailable OCR.
+is bounded. DOCX table rows retain cell alignment and row locators. Textless PDF
+pages can use the optional local OCR path below.
+
+## Optional local PDF OCR
+
+OCR requires Python 3.12 and the optional extra:
+
+```powershell
+uv sync --locked --python 3.12 --extra ui --extra ocr
+uv run --locked --python 3.12 --extra ocr evidenceforge-ingest "path/to/scan.pdf" --owner demo --ocr
+```
+
+Only pages without embedded text are transcribed. The CPU child process keeps the
+document local and defaults to five pages, four million pixels per page, a
+120-second timeout and 200 KB of text. Missing engines, limits and unsuccessful
+recognition produce ingestion warnings. Python 3.13/3.14 retain ordinary text
+extraction; this OCR engine requires 3.12.
+
+OCR locators and quotations refer to the machine transcript. Markdown/JSON exports
+identify those passages and require checking wording, numbers and layout against
+the original PDF page image.
 
 ## Approval, edit and process restart
 
@@ -70,6 +90,46 @@ CURRENT_VERSION`, increments the plan version and requires a new approval.
 `--data-dir` must also be supplied on reconnect if overridden at creation.
 `--cancel THREAD_ID` requests cooperative cancellation; resume a paused run to
 finalize it. Create a fresh service/model for every new paid run.
+
+Generated plans for annual requests or requests naming a year reject new
+subannual requirements in questions and criteria. Explicit breakdown preferences
+are respected. Scope rejection stops before queries; specify the intended
+breakdown in a new request. Date/seasonal exemptions and phrase matching limit this
+rule; other entity, metric or population drift still requires plan review.
+
+## Durable local offline queue
+
+Queue metadata survives restart in `DATA_DIR/jobs/offline_jobs.sqlite3`.
+Use the same data folder and owner for every invocation:
+
+```powershell
+uv run --locked python -m evidenceforge.offline_jobs --data-dir .evidenceforge --owner demo enqueue "Compare solar and wind electricity output." --demo second-pass
+uv run --locked python -m evidenceforge.offline_jobs --data-dir .evidenceforge --owner demo worker
+uv run --locked python -m evidenceforge.offline_jobs --data-dir .evidenceforge --owner demo status JOB_ID
+```
+
+Replace `JOB_ID` with the enqueue output. The first worker saves a thread and stops
+for plan approval. Review that thread in the local workbench, then use its actual
+plan version (the initial version is normally 1):
+
+```powershell
+uv run --locked python -m evidenceforge.offline_jobs --data-dir .evidenceforge --owner demo approve JOB_ID --plan-version 1
+uv run --locked python -m evidenceforge.offline_jobs --data-dir .evidenceforge --owner demo worker
+```
+
+Each worker processes one job and exits. Leases coordinate workers on the same
+local filesystem. Expired leases become interrupted when a worker next checks the
+owner; inspect the attached checkpoint before explicitly continuing:
+
+```powershell
+uv run --locked python -m evidenceforge.offline_jobs --data-dir .evidenceforge --owner demo recover JOB_ID
+uv run --locked python -m evidenceforge.offline_jobs --data-dir .evidenceforge --owner demo worker
+```
+
+Recovery requires an attached checkpoint. Awaiting-approval jobs require `approve`
+with the reviewed version. Workers accept fixture scenarios and reject paid/live
+profiles before creating a restored service. Back up the queue with the complete
+data root. This CLI does not add hosted scheduling or automatic recovery to UI jobs.
 
 ## Optional external access
 
@@ -120,6 +180,43 @@ preserved. Grouping does not establish independent corroboration.
 The mixed-source path is verified with mocked HTTP. Actual Tavily acquisition/full
 pipeline/recovery passed on 5 October; a live Wikipedia fallback passed on 6 October
 after a simulated primary failure. These checks do not establish semantic source truth.
+
+## Replay retained public sources
+
+Keep the saved report state in its original data root with matching artifacts:
+
+```powershell
+uv run --locked python -m evidenceforge.evaluation_retained --state ".evidenceforge/reports/RUN_ID/state.json" --output ".evidenceforge/evaluation/retained-public"
+```
+
+The loader admits available public WEB/API records with verified retained hashes,
+excluding scoped documents and fixture sources. Up to five sources and scripted
+reasoning exercise exact locators, supported citations, duplicate inputs, a missing
+aspect and an empty corpus. Case reports and `summary.json` measure mechanics;
+the command makes no new search/model-provider request and reports independent
+semantic validation as false. Source truth and live model quality remain open.
+
+## Explicit synthetic LangSmith verification
+
+Check readiness without a remote request:
+
+```powershell
+uv run --locked python -m evidenceforge.trace_verification
+```
+
+Privately configure `LANGSMITH_API_KEY` in the environment or dotenv file.
+Standard LangSmith settings are accepted/redacted and do not enable automatic
+graph payload export. Explicitly opt in to one synthetic counter span:
+
+```powershell
+uv run --locked python -m evidenceforge.trace_verification --execute --output ".evidenceforge/verification/synthetic-trace.json"
+```
+
+The probe uses a fixed project, full sampling and bounded receipt readback. Only
+allowlisted synthetic counters are sent; questions, documents and graph state are
+excluded. Exact completed-span readback is required for verified remote delivery.
+Missing credentials or unsuccessful readback return a nonzero exit with
+`--execute`. This guide records no successful remote trace verification.
 
 ## Files and storage
 

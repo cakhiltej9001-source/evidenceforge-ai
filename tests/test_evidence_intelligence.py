@@ -393,3 +393,48 @@ def test_copy_group_identity_stays_stable():
 )
 def test_ambiguous_unit_case_and_decimal_condition_stay_unclassified(text):
     assert extract(evidence(text)) == ()
+
+
+@pytest.mark.parametrize("verb", ["is", "totaled", "totalled"])
+def test_explicit_generation_wording_preserves_scope_and_exact_quote(verb):
+    original = extract(evidence(passage()))[0]
+    text = passage("100000", "MWh", metric="electricity generation").replace(" was ", f" {verb} ")
+    item = evidence(text, "2")
+    equivalent = extract(item)[0]
+    assert equivalent.metric == original.metric == "electricity output"
+    assert equivalent.quote == item.passage[equivalent.start_offset : equivalent.end_offset]
+    assert compare(original, equivalent).relationship == "supports"
+    conflicting = extract(
+        evidence(passage("120", metric="electricity generation").replace(" was ", f" {verb} "), "3")
+    )[0]
+    assert compare(original, conflicting).relationship == "contradicts"
+
+
+@pytest.mark.parametrize(
+    "kwargs",
+    [
+        {"year": "2023"},
+        {"population": "offshore plants"},
+        {"conditions": "storm operation"},
+        {"unit": "MW"},
+        {"entity": "Northfield solar estimated"},
+    ],
+)
+def test_generation_synonym_does_not_merge_different_numeric_scopes(kwargs):
+    original = extract(evidence(passage()))[0]
+    different = extract(evidence(passage("120", metric="electricity generation", **kwargs), "2"))[0]
+    assert compare(original, different).relationship == "not_comparable"
+
+
+@pytest.mark.parametrize(
+    "phrase",
+    [
+        "is not 100",
+        "was about 100",
+        "totaled at most 100",
+        "is expected to be 100",
+    ],
+)
+def test_qualified_generation_values_remain_unclassified(phrase):
+    text = passage(metric="electricity generation").replace("was 100", phrase)
+    assert extract(evidence(text)) == ()
