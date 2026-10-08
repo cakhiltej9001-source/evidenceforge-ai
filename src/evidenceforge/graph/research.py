@@ -146,6 +146,7 @@ def build_research_graph(
     graph.add_edge("reserve_rewrite", "synthesis")
     graph.add_edge("finalizer", END)
     if pause_after is not None and pause_after not in {
+        "manager",
         "query_generator",
         "source_processor",
         "evidence_extractor",

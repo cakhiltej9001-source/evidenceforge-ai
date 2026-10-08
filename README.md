@@ -343,7 +343,7 @@ uv run --locked python -m evidenceforge.trace_verification --execute --output ".
 ```
 
 The probe uses a fixed project and allowlisted counters, excluding research
-questions, documents and graph payloads. Remote delivery remains unverified until
+questions, documents and graph payloads. Synthetic counter delivery/readback passed on 8 October. Future spans require
 an exact completed-span readback succeeds.
 
 ### Corrected controlled Gemini comparison
@@ -503,7 +503,7 @@ Report benchmark results with their sample size and synthetic scope.
 - Context summaries cannot substitute for new evidence or independent corroboration.
 - UI jobs use a process executor. The separate durable CLI queue runs offline jobs
   on one local filesystem; hosted scheduling and distributed jobs remain open.
-- Independent human validation, remote LangSmith export and hosted durability are
+- Independent human validation and hosted durability are
   unverified. The public fixture demo uses temporary storage; paid full-workbench
   hosting remains deferred by the owner's local-storage choice.
 - Historical graph versions or paid runs without durable receipts cannot silently

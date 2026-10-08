@@ -216,7 +216,7 @@ The probe uses a fixed project, full sampling and bounded receipt readback. Only
 allowlisted synthetic counters are sent; questions, documents and graph state are
 excluded. Exact completed-span readback is required for verified remote delivery.
 Missing credentials or unsuccessful readback return a nonzero exit with
-`--execute`. This guide records no successful remote trace verification.
+`--execute`. One fixed synthetic span and its exact remote readback passed on 8 October; see [verification](../LANGSMITH_VERIFICATION_2026-10-08.md).
 
 ## Files and storage
 

@@ -65,7 +65,7 @@ Graph version 8 checkpoints cannot silently resume older graph versions.
 
 The explicit LangSmith probe uploads one synthetic counter span and requires exact
 server readback. Standard configuration alone does not enable raw graph export.
-Remote tracing remains unverified until credentials and receipt checks succeed.
+Synthetic counter delivery and exact receipt readback passed on 8 October; see [verification](../LANGSMITH_VERIFICATION_2026-10-08.md). Full research payload tracing remains disabled.
 These additions establish no new browser download check or independent human review.
 
 Docker execution passed in the private repository's remote CI: image build,
@@ -105,7 +105,7 @@ If fewer than two supported summary claims exist, a shorter summary is disclosed
 Production guidance now includes semantic input classification, ordered search
 fallback, lowest-score evidence eviction and bounded local tracing. These are
 locally tested; a real Wikipedia fallback after simulated primary failure also
-passed. Remote tracing and persistent hosted operation remain unverified; the
+passed. Synthetic remote counter tracing is verified. Persistent hosted operation remains unverified; the
 public offline Streamlit workflow has been deployed and exercised.
 The PDF describes API-or-MCP extension and replaceable search providers; it does
 not mandate a particular MCP server, hosting platform or human-reviewed benchmark.
