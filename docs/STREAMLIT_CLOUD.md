@@ -65,3 +65,7 @@ Official references: [deployment](https://docs.streamlit.io/deploy/streamlit-com
 [dependency selection](https://docs.streamlit.io/deploy/streamlit-community-cloud/deploy-your-app/app-dependencies),
 [private GitHub permissions](https://docs.streamlit.io/deploy/streamlit-community-cloud/status),
 and [app sharing](https://docs.streamlit.io/deploy/streamlit-community-cloud/share-your-app).
+
+## Export verification update - 8 October 2026
+
+[Current source CI](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/37717750091) passed all 445 tests and both jobs on `b65fd0259907fd6b1749566cbe0f1e5447f084e0`. Integration checks inspect Markdown/JSON filenames and actual download bytes, fixture disclaimers, completed JSON progress and visitor isolation. Download actions skip a UI rerun. Fresh anonymous HTTP access returned 200 after the update. The browser helper failed with a Windows sandbox setup error, so actual hosted download completion remains unobserved. No live provider call or private payload was sent by the public demo.

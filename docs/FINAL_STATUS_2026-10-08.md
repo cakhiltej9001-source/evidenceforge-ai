@@ -20,22 +20,19 @@ no paid Render resource was created.
 | 7 | Budgets, cancellation, receipts and tracing | Local implementation complete; synthetic counters-only remote delivery verified |
 | 8 | UI, plan approval and exports | Local implementation complete; export-byte checks added; actual browser download not observed |
 | 9 | Benchmark, Gemini comparison and review | Controlled comparison and AI review complete; independent human/semantic validation unclaimed |
-| 10 | API, containers and deployment | Local durability and historical Docker checks verified; public fixture deployed; paid Render deferred |
+| 10 | API, containers and deployment | Local durability and current Docker checks verified; public fixture deployed; paid Render deferred |
 | 11 | Setup, architecture and evaluation materials | Updated with current implementation and measured limits; external submission acceptance unclaimed |
 
 ## Current verification
 
-- Ruff lint/format checks passed. Strict mypy passed for **85 source files**.
-- The full regression suite and current GitHub CI are **in progress**. Historical
-  passing suites in [6 October status](FINAL_STATUS_2026-10-06.md) remain dated
-  evidence; they do not establish a pass for the current source revision.
-- On 8 October, the public demo returned **HTTP 200 with fresh cookies**.
-  An actual browser report download has not been observed; the browser helper failed with a Windows sandbox setup error.
-- LangSmith synthetic upload and exact completed-span readback passed on 8 October: one tracked receipt, one verified receipt and zero omitted/unverified receipts. The key stays in ignored local configuration. See [verification](LANGSMITH_VERIFICATION_2026-10-08.md). The explicit probe sends synthetic counters
-  and requires exact completed-span readback.
-- **Zero new Gemini/Tavily calls** were made for these additions. The corrected
-  comparison remains **136/140** approved calls; historical ledgers remain
-  **26/30** and **28/40**, separately recorded.
+- [Exact source CI](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/37717750091) passed both Python and Docker jobs on `b65fd0259907fd6b1749566cbe0f1e5447f084e0`, completing at **07:56:21 IST on 8 October 2026**.
+- **445 tests passed in 38.55 seconds** on Linux/Python 3.12. Ruff lint/format, strict mypy (85 source files), locked installation with UI/OCR extras, wheel/sdist build, official Render schema and deployment smoke all passed.
+- Docker verified nonroot UID, 512 MB/half-CPU operation, fresh-container checkpoint reconnect, fresh-volume backup/restore, UI health and authenticated gateway rejection of anonymous upload/media/WebSocket requests.
+- The local Windows OCR suite passed **14 tests in 50.60 seconds**, including actual image-only PDF recognition, transcript disclosure, credential isolation and timeout cleanup. The complete Windows run hit process/import delays and a 15-minute host limit; the full regression evidence above is from Linux CI.
+- Markdown and JSON download filenames, serialized bytes and visitor separation passed integration tests. The public demo returned **HTTP 200 with fresh anonymous cookies** after the GitHub update. Actual browser download completion remains unobserved because the browser helper failed with a Windows sandbox setup error.
+- LangSmith synthetic upload and exact completed-span readback passed: **one tracked receipt, one verified receipt, zero omitted/unverified receipts**. The key stays in ignored local configuration. See [verification](LANGSMITH_VERIFICATION_2026-10-08.md).
+- **Zero new Gemini/Tavily calls** ran. The corrected comparison remains **136/140**; historical ledgers remain **26/30** and **28/40**, separately preserved.
+- All **144 local documentation links** resolved. **202 tracked files** were checked against all three configured private credentials with no matches; `.env` is excluded from Git.
 
 ## Implemented additions
 
@@ -69,6 +66,16 @@ See the [measured replay report](evaluation/RETAINED_PUBLIC_REPLAY_2026-10-07.md
 and [raw JSON](evaluation/RETAINED_PUBLIC_REPLAY_2026-10-07.json).
 Scripted reasoning over one corpus establishes neither source truth, general
 research accuracy nor independent human validation.
+
+## Remaining external checks and broader extensions
+
+- Independent human sign-off and a broader combined live Gemini/Tavily research-quality benchmark have not been performed. The existing review is explicitly AI review.
+- Actual hosted browser download completion remains unobserved because the browser helper failed; download bytes and isolation pass integration tests.
+- Paid persistent hosting of the full workbench remains deferred under the selected INR 5/month cap. The public fixture demo has temporary storage; full local storage is durable.
+- General semantic contradiction/deduplication and distributed cloud workers remain broader extensions. Current numeric comparisons and local fixture queue have explicit bounded behavior.
+- External submission/grading acceptance cannot be claimed without any separate delivery rules. These are not requirements stated by the supplied PDF.
+
+No missing API credential or new Gemini/Tavily allowance blocks the selected local deliverable.
 
 [Setup](submission/SETUP.md), [requirements](submission/REQUIREMENTS.md) and
 [limitations](submission/LIMITATIONS.md) describe the operational boundaries.

@@ -9,7 +9,7 @@ Streamlit fixture demo is deployed; the full workbench retains local durable
 storage. Paid Render hosting remains deferred under the selected INR 5/month cap.
 OCR, document table rows, annual plan scope checks, offline queue recovery,
 export-byte verification and synthetic trace readback have been added. Current
-regression verification is still being completed; one synthetic LangSmith span and its exact remote readback passed on 8 October.
+regression verification passed all 445 tests and both CI jobs; one synthetic LangSmith span and its exact remote readback passed on 8 October.
 
 The corrected comparison remains 136/140 calls; historical ledgers remain
 26/30 and 28/40. New additions used zero Gemini/Tavily calls. The retained public
@@ -18,6 +18,13 @@ general research accuracy and independent human review are not claimed.
 
 All sections below preserve historical execution records. Their then-pending
 notes are superseded by the current status above.
+
+## Completed pending verification - 8 October 2026
+
+- Current source `b65fd0259907fd6b1749566cbe0f1e5447f084e0` passed [both CI jobs](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/37717750091): 445 tests, strict types, lint/format, build, schema, checkpoint/export smoke and constrained authenticated Docker operation. Completed 07:56:21 IST on 8 October.
+- Local actual OCR: 14 tests passed; complete Windows suite hit host startup/import delays. Full regression is verified by Linux CI.
+- One fixed synthetic LangSmith span and exact remote readback passed. No research payload was uploaded and no new Gemini/Tavily calls ran.
+- Public app returned HTTP 200 after the update. Actual browser download remains unobserved because the helper failed; export-byte and visitor separation tests passed in CI.
 
 ## Phase 0 history
 
