@@ -3,8 +3,8 @@
 The full workbench uses local durable storage. The public
 [Streamlit fixture demo](https://evidenceforge-ai-akhiltej.streamlit.app/) is
 deployed with temporary visitor storage, no uploads and no paid providers.
-Paid Render hosting remains deferred under the selected INR 5/month cap;
-no paid Render resource was created.
+Hosting is **free only (INR 0/month)**, replacing the earlier INR 5/month allowance.
+The default Render blueprint also selects free compute without a persistent disk.
 
 ## Phase status
 
@@ -20,7 +20,7 @@ no paid Render resource was created.
 | 7 | Budgets, cancellation, receipts and tracing | Local implementation complete; synthetic counters-only remote delivery verified |
 | 8 | UI, plan approval and exports | Local implementation complete; export-byte checks added; actual browser download not observed |
 | 9 | Benchmark, Gemini comparison and review | Controlled comparison and AI review complete; independent human/semantic validation unclaimed |
-| 10 | API, containers and deployment | Local durability and current Docker checks verified; public fixture deployed; paid Render deferred |
+| 10 | API, containers and deployment | Local durability and current Docker checks verified; public fixture deployed; free hosting only |
 | 11 | Setup, architecture and evaluation materials | Updated with current implementation and measured limits; external submission acceptance unclaimed |
 
 ## Current verification
@@ -71,7 +71,7 @@ research accuracy nor independent human validation.
 
 - Independent human sign-off and a broader combined live Gemini/Tavily research-quality benchmark have not been performed. The existing review is explicitly AI review.
 - Actual hosted browser download completion remains unobserved because the browser helper failed; download bytes and isolation pass integration tests.
-- Paid persistent hosting of the full workbench remains deferred under the selected INR 5/month cap. The public fixture demo has temporary storage; full local storage is durable.
+- Hosting is free only (INR 0/month). The public demo uses temporary storage; durable full-workbench storage stays local. Paid hosting is excluded by the current policy.
 - General semantic contradiction/deduplication and distributed cloud workers remain broader extensions. Current numeric comparisons and local fixture queue have explicit bounded behavior.
 - External submission/grading acceptance cannot be claimed without any separate delivery rules. These are not requirements stated by the supplied PDF.
 

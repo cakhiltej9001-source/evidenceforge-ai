@@ -25,8 +25,8 @@ establish workflow behavior and retained-text support, not general research accu
 Choose **Create plan → Approve plan** to try the workflow. The public
 [fixture demonstration](docs/STREAMLIT_CLOUD.md) separates browser sessions and
 uses temporary storage without document uploads or paid provider calls. The
-full workbench runs locally with durable storage. The ₹5/month cap remains in
-force; paid Render deployment is deferred. Repository access is private.
+full workbench runs locally with durable storage. Hosting is **free only (₹0/month)**;
+this replaces the earlier ₹5/month allowance. Repository access is private.
 See [current phase status](docs/FINAL_STATUS_2026-10-08.md).
 
 ## ✨ Project at a glance
@@ -519,7 +519,7 @@ These are proposed extensions, not completed features:
 - [ ] Expand independent OCR accuracy review and document/table extraction cases.
 - [ ] Evaluate semantic support beyond exact retained quotations.
 - [ ] Extend the local offline queue to hosted operation with authentication/authorization.
-- [ ] Verify hosted durability, backup and access only with a future approved hosting budget.
+- [ ] Verify hosted durability and backups using free resources only.
 
 ## 📖 Further documentation
 

@@ -6,7 +6,7 @@ Updated: 8 October 2026, Asia/Calcutta.
 
 The [8 October status](FINAL_STATUS_2026-10-08.md) is authoritative. The public
 Streamlit fixture demo is deployed; the full workbench retains local durable
-storage. Paid Render hosting remains deferred under the selected INR 5/month cap.
+storage. Hosting is free only (INR 0/month), superseding the earlier INR 5 allowance.
 OCR, document table rows, annual plan scope checks, offline queue recovery,
 export-byte verification and synthetic trace readback have been added. Current
 regression verification passed all 445 tests and both CI jobs; one synthetic LangSmith span and its exact remote readback passed on 8 October.

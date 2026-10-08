@@ -1,5 +1,7 @@
 # Phase 11 — submission and demonstration
 
+> Current policy, 8 October 2026: hosting is free only (INR 0/month), superseding the earlier INR 5 allowance. The public Streamlit fixture demo is deployed. See [current status](FINAL_STATUS_2026-10-08.md); dated results below remain historical.
+
 ## Current completion — 6 October 2026
 
 The [final phase status](FINAL_STATUS_2026-10-06.md) is authoritative. The

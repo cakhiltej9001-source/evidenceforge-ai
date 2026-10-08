@@ -14,27 +14,27 @@ configurations below are optional alternatives and have not been applied.
 | Local UI | Current selected deployment | Durable in the local `.evidenceforge` directory |
 | Streamlit Community Cloud | Deployed public fixture demonstration | Temporary, scoped to the current browser session |
 | [`render.free.yaml`](../render.free.yaml) | Optional login-protected public demonstration using synthetic fixtures | Temporary; lost on restart, redeploy or idle shutdown |
-| [`render.yaml`](../render.yaml) | Paid Render deployment with a persistent disk | Durable on the attached disk; requires a separately approved hosting budget |
+| [`render.yaml`](../render.yaml) | Default free-only Render blueprint; same service as `render.free.yaml` | Temporary; no persistent disk |
 
-The owner selected local durable storage under a ₹5/month hosting cap. The free
-configuration is prepared for review; applying it requires accepting temporary
-storage for a separate public demo. The local installation keeps its saved work.
+The current hosting policy is **free only (₹0/month)**, replacing the earlier ₹5 allowance.
+The existing public Streamlit demo is the selected free deployment. Durable storage
+stays in the local installation. The Render templates are unused alternatives with
+free compute, no disks or databases and automatic deployment disabled.
 
 [Render's free-service documentation](https://render.com/docs/free) states that
 free services cannot attach a persistent disk, lose local SQLite/upload files
 on restart or shutdown, and shut down after 15 idle minutes. First access after
 shutdown can take about a minute. Free service compute does not by itself cap
 workspace bandwidth or build overages when a payment method is configured.
-Check billing controls before provisioning within the owner's spending limit.
+Check billing controls before provisioning within the zero-cost policy; a service must not allow billable overages.
 
 ## Deployment steps after accepting the free demo
 
-1. Confirm that workspace billing controls prevent spending above the approved
-   cap. Do not select a paid compute plan or attach a paid disk.
+1. Confirm that workspace billing controls prevent spending above zero. Do not select a paid compute plan or attach a paid disk.
 2. Grant Render access to the private `evidenceforge-ai` repository through its
    GitHub connection. The repository does not need to become public.
 3. Create a Blueprint from the approved repository branch, selecting
-   `render.free.yaml` as the Blueprint path. Confirm the preview contains one
+   `render.yaml` (or identical `render.free.yaml`) as the Blueprint path. Confirm the preview contains one
    **Free** Docker web service and no disks or databases before applying.
 4. Supply two private password hashes for one strong password: Caddy's bcrypt
    hash and the app's PBKDF2 hash. The template requests both values instead of

@@ -73,8 +73,8 @@ nonroot UID, constrained research/reconnect, fresh-volume synthetic restore and
 UI health. Official Render schema and local restart checks also passed. No
 persistent Render instance or authenticated remote access path has been verified.
 The local PC still lacks Docker. Render API/account access is [verified](../RENDER_ACCESS_VERIFICATION_2026-10-05.md).
-The user selected local durable storage under a ₹5/month cap; paid full-workbench hosting is
-deferred. The separate [public Streamlit fixture demo](../STREAMLIT_CLOUD.md) is live with
+The user selected free-only hosting (₹0/month), replacing the earlier ₹5 allowance.
+Durable full-workbench storage stays local. The separate [public Streamlit fixture demo](../STREAMLIT_CLOUD.md) is live with
 temporary session storage and no paid providers or document uploads. Authenticated Docker gateway checks passed in CI, including anonymous
 browser/upload/media/WebSocket rejection and `RENDER=true` app login configuration.
 Keep the complete local `.evidenceforge` directory for backup/recovery. Synthetic
@@ -85,7 +85,7 @@ restore verifies mechanics, not a future production backup of real user data.
 | Work | Current boundary |
 |---|---|
 | Independent human review / real-source benchmark | Delegated AI review is complete; broader research validation is not established |
-| Hosted operation | Public Streamlit fixture demo verified; persistent full-workbench hosting deferred, no paid resource created |
+| Hosted operation | Public Streamlit fixture demo verified; durable full-workbench storage stays local under the free-only policy |
 | Combined real Gemini/Tavily research-quality study | Tavily access and Gemini structured execution passed separately; synthetic results do not establish combined semantic quality |
 | Separate grading/submission rules | The supplied PDF has no scored rubric, deadline or delivery format |
 

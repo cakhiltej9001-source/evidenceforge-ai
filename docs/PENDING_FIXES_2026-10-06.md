@@ -1,5 +1,7 @@
 # Pending-work completion — 6 October 2026
 
+> Current policy, 8 October 2026: hosting is free only (INR 0/month), superseding the earlier INR 5 allowance. The public Streamlit fixture demo is deployed. See [current status](FINAL_STATUS_2026-10-08.md); dated results below remain historical.
+
 The [final phase status](FINAL_STATUS_2026-10-06.md) is authoritative. The
 user selected local durable storage under a ₹5/month hosting cap; public hosting
 is deferred. The 40-row corrected Gemini comparison and delegated AI review are

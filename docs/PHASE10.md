@@ -1,5 +1,7 @@
 # Phase 10: specialized source and deployment preparation
 
+> Current policy, 8 October 2026: hosting is free only (INR 0/month), superseding the earlier INR 5 allowance. The public Streamlit fixture demo is deployed. See [current status](FINAL_STATUS_2026-10-08.md); dated results below remain historical.
+
 ## Current completion — 6 October 2026
 
 The [final phase status](FINAL_STATUS_2026-10-06.md) is authoritative. The
@@ -74,7 +76,7 @@ attribution and the period when sharing derived records.
   SQLite databases, traces, generated evaluation records and Git metadata.
 - `compose.yaml`: localhost-only port, named `/data` volume, dropped capabilities,
   no privilege escalation. Defaults to fixture reasoning.
-- `render.yaml`: reviewable paid web service configuration with a 1 GB disk;
+- `render.yaml`: free-only web service configuration without a persistent disk;
   automatic deploys disabled. Caddy protects browser routes with a Render
   bcrypt secret while leaving the health path available to the platform.
 - `.github/workflows/ci.yml`: locked install, checks/tests/package build, offline

@@ -1,10 +1,13 @@
-# Reviewable single-owner service. Applying this creates paid resources.
-# The Caddy gateway refuses hosted access until its bcrypt password hash is configured.
+# Default hosting policy: free only (INR 0/month).
+# No paid compute, disks or databases; this template is not deployed automatically.
+# Optional public demonstration. Apply only after accepting temporary storage.
+# Local saved research is not copied here. This service uses synthetic fixtures.
+# Both login hashes must be supplied privately before hosted access can work.
 services:
   - type: web
-    name: evidenceforge-demo
+    name: evidenceforge-free-demo
     runtime: docker
-    plan: 0.5c-512mb
+    plan: free
     healthCheckPath: /_stcore/health
     numInstances: 1
     autoDeployTrigger: "off"
@@ -12,6 +15,8 @@ services:
     envVars:
       - key: EVIDENCEFORGE_AUTH_REQUIRED
         value: "true"
+      - key: EVIDENCEFORGE_AUTH_USERNAME
+        value: admin
       - key: EVIDENCEFORGE_AUTH_PASSWORD_HASH
         sync: false
       - key: CADDY_AUTH_REQUIRED
@@ -23,13 +28,8 @@ services:
       - key: PORT
         value: "8501"
       - key: EVIDENCEFORGE_DATA_DIR
-        value: /data/evidenceforge
+        value: /data/evidenceforge-demo
       - key: EVIDENCEFORGE_MODEL_PROVIDER
         value: fixture
       - key: EVIDENCEFORGE_TRACING_ENABLED
         value: "false"
-    disk:
-      name: evidenceforge-data
-      mountPath: /data
-      sizeGB: 1
-

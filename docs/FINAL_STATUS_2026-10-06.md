@@ -1,5 +1,7 @@
 # Final local project status — 6 October 2026
 
+> Current policy, 8 October 2026: hosting is free only (INR 0/month), superseding the earlier INR 5 allowance. The public Streamlit fixture demo is deployed. See [current status](FINAL_STATUS_2026-10-08.md); dated results below remain historical.
+
 The user selected **local durable storage** after confirming a **₹5/month**
 hosting cap. Public Render deployment is deferred by that choice. No paid Render
 resource was created. The owner subsequently requested a public Streamlit demo,
