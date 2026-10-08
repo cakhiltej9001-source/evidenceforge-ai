@@ -31,8 +31,8 @@ The default Render blueprint also selects free compute without a persistent disk
 - The local Windows OCR suite passed **14 tests in 50.60 seconds**, including actual image-only PDF recognition, transcript disclosure, credential isolation and timeout cleanup. The complete Windows run hit process/import delays and a 15-minute host limit; the full regression evidence above is from Linux CI.
 - [Actual hosted browser downloads](HOSTED_DOWNLOAD_VERIFICATION_2026-10-08.md) passed all eight checks at **14:13:49 IST**: saved `report.md` (1,263 bytes) and `report.json` (22,939 bytes), verified completed fixture contents, and confirmed a fresh browser context had no saved run or report downloads. [Browser CI](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/37751643343) used Chromium without credentials or paid providers.
 - LangSmith synthetic upload and exact completed-span readback passed: **one tracked receipt, one verified receipt, zero omitted/unverified receipts**. The key stays in ignored local configuration. See [verification](LANGSMITH_VERIFICATION_2026-10-08.md).
-- **Zero new Gemini/Tavily calls** ran. The corrected comparison remains **136/140**; historical ledgers remain **26/30** and **28/40**, separately preserved.
-- All **159 local documentation links** resolved. **209 tracked files** were checked against all three configured private credentials with no matches; `.env` is excluded from Git.
+- Engineering, replay and browser checks used **zero new Gemini/Tavily calls**. A separate [user-requested Gemini API test](GEMINI_API_TEST_2026-10-08.md) made two small requests: saved gemini-3.5-flash-lite returned HTTP 503; gemini-3.1-flash-lite returned HTTP 200 and a validated fixed response. The corrected comparison remains **136/140**; historical ledgers remain **26/30** and **28/40**, separately preserved.
+- All **161 local documentation links** resolved. **211 tracked files** were checked against all three configured private credentials with no matches; `.env` is excluded from Git.
 
 ## Implemented additions
 

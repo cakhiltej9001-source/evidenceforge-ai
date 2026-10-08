@@ -1,0 +1,52 @@
+{
+  "diagnostic": "user_requested_gemini_api_test",
+  "date": "2026-10-08",
+  "total_requests": 2,
+  "maximum_requests": 2,
+  "benchmark_ledgers_changed": false,
+  "app_configuration_changed": false,
+  "full_research_workflow_verified": false,
+  "cases": [
+    {
+      "checked_at_utc": "2026-10-08T17:59:40.576712+00:00",
+      "model": "gemini-3.5-flash-lite",
+      "maximum_calls": 1,
+      "http_attempts_reserved": 1,
+      "http_status": 503,
+      "response_validated": false,
+      "maximum_output_tokens": 256,
+      "retries": 0,
+      "benchmark_ledgers_changed": false,
+      "scope": "one fixed synthetic connectivity message; no private research",
+      "status": "http_error",
+      "elapsed_seconds": 8.61,
+      "cost_usd": null
+    },
+    {
+      "checked_at_utc": "2026-10-08T18:01:52.726548+00:00",
+      "model": "gemini-3.1-flash-lite",
+      "maximum_calls_this_fallback": 1,
+      "maximum_calls_both_tests": 2,
+      "http_attempts_reserved": 1,
+      "http_status": 200,
+      "response_validated": true,
+      "maximum_output_tokens": 256,
+      "retries": 0,
+      "benchmark_ledgers_changed": false,
+      "scope": "one fixed synthetic fallback test after saved model HTTP503",
+      "status": "verified",
+      "finish_reason": "STOP",
+      "block_reason": null,
+      "response_matches_expected": true,
+      "response": "GEMINI_API_OK",
+      "usage": {
+        "promptTokenCount": 22,
+        "candidatesTokenCount": 6,
+        "thoughtsTokenCount": null,
+        "totalTokenCount": 28
+      },
+      "elapsed_seconds": 1.297,
+      "cost_usd": null
+    }
+  ]
+}
