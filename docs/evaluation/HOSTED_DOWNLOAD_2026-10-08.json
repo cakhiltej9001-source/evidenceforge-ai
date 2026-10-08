@@ -1,0 +1,41 @@
+{
+  "verification_version": 1,
+  "checked_at_utc": "2026-10-08T08:43:18.349565+00:00",
+  "target": "https://evidenceforge-ai-akhiltej.streamlit.app/",
+  "status": "verified",
+  "stage": "finished",
+  "checks": {
+    "fixture_only_controls": true,
+    "plan_created": true,
+    "report_download_controls_visible": true,
+    "markdown_browser_download": true,
+    "json_browser_download": true,
+    "completed_fixture_export": true,
+    "fresh_browser_has_no_saved_thread": true,
+    "fresh_browser_has_no_report_downloads": true
+  },
+  "downloads": [
+    {
+      "filename": "report.md",
+      "bytes": 1263,
+      "verified": true
+    },
+    {
+      "filename": "report.json",
+      "bytes": 22939,
+      "verified": true
+    }
+  ],
+  "paid_provider_calls_requested_by_check": 0,
+  "scope": "one fixed offline synthetic fixture run and one fresh browser context",
+  "limitations": [
+    "This verifies hosted browser exports and visitor isolation for one fixture case.",
+    "It does not establish broader factual accuracy or persistent hosted storage."
+  ],
+  "browser_version": "153.0.8010.12",
+  "playwright_version": "1.63.0",
+  "workflow_url": "https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/37751643343",
+  "verifier_revision": "e2c02e6f78315e296b3983bd0d8a72e2ec6da35f",
+  "workflow_completed_at_utc": "2026-10-08T08:43:49Z",
+  "deployed_app_revision_observed": false
+}

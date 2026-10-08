@@ -27,7 +27,8 @@ Choose **Create plan → Approve plan** to try the workflow. The public
 uses temporary storage without document uploads or paid provider calls. The
 full workbench runs locally with durable storage. Hosting is **free only (₹0/month)**;
 this replaces the earlier ₹5/month allowance. Repository access is private.
-See [current phase status](docs/FINAL_STATUS_2026-10-08.md).
+See [current phase status](docs/FINAL_STATUS_2026-10-08.md). Actual hosted
+[Markdown/JSON downloads and fresh-visitor isolation](docs/HOSTED_DOWNLOAD_VERIFICATION_2026-10-08.md) passed; full source CI passed 457 tests.
 
 ## ✨ Project at a glance
 

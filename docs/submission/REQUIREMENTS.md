@@ -23,7 +23,7 @@ relative to `src/evidenceforge/` unless marked otherwise.
 | B06 | Shared state and replay-safe reducers | `graph/state.py`, `graph/reducers.py`; `tests/test_state.py` | Implemented contracts, cross-references and bounded records |
 | B07 | Coverage gaps trigger another pass | `nodes/quality.py`, `graph/research.py`; `test_second_pass_adds_new_evidence` | Verified synthetic two-pass demo |
 | B08 | Bounded stop with disclosed gaps | `nodes/quality.py`, `reporting.py`; `test_pass_limit_returns_partial_with_gaps` | Verified partial/pass-limit path and other stop conditions |
-| B09 | Required report sections and sources (PDF 13) | `reporting.py`, `exports.py`; research/Phase 8 tests | Implemented 2-3 audited summary paragraphs when enough supported claims exist, plus per-source evidence chunks/locators. A shorter summary is explicitly disclosed when support is insufficient |
+| B09 | Required report sections and sources (PDF 13) | `reporting.py`, `exports.py`; research/Phase 8 tests and [hosted downloads](../HOSTED_DOWNLOAD_VERIFICATION_2026-10-08.md) | Implemented 2-3 audited summary paragraphs when enough supported claims exist, plus per-source evidence chunks/locators. A shorter summary is explicitly disclosed when support is insufficient |
 | B10 | Critic and shared revision budget | `nodes/quality.py`; critic/citation allowance tests | Implemented; exhausted repairs cannot manufacture completion |
 | B11 | Trace claims to evidence | `nodes/quality.py`, `evidence/projection.py`; audit/support tests | Exact quotations and snapshot integrity verified; independent source truth/semantic accuracy not established |
 | B12 | Registered compiled LangGraph | `graph/research.py`, `graph/builder.py`; planning/research tests | Implemented and executed |
@@ -50,8 +50,9 @@ relative to `src/evidenceforge/` unless marked otherwise.
 ## Implementation additions on 8 October 2026
 
 These additions are implemented with offline regression coverage in source.
-Measured engineering results are recorded separately. This update makes no new
-test-pass, browser-download, human-review or remote-trace claim.
+Measured engineering results and their scope are recorded in the current status
+and [hosted download verification](../HOSTED_DOWNLOAD_VERIFICATION_2026-10-08.md).
+Independent human review and general semantic quality remain unclaimed.
 
 | Feature | Evidence | Limit |
 |---|---|---|
@@ -75,7 +76,7 @@ and approved-call ledgers are preserved.
 - [x] Delegated AI review of all 20 draft annotations and completed bounded Gemini execution; [5 October re-review](../evaluation/DELEGATED_REVIEW_2026-10-05.md) verifies all 40 saved fixture rows and proposes 16 narrower questions.
 - [x] Corrected same-corpus Gemini comparison and delegated 40-row AI review, with research-quality limits disclosed. Independent human validation is not claimed.
 - [x] Private source repository and Docker runtime/remote CI verification.
-- [x] Public offline Streamlit demo deployed; full-workbench durability remains local. Authenticated container access is CI-verified.
+- [x] Public offline Streamlit demo deployed; actual Chromium Markdown/JSON downloads and fresh-visitor isolation verified. Full-workbench durability remains local. Authenticated container access is CI-verified.
 - [x] Read all 23 original-PDF pages and verify requirement/page mapping.
 - [x] Implement original-PDF mixed-source/report/literal deduplication mechanics.
 - [x] Verify actual live Tavily full pipeline with configured credential, one search, exact quotation checks and fresh-service recovery (deterministic reasoning).

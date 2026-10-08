@@ -68,7 +68,7 @@ Graph version 8 checkpoints cannot silently resume older graph versions.
 The explicit LangSmith probe uploads one synthetic counter span and requires exact
 server readback. Standard configuration alone does not enable raw graph export.
 Synthetic counter delivery and exact receipt readback passed on 8 October; see [verification](../LANGSMITH_VERIFICATION_2026-10-08.md). Full research payload tracing remains disabled.
-These additions establish no new browser download check or independent human review.
+[Actual hosted browser exports](../HOSTED_DOWNLOAD_VERIFICATION_2026-10-08.md) passed one completed fixture case and fresh-visitor isolation. Independent human review remains unclaimed.
 
 Docker execution passed in the private repository's remote CI: image build,
 nonroot UID, constrained research/reconnect, fresh-volume synthetic restore and
@@ -87,7 +87,7 @@ restore verifies mechanics, not a future production backup of real user data.
 | Work | Current boundary |
 |---|---|
 | Independent human review / real-source benchmark | Delegated AI review is complete; broader research validation is not established |
-| Hosted operation | Public Streamlit fixture demo verified; durable full-workbench storage stays local under the free-only policy |
+| Hosted operation | Public fixture workflow, actual Chromium downloads and fresh-visitor isolation verified; durable full-workbench storage stays local under the free-only policy |
 | Combined real Gemini/Tavily research-quality study | Tavily access and Gemini structured execution passed separately; synthetic results do not establish combined semantic quality |
 | Separate grading/submission rules | The supplied PDF has no scored rubric, deadline or delivery format |
 

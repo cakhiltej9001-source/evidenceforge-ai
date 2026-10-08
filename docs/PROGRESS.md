@@ -8,8 +8,8 @@ The [8 October status](FINAL_STATUS_2026-10-08.md) is authoritative. The public
 Streamlit fixture demo is deployed; the full workbench retains local durable
 storage. Hosting is free only (INR 0/month), superseding the earlier INR 5 allowance.
 OCR, document table rows, annual plan scope checks, offline queue recovery,
-export-byte verification and synthetic trace readback have been added. Current
-regression verification passed all 445 tests and both CI jobs; one synthetic LangSmith span and its exact remote readback passed on 8 October.
+actual hosted Chromium downloads, fresh-visitor isolation and synthetic trace readback have been verified. Current
+regression verification passed all 457 tests and both CI jobs; one synthetic LangSmith span and its exact remote readback passed on 8 October.
 
 The corrected comparison remains 136/140 calls; historical ledgers remain
 26/30 and 28/40. New additions used zero Gemini/Tavily calls. The retained public
@@ -20,12 +20,20 @@ independent human review are not claimed.
 All sections below preserve historical execution records. Their then-pending
 notes are superseded by the current status above.
 
-## Completed pending verification - 8 October 2026
+## Remaining free checks completed - 8 October 2026, 14:13 IST
+
+- Source `a89e4ef00844acc5f1b2936c98751a69021c2929` passed [full CI](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/37750655847): **457 tests in 28.27 seconds**, strict types, lint/format, packaging, schema and Docker checks. Completed 14:04:55 IST.
+- Dated/seasonal scope safeguards passed 35 targeted tests; ordinary chronology and explicit preferences remain supported.
+- Two retained energy corpora passed all nine checks, preserving full-text/excerpt scope and correctly partial missing-aspect outcomes. Zero provider calls.
+- [Hosted Chromium verification](HOSTED_DOWNLOAD_VERIFICATION_2026-10-08.md) passed all eight checks and saved both actual downloads. A fresh visitor had no saved run or report downloads. Completed 14:13:49 IST.
+- Hosting remains free only (INR 0/month); no paid resources or new Gemini/Tavily calls were used. Remaining optional validation/extensions are listed in the authoritative status.
+
+## Earlier verification history - 8 October 2026
 
 - Current source `b65fd0259907fd6b1749566cbe0f1e5447f084e0` passed [both CI jobs](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/37717750091): 445 tests, strict types, lint/format, build, schema, checkpoint/export smoke and constrained authenticated Docker operation. Completed 07:56:21 IST on 8 October.
 - Local actual OCR: 14 tests passed; complete Windows suite hit host startup/import delays. Full regression is verified by Linux CI.
 - One fixed synthetic LangSmith span and exact remote readback passed. No research payload was uploaded and no new Gemini/Tavily calls ran.
-- Public app returned HTTP 200 after the update. Actual browser download remains unobserved because the helper failed; export-byte and visitor separation tests passed in CI.
+- At this earlier checkpoint the public app returned HTTP 200 and integration checks passed; the desktop helper could not observe actual downloads. The later Chromium verification above closes that check.
 
 ## Phase 0 history
 

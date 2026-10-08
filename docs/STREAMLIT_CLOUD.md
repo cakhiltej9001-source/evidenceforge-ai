@@ -66,6 +66,19 @@ Official references: [deployment](https://docs.streamlit.io/deploy/streamlit-com
 [private GitHub permissions](https://docs.streamlit.io/deploy/streamlit-community-cloud/status),
 and [app sharing](https://docs.streamlit.io/deploy/streamlit-community-cloud/share-your-app).
 
-## Export verification update - 8 October 2026
+## Earlier integration export verification - 8 October 2026
 
 [Current source CI](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/37717750091) passed all 445 tests and both jobs on `b65fd0259907fd6b1749566cbe0f1e5447f084e0`. Integration checks inspect Markdown/JSON filenames and actual download bytes, fixture disclaimers, completed JSON progress and visitor isolation. Download actions skip a UI rerun. Fresh anonymous HTTP access returned 200 after the update. The browser helper failed with a Windows sandbox setup error, so actual hosted download completion remains unobserved. No live provider call or private payload was sent by the public demo.
+
+## Actual browser exports verified - 8 October 2026
+
+[Hosted Chromium verification](HOSTED_DOWNLOAD_VERIFICATION_2026-10-08.md) completed
+at **14:13:49 IST**, passing all eight checks. It saved actual `report.md`
+(1,263 bytes) and `report.json` (22,939 bytes), checked completed fixture content
+and confirmed a separate fresh visitor had no saved thread or download controls.
+[Browser CI](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/37751643343)
+used the fixed public app without credentials or paid provider calls.
+
+This result supersedes the earlier unobserved-download qualification above.
+It covers one synthetic case; it does not establish broad factual accuracy or
+persistent hosted storage. Hosting remains free only (INR 0/month).
