@@ -14,7 +14,7 @@ The default Render blueprint also selects free compute without a persistent disk
 | 1 | Locked package, configuration, schemas and state | Local implementation complete |
 | 2 | Manager, planner, context and queries | Local implementation complete; annual-scope safeguard added; plans still need review |
 | 3 | Retrieval, snapshots and provenance | Local implementation complete; historical Tavily/Wikipedia access verified |
-| 4 | Coverage, synthesis, criticism and reports | Local implementation complete; partial and insufficient outcomes disclosed |
+| 4 | Coverage, synthesis, criticism and reports | Local implementation complete; empty Key Findings edge fixed and regression verified; partial/insufficient outcomes disclosed |
 | 5 | Documents, checkpoints and restart | Local implementation complete; optional bounded OCR and DOCX row retention added |
 | 6 | Ranking, inspection and numeric disputes | Local implementation complete within explicit grammar; generation wording extended |
 | 7 | Budgets, cancellation, receipts and tracing | Local implementation complete; synthetic counters-only remote delivery verified |
@@ -25,14 +25,14 @@ The default Render blueprint also selects free compute without a persistent disk
 
 ## Current verification
 
-- [Exact source CI](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/37750655847) passed both Python and Docker jobs on `a89e4ef00844acc5f1b2936c98751a69021c2929`, completing at **14:04:55 IST on 8 October 2026**.
-- **457 tests passed in 28.27 seconds** on Linux/Python 3.12. Ruff lint/format, strict mypy (85 source files), locked installation with UI/OCR extras, wheel/sdist build, official Render schema and deployment smoke all passed.
+- [Exact source CI](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/37822789945) passed both Python and Docker jobs on `7ffd9cd2cefa58adad16dd70744dafe33749f4cb`, completing at **23:46:11 IST on 8 October 2026**.
+- **459 tests passed in 36.76 seconds** on Linux/Python 3.12. Ruff lint/format, strict mypy (85 source files), locked installation with UI/OCR extras, wheel/sdist build, official Render schema and deployment smoke all passed.
 - Docker verified nonroot UID, 512 MB/half-CPU operation, fresh-container checkpoint reconnect, fresh-volume backup/restore, UI health and authenticated gateway rejection of anonymous upload/media/WebSocket requests.
 - The local Windows OCR suite passed **14 tests in 50.60 seconds**, including actual image-only PDF recognition, transcript disclosure, credential isolation and timeout cleanup. The complete Windows run hit process/import delays and a 15-minute host limit; the full regression evidence above is from Linux CI.
 - [Actual hosted browser downloads](HOSTED_DOWNLOAD_VERIFICATION_2026-10-08.md) passed all eight checks at **14:13:49 IST**: saved `report.md` (1,263 bytes) and `report.json` (22,939 bytes), verified completed fixture contents, and confirmed a fresh browser context had no saved run or report downloads. [Browser CI](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/37751643343) used Chromium without credentials or paid providers.
 - LangSmith synthetic upload and exact completed-span readback passed: **one tracked receipt, one verified receipt, zero omitted/unverified receipts**. The key stays in ignored local configuration. See [verification](LANGSMITH_VERIFICATION_2026-10-08.md).
 - Engineering, replay and browser checks used **zero new Gemini/Tavily calls**. A separate [user-requested Gemini API test](GEMINI_API_TEST_2026-10-08.md) made two small requests: saved gemini-3.5-flash-lite returned HTTP 503; gemini-3.1-flash-lite returned HTTP 200 and a validated fixed response. The corrected comparison remains **136/140**; historical ledgers remain **26/30** and **28/40**, separately preserved.
-- All **161 local documentation links** resolved. **211 tracked files** were checked against all three configured private credentials with no matches; `.env` is excluded from Git.
+- All **172 local documentation links** resolved. **213 tracked files** were checked against all three configured private credentials with no matches; `.env` is excluded from Git.
 
 ## Implemented additions
 
@@ -90,7 +90,7 @@ See the [Gemini diagnostic](GEMINI_API_TEST_2026-10-08.md).
 - General semantic contradiction/deduplication and distributed cloud workers remain broader extensions. Current numeric comparisons and local fixture queue have explicit bounded behavior.
 - External submission/grading acceptance cannot be claimed without any separate delivery rules. These are not requirements stated by the supplied PDF.
 
-The [complete phase audit](PHASE_AUDIT_2026-10-08.md) found one Phase 4 report-section edge, now corrected in source with a regression check. Current live Gemini availability remains a follow-up; independent review and broader extensions retain the qualifications above. Credential setup is complete for the selected local workbench and public fixture demo.
+The [complete phase audit](PHASE_AUDIT_2026-10-08.md) found one Phase 4 report-section edge, now corrected and verified by targeted regressions and full source CI. Current live Gemini availability remains a follow-up; independent review and broader extensions retain the qualifications above. Credential setup is complete for the selected local workbench and public fixture demo.
 
 [Setup](submission/SETUP.md), [requirements](submission/REQUIREMENTS.md) and
 [limitations](submission/LIMITATIONS.md) describe the operational boundaries.

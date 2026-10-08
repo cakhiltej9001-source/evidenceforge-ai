@@ -36,7 +36,23 @@ It also verifies unchanged version-1 behavior for frozen historical comparisons.
 
 Source: [synthesis](../src/evidenceforge/nodes/quality.py).
 Regression: [report behavior](../tests/test_research.py).
-Verification of the changed implementation will be recorded below after CI.
+## Verification of the correction
+
+- Local targeted regression: **2 passed, 20 deselected in 31.56 seconds**.
+  Ruff lint and formatting passed.
+- [Exact-source CI](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/37822789945)
+  passed Python and Docker jobs on source `7ffd9cd2cefa58adad16dd70744dafe33749f4cb`,
+  completing at **23:46:11 IST on 8 October 2026**.
+- **459 tests passed in 36.76 seconds** on Linux/Python 3.12. Strict mypy passed
+  for 85 source files; lint, formatting, locked UI/OCR install, wheel/sdist build,
+  official Render schemas and deployment smoke passed.
+- Docker verified constrained execution, nonroot UID, fresh-container checkpoint
+  reconnect, fresh-volume backup/restore, UI health and authenticated route checks.
+- No further product code changed while recording these results. The earlier
+  hosted browser download test retains its own dated scope.
+- [Sanitized audit measurements](evaluation/PHASE_AUDIT_2026-10-08.json) preserve
+  source identity, test results and the remaining live-provider check.
+
 
 ## Remaining operational check
 

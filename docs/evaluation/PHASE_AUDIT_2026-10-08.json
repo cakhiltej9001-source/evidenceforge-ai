@@ -1,0 +1,51 @@
+{
+  "audit": "phases_0_through_11",
+  "date": "2026-10-08",
+  "source_revision": "7ffd9cd2cefa58adad16dd70744dafe33749f4cb",
+  "ci": {
+    "run_id": 37822789945,
+    "url": "https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/37822789945",
+    "conclusion": "success",
+    "jobs": {
+      "python": "success",
+      "container": "success"
+    },
+    "completed_at_utc": "2026-10-08T18:16:11Z",
+    "completed_at_ist": "2026-10-08 23:46:11 IST",
+    "tests_passed": 459,
+    "tests_seconds": 36.76,
+    "mypy_source_files": 85
+  },
+  "targeted_regression": {
+    "passed": 2,
+    "deselected": 20,
+    "seconds": 31.56,
+    "frozen_v1_preserved": true
+  },
+  "fix": {
+    "phase": 4,
+    "scope": "Populate empty current-v2 Key Findings from existing factual claims; retain usual critic/citation auditing",
+    "new_claims_created": false
+  },
+  "api_requests_during_audit": {
+    "gemini": 0,
+    "tavily": 0
+  },
+  "historical_benchmark_ledgers_changed": false,
+  "private_model_configuration_changed": false,
+  "hosting_policy": "free_only",
+  "remaining_operational": {
+    "saved_model": "gemini-3.5-flash-lite",
+    "latest_basic_http": 503,
+    "fallback_model": "gemini-3.1-flash-lite",
+    "fallback_basic_http": 200,
+    "current_structured_workflow_verified": false
+  },
+  "optional_unclaimed": [
+    "Independent human sign-off",
+    "Broader combined live research-quality study",
+    "General semantic contradiction/deduplication",
+    "Distributed cloud workers",
+    "Separate external grading acceptance"
+  ]
+}
