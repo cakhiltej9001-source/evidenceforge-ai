@@ -281,6 +281,42 @@ def test_report_summary_paragraphs_and_per_source_evidence(tmp_path):
     assert all(a["support"] == "supported" for a in state["citation_audit"])
 
 
+class SummaryOnly(FixtureResearchModel):
+    async def synthesize(self, request: SynthesisInput) -> object:
+        response = await super().synthesize(request)
+        assert isinstance(response, dict)
+        for claim in response["claims"]:
+            claim["section"] = "summary"
+        return response
+
+
+@pytest.mark.parametrize("input_version", [1, 2])
+def test_supported_summary_only_draft_has_findings_without_changing_frozen_v1(
+    tmp_path, input_version
+):
+    state = run(
+        tmp_path,
+        model=SummaryOnly(),
+        options=ResearchOptions(quality_input_version=input_version),
+    )
+    assert state["run_status"] == "completed"
+    findings = next(
+        section["claim_ids"]
+        for section in state["final_report"]["sections"]
+        if section["name"] == "key_findings"
+    )
+    if input_version == 1:
+        assert findings == []
+    else:
+        assert set(findings) == set(state["report_claims"])
+        assert all(audit["support"] == "supported" for audit in state["citation_audit"])
+        markdown = render_report(state)
+        section = markdown.split("## Key Findings\n\n", 1)[1].split("## Sources", 1)[0]
+        assert "solar electricity output" in section
+        assert "wind electricity output" in section
+        assert "No supported claims" not in section
+
+
 def test_report_shortens_summary_when_only_one_claim_is_supported(tmp_path):
     state = run(tmp_path, adapter=SecondPassFixture(), budget=BudgetLimits(max_research_passes=1))
     markdown = render_report(state)

@@ -4,7 +4,7 @@
 ![Python](https://img.shields.io/badge/Python-3.12–3.14-blue)
 ![LangGraph](https://img.shields.io/badge/Workflow-LangGraph-teal)
 ![SQLite](https://img.shields.io/badge/Storage-SQLite-blue)
-![Tests](https://img.shields.io/badge/Tests-373%20passed-brightgreen)
+![Tests](https://img.shields.io/badge/Tests-457%20passed-brightgreen)
 ![Demo](https://img.shields.io/badge/Demo-public%20Streamlit-green)
 
 > A local research workbench that plans questions, gathers inspectable evidence,
@@ -16,10 +16,11 @@ and why the workflow completed or stopped. Python, LangGraph, SQLite and Streaml
 connect the research stages; offline fixtures support demonstrations and optional
 Gemini reasoning supports explicitly started provider runs.
 
-**Verified on 6 October 2026:** 373 tests and both private CI jobs passed, including
-Docker persistence, backup/restore and authenticated gateway checks. The corrected
-Gemini comparison saved 40 answers using 136 of 140 approved calls. These checks
-establish workflow behavior and retained-text support, not general research accuracy.
+**Verified on 8 October 2026:** 457 tests and both private CI jobs passed, including
+Docker persistence, backup/restore and authenticated gateway checks. The earlier
+corrected Gemini comparison saved 40 answers using 136 of 140 approved calls.
+These checks establish workflow behavior and retained-text support; general
+research accuracy remains unclaimed.
 
 **Public demo:** [Open EvidenceForge on Streamlit](https://evidenceforge-ai-akhiltej.streamlit.app/).
 Choose **Create plan → Approve plan** to try the workflow. The public
@@ -286,9 +287,14 @@ EVIDENCEFORGE_MODEL_API_KEY=YOUR_PRIVATE_GEMINI_KEY
 EVIDENCEFORGE_TAVILY_API_KEY=YOUR_PRIVATE_TAVILY_KEY
 ```
 
-The model above is the authorized fallback used in recorded checks, not a claim
-about the latest available model. Gemini receives the question and selected
-passages/context. Explicit live-source choices enable acquisition separately:
+The model above was used in the historical controlled comparison. In the
+[8 October API diagnostic](docs/GEMINI_API_TEST_2026-10-08.md), this saved model
+returned HTTP 503; an explicit `gemini-3.1-flash-lite` fallback returned a valid
+fixed text response. That basic probe did not verify structured EvidenceForge
+execution on the fallback or change the saved model. Current structured provider
+availability therefore remains unverified; historical comparison results remain
+preserved. Gemini receives the question and selected passages/context.
+Explicit live-source choices enable acquisition separately:
 
 ```powershell
 uv run --locked evidenceforge-research "Compare solar and wind electricity output, distinguishing GB half-hour shares from annual output." --live-web --energy-api --require-approval
@@ -315,8 +321,9 @@ uv run --locked mypy
 uv build
 ```
 
-[CI on 6 October](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/37489134491)
-passed **373 tests in 19.37 seconds**, lint/format/types, package build, official
+[CI on 8 October](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/37750655847)
+passed **457 tests in 28.27 seconds** on product source
+`a89e4ef00844acc5f1b2936c98751a69021c2929`, plus lint/format/types, package build, official
 Render schema and offline deployment smoke. Docker checks passed nonroot UID 10001,
 512 MB/half-CPU execution, fresh-container persistence, fresh-volume synthetic
 backup/restore, health and authenticated gateway access. Tests block ordinary
@@ -345,8 +352,8 @@ uv run --locked python -m evidenceforge.trace_verification --execute --output ".
 ```
 
 The probe uses a fixed project and allowlisted counters, excluding research
-questions, documents and graph payloads. Synthetic counter delivery/readback passed on 8 October. Future spans require
-an exact completed-span readback succeeds.
+questions, documents and graph payloads. Synthetic counter delivery/readback passed
+on 8 October. Future spans require exact completed-span readback to verify delivery.
 
 ### Corrected controlled Gemini comparison
 

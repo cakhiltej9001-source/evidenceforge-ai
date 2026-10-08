@@ -74,13 +74,23 @@ research accuracy nor independent human validation.
 - [Two retained corpora](evaluation/RETAINED_CORPORA_2026-10-08.md) passed **all nine checks** with zero provider calls. EIA/Utility Dive full text retained 30 exact cited claims and completed; Wikipedia search excerpts retained nine exact cited claims and correctly stayed partial with a wind-evidence gap. Excerpt scope and corpus isolation were preserved.
 - These measurements do not establish broad semantic accuracy or independent human review.
 
+## Current operational follow-up
+
+The configured local model remains `gemini-3.5-flash-lite`. Its latest basic
+request returned HTTP 503. An explicit `gemini-3.1-flash-lite` fallback passed
+only a fixed-text API diagnostic; the current structured EvidenceForge workflow
+has not been reverified on either model. Historical structured runs remain dated
+evidence. This is a provider-availability follow-up, with credentials configured;
+existing paid checkpoints retain their saved model and durable call protections.
+See the [Gemini diagnostic](GEMINI_API_TEST_2026-10-08.md).
+
 ## Remaining optional validation and extensions
 
 - Independent human sign-off and a broader combined live Gemini/Tavily research-quality benchmark have not been performed. The existing review is explicitly AI review.
 - General semantic contradiction/deduplication and distributed cloud workers remain broader extensions. Current numeric comparisons and local fixture queue have explicit bounded behavior.
 - External submission/grading acceptance cannot be claimed without any separate delivery rules. These are not requirements stated by the supplied PDF.
 
-No required implementation or credential setup remains pending for the selected local workbench and public fixture demo. Optional validation and extension limits are listed above.
+The [complete phase audit](PHASE_AUDIT_2026-10-08.md) found one Phase 4 report-section edge, now corrected in source with a regression check. Current live Gemini availability remains a follow-up; independent review and broader extensions retain the qualifications above. Credential setup is complete for the selected local workbench and public fixture demo.
 
 [Setup](submission/SETUP.md), [requirements](submission/REQUIREMENTS.md) and
 [limitations](submission/LIMITATIONS.md) describe the operational boundaries.

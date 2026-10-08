@@ -94,8 +94,9 @@ finalize it. Create a fresh service/model for every new paid run.
 Generated plans for annual requests or requests naming a year reject new
 subannual requirements in questions and criteria. Explicit breakdown preferences
 are respected. Scope rejection stops before queries; specify the intended
-breakdown in a new request. Date/seasonal exemptions and phrase matching limit this
-rule; other entity, metric or population drift still requires plan review.
+breakdown in a new request. Date/season context authorizes relevant supporting
+measurements while finer unrequested breakdowns remain guarded. Phrase matching
+limits this rule; other entity, metric or population drift still requires plan review.
 
 ## Durable local offline queue
 
@@ -144,9 +145,13 @@ data root. This CLI does not add hosted scheduling or automatic recovery to UI j
 `evidenceforge-energy` without `--live` is synthetic. It retains source evidence
 and state and does not generate a report. Gemini reasoning alone does not enable
 web search; explicit live-source choices control acquisition separately. Recorded
-historical fallback use does not establish
-the model's current availability. Failed/unconfirmed paid calls are not automatically
-retried; historical paid checkpoints without receipts cannot migrate.
+historical fallback use does not establish the model's current availability.
+The [8 October API diagnostic](../GEMINI_API_TEST_2026-10-08.md) recorded HTTP 503
+for the saved `gemini-3.5-flash-lite` and a valid fixed text response from
+`gemini-3.1-flash-lite`. This basic fallback probe did not verify the structured
+workflow or change saved model settings; current structured generation remains
+unverified. Failed/unconfirmed paid calls are not automatically retried;
+historical paid checkpoints without receipts cannot migrate.
 
 ## Explicit mixed-source research
 

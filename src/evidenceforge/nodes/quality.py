@@ -334,10 +334,15 @@ class Synthesis(QualityNode):
             if self.options.quality_input_version == 1:
                 if not placed["summary"]:
                     placed["summary"] = [next(iter(claims))]
-            elif len(placed["summary"]) < 2:
-                placed["summary"] = list(
-                    dict.fromkeys(placed["summary"] + placed["key_findings"] + list(claims))
-                )[:3]
+            else:
+                if not placed["key_findings"]:
+                    placed["key_findings"] = [
+                        cid for cid, claim in claims.items() if claim["kind"] == "fact"
+                    ]
+                if len(placed["summary"]) < 2:
+                    placed["summary"] = list(
+                        dict.fromkeys(placed["summary"] + placed["key_findings"] + list(claims))
+                    )[:3]
             report = Report(
                 id=stable_id("report", s.run_id, version),
                 draft_version=version,

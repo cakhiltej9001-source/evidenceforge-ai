@@ -51,6 +51,12 @@ alignment; merged cells and visual layout still require inspection. Scope names
 isolate stored content but do not authenticate users. Existing
 Gemini mode sends selected question/evidence/context to Google. Availability and
 rate limits can change; historical successes are not current availability guarantees.
+The [8 October basic API diagnostic](../GEMINI_API_TEST_2026-10-08.md) recorded
+HTTP 503 for the saved `gemini-3.5-flash-lite` and a valid fixed text response from
+an explicit `gemini-3.1-flash-lite` fallback. The fallback test did not exercise
+EvidenceForge's structured adapter/workflow or change saved settings. Current
+structured provider generation remains unverified; the historical comparison
+still records its original successful responses.
 Failed or uncertain paid calls are not retried automatically. Historical paid runs
 without durable receipts cannot silently migrate; model/service instances are fresh
 for each new run. Unknown usage and dollar cost remain N/A.
@@ -88,7 +94,7 @@ restore verifies mechanics, not a future production backup of real user data.
 |---|---|
 | Independent human review / real-source benchmark | Delegated AI review is complete; broader research validation is not established |
 | Hosted operation | Public fixture workflow, actual Chromium downloads and fresh-visitor isolation verified; durable full-workbench storage stays local under the free-only policy |
-| Combined real Gemini/Tavily research-quality study | Tavily access and Gemini structured execution passed separately; synthetic results do not establish combined semantic quality |
+| Combined real Gemini/Tavily research-quality study | Tavily access and historical Gemini structured execution passed separately; current structured provider availability is unverified, and synthetic results do not establish combined semantic quality |
 | Separate grading/submission rules | The supplied PDF has no scored rubric, deadline or delivery format |
 
 No missing credential, Gemini allowance or hosting decision blocks the selected
