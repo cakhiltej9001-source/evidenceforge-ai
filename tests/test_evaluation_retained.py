@@ -7,7 +7,9 @@ import pytest
 from pydantic import HttpUrl
 
 from evidenceforge.evaluation_retained import load_retained_public_sources, replay_public_case
+from evidenceforge.reporting import render_report
 from evidenceforge.retrieval.contracts import ArtifactFailure, RetrievedSource
+from evidenceforge.schemas import RunEvent
 
 TEST_SOURCE = RetrievedSource(
     title="Test retained text (not a live factual assertion)",
@@ -74,3 +76,33 @@ def test_duplicate_control_admits_six_results_and_deduplicates(tmp_path_factory)
     assert duplicate["sources"] == 5
     assert duplicate["run_status"] == "completed"
     assert all(result["checks"].values())
+
+
+@pytest.mark.parametrize("gemini_reasoning", [False, True])
+@pytest.mark.parametrize("content_scope", ["full_text", "search_excerpt"])
+def test_retained_public_notice_uses_source_provenance_not_reasoning_mode(
+    tmp_path, gemini_reasoning, content_scope
+):
+    source = TEST_SOURCE.model_copy(update={"content_scope": content_scope})
+    asyncio.run(replay_public_case((source,), tmp_path))
+    state_path = next((tmp_path / "reports").glob("*/state.json"))
+    state = json.loads(state_path.read_text(encoding="utf-8"))
+    if gemini_reasoning:
+        # Exercise the real Gemini-run metadata without making a provider call.
+        event = RunEvent(id="event_notice_gemini", kind="gemini_model", message="gemini-test")
+        state["events"][event.id] = event.model_dump(mode="json")
+    markdown = render_report(state)
+    notice = markdown.split("\n\n", 2)[1]
+    assert "retained public source snapshots" in notice
+    assert "synthetic fixtures" not in notice
+    assert "synthetic fixture demonstration" not in notice
+    assert "source truth is not independently verified" in notice
+    if gemini_reasoning:
+        assert "Live Gemini reasoning" in notice
+    else:
+        assert "Offline fixture reasoning over retained public source snapshots" in notice
+    if content_scope == "search_excerpt":
+        assert "search or section excerpts" in notice
+        assert "does not establish full-page coverage" in notice
+    else:
+        assert "search or section excerpts" not in notice

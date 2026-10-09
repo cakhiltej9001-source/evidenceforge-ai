@@ -1,6 +1,6 @@
 """Structured research inputs and validated model-output boundaries."""
 
-from typing import Annotated, Literal, Protocol
+from typing import Annotated, Literal, Protocol, runtime_checkable
 
 from pydantic import Field, StrictBool
 
@@ -59,6 +59,18 @@ class ReportDraft(Contract):
     claims: Annotated[tuple[DraftClaim, ...], Field(min_length=1, max_length=64)]
 
 
+class QuoteSelection(Contract):
+    evidence_id: Identifier
+    question_ids: Annotated[tuple[Identifier, ...], Field(min_length=1)]
+    section: Literal["summary", "key_findings", "limitations", "disagreements"] = "key_findings"
+
+
+class QuoteSelectionDraft(Contract):
+    """Select retained passages; the model never writes or edits their wording."""
+
+    claims: Annotated[tuple[QuoteSelection, ...], Field(min_length=1, max_length=64)]
+
+
 class SynthesisInput(Contract):
     duplicate_evidence: tuple[DuplicateEvidence, ...] = Field(
         default=(), exclude_if=lambda value: not value
@@ -95,6 +107,7 @@ class ResearchOptions(Contract):
     live_web: StrictBool = False
     live_energy: StrictBool = False
     quality_input_version: Literal[1, 2] = 2
+    quote_selection_version: Literal[0, 1] = Field(default=1, exclude_if=lambda value: value == 0)
     analysis: AnalysisOptions = Field(default_factory=AnalysisOptions)
     node_timeout_seconds: Annotated[float, Field(gt=0, le=60, allow_inf_nan=False)] = 30.0
     max_response_bytes: Annotated[PositiveCount, Field(le=1_000_000)] = 100_000
@@ -105,3 +118,8 @@ class ResearchModel(PlanningModel, Protocol):
     async def evaluate_coverage(self, request: CoverageInput) -> object: ...
     async def synthesize(self, request: SynthesisInput) -> object: ...
     async def critique(self, request: CriticInput) -> object: ...
+
+
+@runtime_checkable
+class QuoteSelectionModel(Protocol):
+    async def select_quotes(self, request: SynthesisInput) -> object: ...

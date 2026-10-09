@@ -204,6 +204,7 @@ class ResearchService:
                             "live_energy",
                             "quality_input_version",
                             "production_policy_version",
+                            "quote_selection_version",
                         },
                     ),
                     **(
@@ -214,6 +215,12 @@ class ResearchService:
                     **(
                         {"production_policy_version": 1}
                         if self.options.production_policy_version
+                        else {}
+                    ),
+                    **(
+                        {"quote_selection_version": 1}
+                        if self.options.quality_input_version == 2
+                        and self.options.quote_selection_version == 1
                         else {}
                     ),
                     **({"live_web": True} if self.options.live_web else {}),
@@ -230,8 +237,15 @@ class ResearchService:
         policy = json.loads(profile)["research_options"].get("production_policy_version", 0)
         if type(policy) is not int or policy not in (0, 1):
             raise CheckpointFailure("Unsupported production policy version.")
+        selection = json.loads(profile)["research_options"].get("quote_selection_version", 0)
+        if type(selection) is not int or selection not in (0, 1):
+            raise CheckpointFailure("Unsupported quote selection contract version.")
         self.options = self.options.model_copy(
-            update={"quality_input_version": version, "production_policy_version": policy}
+            update={
+                "quality_input_version": version,
+                "production_policy_version": policy,
+                "quote_selection_version": selection,
+            }
         )
 
     def cancel(self, thread_id: str, owner_scope: str = "local") -> None:

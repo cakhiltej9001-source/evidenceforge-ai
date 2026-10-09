@@ -148,6 +148,13 @@ def test_semantic_acceptance_completes_six_stage_workflow_and_replays(tmp_path):
             result = await fixture.generate_queries(QueryGenerationRequest.model_validate(value))
         elif title == "CoverageAssessment":
             result = await fixture.evaluate_coverage(CoverageInput.model_validate(value))
+        elif title == "QuoteSelectionDraft":
+            result = {
+                "claims": [
+                    {"evidence_id": item["id"], "question_ids": item["question_ids"]}
+                    for item in value["evidence"]
+                ]
+            }
         elif title == "ReportDraft":
             result = await fixture.synthesize(SynthesisInput.model_validate(value))
         else:
@@ -189,7 +196,7 @@ def test_semantic_acceptance_completes_six_stage_workflow_and_replays(tmp_path):
         "PlanDraft",
         "QueryBatchDraft",
         "CoverageAssessment",
-        "ReportDraft",
+        "QuoteSelectionDraft",
         "CriticAssessment",
     ]
     assert len(model.observations) == 6

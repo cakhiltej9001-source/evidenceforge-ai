@@ -21,6 +21,7 @@ from evidenceforge.research import (
     CoverageInput,
     CriticAssessment,
     CriticInput,
+    QuoteSelectionDraft,
     ReportDraft,
     SynthesisInput,
 )
@@ -327,6 +328,20 @@ class GeminiResearchModel:
             "question IDs. Set kind=fact. Never paraphrase, add quotation marks or invent "
             "numeric comparisons. Put relevant quotations in key_findings and summary. "
             "Follow revision_brief while keeping exact quotations. Leave gaps unresolved.",
+        )
+
+    async def select_quotes(self, request: SynthesisInput) -> object:
+        return await self._generate(
+            "synthesis",
+            request,
+            QuoteSelectionDraft,
+            "Select relevant retained evidence IDs for the report. Do not generate "
+            "statements, excerpts, paraphrases or new evidence. Use only the supplied "
+            "evidence IDs and their linked question IDs. Each selected ID projects "
+            "the COMPLETE retained passage verbatim into a factual report claim. "
+            "Place useful selections in key_findings and summary, and unresolved "
+            "numeric disagreements in disagreements. Follow revision_brief without "
+            "inventing support or filling evidence gaps.",
         )
 
     async def critique(self, request: CriticInput) -> object:

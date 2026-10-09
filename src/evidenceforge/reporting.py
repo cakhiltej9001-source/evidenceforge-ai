@@ -159,6 +159,50 @@ def render_report(state: ResearchState) -> str:
             "Evidence comes from explicitly selected live sources and any selected documents. "
             "Retained quotations are checked; source truth is not independently verified."
         )
+    public_sources = {
+        source.id
+        for source in s.source_records.values()
+        if source.source_type in {SourceType.WEB, SourceType.API, SourceType.MCP}
+        and source.provider != "fixture"
+        and source.owner_scope is None
+        and source.url is not None
+        and source.access_status in {"available", "excerpt_only"}
+    }
+    if public_sources:
+        if any(event.kind == "live_retrieval" for event in s.events.values()):
+            heading = (
+                f"**Live retrieval with {'Gemini' if live_models else 'offline fixture'} "
+                "reasoning.** "
+            )
+        elif live_models:
+            heading = f"**Live Gemini reasoning (`{escape(live_models[0])}`).** "
+        else:
+            heading = "**Offline fixture reasoning over retained public source snapshots.** "
+        origins = ["retained public source snapshots"]
+        if has_documents:
+            origins.append("supplied local documents")
+        if any(
+            source.provider == "fixture" or source.source_type == SourceType.FIXTURE
+            for source in s.source_records.values()
+        ):
+            origins.append("synthetic fixtures")
+        notice = (
+            heading
+            + "Evidence comes from "
+            + " and ".join(origins)
+            + ". Retained quotations are checked; source truth is not independently verified."
+        )
+        if any(
+            s.source_records[sid].access_status == "excerpt_only" for sid in public_sources
+        ) or any(
+            acquisition.source_id in public_sources
+            and (acquisition.content_scope == "search_excerpt" or acquisition.section is not None)
+            for acquisition in s.source_acquisitions.values()
+        ):
+            notice += (
+                " Some retained material consists of search or section excerpts; "
+                "this run does not establish full-page coverage for those sources."
+            )
     lines = [
         "# EvidenceForge research report",
         "",

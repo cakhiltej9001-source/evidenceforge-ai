@@ -119,6 +119,13 @@ def test_paid_plan_edit_approval_and_terminal_reconnect_across_services(tmp_path
             result = await fixture.generate_queries(QueryGenerationRequest.model_validate(value))
         elif title == "CoverageAssessment":
             result = await fixture.evaluate_coverage(CoverageInput.model_validate(value))
+        elif title == "QuoteSelectionDraft":
+            result = {
+                "claims": [
+                    {"evidence_id": item["id"], "question_ids": item["question_ids"]}
+                    for item in value["evidence"]
+                ]
+            }
         elif title == "ReportDraft":
             result = await fixture.synthesize(SynthesisInput.model_validate(value))
         else:
@@ -147,7 +154,7 @@ def test_paid_plan_edit_approval_and_terminal_reconnect_across_services(tmp_path
         "PlanDraft",
         "QueryBatchDraft",
         "CoverageAssessment",
-        "ReportDraft",
+        "QuoteSelectionDraft",
         "CriticAssessment",
     ]
     assert len(fresh.model.observations) == 5
@@ -190,6 +197,13 @@ def test_legacy_quality_receipt_replays_after_restart_without_new_charge(tmp_pat
             result = await fixture.generate_queries(QueryGenerationRequest.model_validate(value))
         elif title == "CoverageAssessment":
             result = await fixture.evaluate_coverage(CoverageInput.model_validate(value))
+        elif title == "QuoteSelectionDraft":
+            result = {
+                "claims": [
+                    {"evidence_id": item["id"], "question_ids": item["question_ids"]}
+                    for item in value["evidence"]
+                ]
+            }
         elif title == "ReportDraft":
             result = await fixture.synthesize(SynthesisInput.model_validate(value))
         else:
@@ -231,4 +245,65 @@ def test_legacy_quality_receipt_replays_after_restart_without_new_charge(tmp_pat
         assert "duplicate_evidence" not in value
     count = len(seen)
     assert asyncio.run(service().resume(paused["thread_id"])) == final
+    assert len(seen) == count
+
+
+@pytest.mark.parametrize("input_version", [1, 2])
+def test_legacy_synthesis_receipt_replays_after_checkpoint_interruption(
+    tmp_path, monkeypatch, input_version
+):
+    from evidenceforge.nodes.quality import Synthesis
+    from evidenceforge.storage.checkpoints import CheckpointRepository
+
+    fixture = FixtureResearchModel()
+    seen = []
+
+    async def handler(request):
+        data = json.loads(request.content)
+        title = data["generationConfig"]["responseJsonSchema"]["title"]
+        value = json.loads(data["contents"][0]["parts"][0]["text"])
+        seen.append(title)
+        if title == "PlanDraft":
+            result = await fixture.plan(ResearchRequest.model_validate(value), max_questions=8)
+        elif title == "QueryBatchDraft":
+            result = await fixture.generate_queries(QueryGenerationRequest.model_validate(value))
+        elif title == "CoverageAssessment":
+            result = await fixture.evaluate_coverage(CoverageInput.model_validate(value))
+        elif title == "ReportDraft":
+            result = await fixture.synthesize(SynthesisInput.model_validate(value))
+        else:
+            result = await fixture.critique(CriticInput.model_validate(value))
+        return httpx.Response(200, json=reply(result))
+
+    def service(options=None):
+        return ResearchService(tmp_path, model=adapter(handler), options=options)
+
+    first = service(ResearchOptions(quality_input_version=input_version, quote_selection_version=0))
+    original_response = Synthesis.response
+
+    async def interrupt_after_receipt(self, awaitable, schema):
+        await original_response(self, awaitable, schema)
+        raise RuntimeError("Simulated interruption after durable synthesis response")
+
+    with monkeypatch.context() as patch:
+        patch.setattr(Synthesis, "response", interrupt_after_receipt)
+        with pytest.raises(RuntimeError, match="durable synthesis response"):
+            asyncio.run(first.run(ResearchRequest(question=QUESTION)))
+
+    checkpoint = CheckpointRepository(tmp_path / "checkpoints", "local")
+    thread = checkpoint.threads()[0]
+    registration = checkpoint.load(thread)
+    assert "quote_selection_version" not in json.loads(registration.profile)["research_options"]
+    assert seen.count("ReportDraft") == 1
+    fresh = service()
+    final = asyncio.run(fresh.resume(thread))
+    assert final["run_status"] == "completed"
+    assert fresh.options.quality_input_version == input_version
+    assert fresh.options.quote_selection_version == 0
+    assert seen.count("ReportDraft") == 1
+    assert "QuoteSelectionDraft" not in seen
+    assert len(seen) == len(fresh.model.observations) == 5
+    assert all(audit["support"] == "supported" for audit in final["citation_audit"])
+    count = len(seen)
+    assert asyncio.run(service().resume(thread)) == final
     assert len(seen) == count

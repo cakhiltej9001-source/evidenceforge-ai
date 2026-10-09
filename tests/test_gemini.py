@@ -155,6 +155,13 @@ def test_full_graph_uses_gemini_transport_and_labels_fixture_evidence(tmp_path):
             result = await fixtures.generate_queries(QueryGenerationRequest.model_validate(value))
         elif title == "CoverageAssessment":
             result = await fixtures.evaluate_coverage(CoverageInput.model_validate(value))
+        elif title == "QuoteSelectionDraft":
+            result = {
+                "claims": [
+                    {"evidence_id": item["id"], "question_ids": item["question_ids"]}
+                    for item in value["evidence"]
+                ]
+            }
         elif title == "ReportDraft":
             result = await fixtures.synthesize(SynthesisInput.model_validate(value))
         elif title == "CriticAssessment":

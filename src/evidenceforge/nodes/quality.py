@@ -17,6 +17,9 @@ from evidenceforge.research import (
     CoverageInput,
     CriticAssessment,
     CriticInput,
+    DraftClaim,
+    QuoteSelectionDraft,
+    QuoteSelectionModel,
     ReportDraft,
     ResearchModel,
     ResearchOptions,
@@ -282,23 +285,48 @@ class Synthesis(QualityNode):
         try:
             version = s.revision_count + 1
             working = self.working(s, ranked=True)
-            result = await self.response(
-                self.model.synthesize(
-                    SynthesisInput(
-                        request=s.request,
-                        questions=s.research_questions,
-                        evidence=working.evidence,
-                        duplicate_evidence=working.duplicates,
-                        source_quality=tuple(s.source_quality.values()),
-                        propositions=tuple(s.propositions.values()),
-                        comparisons=tuple(s.comparisons.values()),
-                        gaps=s.gaps,
-                        revision_brief=s.revision_brief,
-                        draft_version=version,
-                    )
-                ),
-                ReportDraft,
+            request = SynthesisInput(
+                request=s.request,
+                questions=s.research_questions,
+                evidence=working.evidence,
+                duplicate_evidence=working.duplicates,
+                source_quality=tuple(s.source_quality.values()),
+                propositions=tuple(s.propositions.values()),
+                comparisons=tuple(s.comparisons.values()),
+                gaps=s.gaps,
+                revision_brief=s.revision_brief,
+                draft_version=version,
             )
+            if (
+                self.options.quality_input_version == 2
+                and self.options.quote_selection_version == 1
+                and isinstance(self.model, QuoteSelectionModel)
+            ):
+                selection = await self.response(
+                    self.model.select_quotes(request), QuoteSelectionDraft
+                )
+                supplied = {item.id: item for item in working.evidence}
+                known_questions = {question.id for question in s.research_questions}
+                projected = []
+                for claim in selection.claims:
+                    item = supplied.get(claim.evidence_id)
+                    if (
+                        item is None
+                        or not set(claim.question_ids).issubset(known_questions)
+                        or not set(claim.question_ids).issubset(item.question_ids)
+                    ):
+                        raise PlanningContractError("invalid selected quote reference")
+                    projected.append(
+                        DraftClaim(
+                            statement=item.passage,
+                            question_ids=claim.question_ids,
+                            evidence_ids=(item.id,),
+                            section=claim.section,
+                        )
+                    )
+                result = ReportDraft(claims=tuple(projected))
+            else:
+                result = await self.response(self.model.synthesize(request), ReportDraft)
             claims = {}
             placed: dict[str, list[str]] = {"summary": [], "key_findings": []}
             sources: set[str] = set()
