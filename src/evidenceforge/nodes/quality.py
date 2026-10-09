@@ -308,20 +308,20 @@ class Synthesis(QualityNode):
                 supplied = {item.id: item for item in working.evidence}
                 known_questions = {question.id for question in s.research_questions}
                 projected = []
-                for claim in selection.claims:
-                    item = supplied.get(claim.evidence_id)
+                for selected_quote in selection.claims:
+                    item = supplied.get(selected_quote.evidence_id)
                     if (
                         item is None
-                        or not set(claim.question_ids).issubset(known_questions)
-                        or not set(claim.question_ids).issubset(item.question_ids)
+                        or not set(selected_quote.question_ids).issubset(known_questions)
+                        or not set(selected_quote.question_ids).issubset(item.question_ids)
                     ):
                         raise PlanningContractError("invalid selected quote reference")
                     projected.append(
                         DraftClaim(
                             statement=item.passage,
-                            question_ids=claim.question_ids,
+                            question_ids=selected_quote.question_ids,
                             evidence_ids=(item.id,),
-                            section=claim.section,
+                            section=selected_quote.section,
                         )
                     )
                 result = ReportDraft(claims=tuple(projected))
