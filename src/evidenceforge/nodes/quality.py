@@ -1,6 +1,7 @@
 """Bounded structured assessment, drafting, criticism and quote verification."""
 
 import asyncio
+import re
 from collections.abc import Awaitable
 from typing import TypeVar, cast
 
@@ -136,18 +137,42 @@ class CoverageEvaluator(QualityNode):
             for assessment in result.questions:
                 q = known[assessment.question_id]
                 indices = set()
+                missing_percent_indices = set()
                 evidence_ids = set()
                 for criterion in assessment.criteria:
                     if criterion.index in indices or criterion.index >= len(q.acceptance_criteria):
                         raise PlanningContractError("invalid criterion")
-                    indices.add(criterion.index)
                     for eid in criterion.evidence_ids:
                         if (
                             eid not in s.evidence_store
                             or q.id not in s.evidence_store[eid].question_ids
                         ):
                             raise PlanningContractError("invalid coverage evidence")
-                        evidence_ids.add(eid)
+                    criterion_text = q.acceptance_criteria[criterion.index]
+                    requires_number = re.search(r"\bpercent(?:age|ages|s)?\b", criterion_text, re.I)
+                    asks_for_absence = re.search(
+                        r"\b(?:missing|unavailable|absent|unreported|not provided|not reported)\b",
+                        criterion_text,
+                        re.I,
+                    )
+                    has_percentage = any(
+                        re.search(
+                            r"\d+(?:\.\d+)?\s*(?:%|\bpercent\b)",
+                            s.evidence_store[eid].passage,
+                            re.I,
+                        )
+                        for eid in criterion.evidence_ids
+                    )
+                    if (
+                        self.options.quality_input_version == 2
+                        and requires_number
+                        and not asks_for_absence
+                        and not has_percentage
+                    ):
+                        missing_percent_indices.add(criterion.index)
+                        continue
+                    indices.add(criterion.index)
+                    evidence_ids.update(criterion.evidence_ids)
                     signature.append(
                         [
                             q.id,
@@ -179,12 +204,18 @@ class CoverageEvaluator(QualityNode):
                 )
                 for index, text in enumerate(q.acceptance_criteria):
                     if index not in indices:
+                        missing = (
+                            "Numeric percentages are absent from linked retained evidence for: "
+                            + text
+                            if index in missing_percent_indices
+                            else text
+                        )
                         gaps.append(
                             record_data(
                                 ResearchGap(
                                     id=stable_id("gap", q.id, index),
                                     question_id=q.id,
-                                    missing_aspect=text,
+                                    missing_aspect=missing,
                                     needed_source_types=(SourceType.WEB,),
                                     recommended_query=(
                                         f"{text} supporting evidence "
@@ -309,6 +340,7 @@ class Synthesis(QualityNode):
                 supplied = {item.id: item for item in working.evidence}
                 known_questions = {question.id for question in s.research_questions}
                 projected = []
+                seen_selected = set()
                 for selected_quote in selection.claims:
                     item = supplied.get(selected_quote.evidence_id)
                     if (
@@ -317,6 +349,13 @@ class Synthesis(QualityNode):
                         or not set(selected_quote.question_ids).issubset(item.question_ids)
                     ):
                         raise PlanningContractError("invalid selected quote reference")
+                    selected_key = (
+                        selected_quote.evidence_id,
+                        tuple(sorted(selected_quote.question_ids)),
+                    )
+                    if self.options.quote_selection_version == 2 and selected_key in seen_selected:
+                        continue
+                    seen_selected.add(selected_key)
                     projected.append(
                         DraftClaim(
                             statement=item.passage,

@@ -142,3 +142,78 @@ def test_registered_critic_version_routes_without_changing_quote_selection(
     assert model.quote_calls == int(expected == "quote")
     assert model.legacy_calls == int(expected == "legacy")
     assert all(audit["support"] == "supported" for audit in state["citation_audit"])
+
+
+def test_repeated_selected_evidence_has_one_claim_in_current_contract(tmp_path):
+    class RepeatingModel(SelectorFixture):
+        async def select_quotes(self, request):
+            result = await super().select_quotes(request)
+            result["claims"].append({**result["claims"][0], "section": "summary"})
+            return result
+
+    model = RepeatingModel()
+    state = asyncio.run(
+        service(tmp_path, model).run(ResearchRequest(question="Compare alpha and beta production."))
+    )
+    assert state["run_status"] == "completed"
+    assert model.selected == 1
+    assert len(state["report_claims"]) == 2
+    assert len({c["statement"] for c in state["report_claims"].values()}) == 2
+
+
+def test_percentage_criterion_needs_numeric_percentage_in_linked_passage(tmp_path):
+    from evidenceforge.services.retrieval import RetrievalService
+
+    class PercentModel(FixtureResearchModel):
+        def __init__(self):
+            super().__init__(
+                plan_output={
+                    "questions": [
+                        {
+                            "question": "What gases make up the Mars atmosphere?",
+                            "acceptance_criteria": [
+                                "Lists Mars atmospheric gases and their percentages.",
+                                "Lists Mars atmospheric gases.",
+                            ],
+                        }
+                    ]
+                }
+            )
+
+        async def evaluate_coverage(self, request):
+            evidence_id = request.evidence[0].id
+            return {
+                "questions": [
+                    {
+                        "question_id": request.questions[0].id,
+                        "criteria": [
+                            {"index": 0, "evidence_ids": [evidence_id]},
+                            {"index": 1, "evidence_ids": [evidence_id]},
+                        ],
+                    }
+                ]
+            }
+
+    batch = RetrievalBatch(
+        results=(
+            RetrievedSource(
+                title="Synthetic Mars fixture",
+                url="https://example.org/mars",
+                content="Mars atmosphere contains carbon dioxide, nitrogen and argon gases.",
+            ),
+        )
+    )
+    model = PercentModel()
+    app = ResearchService(
+        tmp_path,
+        model=model,
+        retrieval=RetrievalService(tmp_path, {SourceType.WEB: FixtureRetrievalAdapter(batch)}),
+    )
+    state = asyncio.run(
+        app.run(
+            ResearchRequest(question="What are the gases and percentages in the Mars atmosphere?")
+        )
+    )
+    coverage = next(iter(state["coverage_by_question"].values()))
+    assert coverage["status"] == "partial"
+    assert any("Numeric percentages are absent" in gap["missing_aspect"] for gap in state["gaps"])
