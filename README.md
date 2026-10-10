@@ -4,7 +4,7 @@
 ![Python](https://img.shields.io/badge/Python-3.12–3.14-blue)
 ![LangGraph](https://img.shields.io/badge/Workflow-LangGraph-teal)
 ![SQLite](https://img.shields.io/badge/Storage-SQLite-blue)
-![Tests](https://img.shields.io/badge/Tests-459%20passed-brightgreen)
+![Tests](https://img.shields.io/badge/Tests-474%20passed-brightgreen)
 ![Demo](https://img.shields.io/badge/Demo-public%20Streamlit-green)
 
 > A local research workbench that plans questions, gathers inspectable evidence,
@@ -16,11 +16,12 @@ and why the workflow completed or stopped. Python, LangGraph, SQLite and Streaml
 connect the research stages; offline fixtures support demonstrations and optional
 Gemini reasoning supports explicitly started provider runs.
 
-**Verified on 8 October 2026:** 459 tests and both private CI jobs passed, including
-Docker persistence, backup/restore and authenticated gateway checks. The earlier
-corrected Gemini comparison saved 40 answers using 136 of 140 approved calls.
-These checks establish workflow behavior and retained-text support; general
-research accuracy remains unclaimed.
+**Verified on 10 October 2026:** 474 tests and both private CI jobs passed,
+including Docker persistence, backup/restore and authenticated gateway checks.
+A bounded six-call Gemini run completed all structured roles over retained NASA
+section excerpts. It exposed duplicate selection and overcounted coverage of
+unreported Mars percentages; current code fixes both with offline regressions
+and replay. General research accuracy remains unclaimed.
 
 **Public demo:** [Open EvidenceForge on Streamlit](https://evidenceforge-ai-akhiltej.streamlit.app/).
 Choose **Create plan → Approve plan** to try the workflow. The public
@@ -28,8 +29,8 @@ Choose **Create plan → Approve plan** to try the workflow. The public
 uses temporary storage without document uploads or paid provider calls. The
 full workbench runs locally with durable storage. Hosting is **free only (₹0/month)**;
 this replaces the earlier ₹5/month allowance. Repository access is private.
-See [current phase status](docs/FINAL_STATUS_2026-10-08.md). Actual hosted
-[Markdown/JSON downloads and fresh-visitor isolation](docs/HOSTED_DOWNLOAD_VERIFICATION_2026-10-08.md) passed; full source CI passed 459 tests.
+See [current phase status](docs/FINAL_STATUS_2026-10-10.md). Actual hosted
+[Markdown/JSON downloads and fresh-visitor isolation](docs/HOSTED_DOWNLOAD_VERIFICATION_2026-10-08.md) passed; full source CI passed 474 tests.
 
 ## ✨ Project at a glance
 
@@ -282,18 +283,18 @@ Privately configure `.env` only when using provider-backed runs:
 
 ```dotenv
 EVIDENCEFORGE_MODEL_PROVIDER=gemini
-EVIDENCEFORGE_MODEL_ID=gemini-3.5-flash-lite
+EVIDENCEFORGE_MODEL_ID=gemini-3.1-flash-lite
 EVIDENCEFORGE_MODEL_API_KEY=YOUR_PRIVATE_GEMINI_KEY
 EVIDENCEFORGE_TAVILY_API_KEY=YOUR_PRIVATE_TAVILY_KEY
 ```
 
-The model above was used in the historical controlled comparison. In the
-[8 October API diagnostic](docs/GEMINI_API_TEST_2026-10-08.md), this saved model
-returned HTTP 503; an explicit `gemini-3.1-flash-lite` fallback returned a valid
-fixed text response. That basic probe did not verify structured EvidenceForge
-execution on the fallback or change the saved model. Current structured provider
-availability therefore remains unverified; historical comparison results remain
-preserved. Gemini receives the question and selected passages/context.
+The [10 October structured verification](docs/FINAL_STATUS_2026-10-10.md)
+completed all six Gemini roles on `gemini-3.1-flash-lite` over frozen NASA
+section excerpts. Its partial report had exact citations and exposed a duplicate
+and overstated Mars percentage coverage; both now have offline regression and
+replay checks. The ignored local `.env` selects 3.1 for new work. Historical
+runs retain their saved models, receipts and reported results. Gemini receives
+the question and selected passages/context.
 Explicit live-source choices enable acquisition separately:
 
 ```powershell
@@ -321,10 +322,10 @@ uv run --locked mypy
 uv build
 ```
 
-[CI on 8 October](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/37822789945)
-passed **459 tests in 36.76 seconds** on product source
-`7ffd9cd2cefa58adad16dd70744dafe33749f4cb`, plus lint/format/types, package build, official
-Render schema and offline deployment smoke. Docker checks passed nonroot UID 10001,
+[CI on 10 October](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/38018900500)
+passed **474 tests in 38.25 seconds** on product source
+`aa294b2a7cf23e3aee343ed7172776b617ea3d3e`, plus lint/format/types,
+package build, official Render schema and offline deployment smoke. Docker checks passed nonroot UID 10001,
 512 MB/half-CPU execution, fresh-container persistence, fresh-volume synthetic
 backup/restore, health and authenticated gateway access. Tests block ordinary
 network connections and use fabricated secrets. Local Docker is not installed;
@@ -469,7 +470,7 @@ finalization and shared rewrite/search/model/pass/token allowances constrain run
 They do not guarantee correct planning or source truth.
 
 **7. How did you evaluate the project?**
-459 offline tests and constrained Docker checks verify engineering behavior. A
+474 offline tests and constrained Docker checks verify engineering behavior. A
 20-case, 40-answer Gemini comparison records support, scope, disputes, abstentions,
 calls, tokens and latency with explicit synthetic/AI-review limitations.
 
@@ -532,7 +533,8 @@ These are proposed extensions, not completed features:
 
 ## 📖 Further documentation
 
-- [Final phase status](docs/FINAL_STATUS_2026-10-08.md)
+- [Current phase status](docs/FINAL_STATUS_2026-10-10.md)
+- [Live-source diagnostic and AI review](docs/evaluation/LIVE_SOURCE_PROBE_2026-10-10.md)
 - [Setup and recovery](docs/submission/SETUP.md)
 - [Detailed architecture](docs/submission/ARCHITECTURE.md)
 - [Requirement mapping](docs/submission/REQUIREMENTS.md)

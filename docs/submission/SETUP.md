@@ -147,11 +147,13 @@ and state and does not generate a report. Gemini reasoning alone does not enable
 web search; explicit live-source choices control acquisition separately. Recorded
 historical fallback use does not establish the model's current availability.
 The [8 October API diagnostic](../GEMINI_API_TEST_2026-10-08.md) recorded HTTP 503
-for the saved `gemini-3.5-flash-lite` and a valid fixed text response from
-`gemini-3.1-flash-lite`. This basic fallback probe did not verify the structured
-workflow or change saved model settings; current structured generation remains
-unverified. Failed/unconfirmed paid calls are not automatically retried;
-historical paid checkpoints without receipts cannot migrate.
+for `gemini-3.5-flash-lite`. A [10 October structured check](../FINAL_STATUS_2026-10-10.md)
+used `gemini-3.1-flash-lite`: all six roles returned valid structured responses,
+with a partial NASA report and exact retained quotations. The local ignored `.env`
+now selects 3.1 for new runs. Later duplicate and percentage-coverage fixes have
+offline replay and CI evidence; they have not received another live Gemini run.
+Failed/unconfirmed paid calls are not automatically retried; historical saved
+runs keep their registered models and request contracts.
 
 ## Explicit mixed-source research
 
