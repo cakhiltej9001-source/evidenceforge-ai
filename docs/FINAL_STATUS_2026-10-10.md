@@ -30,7 +30,7 @@ A fresh, bounded check used normalized Atmosphere sections fetched from [NASA Ea
 
 The [AI review and measured probe](evaluation/LIVE_SOURCE_PROBE_2026-10-10.md) records the rubric, failed cases, and semantic findings.
 
-The live result establishes that the currently selected model can complete all six structured roles on this controlled case. The latest duplicate and percentage safeguards have offline regression and replay evidence; a fresh live report after those safeguards remains untested. This probe does not establish broad semantic accuracy or independent human sign-off. Cost in dollars is unknown. The 12-call and six-call diagnostic allowances are exhausted and separate from earlier benchmark ledgers.
+The live result establishes that the currently selected model can complete all six structured roles on this controlled case. The latest duplicate and percentage safeguards have offline regression and replay evidence. A subsequent [live Gemini/Tavily check](GEMINI_TAVILY_VERIFICATION_2026-10-10.md) used five HTTP 200 Gemini responses and one HTTP 200 Tavily search (one credit). Synthesis returned a malformed evidence ID and was rejected before any claim was created; the critic did not run. End-to-end live reporting remains unverified. This probe does not establish broad semantic accuracy or independent human sign-off. Cost in dollars is unknown. The earlier 12-call and six-call diagnostic allowances are exhausted and separate from benchmark ledgers. The newly requested combined check has its own six-Gemini/one-Tavily cap: five Gemini requests and the single search were used, with one Gemini request left unused.
 
 ## Engineering and operational status
 
@@ -41,7 +41,7 @@ The local `.env` holds provider credentials and is ignored by Git. The public St
 ## Remaining work
 
 - Independent human review and a larger real-source semantic-quality study remain optional validation. AI review is labeled as AI review.
-- The post-correction report path has offline replay and CI evidence; an additional live run would need a separate approved call allowance.
+- A fresh combined Gemini/Tavily run after the corrections failed synthesis schema validation. No claims were accepted; end-to-end live reporting remains unverified. Failed requests are not automatically replayed.
 - Durable hosted storage and jobs remain deferred by the free-only hosting decision. Local durable storage is the supported mode.
 - Independent OCR accuracy review remains optional; transcript checks do not establish accuracy against original page images.
 - Broader planner-scope controls and semantic support, contradiction, and deduplication checks remain roadmap extensions beyond the documented literal and numeric rules.

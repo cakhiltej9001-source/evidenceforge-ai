@@ -56,8 +56,11 @@ HTTP 503 for `gemini-3.5-flash-lite`. On 10 October,
 `gemini-3.1-flash-lite` completed six structured roles over retained NASA
 section excerpts. Its partial report exposed a duplicate claim and overstated
 coverage of unreported Mars percentages. Current code fixes both; offline
-regressions and replay passed. A fresh live report after those fixes remains
-unverified. The ignored local `.env` now selects 3.1 for new runs; old saved
+regressions and replay passed. A [fresh combined check](../GEMINI_TAVILY_VERIFICATION_2026-10-10.md)
+used five HTTP 200 Gemini responses and one successful Tavily search (one credit).
+Synthesis returned a malformed evidence ID and failed local schema validation;
+zero claims were accepted and the critic did not run. End-to-end live reporting
+remains unverified. The ignored local `.env` now selects 3.1 for new runs; old saved
 runs keep their original model and call receipts. See the
 [current status](../FINAL_STATUS_2026-10-10.md).
 Failed or uncertain paid calls are not retried automatically. Historical paid runs
