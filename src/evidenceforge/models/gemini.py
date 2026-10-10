@@ -353,3 +353,19 @@ class GeminiResearchModel:
             "quoted evidence with honest incomplete coverage; missing evidence alone is "
             "not repaired by rewriting. Otherwise request concise actionable revisions.",
         )
+
+    async def critique_quotes(self, request: CriticInput) -> object:
+        return await self._generate(
+            "critic",
+            request,
+            CriticAssessment,
+            "This report intentionally presents complete verbatim retained passages as "
+            "factual claims. Approve relevant exact quotations even when they are long "
+            "or repeated in summary and key findings. Do not request paraphrasing or "
+            "shortening solely for style: that would break exact citation verification. "
+            "Check that quoted claims address the question, use the linked evidence IDs, "
+            "preserve qualifiers, and do not imply unsupported criteria are answered. "
+            "Missing evidence must remain an explicit gap; it cannot be fixed by a "
+            "rewrite. Request revision only for a concrete relevance, support, or "
+            "misleading-coverage problem, and name that problem specifically.",
+        )

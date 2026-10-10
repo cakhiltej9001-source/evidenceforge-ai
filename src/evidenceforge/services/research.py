@@ -218,9 +218,9 @@ class ResearchService:
                         else {}
                     ),
                     **(
-                        {"quote_selection_version": 1}
+                        {"quote_selection_version": self.options.quote_selection_version}
                         if self.options.quality_input_version == 2
-                        and self.options.quote_selection_version == 1
+                        and self.options.quote_selection_version in (1, 2)
                         else {}
                     ),
                     **({"live_web": True} if self.options.live_web else {}),
@@ -238,7 +238,7 @@ class ResearchService:
         if type(policy) is not int or policy not in (0, 1):
             raise CheckpointFailure("Unsupported production policy version.")
         selection = json.loads(profile)["research_options"].get("quote_selection_version", 0)
-        if type(selection) is not int or selection not in (0, 1):
+        if type(selection) is not int or selection not in (0, 1, 2):
             raise CheckpointFailure("Unsupported quote selection contract version.")
         self.options = self.options.model_copy(
             update={

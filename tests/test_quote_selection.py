@@ -6,6 +6,7 @@ import json
 import pytest
 
 from evidenceforge.models.research import FixtureResearchModel
+from evidenceforge.research import ResearchOptions
 from evidenceforge.retrieval.contracts import RetrievalBatch, RetrievedSource
 from evidenceforge.retrieval.fixtures import FixtureRetrievalAdapter
 from evidenceforge.schemas import ResearchRequest, SourceType
@@ -103,3 +104,41 @@ def test_invalid_selection_or_model_text_fails_closed(tmp_path, problem):
     assert not state["report_claims"] and not state["final_report"]
     assert model.selected == 1 and model.synthesis_calls == 0
     assert "Altered wording" not in json.dumps(state)
+
+
+@pytest.mark.parametrize("version, expected", [(1, "legacy"), (2, "quote")])
+def test_registered_critic_version_routes_without_changing_quote_selection(
+    tmp_path, version, expected
+):
+    class ReviewModel(SelectorFixture):
+        def __init__(self):
+            super().__init__()
+            self.legacy_calls = 0
+            self.quote_calls = 0
+
+        async def critique(self, request):
+            self.legacy_calls += 1
+            return {"decision": "approved"}
+
+        async def critique_quotes(self, request):
+            self.quote_calls += 1
+            assert request.claims
+            assert all(
+                claim.statement in [item.passage for item in request.evidence]
+                for claim in request.claims
+            )
+            return {"decision": "approved"}
+
+    model = ReviewModel()
+    state = asyncio.run(
+        service(
+            tmp_path,
+            model,
+            ResearchOptions(quality_input_version=2, quote_selection_version=version),
+        ).run(ResearchRequest(question="Compare alpha and beta production."))
+    )
+    assert state["run_status"] == "completed"
+    assert model.selected == 1
+    assert model.quote_calls == int(expected == "quote")
+    assert model.legacy_calls == int(expected == "legacy")
+    assert all(audit["support"] == "supported" for audit in state["citation_audit"])

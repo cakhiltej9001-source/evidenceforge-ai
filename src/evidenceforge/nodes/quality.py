@@ -18,6 +18,7 @@ from evidenceforge.research import (
     CriticAssessment,
     CriticInput,
     DraftClaim,
+    QuoteCriticModel,
     QuoteSelectionDraft,
     QuoteSelectionModel,
     ReportDraft,
@@ -299,7 +300,7 @@ class Synthesis(QualityNode):
             )
             if (
                 self.options.quality_input_version == 2
-                and self.options.quote_selection_version == 1
+                and self.options.quote_selection_version in (1, 2)
                 and isinstance(self.model, QuoteSelectionModel)
             ):
                 selection = await self.response(
@@ -408,18 +409,21 @@ class Critic(QualityNode):
             return quality_error(state, "critic", "budget", s.quality_attempts)
         try:
             working = self.working(s)
-            result = await self.response(
-                self.model.critique(
-                    CriticInput(
-                        report=s.draft_report,
-                        claims=tuple(s.report_claims.values()),
-                        evidence=working.evidence,
-                        duplicate_evidence=working.duplicates,
-                        coverage=tuple(s.coverage_by_question.values()),
-                    )
-                ),
-                CriticAssessment,
+            request = CriticInput(
+                report=s.draft_report,
+                claims=tuple(s.report_claims.values()),
+                evidence=working.evidence,
+                duplicate_evidence=working.duplicates,
+                coverage=tuple(s.coverage_by_question.values()),
             )
+            task = (
+                self.model.critique_quotes(request)
+                if self.options.quality_input_version == 2
+                and self.options.quote_selection_version == 2
+                and isinstance(self.model, QuoteCriticModel)
+                else self.model.critique(request)
+            )
+            result = await self.response(task, CriticAssessment)
             verdict = CriticVerdict(
                 draft_version=s.draft_report.draft_version,
                 decision=result.decision,
