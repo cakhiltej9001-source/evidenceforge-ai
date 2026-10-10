@@ -1,4 +1,4 @@
-# Two-topic live-source probe  14 10 October 2026
+# Two-topic live-source probe - 10 October 2026
 
 **Reviewer:** Codex AI. **Human review:** none. **Result:** the completed NASA report needs revision; the subsequent source correction passes offline replay and regression checks. This is a small diagnostic, not an accuracy benchmark.
 

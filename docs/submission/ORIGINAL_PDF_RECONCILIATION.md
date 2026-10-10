@@ -4,6 +4,13 @@ The initial snapshot audit is preserved below. The 5 October implementation upda
 and [passing verification](../ASSIGNMENT_FIXES_2026-10-05.md) supersede its runtime
 gap statuses.
 
+For the latest audit, see [10 October status](../FINAL_STATUS_2026-10-10.md)
+and the [current requirements checklist](REQUIREMENTS.md). Tavily access and
+synthetic LangSmith counter delivery/readback were subsequently verified; the
+historical tables below preserve their original dates. Full research payload
+tracing remains disabled, and durable hosted operation remains deferred under
+the free-only hosting choice.
+
 Reviewed 4 October 2026, Asia/Calcutta, against source revision
 `93b320d65d87dd449905ddc65d91315ef0bf3303`.
 

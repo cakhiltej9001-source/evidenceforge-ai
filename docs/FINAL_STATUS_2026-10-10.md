@@ -1,6 +1,6 @@
-# EvidenceForge status  14 10 October 2026
+# EvidenceForge status - 10 October 2026
 
-The local workbench retains durable SQLite data. The [public Streamlit demo](https://evidenceforge-ai-akhiltej.streamlit.app/) uses offline fixtures and temporary visitor storage. Hosting remains **free only ( b90/month)**. The local Gemini model is now `gemini-3.1-flash-lite`; existing run registrations and paid-call receipts retain their recorded models.
+The local workbench retains durable SQLite data. The [public Streamlit demo](https://evidenceforge-ai-akhiltej.streamlit.app/) uses offline fixtures and temporary visitor storage. Hosting remains **free only (INR 0/month)**. The local Gemini model is now `gemini-3.1-flash-lite`; existing run registrations and paid-call receipts retain their recorded models.
 
 ## Phases
 
@@ -43,5 +43,7 @@ The local `.env` holds provider credentials and is ignored by Git. The public St
 - Independent human review and a larger real-source semantic-quality study remain optional validation. AI review is labeled as AI review.
 - The post-correction report path has offline replay and CI evidence; an additional live run would need a separate approved call allowance.
 - Durable hosted storage and jobs remain deferred by the free-only hosting decision. Local durable storage is the supported mode.
+- Independent OCR accuracy review remains optional; transcript checks do not establish accuracy against original page images.
+- Broader planner-scope controls and semantic support, contradiction, and deduplication checks remain roadmap extensions beyond the documented literal and numeric rules.
 
 See the [8 October phase record](FINAL_STATUS_2026-10-08.md), [setup](submission/SETUP.md), [limitations](submission/LIMITATIONS.md), and the private local verification artifacts under `.evidenceforge/verification/gemini-structured-2026-10-09`.
