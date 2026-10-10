@@ -138,7 +138,7 @@ class CoverageEvaluator(QualityNode):
                 q = known[assessment.question_id]
                 indices = set()
                 missing_percent_indices = set()
-                evidence_ids = set()
+                evidence_ids: set[str] = set()
                 for criterion in assessment.criteria:
                     if criterion.index in indices or criterion.index >= len(q.acceptance_criteria):
                         raise PlanningContractError("invalid criterion")
