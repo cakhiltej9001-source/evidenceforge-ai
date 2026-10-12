@@ -20,6 +20,19 @@ The local workbench retains durable SQLite data. The [public Streamlit demo](htt
 | 11 | Setup and submission materials | Prepared; external acceptance has not been assessed |
 
 
+## Latest quality fixes
+
+The [remaining report quality fixes](REPORT_QUALITY_FIXES_2026-10-12.md) are
+implemented for new contract-version-5 runs: ambiguous flattened numeric tables
+and whole exercise blocks are excluded, and unresolved missing-data requests
+prevent a complete result. Old saved runs retain their contract.
+
+An offline replay of the saved NASA report omitted both problematic quotations
+and returned insufficient evidence with three explicit gaps. The historical
+report/state and provider receipts remained unchanged. No new Gemini, Tavily
+or LangSmith calls were made. This verifies conservative rejection, not a new
+complete research answer or general semantic accuracy.
+
 ## Latest live verification
 
 The second fresh **12 October** campaign completed all six Gemini roles and one
@@ -44,11 +57,11 @@ support and API execution do not establish semantic completeness. The
 
 ## Engineering and operation
 
-The published [source CI on afcad1c](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/38241087132)
-passed both Python and container jobs. The source has **482 passing tests**,
+The published [source CI on 0777791](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/38242786448)
+passed both Python and container jobs. The source has **489 passing tests**,
 Ruff lint/format, strict mypy, package build, Render schema validation,
 deployment smoke, Docker persistence, backup/restore and authenticated gateway
-checks. The 58 focused regression tests also passed locally.
+checks. Seven new quality regression tests also passed locally, alongside the earlier 58 focused checks.
 
 Tavily access, the fresh combined workflow, synthetic LangSmith counter
 delivery/readback, and hosted fixture downloads have verification records.
@@ -57,14 +70,13 @@ The public demo remains fixture only; durable research storage is local.
 
 ## Remaining work
 
-- Table-aware extraction, directly relevant passage selection and broader
-  planner/semantic coverage checks remain roadmap work. Current presentation
-  and unresolved-value qualification fixes are implemented.
+- General table reconstruction and broader planner/semantic evaluation remain
+  roadmap work. Conservative ambiguity/exercise exclusions and final missing-data
+  coverage checks are implemented and verified offline.
 - Broader real-source quality testing, independent human review and independent
   OCR accuracy review remain optional validation.
 - Durable hosted storage and background jobs remain deferred under the
   free-only hosting choice.
-- CI action and runner maintenance is implemented in the new pipeline.
 
 The live provider and full-workflow execution check is complete for this case.
 General reliability and semantic accuracy are not established by one run.

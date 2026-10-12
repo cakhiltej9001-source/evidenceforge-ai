@@ -283,3 +283,15 @@ serialization are preserved for paid receipt hashes. Completed reconnect still m
 no new provider call. Older runs retain their historical findings; start a new run to
 use the updated quality behavior. Graph versions predating 8 and paid runs without
 durable receipts retain their existing incompatibility checks.
+
+## New report quality contract
+
+New runs use quote-selection version 5. Conservative guards exclude ambiguous
+flattened numeric tables and numbered exercise blocks. Requested missing-data
+criteria need explicit absence statements in final quotations; otherwise the
+report discloses a gap and does not complete. These checks do not establish
+general semantic completeness or reconstruct table columns.
+
+Old saved runs restore their registered contracts. Start a new run to use the
+new behavior; reconnecting an old completed run does not rewrite it or authorize
+additional provider work. See [quality verification](../REPORT_QUALITY_FIXES_2026-10-12.md).

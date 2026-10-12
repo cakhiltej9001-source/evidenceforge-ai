@@ -67,8 +67,12 @@ network attempts. That historical report had clipped passages, unrelated text an
 differing percentages. The [12 October fixes and check](../REMAINING_FIXES_2026-10-12.md)
 add compact selection aliases, domain filtering, sentence boundaries and improved
 presentation. Six Gemini roles and one search passed with two exact claims.
-The new report still flattens a PDF table, includes unrelated exercise text and
-omits explicit missing-percentage coverage. Broad semantic accuracy is unverified.
+That run's report flattened a PDF table, included exercise text and omitted
+explicit missing-percentage coverage. [New quality guards](../REPORT_QUALITY_FIXES_2026-10-12.md)
+exclude ambiguous rows/exercises and leave missing-data criteria unresolved without
+explicit question-linked reporting evidence. Offline replay rejected the two
+problematic claims. No fresh provider run was made for this change. General table
+reconstruction and semantic completeness remain unverified.
 The ignored local `.env` selects 3.1 for new runs; old saved runs keep their
 original model and call receipts. See the
 [current status](../FINAL_STATUS_2026-10-12.md).

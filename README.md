@@ -4,7 +4,7 @@
 ![Python](https://img.shields.io/badge/Python-3.12–3.14-blue)
 ![LangGraph](https://img.shields.io/badge/Workflow-LangGraph-teal)
 ![SQLite](https://img.shields.io/badge/Storage-SQLite-blue)
-![Tests](https://img.shields.io/badge/Tests-482%20passed-brightgreen)
+![Tests](https://img.shields.io/badge/Tests-489%20passed-brightgreen)
 ![Demo](https://img.shields.io/badge/Demo-public%20Streamlit-green)
 
 > A local research workbench that plans questions, gathers inspectable evidence,
@@ -16,14 +16,18 @@ and why the workflow completed or stopped. Python, LangGraph, SQLite and Streaml
 connect the research stages; offline fixtures support demonstrations and optional
 Gemini reasoning supports explicitly started provider runs.
 
-**Current verification:** 482 source tests and both private CI jobs passed,
+**Current verification:** 489 source tests and both private CI jobs passed,
 including Docker persistence, backup/restore and authenticated gateway checks.
 The fresh 12 October run completed all six Gemini roles and one Tavily search,
 retaining three NASA sources and two exactly cited claims. Offline review verified
 all audits and fresh-process reconnect with zero network attempts. LangSmith
 synthetic delivery/readback passed. Compact selections, structured domain filters
 and report presentation fixes are implemented; flattened tables and semantic
-completeness remain limits. See [measured fixes](docs/REMAINING_FIXES_2026-10-12.md).
+completeness remain limits. New contract-version-5 runs now exclude ambiguous
+numeric tables and exercise blocks and leave missing-data criteria unresolved
+without explicit reporting evidence. The saved NASA report was rejected in an
+offline replay with zero new calls. See [quality fixes](docs/REPORT_QUALITY_FIXES_2026-10-12.md)
+and [provider verification](docs/REMAINING_FIXES_2026-10-12.md).
 
 **Public demo:** [Open EvidenceForge on Streamlit](https://evidenceforge-ai-akhiltej.streamlit.app/).
 Choose **Create plan → Approve plan** to try the workflow. The public
@@ -32,7 +36,7 @@ uses temporary storage without document uploads or paid provider calls. The
 full workbench runs locally with durable storage. Hosting is **free only (₹0/month)**;
 this replaces the earlier ₹5/month allowance. Repository access is private.
 See [current phase status](docs/FINAL_STATUS_2026-10-12.md). Actual hosted
-[Markdown/JSON downloads and fresh-visitor isolation](docs/HOSTED_DOWNLOAD_VERIFICATION_2026-10-08.md) passed; full source CI passed 482 tests.
+[Markdown/JSON downloads and fresh-visitor isolation](docs/HOSTED_DOWNLOAD_VERIFICATION_2026-10-08.md) passed; full source CI passed 489 tests.
 
 ## ✨ Project at a glance
 
@@ -325,9 +329,9 @@ uv run --locked mypy
 uv build
 ```
 
-[CI on 12 October](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/38241087132)
-passed **482 tests in 28.44 seconds** on product source
-`afcad1c30d60f82e264433cf9c2506adce946193`, plus lint/format/types,
+[CI on 12 October](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/38242786448)
+passed **489 tests in 38.57 seconds** on product source
+`0777791914da01372970cf5850bca7dcae83d62d`, plus lint/format/types,
 package build, official Render schema and offline deployment smoke. Docker checks passed nonroot UID 10001,
 512 MB/half-CPU execution, fresh-container persistence, fresh-volume synthetic
 backup/restore, health and authenticated gateway access. Tests block ordinary
@@ -473,7 +477,7 @@ finalization and shared rewrite/search/model/pass/token allowances constrain run
 They do not guarantee correct planning or source truth.
 
 **7. How did you evaluate the project?**
-482 offline tests and constrained Docker checks verify engineering behavior. A
+489 offline tests and constrained Docker checks verify engineering behavior. A
 20-case, 40-answer Gemini comparison records support, scope, disputes, abstentions,
 calls, tokens and latency with explicit synthetic/AI-review limitations.
 
