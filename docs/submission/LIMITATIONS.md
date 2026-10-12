@@ -63,9 +63,12 @@ zero claims were accepted and the critic did not run. A subsequent separately
 authorized [combined run](../LIVE_GEMINI_TAVILY_REVIEW_2026-10-11.md) completed all six
 roles and one Tavily search, yielding three distinct exact claims with complete
 citation audits. Offline review verified fresh-process reconnect with zero
-network attempts. The report still has clipped passages, unrelated text and
-unexplained differing Mars percentages; one successful run does not remove the
-earlier malformed-ID risk or establish broad semantic accuracy.
+network attempts. That historical report had clipped passages, unrelated text and unexplained
+differing percentages. The [12 October fixes and check](../REMAINING_FIXES_2026-10-12.md)
+add compact selection aliases, domain filtering, sentence boundaries and improved
+presentation. Six Gemini roles and one search passed with two exact claims.
+The new report still flattens a PDF table, includes unrelated exercise text and
+omits explicit missing-percentage coverage. Broad semantic accuracy is unverified.
 The ignored local `.env` selects 3.1 for new runs; old saved runs keep their
 original model and call receipts. See the
 [current status](../FINAL_STATUS_2026-10-12.md).
@@ -85,7 +88,7 @@ Graph version 8 checkpoints cannot silently resume older graph versions.
 
 The explicit LangSmith probe uploads one synthetic counter span and requires exact
 server readback. Standard configuration alone does not enable raw graph export.
-Synthetic counter delivery and exact receipt readback passed on 8 October; see [verification](../LANGSMITH_VERIFICATION_2026-10-08.md). Full research payload tracing remains disabled.
+Fresh synthetic counter delivery and exact receipt readback passed on 12 October; see [verification](../REMAINING_FIXES_2026-10-12.md). Full research payload tracing remains disabled.
 [Actual hosted browser exports](../HOSTED_DOWNLOAD_VERIFICATION_2026-10-08.md) passed one completed fixture case and fresh-visitor isolation. Independent human review remains unclaimed.
 
 Docker execution passed in the private repository's remote CI: image build,
@@ -106,7 +109,7 @@ restore verifies mechanics, not a future production backup of real user data.
 |---|---|
 | Independent human review / real-source benchmark | Delegated AI review is complete; broader research validation is not established |
 | Hosted operation | Public fixture workflow, actual Chromium downloads and fresh-visitor isolation verified; durable full-workbench storage stays local under the free-only policy |
-| Combined real Gemini/Tavily research-quality study | A bounded six-call Gemini/NASA structured run and earlier Tavily access passed separately; no combined fresh search plus model quality study or independent review has been performed |
+| Combined real Gemini/Tavily research-quality study | Fresh combined six-role Gemini/Tavily execution passed; AI review recorded table/coverage limitations; no broad quality study or independent human review has been performed |
 | Separate grading/submission rules | The supplied PDF has no scored rubric, deadline or delivery format |
 
 No missing credential, Gemini allowance or hosting decision blocks the selected

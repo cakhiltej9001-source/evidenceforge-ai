@@ -147,11 +147,12 @@ and state and does not generate a report. Gemini reasoning alone does not enable
 web search; explicit live-source choices control acquisition separately. Recorded
 historical fallback use does not establish the model's current availability.
 The [8 October API diagnostic](../GEMINI_API_TEST_2026-10-08.md) recorded HTTP 503
-for `gemini-3.5-flash-lite`. The [latest combined live check](../LIVE_GEMINI_TAVILY_REVIEW_2026-10-11.md)
-used `gemini-3.1-flash-lite`: all six roles returned valid structured responses
-with one fresh Tavily search, a completed report and three exact cited claims.
-A fresh-process reconnect restored the saved result with zero network attempts.
-Report readability and explanation of differing source values remain limited.
+for `gemini-3.5-flash-lite`. The [12 October combined live check](../REMAINING_FIXES_2026-10-12.md) used
+gemini-3.1-flash-lite: all six roles returned valid structured responses, one fresh
+Tavily search completed, and two exact quoted claims were retained. Offline
+fresh-process reconnect passed with zero network attempts. New runs use compact
+selection aliases and structured domain filters. Report presentation is improved;
+flattened tables and semantic completeness remain limitations.
 The local ignored `.env` selects 3.1 for new runs.
 Failed/unconfirmed paid calls are not automatically retried; historical saved
 runs keep their registered models and request contracts.
@@ -179,8 +180,8 @@ GB shares in one half-hour, not annual/global/absolute output. Selecting it does
 promise that it can answer every requested comparison. The synthetic scenario is
 used only when no live source or document is selected.
 
-Summary paragraphs contain audited quotations and shorten with disclosure if fewer
-than two supported claims exist. Sources list cited evidence chunks with exact
+New report summaries reference audited quotations printed once in findings,
+limitations or disagreements. Older saved runs keep their original presentation. Sources list cited evidence chunks with exact
 locators. Literal copies/contained passages are grouped for model input; all original
 records remain retained. Distinct facts, qualifiers and uncovered question links are
 preserved. Grouping does not establish independent corroboration.
@@ -224,7 +225,7 @@ The probe uses a fixed project, full sampling and bounded receipt readback. Only
 allowlisted synthetic counters are sent; questions, documents and graph state are
 excluded. Exact completed-span readback is required for verified remote delivery.
 Missing credentials or unsuccessful readback return a nonzero exit with
-`--execute`. One fixed synthetic span and its exact remote readback passed on 8 October; see [verification](../LANGSMITH_VERIFICATION_2026-10-08.md).
+`--execute`. A fresh synthetic counter span and exact readback passed on 12 October; see [current verification](../REMAINING_FIXES_2026-10-12.md). The [8 October record](../LANGSMITH_VERIFICATION_2026-10-08.md) remains historical.
 
 ## Files and storage
 
