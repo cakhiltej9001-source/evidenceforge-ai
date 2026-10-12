@@ -107,8 +107,8 @@ class ResearchOptions(Contract):
     live_web: StrictBool = False
     live_energy: StrictBool = False
     quality_input_version: Literal[1, 2] = 2
-    quote_selection_version: Literal[0, 1, 2, 3] = Field(
-        default=3, exclude_if=lambda value: value == 0
+    quote_selection_version: Literal[0, 1, 2, 3, 4] = Field(
+        default=4, exclude_if=lambda value: value == 0
     )
     analysis: AnalysisOptions = Field(default_factory=AnalysisOptions)
     node_timeout_seconds: Annotated[float, Field(gt=0, le=60, allow_inf_nan=False)] = 30.0
@@ -135,3 +135,8 @@ class QuoteCriticModel(Protocol):
 @runtime_checkable
 class ConstrainedQuoteSelectionModel(Protocol):
     async def select_quotes_constrained(self, request: SynthesisInput) -> object: ...
+
+
+@runtime_checkable
+class CompactQuoteSelectionModel(Protocol):
+    async def select_quotes_compact(self, request: SynthesisInput) -> object: ...

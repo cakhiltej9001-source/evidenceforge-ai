@@ -1,6 +1,7 @@
 """Tavily REST search through one fixed endpoint with streamed size limits."""
 
 import json
+import re
 from datetime import UTC, datetime
 from email.utils import parsedate_to_datetime
 from math import isfinite
@@ -49,6 +50,18 @@ class TavilyAdapter:
             "include_images": False,
             "include_usage": True,
         }
+        if options.structured_domain_filters:
+            domains = re.findall(r"(?<!\S)site:([a-zA-Z0-9.-]+)(?=\s|$)", query.text)
+            if domains:
+                domains = sorted(set(domain.casefold() for domain in domains))
+                if len(domains) > 20:
+                    raise RetrievalFailure("schema")
+                payload["query"] = re.sub(
+                    r"(?<!\S)site:[a-zA-Z0-9.-]+(?=\s|$)", "", query.text
+                ).strip()
+                if not payload["query"]:
+                    raise RetrievalFailure("schema")
+                payload["include_domains"] = domains
         try:
             async with self._client.stream(
                 "POST",

@@ -396,3 +396,78 @@ class GeminiResearchModel:
             "Follow revision_brief without inventing support.",
             wire_schema=wire,
         )
+
+    async def select_quotes_compact(self, request: SynthesisInput) -> object:
+        """Use short enum aliases to bound schema complexity, then restore real IDs."""
+        evidence_ids = {item.id: f"e_{i}" for i, item in enumerate(request.evidence)}
+        question_ids = {q.id: f"q_{i}" for i, q in enumerate(request.questions)}
+        mapped = request.model_copy(
+            update={
+                "questions": tuple(
+                    q.model_copy(update={"id": question_ids[q.id]}) for q in request.questions
+                ),
+                "evidence": tuple(
+                    e.model_copy(
+                        update={
+                            "id": evidence_ids[e.id],
+                            "question_ids": tuple(question_ids[qid] for qid in e.question_ids),
+                        }
+                    )
+                    for e in request.evidence
+                ),
+                "gaps": tuple(
+                    g.model_copy(update={"question_id": question_ids[g.question_id]})
+                    for g in request.gaps
+                ),
+                "propositions": tuple(
+                    p.model_copy(
+                        update={
+                            "evidence_id": evidence_ids.get(p.evidence_id, p.evidence_id),
+                            "question_ids": tuple(question_ids[qid] for qid in p.question_ids),
+                        }
+                    )
+                    for p in request.propositions
+                ),
+                "comparisons": tuple(
+                    c.model_copy(
+                        update={
+                            "question_ids": tuple(question_ids[qid] for qid in c.question_ids),
+                        }
+                    )
+                    for c in request.comparisons
+                ),
+                "duplicate_evidence": (),
+            }
+        )
+        wire = provider_schema(QuoteSelectionDraft.model_json_schema())
+        fields = wire["$defs"]["QuoteSelection"]["properties"]
+        fields["evidence_id"]["enum"] = sorted(evidence_ids.values())
+        fields["question_ids"]["items"]["enum"] = sorted(question_ids.values())
+        raw = await self._generate(
+            "synthesis",
+            mapped,
+            QuoteSelectionDraft,
+            "Select relevant complete retained passages using the allowed short IDs. "
+            "Do not generate wording. Prefer directly relevant passages; avoid unrelated "
+            "navigation, equations and download metadata. Select each evidence once. "
+            "Preserve qualifiers, place unresolved differing values in disagreements, "
+            "and leave missing evidence as gaps. Do not infer causes or choose a winner.",
+            wire_schema=wire,
+        )
+        selected = QuoteSelectionDraft.model_validate(raw)
+        reverse_evidence = {alias: real for real, alias in evidence_ids.items()}
+        reverse_questions = {alias: real for real, alias in question_ids.items()}
+        try:
+            decoded = {
+                "claims": [
+                    {
+                        "evidence_id": reverse_evidence[c.evidence_id],
+                        "question_ids": [reverse_questions[qid] for qid in c.question_ids],
+                        "section": c.section,
+                    }
+                    for c in selected.claims
+                ]
+            }
+        except KeyError:
+            raise ModelUnavailable("Gemini selected an unknown quotation alias.") from None
+        return QuoteSelectionDraft.model_validate(decoded).model_dump(mode="json")

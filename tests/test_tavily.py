@@ -205,3 +205,28 @@ def test_retry_after_rate_limit_is_bounded_and_does_not_expose_response():
     assert caught.value.category == "rate_limit"
     assert caught.value.retry_after_seconds == 2.0
     assert "secret provider detail" not in str(caught.value)
+
+
+@pytest.mark.parametrize("enabled", [False, True])
+def test_site_operator_uses_structured_domain_filter_only_in_new_contract(enabled):
+    seen = []
+    query = QUERY.model_copy(update={"text": "site:nasa.gov Earth Mars atmosphere percentages"})
+
+    def handler(request):
+        payload = json.loads(request.content)
+        seen.append(payload)
+        if enabled:
+            assert payload["query"] == "Earth Mars atmosphere percentages"
+            assert payload["include_domains"] == ["nasa.gov"]
+        else:
+            assert payload["query"] == query.text
+            assert "include_domains" not in payload
+        return httpx.Response(200, json={"results": [], "usage": {"credits": 1}})
+
+    async def scenario():
+        async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as client:
+            adapter = TavilyAdapter(SecretStr("synthetic_key"), client)
+            return await adapter.search(query, RetrievalOptions(structured_domain_filters=enabled))
+
+    asyncio.run(scenario())
+    assert len(seen) == 1

@@ -138,3 +138,46 @@ def test_provider_quote_schema_only_offers_real_evidence_and_question_ids(tmp_pa
     result = asyncio.run(model.select_quotes_constrained(request))
     assert result["claims"][0]["evidence_id"] == request.evidence[0].id
     assert len(captured) == 1
+
+
+def test_compact_quote_aliases_restore_authentic_ids_without_mutating_input(tmp_path):
+    state = StateSnapshot.model_validate(completed(tmp_path, version=4))
+    request = SynthesisInput(
+        request=state.request,
+        questions=state.research_questions,
+        evidence=tuple(state.evidence_store.values()),
+        gaps=(),
+        revision_brief=(),
+        draft_version=1,
+    )
+    original = request.model_dump_json()
+
+    def handler(http_request):
+        payload = json.loads(http_request.content)
+        value = json.loads(payload["contents"][0]["parts"][0]["text"])
+        wire = payload["generationConfig"]["responseJsonSchema"]
+        fields = wire["$defs"]["QuoteSelection"]["properties"]
+        assert fields["evidence_id"]["enum"] == ["e_0", "e_1"]
+        assert fields["question_ids"]["items"]["enum"] == ["q_0"]
+        assert "maxItems" not in wire["properties"]["claims"]
+        assert value["evidence"][0]["passage"] == request.evidence[0].passage
+        result = {"claims": [{"evidence_id": "e_0", "question_ids": ["q_0"]}]}
+        return httpx.Response(
+            200,
+            json={
+                "candidates": [
+                    {"finishReason": "STOP", "content": {"parts": [{"text": json.dumps(result)}]}}
+                ]
+            },
+        )
+
+    model = GeminiResearchModel(
+        "test-model",
+        SecretStr("synthetic-key"),
+        BudgetLimits(),
+        transport=httpx.MockTransport(handler),
+    )
+    result = asyncio.run(model.select_quotes_compact(request))
+    assert result["claims"][0]["evidence_id"] == request.evidence[0].id
+    assert result["claims"][0]["question_ids"] == [request.questions[0].id]
+    assert request.model_dump_json() == original

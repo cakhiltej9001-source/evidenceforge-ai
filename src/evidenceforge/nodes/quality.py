@@ -14,6 +14,7 @@ from evidenceforge.nodes.common import Update, checked_patch, record_data
 from evidenceforge.nodes.quality_common import quality_error, quality_event
 from evidenceforge.planning import ModelUnavailable, PlanningContractError, parse_response
 from evidenceforge.research import (
+    CompactQuoteSelectionModel,
     ConstrainedQuoteSelectionModel,
     CoverageAssessment,
     CoverageInput,
@@ -332,11 +333,14 @@ class Synthesis(QualityNode):
             )
             if (
                 self.options.quality_input_version == 2
-                and self.options.quote_selection_version in (1, 2, 3)
+                and self.options.quote_selection_version in (1, 2, 3, 4)
                 and isinstance(self.model, QuoteSelectionModel)
             ):
                 selection = await self.response(
-                    self.model.select_quotes_constrained(request)
+                    self.model.select_quotes_compact(request)
+                    if self.options.quote_selection_version >= 4
+                    and isinstance(self.model, CompactQuoteSelectionModel)
+                    else self.model.select_quotes_constrained(request)
                     if self.options.quote_selection_version >= 3
                     and isinstance(self.model, ConstrainedQuoteSelectionModel)
                     else self.model.select_quotes(request),

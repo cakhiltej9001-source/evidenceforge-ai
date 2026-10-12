@@ -40,6 +40,7 @@ class ArtifactFailure(RuntimeError):
 
 
 class RetrievalOptions(Contract):
+    structured_domain_filters: StrictBool = Field(default=False, exclude_if=lambda value: not value)
     max_results: Annotated[PositiveCount, Field(le=20)] = 5
     max_response_bytes: Annotated[PositiveCount, Field(le=10_000_000)] = 1_000_000
     max_source_bytes: Annotated[PositiveCount, Field(le=1_000_000)] = 100_000

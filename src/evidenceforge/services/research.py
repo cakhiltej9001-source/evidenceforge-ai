@@ -35,7 +35,12 @@ from evidenceforge.planning import ModelUnavailable, PlanDraft, normalized
 from evidenceforge.reporting import finalize, render_report
 from evidenceforge.research import ResearchModel, ResearchOptions
 from evidenceforge.retrieval.carbon_intensity import CarbonIntensityAdapter
-from evidenceforge.retrieval.contracts import CallReceipt, RetrievalAdapter, RetrievalBatch
+from evidenceforge.retrieval.contracts import (
+    CallReceipt,
+    RetrievalAdapter,
+    RetrievalBatch,
+    RetrievalOptions,
+)
 from evidenceforge.retrieval.documents import DocumentRetrievalAdapter
 from evidenceforge.retrieval.fallback import OrderedSearch
 from evidenceforge.retrieval.fixtures import FixtureRetrievalAdapter
@@ -146,7 +151,13 @@ class ResearchService:
                 adapters[SourceType.DOCUMENT] = DocumentRetrievalAdapter(
                     self.documents, request.owner_scope, request.document_ids
                 )
-            return RetrievalService(self.data_dir, adapters)
+            return RetrievalService(
+                self.data_dir,
+                adapters,
+                RetrievalOptions(
+                    structured_domain_filters=self.options.quote_selection_version >= 4
+                ),
+            )
         if request.document_ids:
             return RetrievalService(
                 self.data_dir,
@@ -220,7 +231,7 @@ class ResearchService:
                     **(
                         {"quote_selection_version": self.options.quote_selection_version}
                         if self.options.quality_input_version == 2
-                        and self.options.quote_selection_version in (1, 2, 3)
+                        and self.options.quote_selection_version in (1, 2, 3, 4)
                         else {}
                     ),
                     **({"live_web": True} if self.options.live_web else {}),
@@ -238,7 +249,7 @@ class ResearchService:
         if type(policy) is not int or policy not in (0, 1):
             raise CheckpointFailure("Unsupported production policy version.")
         selection = json.loads(profile)["research_options"].get("quote_selection_version", 0)
-        if type(selection) is not int or selection not in (0, 1, 2, 3):
+        if type(selection) is not int or selection not in (0, 1, 2, 3, 4):
             raise CheckpointFailure("Unsupported quote selection contract version.")
         self.options = self.options.model_copy(
             update={
