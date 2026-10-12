@@ -134,7 +134,13 @@ class GeminiResearchModel:
         )
 
     async def _generate(
-        self, role: str, request: Contract, schema: type[Contract], instruction: str
+        self,
+        role: str,
+        request: Contract,
+        schema: type[Contract],
+        instruction: str,
+        *,
+        wire_schema: dict[str, Any] | None = None,
     ) -> object:
         system = (
             "You are an evidence research assistant. Return only JSON matching the schema. "
@@ -153,7 +159,8 @@ class GeminiResearchModel:
             "contents": [{"role": "user", "parts": [{"text": request.model_dump_json()}]}],
             "generationConfig": {
                 "responseMimeType": "application/json",
-                "responseJsonSchema": provider_schema(
+                "responseJsonSchema": wire_schema
+                or provider_schema(
                     schema.model_json_schema(), array_bounds=role == "coverage_evaluator"
                 ),
                 "maxOutputTokens": 4096,
@@ -368,4 +375,24 @@ class GeminiResearchModel:
             "Missing evidence must remain an explicit gap; it cannot be fixed by a "
             "rewrite. Request revision only for a concrete relevance, support, or "
             "misleading-coverage problem, and name that problem specifically.",
+        )
+
+    async def select_quotes_constrained(self, request: SynthesisInput) -> object:
+        """Constrain new selections to actual input IDs; keep legacy receipts stable."""
+        wire = provider_schema(QuoteSelectionDraft.model_json_schema(), array_bounds=True)
+        fields = wire["$defs"]["QuoteSelection"]["properties"]
+        fields["evidence_id"]["enum"] = sorted(item.id for item in request.evidence)
+        fields["question_ids"]["items"]["enum"] = sorted(q.id for q in request.questions)
+        return await self._generate(
+            "synthesis",
+            request,
+            QuoteSelectionDraft,
+            "Select the most relevant complete retained passages using the allowed IDs. "
+            "Do not generate statements or paraphrases. Prefer short, directly relevant "
+            "passages; avoid navigation, equations or download metadata unrelated to "
+            "the question. Select each evidence ID once. Preserve source qualifiers. "
+            "Put unresolved differing source values in disagreements; do not select a "
+            "winner or infer their causes. Leave missing evidence as explicit gaps. "
+            "Follow revision_brief without inventing support.",
+            wire_schema=wire,
         )

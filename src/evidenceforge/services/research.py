@@ -220,7 +220,7 @@ class ResearchService:
                     **(
                         {"quote_selection_version": self.options.quote_selection_version}
                         if self.options.quality_input_version == 2
-                        and self.options.quote_selection_version in (1, 2)
+                        and self.options.quote_selection_version in (1, 2, 3)
                         else {}
                     ),
                     **({"live_web": True} if self.options.live_web else {}),
@@ -238,7 +238,7 @@ class ResearchService:
         if type(policy) is not int or policy not in (0, 1):
             raise CheckpointFailure("Unsupported production policy version.")
         selection = json.loads(profile)["research_options"].get("quote_selection_version", 0)
-        if type(selection) is not int or selection not in (0, 1, 2):
+        if type(selection) is not int or selection not in (0, 1, 2, 3):
             raise CheckpointFailure("Unsupported quote selection contract version.")
         self.options = self.options.model_copy(
             update={
@@ -267,6 +267,13 @@ class ResearchService:
                 id=stable_id("working_evidence", state["run_id"]),
                 kind="working_evidence_enabled",
                 message="Repeated literal passages are grouped; source provenance is retained.",
+            )
+            state = apply_update(state, {"events": {event.id: record_data(event)}})
+        if self.options.quality_input_version == 2 and self.options.quote_selection_version >= 3:
+            event = RunEvent(
+                id=stable_id("readable_report", state["run_id"]),
+                kind="readable_report",
+                message="Complete sentence groups and quotation references enabled.",
             )
             state = apply_update(state, {"events": {event.id: record_data(event)}})
         if isinstance(self.model, GeminiResearchModel):
@@ -394,6 +401,10 @@ class ResearchService:
                             artifacts,
                             retrieval.options,
                             evict_lowest=bool(self.options.production_policy_version),
+                            sentence_boundaries=(
+                                self.options.quality_input_version == 2
+                                and self.options.quote_selection_version >= 3
+                            ),
                         ),
                         artifacts,
                         self.options,
@@ -525,6 +536,10 @@ class ResearchService:
                             artifacts,
                             retrieval.options,
                             evict_lowest=bool(self.options.production_policy_version),
+                            sentence_boundaries=(
+                                self.options.quality_input_version == 2
+                                and self.options.quote_selection_version >= 3
+                            ),
                         ),
                         artifacts,
                         self.options,

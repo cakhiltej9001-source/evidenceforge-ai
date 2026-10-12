@@ -219,6 +219,19 @@ def render_report(state: ResearchState) -> str:
     report = s.final_report
     sources = {sid: index + 1 for index, sid in enumerate(report.source_ids if report else ())}
     sections = {section.name: section.claim_ids for section in report.sections} if report else {}
+    readable = any(event.kind == "readable_report" for event in s.events.values())
+    quote_numbers = {cid: index + 1 for index, cid in enumerate(s.report_claims)}
+    shown: dict[str, int] = {}
+    if readable and sections.get("summary"):
+        assigned = {cid for name, ids in sections.items() if name != "summary" for cid in ids}
+        sections["key_findings"] = tuple(
+            dict.fromkeys(
+                (
+                    *sections.get("key_findings", ()),
+                    *(cid for cid in sections["summary"] if cid not in assigned),
+                )
+            )
+        )
     for name, title in (
         ("summary", "Summary"),
         ("key_findings", "Key Findings"),
@@ -228,6 +241,15 @@ def render_report(state: ResearchState) -> str:
         if name not in ("summary", "key_findings") and not sections.get(name):
             continue
         lines.extend([f"## {title}", ""])
+        if readable and name == "disagreements":
+            lines.extend(
+                [
+                    "These source differences remain unresolved. Retained evidence does not "
+                    "establish whether they reflect dates, measurement scope, rounding or error. "
+                    "Do not assume the values are directly comparable or choose one as correct.",
+                    "",
+                ]
+            )
         rendered: list[str] = []
         for cid in sections.get(name, ()):
             claim = s.report_claims[cid]
@@ -244,9 +266,15 @@ def render_report(state: ResearchState) -> str:
                 if locator.section is not None:
                     locations.append(escape(locator.section))
             suffix = " (" + "; ".join(sorted(set(locations))) + ")" if locations else ""
-            rendered.append(
-                f'"{escape(claim.statement)}" ' + " ".join(f"[{n}]" for n in citations) + suffix
-            )
+            refs = " ".join(f"[{n}]" for n in citations)
+            if readable and name == "summary":
+                rendered.append(f"Supported quotation Q{quote_numbers[cid]}: {refs}{suffix}")
+            elif readable and claim.statement in shown:
+                rendered.append(f"See quotation Q{shown[claim.statement]} above. {refs}{suffix}")
+            else:
+                label = f"**Q{quote_numbers[cid]}.** " if readable else ""
+                rendered.append(label + f'"{escape(claim.statement)}" ' + refs + suffix)
+                shown[claim.statement] = quote_numbers[cid]
         if name == "summary" and rendered:
             count = min(3, len(rendered))
             for index in range(count):
@@ -297,12 +325,9 @@ def render_report(state: ResearchState) -> str:
                 location.append(f"paragraph {locator.paragraph}")
             if locator.section is not None:
                 location.append(escape(locator.section))
-            lines.append(
-                f'  - Evidence `{eid}`: "{escape(evidence.passage)}" '
-                + "("
-                + "; ".join(location)
-                + ")."
-            )
+            prefix = f"  - Evidence `{eid}`: "
+            quote = "" if readable else f'"{escape(evidence.passage)}" '
+            lines.append(prefix + quote + "(" + "; ".join(location) + ").")
     if not sources:
         lines.append("No retained sources support a final claim.")
     lines.extend(
@@ -320,6 +345,24 @@ def render_report(state: ResearchState) -> str:
             ),
         ]
     )
+    if readable:
+        lines.extend(
+            [
+                "",
+                "Passages use complete sentence boundaries when available. Upstream excerpts "
+                "may already be incomplete. Full retained text and exact offsets are available "
+                "in the JSON export; repeated quotations are referenced once in this report.",
+            ]
+        )
+        if len(sources) > 1 and any(
+            re.search(r"\d+(?:\.\d+)?\s*(?:%|\bpercent\b)", c.statement, re.I)
+            for c in s.report_claims.values()
+        ):
+            lines.append(
+                "Quoted percentages have not been reconciled across source dates and "
+                "measurement scopes unless the evidence comparison audit explicitly says so. "
+                "Differing values remain unresolved; quotation checks do not select a winner."
+            )
     if ocr_transcripts(s):
         lines.extend(["", OCR_TRANSCRIPT_LIMITATION])
     duplicates = working_evidence(s.evidence_store.values()).duplicates

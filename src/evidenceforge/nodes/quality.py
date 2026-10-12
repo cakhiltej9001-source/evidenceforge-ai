@@ -14,6 +14,7 @@ from evidenceforge.nodes.common import Update, checked_patch, record_data
 from evidenceforge.nodes.quality_common import quality_error, quality_event
 from evidenceforge.planning import ModelUnavailable, PlanningContractError, parse_response
 from evidenceforge.research import (
+    ConstrainedQuoteSelectionModel,
     CoverageAssessment,
     CoverageInput,
     CriticAssessment,
@@ -331,11 +332,15 @@ class Synthesis(QualityNode):
             )
             if (
                 self.options.quality_input_version == 2
-                and self.options.quote_selection_version in (1, 2)
+                and self.options.quote_selection_version in (1, 2, 3)
                 and isinstance(self.model, QuoteSelectionModel)
             ):
                 selection = await self.response(
-                    self.model.select_quotes(request), QuoteSelectionDraft
+                    self.model.select_quotes_constrained(request)
+                    if self.options.quote_selection_version >= 3
+                    and isinstance(self.model, ConstrainedQuoteSelectionModel)
+                    else self.model.select_quotes(request),
+                    QuoteSelectionDraft,
                 )
                 supplied = {item.id: item for item in working.evidence}
                 known_questions = {question.id for question in s.research_questions}
@@ -353,7 +358,7 @@ class Synthesis(QualityNode):
                         selected_quote.evidence_id,
                         tuple(sorted(selected_quote.question_ids)),
                     )
-                    if self.options.quote_selection_version == 2 and selected_key in seen_selected:
+                    if self.options.quote_selection_version >= 2 and selected_key in seen_selected:
                         continue
                     seen_selected.add(selected_key)
                     projected.append(
@@ -458,7 +463,7 @@ class Critic(QualityNode):
             task = (
                 self.model.critique_quotes(request)
                 if self.options.quality_input_version == 2
-                and self.options.quote_selection_version == 2
+                and self.options.quote_selection_version >= 2
                 and isinstance(self.model, QuoteCriticModel)
                 else self.model.critique(request)
             )

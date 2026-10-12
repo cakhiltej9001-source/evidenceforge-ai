@@ -34,12 +34,54 @@ def spans(text: str, size: int) -> Iterator[tuple[int, int]]:
             start = boundary + (separator.end() if separator else 0)
 
 
+def readable_spans(text: str, size: int) -> Iterator[tuple[int, int]]:
+    """Group complete sentences with exact offsets; never cut a word or sentence.
+
+    Oversized sentences are returned whole so the caller can explicitly reject
+    them. Paragraph ends may already be clipped by the upstream provider.
+    """
+    target = min(size, 500)
+    for start, end in spans(text, max(1, len(text))):
+        while start < end and text[start].isspace():
+            start += 1
+        while end > start and text[end - 1].isspace():
+            end -= 1
+        boundaries = (
+            [start]
+            + [
+                start + match.end()
+                for match in re.finditer(r'(?<=[.!?])\s+(?=[A-Z"\'])', text[start:end])
+            ]
+            + [end]
+        )
+        group_start, group_end = start, start
+        for left, right in zip(boundaries[:-1], boundaries[1:], strict=True):
+            while left < right and text[left].isspace():
+                left += 1
+            while right > left and text[right - 1].isspace():
+                right -= 1
+            if left == right:
+                continue
+            if group_end > group_start and right - group_start > target:
+                yield group_start, group_end
+                group_start = left
+            group_end = right
+        if group_end > group_start:
+            yield group_start, group_end
+
+
 class EvidenceExtractor:
     def __init__(
-        self, artifacts: ArtifactStore, options: RetrievalOptions, *, evict_lowest: bool = False
+        self,
+        artifacts: ArtifactStore,
+        options: RetrievalOptions,
+        *,
+        evict_lowest: bool = False,
+        sentence_boundaries: bool = False,
     ) -> None:
         self.artifacts, self.options = artifacts, options
         self.evict_lowest = evict_lowest
+        self.sentence_boundaries = sentence_boundaries
 
     def __call__(self, state: ResearchState) -> Update:
         snapshot = StateSnapshot.model_validate(state)
@@ -89,11 +131,35 @@ class EvidenceExtractor:
             }
             acquired = snapshot.source_acquisitions[acquisition_ids[0]]
             produced = 0
-            for start, end in spans(content, self.options.passage_chars):
+            candidates = list(
+                readable_spans(content, self.options.passage_chars)
+                if self.sentence_boundaries
+                else spans(content, self.options.passage_chars)
+            )
+            if self.sentence_boundaries:
+                focus = set().union(
+                    *(tokens(q.question) for q in snapshot.research_questions if q.id in questions)
+                )
+                candidates.sort(
+                    key=lambda pair: (
+                        -len(focus & tokens(content[pair[0] : pair[1]])),
+                        -min(30, len(content[pair[0] : pair[1]].split())),
+                        pair[0],
+                    )
+                )
+            for start, end in candidates:
                 passage = content[start:end]
                 identifier = stable_id(
                     "evidence", snapshot.owner_scope, source_id, snapshot_id, start, end
                 )
+                if self.sentence_boundaries and len(passage) > self.options.passage_chars:
+                    reject(
+                        identifier,
+                        source_id,
+                        "content_limit",
+                        "A complete sentence exceeded the passage bound; it was not clipped.",
+                    )
+                    continue
                 if produced >= self.options.max_passages_per_source:
                     reject(
                         identifier, source_id, "evidence_limit", "Per-source passage limit reached."
