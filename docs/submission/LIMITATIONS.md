@@ -59,10 +59,16 @@ coverage of unreported Mars percentages. Current code fixes both; offline
 regressions and replay passed. A [fresh combined check](../GEMINI_TAVILY_VERIFICATION_2026-10-10.md)
 used five HTTP 200 Gemini responses and one successful Tavily search (one credit).
 Synthesis returned a malformed evidence ID and failed local schema validation;
-zero claims were accepted and the critic did not run. End-to-end live reporting
-remains unverified. The ignored local `.env` now selects 3.1 for new runs; old saved
-runs keep their original model and call receipts. See the
-[current status](../FINAL_STATUS_2026-10-10.md).
+zero claims were accepted and the critic did not run. A subsequent separately
+authorized [combined run](../LIVE_GEMINI_TAVILY_REVIEW_2026-10-11.md) completed all six
+roles and one Tavily search, yielding three distinct exact claims with complete
+citation audits. Offline review verified fresh-process reconnect with zero
+network attempts. The report still has clipped passages, unrelated text and
+unexplained differing Mars percentages; one successful run does not remove the
+earlier malformed-ID risk or establish broad semantic accuracy.
+The ignored local `.env` selects 3.1 for new runs; old saved runs keep their
+original model and call receipts. See the
+[current status](../FINAL_STATUS_2026-10-12.md).
 Failed or uncertain paid calls are not retried automatically. Historical paid runs
 without durable receipts cannot silently migrate; model/service instances are fresh
 for each new run. Unknown usage and dollar cost remain N/A.

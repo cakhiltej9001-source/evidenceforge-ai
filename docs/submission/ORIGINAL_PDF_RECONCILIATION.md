@@ -4,7 +4,7 @@ The initial snapshot audit is preserved below. The 5 October implementation upda
 and [passing verification](../ASSIGNMENT_FIXES_2026-10-05.md) supersede its runtime
 gap statuses.
 
-For the latest audit, see [10 October status](../FINAL_STATUS_2026-10-10.md)
+For the latest audit, see [12 October status](../FINAL_STATUS_2026-10-12.md)
 and the [current requirements checklist](REQUIREMENTS.md). Tavily access and
 synthetic LangSmith counter delivery/readback were subsequently verified; the
 historical tables below preserve their original dates. Full research payload

@@ -147,11 +147,12 @@ and state and does not generate a report. Gemini reasoning alone does not enable
 web search; explicit live-source choices control acquisition separately. Recorded
 historical fallback use does not establish the model's current availability.
 The [8 October API diagnostic](../GEMINI_API_TEST_2026-10-08.md) recorded HTTP 503
-for `gemini-3.5-flash-lite`. A [10 October structured check](../FINAL_STATUS_2026-10-10.md)
-used `gemini-3.1-flash-lite`: all six roles returned valid structured responses,
-with a partial NASA report and exact retained quotations. The local ignored `.env`
-now selects 3.1 for new runs. Later duplicate and percentage-coverage fixes have
-offline replay and CI evidence; they have not received another live Gemini run.
+for `gemini-3.5-flash-lite`. The [latest combined live check](../LIVE_GEMINI_TAVILY_REVIEW_2026-10-11.md)
+used `gemini-3.1-flash-lite`: all six roles returned valid structured responses
+with one fresh Tavily search, a completed report and three exact cited claims.
+A fresh-process reconnect restored the saved result with zero network attempts.
+Report readability and explanation of differing source values remain limited.
+The local ignored `.env` selects 3.1 for new runs.
 Failed/unconfirmed paid calls are not automatically retried; historical saved
 runs keep their registered models and request contracts.
 

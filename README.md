@@ -16,12 +16,13 @@ and why the workflow completed or stopped. Python, LangGraph, SQLite and Streaml
 connect the research stages; offline fixtures support demonstrations and optional
 Gemini reasoning supports explicitly started provider runs.
 
-**Verified on 10 October 2026:** 474 tests and both private CI jobs passed,
+**Current verification:** 474 source tests and both private CI jobs passed,
 including Docker persistence, backup/restore and authenticated gateway checks.
-A bounded six-call Gemini run completed all structured roles over retained NASA
-section excerpts. It exposed duplicate selection and overcounted coverage of
-unreported Mars percentages; current code fixes both with offline regressions
-and replay. General research accuracy remains unclaimed.
+A fresh combined run completed all six Gemini roles and one Tavily search,
+retaining three NASA sources and three exactly cited claims. The 11 October
+offline review verified all claim audits and a fresh-process reconnect with zero
+network attempts. Report readability and explanation of differing source values
+still need improvement; general research accuracy remains unclaimed.
 
 **Public demo:** [Open EvidenceForge on Streamlit](https://evidenceforge-ai-akhiltej.streamlit.app/).
 Choose **Create plan → Approve plan** to try the workflow. The public
@@ -29,7 +30,7 @@ Choose **Create plan → Approve plan** to try the workflow. The public
 uses temporary storage without document uploads or paid provider calls. The
 full workbench runs locally with durable storage. Hosting is **free only (₹0/month)**;
 this replaces the earlier ₹5/month allowance. Repository access is private.
-See [current phase status](docs/FINAL_STATUS_2026-10-10.md). Actual hosted
+See [current phase status](docs/FINAL_STATUS_2026-10-12.md). Actual hosted
 [Markdown/JSON downloads and fresh-visitor isolation](docs/HOSTED_DOWNLOAD_VERIFICATION_2026-10-08.md) passed; full source CI passed 474 tests.
 
 ## ✨ Project at a glance
@@ -288,13 +289,14 @@ EVIDENCEFORGE_MODEL_API_KEY=YOUR_PRIVATE_GEMINI_KEY
 EVIDENCEFORGE_TAVILY_API_KEY=YOUR_PRIVATE_TAVILY_KEY
 ```
 
-The [10 October structured verification](docs/FINAL_STATUS_2026-10-10.md)
-completed all six Gemini roles on `gemini-3.1-flash-lite` over frozen NASA
-section excerpts. Its partial report had exact citations and exposed a duplicate
-and overstated Mars percentage coverage; both now have offline regression and
-replay checks. The ignored local `.env` selects 3.1 for new work. Historical
-runs retain their saved models, receipts and reported results. Gemini receives
-the question and selected passages/context.
+The [latest live review](docs/LIVE_GEMINI_TAVILY_REVIEW_2026-10-11.md)
+verified a completed `gemini-3.1-flash-lite` workflow with one fresh Tavily search:
+six valid structured responses, three exact claims and complete citation audits.
+The earlier malformed-ID failure remains preserved; the successful repeat does
+not establish broad reliability. The report still needs readability and
+source-difference improvements. The ignored local `.env` selects 3.1 for new
+work. Historical runs retain their saved models, receipts and results. Gemini
+receives the question and selected passages/context.
 Explicit live-source choices enable acquisition separately:
 
 ```powershell
@@ -533,7 +535,7 @@ These are proposed extensions, not completed features:
 
 ## 📖 Further documentation
 
-- [Current phase status](docs/FINAL_STATUS_2026-10-10.md)
+- [Current phase status](docs/FINAL_STATUS_2026-10-12.md)
 - [Live-source diagnostic and AI review](docs/evaluation/LIVE_SOURCE_PROBE_2026-10-10.md)
 - [Setup and recovery](docs/submission/SETUP.md)
 - [Detailed architecture](docs/submission/ARCHITECTURE.md)

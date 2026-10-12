@@ -8,7 +8,7 @@ source hash, interpretations and concrete gaps. The PDF contains no scored rubri
 or deadline. Baseline mechanics are implemented conservatively; actual Tavily access
 and full research are [verified with deterministic reasoning](../TAVILY_VERIFICATION_2026-10-05.md).
 The controlled comparison and delegated AI review are complete; general research
-accuracy remains unclaimed. See [current status](../FINAL_STATUS_2026-10-10.md). Paths below are
+accuracy remains unclaimed. See [current status](../FINAL_STATUS_2026-10-12.md). Paths below are
 relative to `src/evidenceforge/` unless marked otherwise.
 
 ## Baseline traceability
