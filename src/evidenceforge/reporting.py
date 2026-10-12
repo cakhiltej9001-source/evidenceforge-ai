@@ -10,9 +10,19 @@ from evidenceforge.evidence.deduplication import working_evidence
 from evidenceforge.graph.state import ResearchState, StateSnapshot
 from evidenceforge.identity import stable_id
 from evidenceforge.nodes.common import Update, checked_patch, record_data
+from evidenceforge.nodes.extraction import ambiguous_table
 from evidenceforge.nodes.quality import quality_remaining
 from evidenceforge.nodes.quality_common import quality_event
-from evidenceforge.schemas import EvidenceItem, Report, ReportSection, SourceType, utc_now
+from evidenceforge.schemas import (
+    EvidenceItem,
+    QuestionCoverage,
+    QuestionCoverageStatus,
+    Report,
+    ReportSection,
+    ResearchGap,
+    SourceType,
+    utc_now,
+)
 
 OCR_TRANSCRIPT_LIMITATION = (
     "Local OCR evidence is a machine-generated transcript. Quotation checks and offsets "
@@ -45,6 +55,57 @@ def finalize(state: ResearchState) -> Update:
         a.claim_id for a in s.citation_audit if a.structural_valid and a.support == "supported"
     }
     claims = {cid: c for cid, c in s.report_claims.items() if cid in accepted}
+    quality_gaps = []
+    guarded = any(e.kind == "report_quality_guard" for e in s.events.values())
+    if guarded:
+        for cid, claim in tuple(claims.items()):
+            if ambiguous_table(claim.statement) or re.search(
+                r"\b(?:Problem|Question|Exercise)\s+\d+\s*[-:.\u2013\u2014]", claim.statement
+            ):
+                del claims[cid]
+                for qid in claim.question_ids:
+                    quality_gaps.append(
+                        ResearchGap(
+                            id=stable_id("report_quality_gap", s.run_id, cid, qid),
+                            question_id=qid,
+                            missing_aspect=(
+                                "An ambiguous numeric table or exercise quotation was omitted. "
+                                "Recover aligned rows or prose before interpreting values."
+                            ),
+                            needed_source_types=(SourceType.WEB, SourceType.DOCUMENT),
+                            recommended_query="Find aligned rows or relevant prose.",
+                        )
+                    )
+        for question in s.research_questions:
+            for index, criterion in enumerate(question.acceptance_criteria):
+                if not re.search(
+                    r"\b(?:missing|unavailable|absent|unreported|not provided|not reported)\b",
+                    criterion,
+                    re.I,
+                ):
+                    continue
+                if any(
+                    question.id in c.question_ids
+                    and re.search(
+                        r"\b(?:missing|unavailable|absent|unreported|not provided|not reported)\b",
+                        c.statement,
+                        re.I,
+                    )
+                    for c in claims.values()
+                ):
+                    continue
+                quality_gaps.append(
+                    ResearchGap(
+                        id=stable_id("report_quality_gap", s.run_id, question.id, index),
+                        question_id=question.id,
+                        missing_aspect=(
+                            "The final quotations do not establish the requested "
+                            "missing-data inventory: " + criterion
+                        ),
+                        needed_source_types=(SourceType.WEB, SourceType.DOCUMENT),
+                        recommended_query="Find reporting scope and missing-data information.",
+                    )
+                )
     blocked = [a for a in s.citation_audit if a.claim_id not in accepted]
     approved = s.critic_verdict is not None and s.critic_verdict.decision == "approved"
     complete = (
@@ -53,6 +114,7 @@ def finalize(state: ResearchState) -> Update:
         and approved
         and s.coverage_status == "sufficient"
         and not s.stage_error
+        and not quality_gaps
     )
     reason = s.stop_reason.value if s.stop_reason else "no_evidence"
     if complete:
@@ -71,6 +133,8 @@ def finalize(state: ResearchState) -> Update:
             reason = "model_call_limit" if quality_remaining(s) < 2 else "rewrite_limit"
     if s.stage_error:
         reason = s.stop_reason.value if s.stop_reason else "fatal_error"
+    if quality_gaps and not s.stage_error:
+        reason = "no_progress" if reason == "sufficient" else reason
     report = None
     if s.draft_report and claims:
         report = Report(
@@ -101,6 +165,27 @@ def finalize(state: ResearchState) -> Update:
     return checked_patch(
         state,
         {
+            **(
+                {
+                    "gaps": [record_data(g) for g in (*s.gaps, *quality_gaps)],
+                    "coverage_status": "missing",
+                    "coverage_by_question": {
+                        qid: record_data(
+                            QuestionCoverage(
+                                question_id=qid,
+                                status=QuestionCoverageStatus.PARTIAL,
+                                evidence_ids=coverage.evidence_ids,
+                                rationale="Final report checks left a criterion unresolved.",
+                            )
+                        )
+                        if any(g.question_id == qid for g in quality_gaps)
+                        else record_data(coverage)
+                        for qid, coverage in s.coverage_by_question.items()
+                    },
+                }
+                if quality_gaps
+                else {}
+            ),
             "report_claims": {cid: record_data(c) for cid, c in claims.items()},
             "claim_evidence_map": {
                 lid: record_data(link)
@@ -363,6 +448,13 @@ def render_report(state: ResearchState) -> str:
                 "measurement scopes unless the evidence comparison audit explicitly says so. "
                 "Differing values remain unresolved; quotation checks do not select a winner."
             )
+    if any(e.kind == "report_quality_guard" for e in s.events.values()):
+        lines.append(
+            "Ambiguous flattened numeric tables and exercise instructions are excluded. "
+            "Missing-data criteria need explicit reporting evidence; absence from a search "
+            "excerpt does not establish absence from the source. These conservative checks "
+            "do not establish general semantic completeness."
+        )
     if ocr_transcripts(s):
         lines.extend(["", OCR_TRANSCRIPT_LIMITATION])
     duplicates = working_evidence(s.evidence_store.values()).duplicates

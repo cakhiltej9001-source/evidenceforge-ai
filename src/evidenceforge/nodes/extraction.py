@@ -70,6 +70,34 @@ def readable_spans(text: str, size: int) -> Iterator[tuple[int, int]]:
             yield group_start, group_end
 
 
+def ambiguous_table(text: str) -> bool:
+    """Detect flattened numeric rows; never guess column associations."""
+    if any(separator in text for separator in ("\n", "\t", "|")):
+        return False
+    runs = re.findall(r"(?:<?\d+(?:\.\d+)?%?\s+){2,}<?\d+(?:\.\d+)?%?", text)
+    return len(runs) >= 2 and len(re.findall(r"\d+(?:\.\d+)?\s*%", text)) >= 6
+
+
+def safe_spans(text: str, size: int) -> Iterator[tuple[int, int]]:
+    """Separate exercise instructions from prose without altering snapshot offsets."""
+    boundaries = (
+        [0]
+        + [
+            match.start()
+            for match in re.finditer(
+                r"\b(?:Problem|Question|Exercise)\s+\d+\s*[-:.\u2013\u2014]", text
+            )
+        ]
+        + [len(text)]
+    )
+    for left, right in zip(boundaries[:-1], boundaries[1:], strict=True):
+        if re.match(r"^(?:Problem|Question|Exercise)\s+\d+", text[left:right]):
+            yield left, right
+            continue
+        for start, end in readable_spans(text[left:right], size):
+            yield left + start, left + end
+
+
 class EvidenceExtractor:
     def __init__(
         self,
@@ -78,10 +106,12 @@ class EvidenceExtractor:
         *,
         evict_lowest: bool = False,
         sentence_boundaries: bool = False,
+        quality_guards: bool = False,
     ) -> None:
         self.artifacts, self.options = artifacts, options
         self.evict_lowest = evict_lowest
         self.sentence_boundaries = sentence_boundaries
+        self.quality_guards = quality_guards
 
     def __call__(self, state: ResearchState) -> Update:
         snapshot = StateSnapshot.model_validate(state)
@@ -132,7 +162,9 @@ class EvidenceExtractor:
             acquired = snapshot.source_acquisitions[acquisition_ids[0]]
             produced = 0
             candidates = list(
-                readable_spans(content, self.options.passage_chars)
+                safe_spans(content, self.options.passage_chars)
+                if self.quality_guards
+                else readable_spans(content, self.options.passage_chars)
                 if self.sentence_boundaries
                 else spans(content, self.options.passage_chars)
             )
@@ -152,6 +184,20 @@ class EvidenceExtractor:
                 identifier = stable_id(
                     "evidence", snapshot.owner_scope, source_id, snapshot_id, start, end
                 )
+                if self.quality_guards and (
+                    ambiguous_table(passage)
+                    or re.match(
+                        r"^(?:Problem|Question|Exercise)\s+\d+\s*[-:.\u2013\u2014]", passage
+                    )
+                ):
+                    reject(
+                        identifier,
+                        source_id,
+                        "irrelevant",
+                        "Ambiguous flattened numeric table or exercise instructions; "
+                        "column associations were not inferred.",
+                    )
+                    continue
                 if self.sentence_boundaries and len(passage) > self.options.passage_chars:
                     reject(
                         identifier,
