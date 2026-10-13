@@ -69,6 +69,9 @@ passed both Python and container jobs: 515 tests in 39.30 seconds, strict mypy
 for 87 source files, lint/format, package build, deployment smoke, constrained
 Docker persistence/backup and authenticated gateway checks.
 
-Initial anonymous browser checks observed the earlier fixture UI. The owner
-reported saving secrets and rebooting; hosted activation is being rechecked.
-Source verification does not by itself prove the hosted revision has updated.
+Initial anonymous browser checks observed the earlier fixture UI. After saving
+private secrets and rebooting, the owner explicitly confirmed seeing Sign in to
+EvidenceForge on 13 October 2026. This confirms the new login screen in the
+owner's browser. The independent anonymous browser view remains under review;
+it has continued to show the earlier fixture page. No hosted provider requests
+were submitted during these checks.

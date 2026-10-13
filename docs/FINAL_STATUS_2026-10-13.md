@@ -96,5 +96,6 @@ Earlier verification records and provider receipts remain preserved.
 
 The owner requested live access behind login and reported saving private secrets.
 See [implementation and checks](STREAMLIT_LIVE_2026-10-13.md). Configured local UI
-research also defaults to Gemini and Tavily. Hosted activation is checked after
-publishing; the earlier anonymous fixture results remain historical.
+research also defaults to Gemini and Tavily. After publishing and rebooting, the owner confirmed the new sign-in screen.
+Independent anonymous browser activation remains unconfirmed; the earlier
+anonymous fixture results remain historical. No hosted API calls were submitted.
