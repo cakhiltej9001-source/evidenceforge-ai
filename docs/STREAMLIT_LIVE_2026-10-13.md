@@ -61,3 +61,14 @@ after publishing; broader research accuracy remains unclaimed.
 
 [Streamlit deployment](STREAMLIT_CLOUD.md) |
 [Earlier live provider screenshot](LIVE_PROVIDER_SCREENSHOT_2026-10-13.md)
+
+## Source CI result
+
+[CI for source 8940662](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/38409945905)
+passed both Python and container jobs: 515 tests in 39.30 seconds, strict mypy
+for 87 source files, lint/format, package build, deployment smoke, constrained
+Docker persistence/backup and authenticated gateway checks.
+
+Initial anonymous browser checks observed the earlier fixture UI. The owner
+reported saving secrets and rebooting; hosted activation is being rechecked.
+Source verification does not by itself prove the hosted revision has updated.
