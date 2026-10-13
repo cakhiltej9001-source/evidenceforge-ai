@@ -47,7 +47,11 @@ evidence with three explicit gaps. The original state/report was byte-identical
 and all provider ledger files were unchanged. Private results remain under
 .evidenceforge/verification/report-quality-2026-10-13/.
 
-No new Gemini, Tavily or LangSmith requests were made for these fixes. The
+No new provider requests were made while implementing the fixes. A subsequent
+separately approved [live Gemini/Tavily check](LIVE_PROVIDER_CHECK_2026-10-13.md)
+used 6 Gemini calls and 1 Tavily search: all provider calls passed. The report
+correctly remained partial with two evidence gaps; fresh-process recovery
+passed without extra calls. No new LangSmith request was made. The
 [12 October provider verification](REMAINING_FIXES_2026-10-12.md) and
 [earlier quality checks](REPORT_QUALITY_FIXES_2026-10-12.md) remain historical.
 The corrected tests address
@@ -62,7 +66,7 @@ without hiding the original result.
 | 1 | Package, configuration, schemas and state | Implemented and tested |
 | 2 | Manager, planning, context and queries | Implemented; plan scope still needs review |
 | 3 | Retrieval, snapshots and provenance | Implemented; prior live Tavily and fallback checks verified |
-| 4 | Coverage, synthesis, criticism and reports | Implemented; stricter table/absence guards verified offline; general semantic accuracy unclaimed |
+| 4 | Coverage, synthesis, criticism and reports | Implemented; stricter table/absence guards verified offline and in a bounded live run; report partial; general semantic accuracy unclaimed |
 | 5 | Documents, checkpoints and restart | Implemented locally; optional OCR bounded |
 | 6 | Ranking, inspection and numeric comparison | Implemented for documented scopes and grammar |
 | 7 | Budgets, receipts, cancellation and tracing | Implemented; synthetic LangSmith delivery/readback verified on 12 October |
