@@ -62,6 +62,7 @@ def test_exercise_ends_at_paragraph_boundary_and_offsets_stay_exact():
         "Wind generation is not missing.",
         "Wind generation is not unavailable.",
         "No data are missing for wind generation.",
+        "No wind generation percentages are missing.",
         "Wind generation is measured. Solar generation is missing.",
     ],
 )

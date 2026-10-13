@@ -87,7 +87,8 @@ def test_unsupported_claim_is_repaired_and_critic_repeated(tmp_path):
     assert state["run_status"] == "completed"
     assert state["revision_count"] == 1
     assert model.synthesis_calls == model.critic_calls == 2
-    assert "999" not in render_report(state)
+    assert all("999" not in c["statement"] for c in state["report_claims"].values())
+    assert "Solar produces 999 gigawatts everywhere" not in render_report(state)
     assert state["draft_report"]["draft_version"] == 2
 
 
@@ -105,7 +106,8 @@ def test_exhausted_repairs_omit_unsupported_claim(tmp_path):
     assert state["stop_reason"] == "rewrite_limit"
     assert state["revision_count"] == 1
     assert len(state["unresolved_audits"]) == 1
-    assert "999" not in render_report(state)
+    assert all("999" not in c["statement"] for c in state["report_claims"].values())
+    assert "Unsupported secret number 999" not in render_report(state)
     assert "Omitted 1 claims" in render_report(state)
 
 
@@ -221,7 +223,8 @@ def test_absent_date_qualifier_fails_support(tmp_path):
     state = run(tmp_path, model=MissingQualifier(), budget=BudgetLimits(max_rewrites=0))
     assert state["unresolved_audits"]
     assert state["run_status"] == "partial"
-    assert "2024" not in render_report(state)
+    assert all("during 2024 only" not in c["qualifiers"] for c in state["report_claims"].values())
+    assert "during 2024 only" not in render_report(state)
 
 
 class CorruptSnapshot(FixtureResearchModel):

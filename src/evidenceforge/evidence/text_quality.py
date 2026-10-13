@@ -10,6 +10,7 @@ ABSENCE = re.compile(
 )
 NEGATED_ABSENCE = re.compile(
     r"\b(?:not|never)\s+(?:missing|unavailable|absent|unreported)\b"
+    r"|\bno\b[^.!?;\n]{0,120}\bmissing\b"
     r"|\bno\s+(?:(?:data|values|percentages)\s+(?:are|were)\s+)?missing\b",
     re.I,
 )
