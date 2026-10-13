@@ -1,4 +1,4 @@
-"""Community Cloud workbench with owner login and private provider secrets."""
+"""Community Cloud workbench with optional login and private provider secrets."""
 
 import os
 import sys
@@ -23,11 +23,11 @@ try:
         settings.model_provider != "gemini"
         or settings.model_api_key is None
         or settings.tavily_api_key is None
-        or settings.auth_password_hash is None
+        or (settings.auth_required and settings.auth_password_hash is None)
     ):
         raise ConfigurationError(
             "Live hosted setup is incomplete. The owner must add Gemini, Tavily "
-            "and login settings in Streamlit App settings > Secrets."
+            "and required access settings in Streamlit App settings > Secrets."
         )
 except ConfigurationError as exc:
     st.set_page_config(page_title="EvidenceForge", page_icon=":mag:", layout="wide")

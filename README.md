@@ -30,8 +30,9 @@ These bounded rules do not establish general semantic accuracy. See
 [current fixes and measured verification](docs/FINAL_STATUS_2026-10-13.md).
 
 **Hosted app:** [Open EvidenceForge on Streamlit](https://evidenceforge-ai-akhiltej.streamlit.app/).
-[Login-protected live mode](docs/STREAMLIT_LIVE_2026-10-13.md) uses privately
-configured Gemini and Tavily keys. Sign in, create a plan and approve it.
+[Public live mode](docs/STREAMLIT_PUBLIC_LIVE_2026-10-13.md) uses privately
+configured Gemini and Tavily keys without a password, as requested by the owner.
+Create a plan, review it and approve it. Each browser session has its own scope.
 Hosting remains free only (INR 0/month); provider usage may consume credits.
 Hosted storage is temporary. The local workbench keeps durable research.
 An explicit offline demo mode remains available. Repository access is private.
@@ -52,7 +53,7 @@ See [current phase status](docs/FINAL_STATUS_2026-10-13.md). Actual hosted
 | Storage | Scoped SQLite checkpoints, durable call receipts and immutable source snapshots |
 | Interface | CLI plus optional Streamlit workbench |
 | Evaluation | Offline regression and a frozen 20-case, 40-answer controlled Gemini comparison |
-| Deployment | Streamlit live mode behind login; explicit offline demo; durable local installation; constrained Docker and authenticated gateway verified in private CI |
+| Deployment | Public Streamlit live mode with browser-session scopes; explicit offline demo; durable local installation; constrained Docker and authenticated gateway verified in private CI |
 
 ## 🧠 Architecture
 

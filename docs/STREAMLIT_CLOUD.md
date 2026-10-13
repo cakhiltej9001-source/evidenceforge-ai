@@ -1,5 +1,9 @@
 # Streamlit Community Cloud deployment
 
+> Update: the owner subsequently requested removing the password.
+> See [current public live mode](STREAMLIT_PUBLIC_LIVE_2026-10-13.md).
+
+
 ## Current live-mode update - 13 October 2026
 
 The owner requested login-protected live research with the saved Gemini/Tavily

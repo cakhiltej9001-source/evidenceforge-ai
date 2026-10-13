@@ -306,16 +306,23 @@ def main(*, public_demo: bool = False, cloud_hosted: bool = False) -> None:
                 "Hosted files and saved research are temporary. Download reports before "
                 "leaving; use the local app for durable storage."
             )
-        owner = (
-            "hosted"
-            if required(load_settings())
-            else st.sidebar.text_input("Local workspace scope", value="local")
-        )
-        st.sidebar.caption(
-            "Hosted access uses one trusted owner account."
-            if required(load_settings())
-            else "Scope names separate local records. Local access is restricted to this computer."
-        )
+        if cloud_hosted and not required(load_settings()):
+            owner = st.session_state.setdefault("cloud_visitor_owner", "visitor_" + uuid4().hex)
+            st.sidebar.caption("Temporary research for this browser session only.")
+        else:
+            owner = (
+                "hosted"
+                if required(load_settings())
+                else st.sidebar.text_input("Local workspace scope", value="local")
+            )
+            st.sidebar.caption(
+                "Hosted access uses one trusted owner account."
+                if required(load_settings())
+                else (
+                    "Scope names separate local records. "
+                    "Local access is restricted to this computer."
+                )
+            )
     app = workbench(str(directory.resolve()))
     try:
         ResearchRequest(question="Workspace selection", owner_scope=owner)

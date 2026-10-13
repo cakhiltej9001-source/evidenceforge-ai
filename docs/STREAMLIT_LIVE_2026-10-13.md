@@ -1,5 +1,9 @@
 # Login-protected live research on Streamlit - 13 October 2026
 
+> Update: the owner subsequently requested removing the password.
+> See [current public live mode](STREAMLIT_PUBLIC_LIVE_2026-10-13.md).
+
+
 The owner approved using the saved Gemini and Tavily keys behind login and
 reported saving the prepared secrets in Streamlit App settings.
 

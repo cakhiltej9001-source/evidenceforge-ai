@@ -1,4 +1,4 @@
-"""Streamlit Cloud bootstrap with explicit offline mode and private live login."""
+"""Streamlit Cloud bootstrap with explicit offline mode and optional live login."""
 
 import json
 from collections.abc import Mapping, MutableMapping
@@ -7,6 +7,7 @@ from evidenceforge.config import ConfigurationError
 
 CLOUD_KEYS = (
     "EVIDENCEFORGE_CLOUD_MODE",
+    "EVIDENCEFORGE_CLOUD_ACCESS",
     "EVIDENCEFORGE_MODEL_PROVIDER",
     "EVIDENCEFORGE_MODEL_ID",
     "EVIDENCEFORGE_MODEL_API_KEY",
@@ -18,7 +19,7 @@ CLOUD_KEYS = (
 
 
 def configure_cloud(environ: MutableMapping[str, str], secrets: Mapping[str, object]) -> bool:
-    """Return fixture mode; live mode always requires the existing owner login."""
+    """Return fixture mode; public live access is the default, login is opt-in."""
     for key in CLOUD_KEYS:
         if key in secrets:
             value = secrets[key]
@@ -34,7 +35,10 @@ def configure_cloud(environ: MutableMapping[str, str], secrets: Mapping[str, obj
         for key in ("MODEL_API_KEY", "MODEL_ID", "TAVILY_API_KEY"):
             environ["EVIDENCEFORGE_" + key] = ""
         return True
-    environ["EVIDENCEFORGE_AUTH_REQUIRED"] = "true"
+    access = environ.get("EVIDENCEFORGE_CLOUD_ACCESS", "public").strip().lower()
+    if access not in {"public", "login"}:
+        raise ConfigurationError("Cloud access must be public or login.")
+    environ["EVIDENCEFORGE_AUTH_REQUIRED"] = str(access == "login").lower()
     environ.setdefault("EVIDENCEFORGE_MODEL_PROVIDER", "gemini")
     environ.setdefault(
         "EVIDENCEFORGE_BUDGET",

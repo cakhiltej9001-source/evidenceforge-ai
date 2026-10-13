@@ -1,6 +1,6 @@
 # EvidenceForge status - 13 October 2026
 
-Hosting remains **free only (INR 0/month)**. The Streamlit app now supports login-protected live mode
+Hosting remains **free only (INR 0/month)**. The Streamlit app now supports public live mode without a password
 with private provider keys and temporary hosted storage. Durable full research stays local.
 
 ## Current fixes
@@ -99,3 +99,9 @@ See [implementation and checks](STREAMLIT_LIVE_2026-10-13.md). Configured local 
 research also defaults to Gemini and Tavily. After publishing and rebooting, the owner confirmed the new sign-in screen.
 Independent anonymous browser activation remains unconfirmed; the earlier
 anonymous fixture results remain historical. No hosted API calls were submitted.
+
+## Password removed at owner request
+
+See [public live mode](STREAMLIT_PUBLIC_LIVE_2026-10-13.md). Visitor scopes replace
+the shared owner workspace for anonymous sessions; provider keys remain private.
+Per-run API limits remain in force. Hosted activation is checked separately.
