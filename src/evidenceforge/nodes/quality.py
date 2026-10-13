@@ -333,7 +333,7 @@ class Synthesis(QualityNode):
             )
             if (
                 self.options.quality_input_version == 2
-                and self.options.quote_selection_version in (1, 2, 3, 4, 5)
+                and self.options.quote_selection_version in (1, 2, 3, 4, 5, 6)
                 and isinstance(self.model, QuoteSelectionModel)
             ):
                 selection = await self.response(

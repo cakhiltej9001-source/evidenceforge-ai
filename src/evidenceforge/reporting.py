@@ -7,6 +7,12 @@ from typing import cast
 from pydantic import JsonValue
 
 from evidenceforge.evidence.deduplication import working_evidence
+from evidenceforge.evidence.text_quality import (
+    EXERCISE,
+    absence_supported,
+    aligned_table,
+    ambiguous_flat_table,
+)
 from evidenceforge.graph.state import ResearchState, StateSnapshot
 from evidenceforge.identity import stable_id
 from evidenceforge.nodes.common import Update, checked_patch, record_data
@@ -56,11 +62,17 @@ def finalize(state: ResearchState) -> Update:
     }
     claims = {cid: c for cid, c in s.report_claims.items() if cid in accepted}
     quality_gaps = []
-    guarded = any(e.kind == "report_quality_guard" for e in s.events.values())
+    strict = any(e.kind == "report_quality_guard_v2" for e in s.events.values())
+    guarded = strict or any(e.kind == "report_quality_guard" for e in s.events.values())
     if guarded:
         for cid, claim in tuple(claims.items()):
-            if ambiguous_table(claim.statement) or re.search(
-                r"\b(?:Problem|Question|Exercise)\s+\d+\s*[-:.\u2013\u2014]", claim.statement
+            if (
+                (ambiguous_flat_table(claim.statement) or EXERCISE.search(claim.statement))
+                if strict
+                else ambiguous_table(claim.statement)
+                or re.search(
+                    r"\b(?:Problem|Question|Exercise)\s+\d+\s*[-:.\u2013\u2014]", claim.statement
+                )
             ):
                 del claims[cid]
                 for qid in claim.question_ids:
@@ -84,7 +96,12 @@ def finalize(state: ResearchState) -> Update:
                     re.I,
                 ):
                     continue
-                if any(
+                if strict and absence_supported(
+                    criterion,
+                    (c.statement for c in claims.values() if question.id in c.question_ids),
+                ):
+                    continue
+                if not strict and any(
                     question.id in c.question_ids
                     and re.search(
                         r"\b(?:missing|unavailable|absent|unreported|not provided|not reported)\b",
@@ -356,6 +373,18 @@ def render_report(state: ResearchState) -> str:
                 rendered.append(f"Supported quotation Q{quote_numbers[cid]}: {refs}{suffix}")
             elif readable and claim.statement in shown:
                 rendered.append(f"See quotation Q{shown[claim.statement]} above. {refs}{suffix}")
+            elif any(
+                e.kind == "report_quality_guard_v2" for e in s.events.values()
+            ) and aligned_table(claim.statement):
+                longest = max(
+                    (len(m.group()) for m in re.finditer(chr(96) + "+", claim.statement)), default=0
+                )
+                fence = chr(96) * max(3, longest + 1)
+                rendered.append(
+                    f"**Q{quote_numbers[cid]}.** {refs}{suffix}\n\n"
+                    f"{fence}text\n{claim.statement}\n{fence}"
+                )
+                shown[claim.statement] = quote_numbers[cid]
             else:
                 label = f"**Q{quote_numbers[cid]}.** " if readable else ""
                 rendered.append(label + f'"{escape(claim.statement)}" ' + refs + suffix)
@@ -448,7 +477,9 @@ def render_report(state: ResearchState) -> str:
                 "measurement scopes unless the evidence comparison audit explicitly says so. "
                 "Differing values remain unresolved; quotation checks do not select a winner."
             )
-    if any(e.kind == "report_quality_guard" for e in s.events.values()):
+    if any(
+        e.kind in {"report_quality_guard", "report_quality_guard_v2"} for e in s.events.values()
+    ):
         lines.append(
             "Ambiguous flattened numeric tables and exercise instructions are excluded. "
             "Missing-data criteria need explicit reporting evidence; absence from a search "

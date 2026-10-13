@@ -107,13 +107,21 @@ class EvidenceExtractor:
         evict_lowest: bool = False,
         sentence_boundaries: bool = False,
         quality_guards: bool = False,
+        strict_quality_guards: bool = False,
     ) -> None:
         self.artifacts, self.options = artifacts, options
         self.evict_lowest = evict_lowest
         self.sentence_boundaries = sentence_boundaries
         self.quality_guards = quality_guards
+        self.strict_quality_guards = strict_quality_guards
 
     def __call__(self, state: ResearchState) -> Update:
+        from evidenceforge.evidence.text_quality import (
+            EXERCISE,
+            ambiguous_flat_table,
+            quality_spans,
+        )
+
         snapshot = StateSnapshot.model_validate(state)
         if snapshot.run_status != "running" or snapshot.iteration_count == 0:
             return {}
@@ -162,7 +170,9 @@ class EvidenceExtractor:
             acquired = snapshot.source_acquisitions[acquisition_ids[0]]
             produced = 0
             candidates = list(
-                safe_spans(content, self.options.passage_chars)
+                quality_spans(content, self.options.passage_chars)
+                if self.strict_quality_guards
+                else safe_spans(content, self.options.passage_chars)
                 if self.quality_guards
                 else readable_spans(content, self.options.passage_chars)
                 if self.sentence_boundaries
@@ -185,7 +195,9 @@ class EvidenceExtractor:
                     "evidence", snapshot.owner_scope, source_id, snapshot_id, start, end
                 )
                 if self.quality_guards and (
-                    ambiguous_table(passage)
+                    (ambiguous_flat_table(passage) or EXERCISE.match(passage))
+                    if self.strict_quality_guards
+                    else ambiguous_table(passage)
                     or re.match(
                         r"^(?:Problem|Question|Exercise)\s+\d+\s*[-:.\u2013\u2014]", passage
                     )
