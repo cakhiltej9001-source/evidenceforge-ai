@@ -22,3 +22,11 @@ Gemini or Tavily requests were made while removing the password.
 
 Earlier login-protected deployment records remain historical. Hosted activation
 is checked separately from source tests and GitHub CI.
+
+## Verification result
+
+All 9 targeted live/access tests passed. [Full CI](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/38413415556)
+passed for source 078546ac299ed4634e84a80bc9ef824f2521f39c: 517 tests in
+39.59 seconds, plus lint/format/types, build and container checks. No private
+credentials or provider receipts were published. Hosted UI activation is
+observed separately from these source checks.
