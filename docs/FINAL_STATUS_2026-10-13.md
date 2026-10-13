@@ -85,3 +85,9 @@ No new hosting resources were created. Credentials and private replay evidence
 remain ignored by Git. See [setup](submission/SETUP.md),
 [limitations](submission/LIMITATIONS.md), and the
 [12 October historical status](FINAL_STATUS_2026-10-12.md).
+
+## Fresh live test with screenshot
+
+A second separately approved campaign used six Gemini calls and one Tavily
+search. See the [measured outcome and browser screenshot](LIVE_PROVIDER_SCREENSHOT_2026-10-13.md).
+Earlier verification records and provider receipts remain preserved.
