@@ -286,7 +286,7 @@ durable receipts retain their existing incompatibility checks.
 
 ## New report quality contract
 
-New runs use quote-selection version 5. Conservative guards exclude ambiguous
+New runs use quote-selection version 6. Conservative guards exclude ambiguous
 flattened numeric tables and numbered exercise blocks. Requested missing-data
 criteria need explicit absence statements in final quotations; otherwise the
 report discloses a gap and does not complete. These checks do not establish
@@ -295,3 +295,10 @@ general semantic completeness or reconstruct table columns.
 Old saved runs restore their registered contracts. Start a new run to use the
 new behavior; reconnecting an old completed run does not rewrite it or authorize
 additional provider work. See [quality verification](../REPORT_QUALITY_FIXES_2026-10-12.md).
+
+Consistent pipe/tab tables keep their headers and rows as atomic passages and
+verbatim Markdown blocks. Line breaks alone do not validate flattened numeric
+rows. Missing-data subject words must occur in the same clause as explicit absence
+evidence; unrelated or negated absence is not sufficient. Numbered exercise
+sections stop at paragraph boundaries. These are bounded lexical/layout checks.
+See [current verification](../FINAL_STATUS_2026-10-13.md).

@@ -136,3 +136,15 @@ passed. Synthetic remote counter tracing is verified. Persistent hosted operatio
 public offline Streamlit workflow has been deployed and exercised.
 The PDF describes API-or-MCP extension and replaceable search providers; it does
 not mandate a particular MCP server, hosting platform or human-reviewed benchmark.
+
+## 13 October quality follow-up
+
+Contract version 6 preserves consistent table delimiters/header rows, rejects
+ambiguous numeric rows despite cosmetic line breaks, checks absence evidence
+against criterion subjects, and retains prose after exercise paragraphs. Earlier
+saved contracts remain unchanged. Unsupported-claim safety tests now inspect
+claims and qualifiers rather than matching arbitrary digits in evidence hashes.
+
+These rules do not reconstruct lost PDF layout or establish general semantic
+completeness. No new provider calls were made for this work. Independent human
+review remains open. See [current status](../FINAL_STATUS_2026-10-13.md).
