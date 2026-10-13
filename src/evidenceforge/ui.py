@@ -265,7 +265,7 @@ def authenticated() -> bool:
     return False
 
 
-def main(*, public_demo: bool = False) -> None:
+def main(*, public_demo: bool = False, cloud_hosted: bool = False) -> None:
     st.set_page_config(page_title="EvidenceForge", page_icon="🔎", layout="wide")
     if not authenticated():
         return
@@ -285,13 +285,27 @@ def main(*, public_demo: bool = False) -> None:
         owner = st.session_state.setdefault("public_demo_owner", "visitor_" + uuid4().hex)
         st.sidebar.caption("Temporary storage for this browser session only.")
     else:
-        st.caption("Local evidence workbench | exact passages and inspectable citations")
+        st.caption(
+            "Hosted live research | exact passages and inspectable citations"
+            if cloud_hosted
+            else "Local evidence workbench | exact passages and inspectable citations"
+        )
         st.info(
             "Choose offline reasoning or configured Gemini. Saved Gemini workflows support "
             "plan approval, editing and resume with durable call records. "
             "Synthetic demos are examples; use documents for your own research."
         )
-        directory = load_settings().data_dir
+        directory = (
+            Path(gettempdir()) / "evidenceforge-community-live"
+            if cloud_hosted
+            else load_settings().data_dir
+        )
+        if cloud_hosted:
+            st.warning(
+                "Hosting is free; Gemini and Tavily may consume your provider allowance. "
+                "Hosted files and saved research are temporary. Download reports before "
+                "leaving; use the local app for durable storage."
+            )
         owner = (
             "hosted"
             if required(load_settings())
@@ -314,7 +328,7 @@ def main(*, public_demo: bool = False) -> None:
         st.session_state["current_owner"] = owner
     entered = ""
     if not public_demo:
-        with st.expander("Add local evidence", expanded=False):
+        with st.expander("Add document evidence", expanded=False):
             upload = st.file_uploader("PDF, DOCX or TXT, up to 4 MB", type=["pdf", "docx", "txt"])
             if st.button("Import document", disabled=upload is None):
                 try:
@@ -342,7 +356,15 @@ def main(*, public_demo: bool = False) -> None:
             "Research question", value="Compare solar and wind electricity output."
         )
         reasoning = st.selectbox(
-            "Reasoning provider", ["Offline"] if public_demo else ["Offline", "Gemini (configured)"]
+            "Reasoning provider",
+            ["Offline"] if public_demo else ["Offline", "Gemini (configured)"],
+            index=(
+                1
+                if not public_demo
+                and load_settings().model_provider == "gemini"
+                and load_settings().model_api_key is not None
+                else 0
+            ),
         )
         live_web = False
         live_energy = False
@@ -351,12 +373,21 @@ def main(*, public_demo: bool = False) -> None:
                 "Gemini sends the question and selected evidence to Google "
                 "and uses your configured call/token allowances."
             )
-            live_web = st.checkbox("Search live web with Tavily", value=False)
+            live_web = st.checkbox(
+                "Search live web with Tavily",
+                value=load_settings().tavily_api_key is not None,
+            )
             live_energy = st.checkbox("Include GB half-hour energy API", value=False)
             st.caption(
                 "Live search uses configured search credits; the energy API returns GB "
                 "generation shares, not annual/global output. Documents are searched "
                 "alongside selected live sources."
+            )
+        if not public_demo:
+            limits = load_settings().budget
+            st.caption(
+                f"Per run: up to {limits.max_model_calls} model calls and "
+                f"{limits.max_searches} searches. Review the plan before continuing."
             )
         demo = st.selectbox(
             "Synthetic scenario (used when no live sources or documents are selected)",

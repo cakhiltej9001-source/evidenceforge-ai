@@ -24,3 +24,5 @@ traces/
 *.sqlite-*
 *.sqlite3-*
 
+
+.streamlit/secrets.toml

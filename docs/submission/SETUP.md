@@ -302,3 +302,11 @@ rows. Missing-data subject words must occur in the same clause as explicit absen
 evidence; unrelated or negated absence is not sufficient. Numbered exercise
 sections stop at paragraph boundaries. These are bounded lexical/layout checks.
 See [current verification](../FINAL_STATUS_2026-10-13.md).
+
+## Login-protected live mode - 13 October 2026
+
+The owner requested hosted live research using private Gemini/Tavily keys.
+See [live mode and checks](../STREAMLIT_LIVE_2026-10-13.md). Configured local
+UI research now selects these providers by default. Hosted storage remains
+temporary; hosting is free but provider usage may consume credits. Earlier
+fixture-only deployment checks above are historical.

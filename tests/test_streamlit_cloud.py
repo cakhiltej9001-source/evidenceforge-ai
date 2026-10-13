@@ -15,6 +15,7 @@ from evidenceforge.workbench import LocalWorkbench
 
 def test_public_demo_completes_and_isolates_visitors(tmp_path, monkeypatch):
     monkeypatch.setenv("EVIDENCEFORGE_AUTH_REQUIRED", "false")
+    monkeypatch.setenv("EVIDENCEFORGE_CLOUD_MODE", "demo")
     monkeypatch.delenv("RENDER", raising=False)
     for key, value in {
         "MODEL_PROVIDER": "fixture",

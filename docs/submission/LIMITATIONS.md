@@ -148,3 +148,11 @@ claims and qualifiers rather than matching arbitrary digits in evidence hashes.
 These rules do not reconstruct lost PDF layout or establish general semantic
 completeness. No new provider calls were made for this work. Independent human
 review remains open. See [current status](../FINAL_STATUS_2026-10-13.md).
+
+## Login-protected live mode - 13 October 2026
+
+The owner requested hosted live research using private Gemini/Tavily keys.
+See [live mode and checks](../STREAMLIT_LIVE_2026-10-13.md). Configured local
+UI research now selects these providers by default. Hosted storage remains
+temporary; hosting is free but provider usage may consume credits. Earlier
+fixture-only deployment checks above are historical.

@@ -1,7 +1,7 @@
 # EvidenceForge status - 13 October 2026
 
-Hosting remains **free only (INR 0/month)**. The public Streamlit app is an offline
-fixture demo with temporary visitor storage. Durable full research stays local.
+Hosting remains **free only (INR 0/month)**. The Streamlit app now supports login-protected live mode
+with private provider keys and temporary hosted storage. Durable full research stays local.
 
 ## Current fixes
 
@@ -91,3 +91,10 @@ remain ignored by Git. See [setup](submission/SETUP.md),
 A second separately approved campaign used six Gemini calls and one Tavily
 search. See the [measured outcome and browser screenshot](LIVE_PROVIDER_SCREENSHOT_2026-10-13.md).
 Earlier verification records and provider receipts remain preserved.
+
+## Hosted live-mode update
+
+The owner requested live access behind login and reported saving private secrets.
+See [implementation and checks](STREAMLIT_LIVE_2026-10-13.md). Configured local UI
+research also defaults to Gemini and Tavily. Hosted activation is checked after
+publishing; the earlier anonymous fixture results remain historical.

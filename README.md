@@ -29,12 +29,12 @@ to the requested subject clause, and retain useful prose after exercise blocks.
 These bounded rules do not establish general semantic accuracy. See
 [current fixes and measured verification](docs/FINAL_STATUS_2026-10-13.md).
 
-**Public demo:** [Open EvidenceForge on Streamlit](https://evidenceforge-ai-akhiltej.streamlit.app/).
-Choose **Create plan → Approve plan** to try the workflow. The public
-[fixture demonstration](docs/STREAMLIT_CLOUD.md) separates browser sessions and
-uses temporary storage without document uploads or paid provider calls. The
-full workbench runs locally with durable storage. Hosting is **free only (₹0/month)**;
-this replaces the earlier ₹5/month allowance. Repository access is private.
+**Hosted app:** [Open EvidenceForge on Streamlit](https://evidenceforge-ai-akhiltej.streamlit.app/).
+[Login-protected live mode](docs/STREAMLIT_LIVE_2026-10-13.md) uses privately
+configured Gemini and Tavily keys. Sign in, create a plan and approve it.
+Hosting remains free only (INR 0/month); provider usage may consume credits.
+Hosted storage is temporary. The local workbench keeps durable research.
+An explicit offline demo mode remains available. Repository access is private.
 See [current phase status](docs/FINAL_STATUS_2026-10-13.md). Actual hosted
 [Markdown/JSON downloads and fresh-visitor isolation](docs/HOSTED_DOWNLOAD_VERIFICATION_2026-10-08.md) passed; full source CI passed 508 tests.
 
@@ -52,7 +52,7 @@ See [current phase status](docs/FINAL_STATUS_2026-10-13.md). Actual hosted
 | Storage | Scoped SQLite checkpoints, durable call receipts and immutable source snapshots |
 | Interface | CLI plus optional Streamlit workbench |
 | Evaluation | Offline regression and a frozen 20-case, 40-answer controlled Gemini comparison |
-| Deployment | Public offline Streamlit demo; durable local installation; constrained Docker and authenticated gateway verified in private CI |
+| Deployment | Streamlit live mode behind login; explicit offline demo; durable local installation; constrained Docker and authenticated gateway verified in private CI |
 
 ## 🧠 Architecture
 
@@ -411,7 +411,7 @@ quality of a combined live Gemini/web report.
 | Report is partial | Unresolved criteria, conflict or an exhausted allowance | Inspect stop reasons, evidence and gaps; review the plan rather than treating partial as complete |
 | Document is unavailable under an owner | Scope or document ID does not match | Use the ingestion ID and same owner/data directory |
 | Scanned PDF has no extracted text | OCR is disabled, unavailable or exceeded a limit | Use Python 3.12 with the `ocr` extra and `--ocr`; inspect ingestion warnings and the page image |
-| Another person cannot open localhost | Localhost points to their own computer | Open the [public offline demo](https://evidenceforge-ai-akhiltej.streamlit.app/), or run an authorized local installation for live research |
+| Another person cannot open localhost | Localhost points to their own computer | Open the [hosted app](https://evidenceforge-ai-akhiltej.streamlit.app/), or run an authorized local installation for live research |
 | Browser shows `ERR_CONNECTION_REFUSED` locally | The UI server is stopped or the port is wrong | Restart `evidenceforge-ui` on the selected port and keep it running; see [local access and public deployment](docs/PUBLIC_DEMO.md) |
 
 For a provider-free persistence check, run the following twice from separate

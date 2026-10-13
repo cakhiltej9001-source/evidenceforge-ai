@@ -1,5 +1,15 @@
 # Streamlit Community Cloud deployment
 
+## Current live-mode update - 13 October 2026
+
+The owner requested login-protected live research with the saved Gemini/Tavily
+keys. See [live mode setup and verification](STREAMLIT_LIVE_2026-10-13.md).
+The entrypoint now reads private Streamlit secrets and forces owner login in
+live mode. Configured Gemini/Tavily are selected by default after login.
+Hosting is still free; storage is temporary and provider requests use credits.
+The records below describe the earlier fixture deployment.
+
+
 The owner requested a public Streamlit demonstration. The entrypoint is
 `scripts/streamlit_cloud/streamlit_app.py`, in private repository
 `cakhiltej9001-source/evidenceforge-ai`, branch `codex/pending-verification`.
@@ -58,8 +68,8 @@ The private connection is available. The source repository has not been made
 public. The deployed Streamlit app's **Make this app public** setting was enabled
 and checked again after saving.
 
-For future redeployment, use the entrypoint above and retain public fixture-only
-sharing. Do not upload the local `.env` or `.evidenceforge` data.
+For redeployment, use the same entrypoint. Choose live mode with private keys
+and owner login, or explicit demo mode for anonymous fixture-only sharing. Do not upload the local `.env` or `.evidenceforge` data.
 
 Official references: [deployment](https://docs.streamlit.io/deploy/streamlit-community-cloud/deploy-your-app/deploy),
 [dependency selection](https://docs.streamlit.io/deploy/streamlit-community-cloud/deploy-your-app/app-dependencies),
