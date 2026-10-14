@@ -8,9 +8,8 @@ import streamlit as st
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src"))
 
-from evidenceforge.cloud import configure_cloud  # noqa: E402
+from evidenceforge.cloud import configure_cloud, validate_cloud_configuration  # noqa: E402
 from evidenceforge.config import ConfigurationError, load_settings  # noqa: E402
-from evidenceforge.ui import main  # noqa: E402
 
 try:
     try:
@@ -18,6 +17,7 @@ try:
     except FileNotFoundError:
         secrets = {}
     public_demo = configure_cloud(os.environ, secrets)
+    validate_cloud_configuration(os.environ)
     settings = load_settings(env_file=None)
     if not public_demo and (
         settings.model_provider != "gemini"
@@ -34,5 +34,7 @@ except ConfigurationError as exc:
     st.title("EvidenceForge live research")
     st.error(str(exc))
     st.stop()
+
+from evidenceforge.ui import main  # noqa: E402
 
 main(public_demo=public_demo, cloud_hosted=not public_demo)

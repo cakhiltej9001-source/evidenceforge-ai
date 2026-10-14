@@ -36,7 +36,8 @@ Create a plan, review it and approve it. Each browser session has its own scope.
 Hosting remains free only (INR 0/month); provider usage may consume credits.
 Hosted storage is temporary. The local workbench keeps durable research.
 An explicit offline demo mode remains available. Repository access is private.
-See [current phase status](docs/FINAL_STATUS_2026-10-13.md). Actual hosted
+See the [14 October hosted configuration repair](docs/HOSTED_CONFIG_FIX_2026-10-14.md)
+and [current phase status](docs/FINAL_STATUS_2026-10-13.md). Actual hosted
 [Markdown/JSON downloads and fresh-visitor isolation](docs/HOSTED_DOWNLOAD_VERIFICATION_2026-10-08.md) passed; full source CI passed 517 tests.
 
 ## ✨ Project at a glance

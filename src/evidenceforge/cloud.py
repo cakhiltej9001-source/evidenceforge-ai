@@ -5,6 +5,8 @@ from collections.abc import Mapping, MutableMapping
 
 from evidenceforge.config import ConfigurationError
 
+DEFAULT_CLOUD_MODEL = "gemini-3.1-flash-lite"
+
 CLOUD_KEYS = (
     "EVIDENCEFORGE_CLOUD_MODE",
     "EVIDENCEFORGE_CLOUD_ACCESS",
@@ -39,7 +41,26 @@ def configure_cloud(environ: MutableMapping[str, str], secrets: Mapping[str, obj
     if access not in {"public", "login"}:
         raise ConfigurationError("Cloud access must be public or login.")
     environ["EVIDENCEFORGE_AUTH_REQUIRED"] = str(access == "login").lower()
-    environ.setdefault("EVIDENCEFORGE_MODEL_PROVIDER", "gemini")
+    # Live Cloud uses Gemini. A prior demo rerun may have left fixture/blank env values.
+    environ["EVIDENCEFORGE_MODEL_PROVIDER"] = "gemini"
+    for canonical, aliases in {
+        "EVIDENCEFORGE_MODEL_API_KEY": ("GEMINI_API_KEY", "GOOGLE_API_KEY"),
+        "EVIDENCEFORGE_TAVILY_API_KEY": ("TAVILY_API_KEY",),
+        "EVIDENCEFORGE_MODEL_ID": ("GEMINI_MODEL", "GEMINI_MODEL_ID"),
+    }.items():
+        supplied = [
+            secrets.get(canonical),
+            *(secrets.get(alias) for alias in aliases),
+            environ.get(canonical),
+            *(environ.get(alias) for alias in aliases),
+        ]
+        value = next(
+            (item.strip() for item in supplied if isinstance(item, str) and item.strip()),
+            "",
+        )
+        environ[canonical] = value
+    if not environ["EVIDENCEFORGE_MODEL_ID"]:
+        environ["EVIDENCEFORGE_MODEL_ID"] = DEFAULT_CLOUD_MODEL
     environ.setdefault(
         "EVIDENCEFORGE_BUDGET",
         json.dumps(
@@ -59,3 +80,29 @@ def configure_cloud(environ: MutableMapping[str, str], secrets: Mapping[str, obj
         ),
     )
     return False
+
+
+def validate_cloud_configuration(environ: Mapping[str, str]) -> None:
+    """Report only missing field names before Pydantic's root model validator runs."""
+    if environ.get("EVIDENCEFORGE_CLOUD_MODE", "live").strip().lower() == "demo":
+        return
+    missing = [
+        key
+        for key in (
+            "EVIDENCEFORGE_MODEL_ID",
+            "EVIDENCEFORGE_MODEL_API_KEY",
+            "EVIDENCEFORGE_TAVILY_API_KEY",
+        )
+        if not environ.get(key, "").strip()
+    ]
+    if (
+        environ.get("EVIDENCEFORGE_AUTH_REQUIRED") == "true"
+        and not environ.get("EVIDENCEFORGE_AUTH_PASSWORD_HASH", "").strip()
+    ):
+        missing.append("EVIDENCEFORGE_AUTH_PASSWORD_HASH")
+    if missing:
+        raise ConfigurationError(
+            "Live hosted setup is incomplete. Missing: "
+            + ", ".join(missing)
+            + ". Add these in Streamlit App settings > Secrets and save."
+        )
