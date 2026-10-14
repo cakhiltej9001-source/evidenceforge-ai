@@ -75,3 +75,12 @@ passed for 64ed4771569c7149f08ebc5a57ec21d49c9b40cd: 527 tests in 41.07 seconds,
 strict mypy for 87 source files and both Python/container jobs. All 10 targeted
 configuration regressions passed; the explicit before/after collision
 reproduction also passed separately. No new paid provider calls were made.
+
+## Resolved hosted setup
+
+After the owner saved both root-level API keys, an independent fresh anonymous
+browser confirmed the deployed live form: all six checks passed. The setup
+error and password form are absent, Gemini and Tavily are selected and Create
+plan is visible. See the [actual hosted screenshot and scope](HOSTED_LIVE_READY_2026-10-14.md).
+No research was started and no new provider calls were requested by the check.
+This supersedes the pending hosted-key status above.

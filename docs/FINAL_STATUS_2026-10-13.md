@@ -105,3 +105,12 @@ anonymous fixture results remain historical. No hosted API calls were submitted.
 See [public live mode](STREAMLIT_PUBLIC_LIVE_2026-10-13.md). Visitor scopes replace
 the shared owner workspace for anonymous sessions; provider keys remain private.
 Per-run API limits remain in force. Hosted activation is checked separately.
+
+## Hosted setup verified - 14 October 2026
+
+The missing root-level API keys were saved. An independent anonymous browser
+verified all six live UI checks: password absent, Gemini and Tavily selected,
+Create plan available, caller scope absent and no setup error. See the
+[actual hosted screenshot](HOSTED_LIVE_READY_2026-10-14.md). No research or new
+provider calls were requested by this check. Hosting remains free with
+temporary storage; earlier pending deployment/setup statements are superseded.
