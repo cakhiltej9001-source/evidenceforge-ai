@@ -114,3 +114,12 @@ Create plan available, caller scope absent and no setup error. See the
 [actual hosted screenshot](HOSTED_LIVE_READY_2026-10-14.md). No research or new
 provider calls were requested by this check. Hosting remains free with
 temporary storage; earlier pending deployment/setup statements are superseded.
+
+## Three hosted live cases - 14 October 2026
+
+The separately approved 18-Gemini/3-search campaign used 13 Gemini calls and two
+Tavily searches. Photovoltaics completed, seasons ended partial after a model-stage
+failure, and the atmosphere case failed before retrieval. See the
+[screenshots, usage receipts and limitations](HOSTED_LIVE_TESTS_2026-10-14.md).
+Two model-stage failures and incomplete detailed-error exports remain open;
+general live reliability is not established. Hosting remains free only.

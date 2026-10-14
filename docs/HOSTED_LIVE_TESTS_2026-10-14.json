@@ -1,0 +1,196 @@
+{
+  "date": "2026-10-14",
+  "target": "https://evidenceforge-ai-akhiltej.streamlit.app/",
+  "authorization": {
+    "gemini_calls": 18,
+    "tavily_searches": 3
+  },
+  "used": {
+    "gemini_calls": 13,
+    "tavily_searches": 2
+  },
+  "usage_method": "Provider counters parsed only after Gemini provider usage heading; generic workflow token counters are not provider receipts.",
+  "cases": [
+    {
+      "case": "01-seasons",
+      "title": "Earth seasons",
+      "question": "According to NASA, what causes Earth's seasons? Explain the role of axial tilt and sunlight. Use one focused research question and official NASA sources.",
+      "progress": {
+        "run_status": "partial",
+        "stop_reason": "fatal_error",
+        "retrieval_passes": 1,
+        "rewrites": 0,
+        "search_calls": 1,
+        "evidence_count": 37,
+        "tool_errors": 1,
+        "citation_checks": 3
+      },
+      "model": "gemini-3.1-flash-lite",
+      "claims": 3,
+      "evidence": 37,
+      "sources": [
+        {
+          "title": "\"Get a Straight Answer\"",
+          "url": "https://pwg.gsfc.nasa.gov/stargaze/StarFAQ1.htm",
+          "provider": "tavily"
+        },
+        {
+          "title": "What Causes the Seasons? | NASA Space Place \u2013 NASA Science for Kids",
+          "url": "https://spaceplace.nasa.gov/seasons",
+          "provider": "tavily"
+        },
+        {
+          "title": "Paleoclimatology: Explaining the Evidence - NASA Science",
+          "url": "https://science.nasa.gov/earth/earth-observatory/paleoclimatology-explaining-the-evidence",
+          "provider": "tavily"
+        },
+        {
+          "title": "Climate and Earth\u2019s Energy Budget - NASA Science",
+          "url": "https://science.nasa.gov/earth/earth-observatory/climate-and-earths-energy-budget",
+          "provider": "tavily"
+        },
+        {
+          "title": "Milankovitch (Orbital) Cycles and Their Role in Earth's Climate - NASA Science",
+          "url": "https://science.nasa.gov/science-research/earth-science/milankovitch-orbital-cycles-and-their-role-in-earths-climate",
+          "provider": "tavily"
+        }
+      ],
+      "checks": {
+        "live_export": true,
+        "gemini_export": true,
+        "within_model_cap": true,
+        "within_search_cap": true,
+        "exports_stable_without_research_retry": true,
+        "nonempty_findings": true,
+        "server_citations_supported": true,
+        "quotations_match_exported_evidence": true,
+        "no_duplicate_claims": true,
+        "credential_fields_absent": true
+      },
+      "provider_usage": {
+        "paid_calls": 6,
+        "succeeded_calls": 5,
+        "unconfirmed_calls": 0,
+        "input_tokens_known": 61749,
+        "output_tokens_known": 2805,
+        "tokens_used_or_reserved": 64554,
+        "usage_unknown_calls": 0
+      },
+      "search_credits_known": 1,
+      "estimated_cost_usd": null,
+      "original_report_sha256": "42ca100adafc47a18ad4e114d463e403fe04f687f6f3228e889de76ca86aeaad"
+    },
+    {
+      "case": "02-photovoltaics",
+      "title": "Photovoltaic electricity",
+      "question": "According to the U.S. Department of Energy, how do photovoltaic cells convert sunlight into electricity? Use one focused research question and official energy.gov sources.",
+      "progress": {
+        "run_status": "completed",
+        "stop_reason": "sufficient",
+        "retrieval_passes": 1,
+        "rewrites": 0,
+        "search_calls": 1,
+        "evidence_count": 29,
+        "tool_errors": 0,
+        "citation_checks": 3
+      },
+      "model": "gemini-3.1-flash-lite",
+      "claims": 3,
+      "evidence": 29,
+      "sources": [
+        {
+          "title": "PV Cells 101, Part 2: Solar Photovoltaic Cell Research Directions | Department of Energy",
+          "url": "https://www.energy.gov/cmei/systems/articles/pv-cells-101-part-2-solar-photovoltaic-cell-research-directions",
+          "provider": "tavily"
+        },
+        {
+          "title": "Solar Photovoltaic Performance and Efficiency Basics | Department of Energy",
+          "url": "https://www.energy.gov/cmei/systems/solar-photovoltaic-performance-and-efficiency-basics",
+          "provider": "tavily"
+        },
+        {
+          "title": "Solar Photovoltaic Cell Basics | Department of Energy",
+          "url": "https://www.energy.gov/cmei/systems/solar-photovoltaic-cell-basics",
+          "provider": "tavily"
+        },
+        {
+          "title": "PV Cells 101: A Primer on the Solar Photovoltaic Cell | Department of Energy",
+          "url": "https://www.energy.gov/cmei/systems/articles/pv-cells-101-primer-solar-photovoltaic-cell",
+          "provider": "tavily"
+        },
+        {
+          "title": "Solar Photovoltaic Technology Basics | Department of Energy",
+          "url": "https://www.energy.gov/cmei/systems/solar-photovoltaic-technology-basics",
+          "provider": "tavily"
+        }
+      ],
+      "checks": {
+        "live_export": true,
+        "gemini_export": true,
+        "within_model_cap": true,
+        "within_search_cap": true,
+        "exports_stable_without_research_retry": true,
+        "nonempty_findings": true,
+        "server_citations_supported": true,
+        "quotations_match_exported_evidence": true,
+        "no_duplicate_claims": true,
+        "credential_fields_absent": true
+      },
+      "provider_usage": {
+        "paid_calls": 6,
+        "succeeded_calls": 6,
+        "unconfirmed_calls": 0,
+        "input_tokens_known": 47364,
+        "output_tokens_known": 2608,
+        "tokens_used_or_reserved": 49972,
+        "usage_unknown_calls": 0
+      },
+      "search_credits_known": 1,
+      "estimated_cost_usd": null,
+      "original_report_sha256": "cadff175e1ae94f447323f24fdb6c04925c4bee8b4d297457d2e7c77750d9d9a"
+    },
+    {
+      "case": "03-atmospheres",
+      "title": "Atmospheric gas comparison",
+      "question": "Compare the main gases in Earth's and Mars's atmospheres using NASA sources. Include gas percentages only when explicitly provided and disclose missing percentages. Use one combined research question.",
+      "progress": {
+        "run_status": "failed",
+        "stop_reason": "fatal_error",
+        "retrieval_passes": 0,
+        "rewrites": 0,
+        "search_calls": 0,
+        "evidence_count": 0,
+        "tool_errors": 1,
+        "citation_checks": 0
+      },
+      "model": "gemini-3.1-flash-lite",
+      "claims": 0,
+      "evidence": 0,
+      "sources": [],
+      "checks": {
+        "live_export": true,
+        "gemini_export": true,
+        "within_model_cap": true,
+        "within_search_cap": true,
+        "exports_stable_without_research_retry": true,
+        "nonempty_findings": false,
+        "server_citations_supported": false,
+        "quotations_match_exported_evidence": false,
+        "no_duplicate_claims": true,
+        "credential_fields_absent": true
+      },
+      "provider_usage": {
+        "paid_calls": 1,
+        "succeeded_calls": 0,
+        "unconfirmed_calls": 0,
+        "input_tokens_known": 0,
+        "output_tokens_known": 0,
+        "tokens_used_or_reserved": 5503,
+        "usage_unknown_calls": 1
+      },
+      "search_credits_known": 0,
+      "estimated_cost_usd": null,
+      "original_report_sha256": "eb2f73074b7822b1b673f0fafeb8249a54f5731fa612f232b4eaf9386a5ec256"
+    }
+  ]
+}
