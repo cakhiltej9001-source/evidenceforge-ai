@@ -51,7 +51,15 @@ real Streamlit UI was exercised from a simulated first-call HTTP 503 to an appro
 rose report through both recovery paths. All provider content in these tests was
 synthetic, so this is not a fresh live Gemini/Tavily success claim.
 
-Lint, formatting and strict source type checking are required before publishing.
+Lint, formatting and strict type checking passed (88 source files).
+[Source CI](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/38589918480)
+passed **533 tests in 32.85 seconds**, plus the container persistence, backup/restore,
+UI health and authenticated gateway checks, for source commit `1b1279d`.
+
+The source fix is pushed to the deployed branch. An independent anonymous page
+check did not yet observe the new guidance. The browser management helper timed
+out, so an owner reboot was requested; hosted activation remains unconfirmed.
+
 A separate allowance of up to six Gemini calls and one Tavily search was requested
 for a fresh live rose check. No new provider calls have been made pending that
 reply. Earlier live outcomes and allowances remain unchanged.
