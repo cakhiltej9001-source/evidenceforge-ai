@@ -424,6 +424,7 @@ def main(*, public_demo: bool = False, cloud_hosted: bool = False) -> None:
                 "If Gemini is unavailable, select Offline and keep Tavily enabled to get "
                 "quotations from real web sources without Gemini calls."
             )
+            st.caption("New Gemini runs combine question review and planning in one call.")
             live_web = st.checkbox(
                 "Search live web with Tavily",
                 value=load_settings().tavily_api_key is not None,

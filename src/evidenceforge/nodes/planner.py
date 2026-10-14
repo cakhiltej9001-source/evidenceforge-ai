@@ -1,12 +1,14 @@
 """Validate a model plan, then assign deterministic question identities."""
 
 import asyncio
+from typing import cast
 
 from pydantic import ValidationError
 
 from evidenceforge.graph.state import ResearchState, StateSnapshot, validate_state
 from evidenceforge.identity import stable_id
 from evidenceforge.models.base import PlanningModel
+from evidenceforge.models.gemini import GeminiResearchModel
 from evidenceforge.nodes.common import (
     Update,
     checked_patch,
@@ -15,23 +17,28 @@ from evidenceforge.nodes.common import (
     initialization_patch,
     record_data,
 )
+from evidenceforge.nodes.input_review import GUIDANCE
 from evidenceforge.planning import (
     ModelUnavailable,
     PlanDraft,
     PlanningContractError,
     PlanningOptions,
     PlanScopeError,
+    ReviewedPlanDraft,
     normalized,
     parse_response,
     validate_plan_scope,
 )
-from evidenceforge.schemas import ResearchQuestion, ToolError
+from evidenceforge.schemas import ResearchQuestion, ToolError, utc_now
 
 
 class Planner:
-    def __init__(self, model: PlanningModel, options: PlanningOptions) -> None:
+    def __init__(
+        self, model: PlanningModel, options: PlanningOptions, *, reviewed_plan: bool = False
+    ) -> None:
         self.model = model
         self.options = options
+        self.reviewed_plan = reviewed_plan
 
     async def __call__(self, state: ResearchState) -> Update:
         state = validate_state(state)
@@ -52,10 +59,44 @@ class Planner:
             )
 
         try:
-            response = await asyncio.wait_for(
-                self.model.plan(snapshot.request, max_questions=snapshot.budget.max_subquestions),
-                timeout=self.options.node_timeout_seconds,
-            )
+            review_patch: Update = {}
+            if self.reviewed_plan and isinstance(self.model, GeminiResearchModel):
+                response = await asyncio.wait_for(
+                    self.model.review_and_plan(
+                        snapshot.request, max_questions=snapshot.budget.max_subquestions
+                    ),
+                    timeout=self.options.node_timeout_seconds,
+                )
+                reviewed = parse_response(
+                    response, ReviewedPlanDraft, self.options.max_response_bytes
+                )
+                review_patch = event_patch(
+                    state,
+                    "input_guardrail",
+                    "input_review_" + reviewed.category,
+                    GUIDANCE[reviewed.category],
+                )
+                if reviewed.category != "research":
+                    return checked_patch(
+                        state,
+                        {
+                            **review_patch,
+                            **initialization_patch(state, "planner", "failed"),
+                            "planning_attempts": snapshot.planning_attempts + 1,
+                            "run_status": "failed",
+                            "planning_status": "failed",
+                            "stop_reason": "input_rejected",
+                            "finished_at": utc_now().isoformat(),
+                        },
+                    )
+                response = PlanDraft(questions=reviewed.questions)
+            else:
+                response = await asyncio.wait_for(
+                    self.model.plan(
+                        snapshot.request, max_questions=snapshot.budget.max_subquestions
+                    ),
+                    timeout=self.options.node_timeout_seconds,
+                )
             plan = parse_response(response, PlanDraft, self.options.max_response_bytes)
             if len(plan.questions) > snapshot.budget.max_subquestions:
                 raise PlanningContractError("subquestion allowance exceeded")
@@ -74,19 +115,24 @@ class Planner:
                 )
                 for question in plan.questions
             ]
+            plan_event = event_patch(
+                state,
+                "planner",
+                "plan_created",
+                f"Structured plan validated with {len(questions)} focused questions.",
+            )
             return checked_patch(
                 state,
                 {
+                    **review_patch,
                     "research_questions": [record_data(question) for question in questions],
                     "plan_version": snapshot.plan_version + 1,
                     "planning_attempts": snapshot.planning_attempts + 1,
                     **initialization_patch(state, "planner", "ready"),
-                    **event_patch(
-                        state,
-                        "planner",
-                        "plan_created",
-                        f"Structured plan validated with {len(questions)} focused questions.",
-                    ),
+                    "events": {
+                        **cast(dict[str, object], review_patch.get("events", {})),
+                        **cast(dict[str, object], plan_event["events"]),
+                    },
                 },
             )
         except PlanScopeError:

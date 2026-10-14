@@ -82,7 +82,10 @@ def build_research_graph(
 ) -> CompiledStateGraph[ResearchState, None, ResearchState, ResearchState]:
     if model.is_fixture is not True and not isinstance(model, GeminiResearchModel):
         raise ValueError("Unsupported live research model.")
-    planning = PlanningOptions(available_source_types=tuple(processor.adapters))
+    planning = PlanningOptions(
+        available_source_types=tuple(processor.adapters),
+        node_timeout_seconds=60 if options.production_policy_version == 2 else 30,
+    )
     graph = StateGraph(ResearchState)
     from collections.abc import Callable
     from typing import Any
@@ -91,7 +94,9 @@ def build_research_graph(
         graph.add_node(name, node_trace.wrap(name, action) if node_trace else action)
 
     add_node("manager", manager)
-    add_node("planner", Planner(model, planning))
+    add_node(
+        "planner", Planner(model, planning, reviewed_plan=options.production_policy_version == 2)
+    )
     add_node("context_manager", ContextManager(repository, planning))
     add_node(
         "prepare_approval", lambda state: prepare_approval(state, options.require_plan_approval)
@@ -121,7 +126,7 @@ def build_research_graph(
     add_node("citation_checker", CitationChecker(artifacts))
     add_node("reserve_rewrite", reserve_rewrite)
     add_node("finalizer", finalize)
-    if options.production_policy_version and isinstance(model, GeminiResearchModel):
+    if options.production_policy_version == 1 and isinstance(model, GeminiResearchModel):
         add_node("input_guardrail", InputGuardrail(model))
         graph.add_edge(START, "input_guardrail")
         graph.add_conditional_edges(

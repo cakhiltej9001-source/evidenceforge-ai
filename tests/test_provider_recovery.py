@@ -89,8 +89,8 @@ def test_explicit_retry_is_new_owned_run_and_preserves_failure(tmp_path, monkeyp
     real_model = GeminiResearchModel
     monkeypatch.setattr(
         "evidenceforge.workbench.GeminiResearchModel",
-        lambda name, key, budget: real_model(
-            name, key, budget, transport=httpx.MockTransport(reject)
+        lambda name, key, budget, **options: real_model(
+            name, key, budget, transport=httpx.MockTransport(reject), **options
         ),
     )
     app = LocalWorkbench(tmp_path)
@@ -199,6 +199,9 @@ def test_ui_retry_recovers_a_rose_answer_with_mocked_providers(tmp_path, monkeyp
         value = json.loads(payload["contents"][0]["parts"][0]["text"])
         if title == "SemanticDecision":
             result = {"category": "research"}
+        elif title == "ReviewedPlanDraft":
+            result = await fixture.plan(ResearchRequest.model_validate(value), max_questions=1)
+            result["category"] = "research"
         elif title == "PlanDraft":
             result = await fixture.plan(ResearchRequest.model_validate(value), max_questions=1)
         elif title == "QueryBatchDraft":
@@ -271,7 +274,7 @@ def test_ui_retry_recovers_a_rose_answer_with_mocked_providers(tmp_path, monkeyp
         next(b for b in at.button if b.label == "Create plan").click().run()
         at.run()
         assert not at.exception
-        assert any("Question review (HTTP 503)" in e.value for e in at.error), (
+        assert any("Question review and planning (HTTP 503)" in e.value for e in at.error), (
             [e.value for e in at.error],
             [m.value for m in at.info],
             len(requests),
@@ -293,7 +296,7 @@ def test_ui_retry_recovers_a_rose_answer_with_mocked_providers(tmp_path, monkeyp
         assert final["run_status"] == "completed" and final["report_claims"]
         assert final["thread_id"] != first_thread
         assert apps[0].snapshot("local", first_thread)["run_status"] == "failed"
-        assert len(requests) == (1 if source_only else 7)
+        assert len(requests) == (1 if source_only else 6)
         assert bool(apps[0].paid_usage("local", final["thread_id"])) is not source_only
         assert any("flowering plant" in m.value for m in at.markdown)
     finally:

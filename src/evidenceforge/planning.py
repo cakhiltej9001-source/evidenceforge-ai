@@ -2,7 +2,7 @@
 
 import json
 import re
-from typing import Annotated, Self
+from typing import Annotated, Literal, Self
 
 from pydantic import BaseModel, Field, StrictBool, StringConstraints, model_validator
 
@@ -63,6 +63,21 @@ class PlanDraft(Contract):
         names = [normalized(question.question) for question in self.questions]
         if len(names) != len(set(names)):
             raise ValueError("duplicate focused questions")
+        return self
+
+
+class ReviewedPlanDraft(Contract):
+    """One structured review/plan boundary; rejected requests cannot carry a plan."""
+
+    category: Literal["research", "gibberish", "non_research", "manipulation", "vague"]
+    questions: Annotated[tuple[QuestionDraft, ...], Field(max_length=32)]
+
+    @model_validator(mode="after")
+    def reviewed_plan(self) -> Self:
+        if self.category == "research":
+            PlanDraft(questions=self.questions)
+        elif self.questions:
+            raise ValueError("rejected requests must not include a plan")
         return self
 
 

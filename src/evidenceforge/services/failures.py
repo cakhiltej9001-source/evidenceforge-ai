@@ -4,6 +4,7 @@ from evidenceforge.graph.state import ResearchState, StateSnapshot
 from evidenceforge.storage.model_calls import ModelReceipt
 
 STAGES = {
+    "reviewed_planner": "Question review and planning",
     "input_guardrail": "Question review",
     "planner": "Research planning",
     "context_manager": "Document/context lookup",

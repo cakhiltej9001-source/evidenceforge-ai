@@ -1,9 +1,11 @@
 # Recovering from a failed Gemini stage
 
 The reported `what is rose ?` run stopped after its first model call, before any
-Tavily search or evidence extraction. The supplied printout showed only a generic
-fatal error. It did not expose an HTTP status, so the original provider cause is
-not established and is not guessed here.
+Tavily search or evidence extraction. A separately approved hosted reproduction
+on the rebooted recovery build identified a **Gemini request timeout during
+question review**: one Gemini call, zero searches and no evidence. Its actual
+token consumption was unknown; 5,317 tokens remained reserved. The original
+printout alone did not establish an HTTP status or root cause.
 
 ## Changes
 
@@ -13,6 +15,18 @@ not established and is not guessed here.
   credentials are never displayed.
 - Timeouts and incomplete structured responses have separate receipt statuses.
   Unconfirmed calls remain blocked from automatic replay.
+- New workbench runs use policy version 2: semantic question review and planning
+  share one structured response. Rejected requests must have an empty plan;
+  accepted plans still pass cardinality, distinctness and scope validation.
+  The normal one-pass workflow uses five model calls rather than six. New Gemini
+  requests have a 45-second transport timeout within 60-second node limits.
+  Flash-Lite's combined review uses `minimal` thinking, supported for lower
+  latency by [Google's Gemini 3 guide](https://ai.google.dev/gemini-api/docs/gemini-3).
+  This does not guarantee provider availability or latency.
+- Old saved runs resume using their registered policy and request hashes.
+  An explicitly requested fresh attempt for a legacy live-source/document run
+  upgrades to the current policy while preserving its question, model, sources
+  and per-run budget. Earlier failed receipts are retained.
 - **Try again with a new Gemini plan** starts an explicitly requested new run with
   the same question, model, sources and per-run budget. The earlier failed run and
   its usage remain intact. Plan approval is still required.
@@ -60,6 +74,7 @@ The source fix is pushed to the deployed branch. An independent anonymous page
 check did not yet observe the new guidance. The browser management helper timed
 out, so an owner reboot was requested; hosted activation remains unconfirmed.
 
-A separate allowance of up to six Gemini calls and one Tavily search was requested
-for a fresh live rose check. No new provider calls have been made pending that
-reply. Earlier live outcomes and allowances remain unchanged.
+The owner approved six Gemini calls and one Tavily search, then reported rebooting
+the app. The hosted reproduction used one Gemini call and no searches. The
+remaining verification is limited to five additional Gemini calls and one search
+within that same allowance; earlier campaigns remain unchanged.
