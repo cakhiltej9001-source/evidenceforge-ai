@@ -60,3 +60,18 @@ the generic error before normalization and validates the same credentials after.
 The setup error screen now displays Configuration loader: 2026-10-14 v2 and
 points to Streamlit Secrets. This distinguishes the updated loader from an
 older hosted revision; the owner's current hosted view still requires recheck.
+
+## Active loader and final source CI
+
+The owner observed the new explicit missing-key message, confirming the updated
+loader is active. The hosted server reports EVIDENCEFORGE_MODEL_API_KEY and
+EVIDENCEFORGE_TAVILY_API_KEY missing. A private two-line repair file was opened
+in Notepad to help place these entries at TOML root level above section headers.
+Hosted research remains unverified until those fields are saved and the form
+appears; this status does not claim provider generation succeeded remotely.
+
+[Final source CI](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/38489016633)
+passed for 64ed4771569c7149f08ebc5a57ec21d49c9b40cd: 527 tests in 41.07 seconds,
+strict mypy for 87 source files and both Python/container jobs. All 10 targeted
+configuration regressions passed; the explicit before/after collision
+reproduction also passed separately. No new paid provider calls were made.

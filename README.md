@@ -4,7 +4,7 @@
 ![Python](https://img.shields.io/badge/Python-3.12–3.14-blue)
 ![LangGraph](https://img.shields.io/badge/Workflow-LangGraph-teal)
 ![SQLite](https://img.shields.io/badge/Storage-SQLite-blue)
-![Tests](https://img.shields.io/badge/Tests-525%20passed-brightgreen)
+![Tests](https://img.shields.io/badge/Tests-527%20passed-brightgreen)
 ![Demo](https://img.shields.io/badge/Demo-public%20Streamlit-green)
 
 > A local research workbench that plans questions, gathers inspectable evidence,
@@ -16,7 +16,7 @@ and why the workflow completed or stopped. Python, LangGraph, SQLite and Streaml
 connect the research stages; offline fixtures support demonstrations and optional
 Gemini reasoning supports explicitly started provider runs.
 
-**Current verification:** 525 source tests and both private CI jobs passed,
+**Current verification:** 527 source tests and both private CI jobs passed,
 including Docker persistence, backup/restore and authenticated gateway checks.
 The fresh 12 October run completed all six Gemini roles and one Tavily search,
 retaining three NASA sources and two exactly cited claims. Offline review verified
@@ -38,7 +38,7 @@ Hosted storage is temporary. The local workbench keeps durable research.
 An explicit offline demo mode remains available. Repository access is private.
 See the [14 October hosted configuration repair](docs/HOSTED_CONFIG_FIX_2026-10-14.md)
 and [current phase status](docs/FINAL_STATUS_2026-10-13.md). Actual hosted
-[Markdown/JSON downloads and fresh-visitor isolation](docs/HOSTED_DOWNLOAD_VERIFICATION_2026-10-08.md) passed; full source CI passed 525 tests.
+[Markdown/JSON downloads and fresh-visitor isolation](docs/HOSTED_DOWNLOAD_VERIFICATION_2026-10-08.md) passed; full source CI passed 527 tests.
 
 ## ✨ Project at a glance
 
@@ -331,9 +331,9 @@ uv run --locked mypy
 uv build
 ```
 
-[CI on 14 October](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/38488334349)
-passed **525 tests in 34.74 seconds** on product source
-`0adf6e8d4c15b8f61e49f5c75c88598b02377d08`, plus lint/format/types,
+[CI on 14 October](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/38489016633)
+passed **527 tests in 41.07 seconds** on product source
+`64ed4771569c7149f08ebc5a57ec21d49c9b40cd`, plus lint/format/types,
 package build, official Render schema and offline deployment smoke. Docker checks passed nonroot UID 10001,
 512 MB/half-CPU execution, fresh-container persistence, fresh-volume synthetic
 backup/restore, health and authenticated gateway access. Tests block ordinary
@@ -479,7 +479,7 @@ finalization and shared rewrite/search/model/pass/token allowances constrain run
 They do not guarantee correct planning or source truth.
 
 **7. How did you evaluate the project?**
-525 offline tests and constrained Docker checks verify engineering behavior. A
+527 offline tests and constrained Docker checks verify engineering behavior. A
 20-case, 40-answer Gemini comparison records support, scope, disputes, abstentions,
 calls, tokens and latency with explicit synthetic/AI-review limitations.
 
