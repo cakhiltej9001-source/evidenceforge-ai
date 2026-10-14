@@ -43,7 +43,7 @@ def ingest_upload(store: DocumentStore, owner: str, name: str, data: bytes) -> D
             path.unlink(missing_ok=True)
 
 
-def show_report(state: ResearchState) -> None:
+def show_report(state: ResearchState, export_json: str | None = None) -> None:
     st.subheader("Research report")
     st.markdown(render_report(state))
     st.caption("Downloads include selected document/source passages. Review before sharing.")
@@ -51,7 +51,11 @@ def show_report(state: ResearchState) -> None:
         "Download Markdown", render_report(state), "report.md", "text/markdown", on_click="ignore"
     )
     st.download_button(
-        "Download JSON", report_export(state), "report.json", "application/json", on_click="ignore"
+        "Download JSON",
+        export_json or report_export(state),
+        "report.json",
+        "application/json",
+        on_click="ignore",
     )
     with st.expander("Audit results, source ranking and disputes"):
         st.json(audit(state))
@@ -103,6 +107,41 @@ def run_panel(app: LocalWorkbench, owner: str) -> None:
         st.caption("Thread: " + thread)
         s = StateSnapshot.model_validate(state)
         usage = usage_summary(state)
+        if state["tool_errors"]:
+            from evidenceforge.services.failures import public_failures
+
+            diagnostics = app.model_failures(owner, thread) or public_failures(state)
+            for diagnostic in diagnostics:
+                code = diagnostic.get("http_status")
+                suffix = f" (HTTP {code})" if code else ""
+                st.error(f"{diagnostic['stage']}{suffix}: {diagnostic['message']}")
+            st.caption(
+                "This run was not retried automatically. A new attempt uses a separate "
+                "run allowance; earlier calls remain counted."
+            )
+            if s.run_status.value in {"failed", "partial"} and any(
+                e.kind == "gemini_model" for e in s.events.values()
+            ):
+                if st.button("Try again with a new Gemini plan", disabled=app.active(owner)):
+                    st.session_state["active_job"] = app.retry(owner, thread)
+                    st.session_state.pop("selected_thread", None)
+                    st.rerun()
+                if s.request.document_ids or any(
+                    e.kind == "live_retrieval" for e in s.events.values()
+                ):
+                    st.info(
+                        "You can get quoted source passages without Gemini. This uses the "
+                        "same selected sources and search allowance, with lexical matching "
+                        "instead of model analysis. Review and approve the new plan."
+                    )
+                    if st.button(
+                        "Get source quotations without Gemini", disabled=app.active(owner)
+                    ):
+                        st.session_state["active_job"] = app.retry(
+                            owner, thread, without_gemini=True
+                        )
+                        st.session_state.pop("selected_thread", None)
+                        st.rerun()
         with st.expander("Live timeline"):
             st.table([{"Time": e["time"], "Event": e["step"]} for e in public_timeline(state)])
         with st.expander("Coverage and unresolved questions"):
@@ -131,7 +170,8 @@ def run_panel(app: LocalWorkbench, owner: str) -> None:
                 )
             else:
                 st.caption(
-                    "Offline stages use configured allowances; no paid provider calls are made."
+                    "Offline reasoning makes no Gemini calls. Selected live sources may "
+                    "still consume search credits."
                 )
             st.json(usage)
             paid = app.paid_usage(owner, thread)
@@ -224,7 +264,7 @@ def run_panel(app: LocalWorkbench, owner: str) -> None:
             elif not active and st.button("Resume saved workflow"):
                 st.session_state["active_job"] = app.resume(owner, thread)
         else:
-            show_report(state)
+            show_report(state, app.export(owner, thread))
     except Exception:
         # Provider, filesystem and validation exceptions may include sensitive values.
         st.error(
@@ -379,6 +419,10 @@ def main(*, public_demo: bool = False, cloud_hosted: bool = False) -> None:
             st.caption(
                 "Gemini sends the question and selected evidence to Google "
                 "and uses your configured call/token allowances."
+            )
+            st.caption(
+                "If Gemini is unavailable, select Offline and keep Tavily enabled to get "
+                "quotations from real web sources without Gemini calls."
             )
             live_web = st.checkbox(
                 "Search live web with Tavily",

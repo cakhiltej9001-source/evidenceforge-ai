@@ -249,6 +249,7 @@ class GeminiResearchModel:
                 )
             candidates = data.get("candidates", [])
             if len(candidates) != 1 or candidates[0].get("finishReason") != "STOP":
+                observation["status"] = "incomplete"
                 raise ModelUnavailable("Gemini returned no complete structured response.")
             parts = candidates[0]["content"]["parts"]
             text = "".join(
@@ -277,6 +278,13 @@ class GeminiResearchModel:
                     receipt.model_copy(update={"status": "failed", "observation": observation})
                 )
             raise ModelUnavailable("Gemini response did not satisfy the local schema.") from None
+        except httpx.TimeoutException:
+            observation["status"] = "timeout"
+            if receipt is not None and self._ledger is not None:
+                self._ledger.finish(
+                    receipt.model_copy(update={"status": "failed", "observation": observation})
+                )
+            raise ModelUnavailable("Gemini request timed out.") from None
         except (httpx.HTTPError, ValueError, KeyError, TypeError, AttributeError):
             observation["status"] = "failed"
             if receipt is not None and self._ledger is not None:

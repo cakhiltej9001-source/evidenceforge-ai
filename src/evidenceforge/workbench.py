@@ -158,6 +158,29 @@ class LocalWorkbench:
             owner, thread, lambda: asyncio.run(service.resume(thread, owner, decision=decision))
         )
 
+    def retry(self, owner: str, thread: str, *, without_gemini: bool = False) -> str:
+        """Explicit new run after failure; preserve the prior immutable usage records."""
+        state = self.snapshot(owner, thread)
+        registration = CheckpointRepository(self.data_dir / "checkpoints", owner).load(thread)
+        profile = json.loads(registration.profile)
+        if (
+            state["run_status"] not in {"failed", "partial"}
+            or not state["tool_errors"]
+            or not str(profile["model"]).endswith(".GeminiResearchModel")
+        ):
+            raise CheckpointFailure("Only a failed Gemini workflow can start a fresh attempt.")
+        # Construct through the registered profile so model and source choices stay fixed.
+        if without_gemini:
+            options = ResearchOptions.model_validate(profile["research_options"])
+            if not (options.live_web or options.live_energy or state["request"]["document_ids"]):
+                raise CheckpointFailure("Select real sources before using source quotations.")
+            service = self.service("immediate", options, gemini=False)
+        else:
+            service = self.registered_service(owner, thread)
+        request = ResearchRequest.model_validate(state["request"])
+        budget = BudgetLimits.model_validate(state["budget"])
+        return self.submit(owner, new_id("job"), lambda: asyncio.run(service.run(request, budget)))
+
     def edit(self, owner: str, thread: str, plan: PlanDraft, version: int) -> str:
         service = self.registered_service(owner, thread)
         return self.submit(
@@ -190,7 +213,9 @@ class LocalWorkbench:
     def export(self, owner: str, thread: str) -> str:
         from evidenceforge.exports import report_export
 
-        return report_export(self.snapshot(owner, thread))
+        data = json.loads(report_export(self.snapshot(owner, thread)))
+        data["provider_failures"] = self.model_failures(owner, thread)
+        return json.dumps(data, ensure_ascii=False, indent=2)
 
     def paid_usage(self, owner: str, thread: str) -> dict[str, object] | None:
         from evidenceforge.storage.model_calls import ModelCallLedger, model_usage
@@ -209,6 +234,25 @@ class LocalWorkbench:
             existing=True,
         )
         return model_usage(ledger.records())
+
+    def model_failures(self, owner: str, thread: str) -> list[dict[str, str | int]]:
+        from evidenceforge.services.failures import model_failures
+        from evidenceforge.storage.model_calls import ModelCallLedger
+
+        registration = CheckpointRepository(self.data_dir / "checkpoints", owner).load(thread)
+        profile = json.loads(registration.profile)
+        if profile.get("model_ledger_version") != 1:
+            return []
+        initial = registration.initial_state
+        ledger = ModelCallLedger(
+            self.data_dir / "model_calls",
+            owner,
+            str(initial["run_id"]),
+            str(profile["model_id"]),
+            BudgetLimits.model_validate(initial["budget"]),
+            existing=True,
+        )
+        return model_failures(ledger.records())
 
     def close(self) -> None:
         self.executor.shutdown(wait=True)

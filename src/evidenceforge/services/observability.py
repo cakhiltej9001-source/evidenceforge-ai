@@ -229,7 +229,10 @@ def public_timeline(state: ResearchState) -> list[dict[str, str]]:
     for event in s.events.values():
         label = _EVENT_LABELS.get(event.kind)
         if label is None and event.kind.endswith("_failed"):
-            label = "Workflow step unavailable"
+            from evidenceforge.services.failures import STAGES
+
+            role = event.kind.removesuffix("_failed")
+            label = STAGES.get(role, "Workflow step") + " unavailable"
         if label is not None:
             result.append({"id": event.id, "time": event.occurred_at.isoformat(), "step": label})
     return sorted(result, key=lambda item: (item["time"], item["id"]))[-100:]

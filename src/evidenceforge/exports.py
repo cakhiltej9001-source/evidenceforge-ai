@@ -6,6 +6,7 @@ from evidenceforge.evidence.deduplication import WorkingEvidence, working_eviden
 from evidenceforge.evidence.projection import audit, project
 from evidenceforge.graph.state import ResearchState, StateSnapshot
 from evidenceforge.reporting import OCR_TRANSCRIPT_LIMITATION, ocr_transcripts
+from evidenceforge.services.failures import public_failures
 from evidenceforge.services.observability import public_progress
 from evidenceforge.services.usage import usage_summary
 
@@ -38,6 +39,7 @@ def report_export(state: ResearchState) -> str:
         "report": s.final_report.model_dump(mode="json") if s.final_report else None,
         "graph": project(state).model_dump(mode="json"),
         "audit": audit(state),
+        "tool_errors": public_failures(state),
         "deduplication": {
             "applied_to_model_input": deduplication_enabled,
             "retained_passages": len(s.evidence_store),

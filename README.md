@@ -41,6 +41,9 @@ were verified on 14 October 2026 without research calls.
 [Three subsequent actual hosted Gemini/Tavily tests with screenshots](docs/HOSTED_LIVE_TESTS_2026-10-14.md)
 used 13 Gemini calls and 2 searches: one completed, one was partial and one failed
 before retrieval. The report documents these failures and measured usage.
+[Failure explanations and explicit recovery controls](docs/HOSTED_RECOVERY_2026-10-14.md)
+offer a new Gemini attempt or quoted source passages without Gemini. Each action
+preserves earlier usage and still requires plan approval.
 See the [14 October hosted configuration repair](docs/HOSTED_CONFIG_FIX_2026-10-14.md)
 and [current phase status](docs/FINAL_STATUS_2026-10-13.md). Actual hosted
 [Markdown/JSON downloads and fresh-visitor isolation](docs/HOSTED_DOWNLOAD_VERIFICATION_2026-10-08.md) passed; full source CI passed 527 tests.
