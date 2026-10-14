@@ -114,4 +114,44 @@ def test_missing_key_entrypoint_shows_cloud_action_instead_of_root_error(monkeyp
     assert "EVIDENCEFORGE_MODEL_API_KEY" in at.error[0].value
     assert "Streamlit App settings > Secrets" in at.error[0].value
     assert "model configuration" not in at.error[0].value
+    assert any(c.value == "Configuration loader: 2026-10-14 v2" for c in at.caption)
     assert not any(b.label == "Create plan" for b in at.button)
+
+
+def test_case_colliding_environment_cannot_shadow_valid_cloud_keys(monkeypatch):
+    import os
+
+    from evidenceforge.config import load_settings
+
+    env = {
+        "EVIDENCEFORGE_MODEL_PROVIDER": "gemini",
+        "EVIDENCEFORGE_MODEL_API_KEY": "synthetic-valid-canonical",
+        "evidenceforge_model_api_key": "",
+        "EVIDENCEFORGE_MODEL_ID": "synthetic-model",
+        "evidenceforge_model_id": "",
+        "EVIDENCEFORGE_TAVILY_API_KEY": "synthetic-tavily",
+    }
+    monkeypatch.setattr(os, "environ", env)
+    with pytest.raises(ConfigurationError, match="model configuration"):
+        load_settings(None)
+    configure_cloud(env, {})
+    validate_cloud_configuration(env)
+    settings = load_settings(None)
+    assert settings.model_api_key.get_secret_value() == "synthetic-valid-canonical"
+    assert settings.model_id == "synthetic-model"
+    assert "evidenceforge_model_api_key" not in env
+
+
+def test_lowercase_cloud_secret_names_are_normalized():
+    env = {}
+    configure_cloud(
+        env,
+        {
+            "gemini_api_key": "synthetic-gemini",
+            "tavily_api_key": "synthetic-tavily",
+            "evidenceforge_cloud_access": "public",
+        },
+    )
+    validate_cloud_configuration(env)
+    assert configured(env).model_api_key.get_secret_value() == "synthetic-gemini"
+    assert env["EVIDENCEFORGE_AUTH_REQUIRED"] == "false"

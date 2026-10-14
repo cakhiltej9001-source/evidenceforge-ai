@@ -22,6 +22,31 @@ CLOUD_KEYS = (
 
 def configure_cloud(environ: MutableMapping[str, str], secrets: Mapping[str, object]) -> bool:
     """Return fixture mode; public live access is the default, login is opt-in."""
+    # Linux permits both uppercase and lowercase env names; Pydantic folds them.
+    # A stale lowercase blank can otherwise shadow a valid canonical secret.
+    normalized: dict[str, object] = {}
+    for name, value in secrets.items():
+        canonical = name.upper()
+        if canonical not in normalized or name == canonical:
+            normalized[canonical] = value
+    secrets = normalized
+    for name in tuple(environ):
+        canonical = name.upper()
+        if name != canonical and (
+            canonical.startswith("EVIDENCEFORGE_")
+            or canonical
+            in {
+                "GEMINI_API_KEY",
+                "GOOGLE_API_KEY",
+                "TAVILY_API_KEY",
+                "GEMINI_MODEL",
+                "GEMINI_MODEL_ID",
+                "LANGSMITH_TRACING",
+            }
+        ):
+            if not environ.get(canonical, "").strip():
+                environ[canonical] = environ[name]
+            del environ[name]
     for key in CLOUD_KEYS:
         if key in secrets:
             value = secrets[key]

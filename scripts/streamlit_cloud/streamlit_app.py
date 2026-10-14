@@ -32,7 +32,8 @@ try:
 except ConfigurationError as exc:
     st.set_page_config(page_title="EvidenceForge", page_icon=":mag:", layout="wide")
     st.title("EvidenceForge live research")
-    st.error(str(exc))
+    st.error(str(exc).replace("Check .env.example.", "Review Streamlit App settings > Secrets."))
+    st.caption("Configuration loader: 2026-10-14 v2")
     st.stop()
 
 from evidenceforge.ui import main  # noqa: E402
