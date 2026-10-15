@@ -398,16 +398,36 @@ def main(*, public_demo: bool = False, cloud_hosted: bool = False) -> None:
                 "Existing document IDs (one per line)",
                 value="\n".join(st.session_state.get("document_ids", [])),
             )
+    synthetic_mode = public_demo
+    if not public_demo:
+        synthetic_mode = (
+            st.radio(
+                "Research mode",
+                ["Research with real sources", "Synthetic demonstration"],
+                horizontal=True,
+            )
+            == "Synthetic demonstration"
+        )
+        if synthetic_mode:
+            st.info(
+                "Synthetic demonstration uses example passages and offline reasoning. "
+                "It cannot answer general factual questions."
+            )
+        else:
+            st.caption(
+                "Select Tavily web search, the relevant energy API, or imported documents. "
+                "Gemini does not search the web by itself."
+            )
     with st.form("new_research"):
         question = st.text_area(
             "Research question", value="Compare solar and wind electricity output."
         )
         reasoning = st.selectbox(
             "Reasoning provider",
-            ["Offline"] if public_demo else ["Offline", "Gemini (configured)"],
+            ["Offline"] if synthetic_mode else ["Offline", "Gemini (configured)"],
             index=(
                 1
-                if not public_demo
+                if not synthetic_mode
                 and load_settings().model_provider == "gemini"
                 and load_settings().model_api_key is not None
                 else 0
@@ -415,7 +435,7 @@ def main(*, public_demo: bool = False, cloud_hosted: bool = False) -> None:
         )
         live_web = False
         live_energy = False
-        if not public_demo:
+        if not synthetic_mode:
             st.caption(
                 "Gemini sends the question and selected evidence to Google "
                 "and uses your configured call/token allowances."
@@ -441,27 +461,40 @@ def main(*, public_demo: bool = False, cloud_hosted: bool = False) -> None:
                 f"Per run: up to {limits.max_model_calls} model calls and "
                 f"{limits.max_searches} searches. Review the plan before continuing."
             )
-        demo = st.selectbox(
-            "Synthetic scenario (used when no live sources or documents are selected)",
-            ["second-pass", "immediate", "empty", "dispute"],
-        )
+        demo = "second-pass"
+        if synthetic_mode:
+            demo = st.selectbox(
+                "Synthetic scenario",
+                ["second-pass", "immediate", "empty", "dispute"],
+            )
         submitted = st.form_submit_button("Create plan", disabled=app.active(owner))
     if submitted:
         try:
             request = ResearchRequest(
                 question=question,
                 owner_scope=owner,
-                document_ids=tuple(x.strip() for x in entered.splitlines() if x.strip()),
+                document_ids=(
+                    ()
+                    if synthetic_mode
+                    else tuple(x.strip() for x in entered.splitlines() if x.strip())
+                ),
             )
-            st.session_state["active_job"] = app.start(
-                request,
-                demo,
-                budget=load_settings().budget,
-                gemini=reasoning == "Gemini (configured)",
-                live_web=live_web,
-                live_energy=live_energy,
-            )
-            st.session_state.pop("selected_thread", None)
+            if not synthetic_mode and not (request.document_ids or live_web or live_energy):
+                st.error(
+                    "No research sources selected. Enable Search live web with Tavily "
+                    "or import a document, then click Create plan. Gemini does not search "
+                    "the web by itself. No API calls were made for this submission."
+                )
+            else:
+                st.session_state["active_job"] = app.start(
+                    request,
+                    demo,
+                    budget=load_settings().budget,
+                    gemini=reasoning == "Gemini (configured)",
+                    live_web=live_web,
+                    live_energy=live_energy,
+                )
+                st.session_state.pop("selected_thread", None)
         except ConfigurationError as exc:
             st.error(str(exc))
         except Exception:

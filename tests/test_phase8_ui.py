@@ -31,6 +31,9 @@ def test_ui_create_approve_download_and_change_scope(tmp_path, monkeypatch):
     try:
         at.run()
         assert not at.exception and not at.error
+        next(r for r in at.radio if r.label == "Research mode").set_value(
+            "Synthetic demonstration"
+        ).run()
         next(b for b in at.button if b.label == "Create plan").click().run()
         assert not at.exception and not at.error
         assert any(h.value == "Review the research plan" for h in at.subheader)
