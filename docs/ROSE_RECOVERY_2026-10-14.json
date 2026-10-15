@@ -1,0 +1,80 @@
+{
+  "date": "2026-10-14",
+  "question": "what is rose ?",
+  "approved": {
+    "gemini_calls": 6,
+    "tavily_searches": 1
+  },
+  "used": {
+    "gemini_calls": 3,
+    "tavily_searches": 1
+  },
+  "unused": {
+    "gemini_calls": 3,
+    "tavily_searches": 0
+  },
+  "hosted_attempt": {
+    "status": "failed",
+    "gemini_calls": 1,
+    "searches": 0,
+    "failure": "Question-review timeout"
+  },
+  "combined_local_attempt": {
+    "status": "failed",
+    "gemini_calls": 2,
+    "searches": 0,
+    "succeeded_roles": [
+      "reviewed_planner"
+    ],
+    "failed_role": "query_generator",
+    "http_status": 503
+  },
+  "local_source_recovery": {
+    "status": "completed",
+    "stop": "sufficient",
+    "gemini_calls": 0,
+    "tavily_searches": 1,
+    "retained_passages": 33,
+    "exact_citation_audits_passed": 33,
+    "semantic_review": "lexical only",
+    "sources": [
+      {
+        "title": "Rose - Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Rose",
+        "provider": "tavily"
+      },
+      {
+        "title": "Turkish Rose: A Review of the History, Ethnobotany, and ...",
+        "url": "https://www.herbalgram.org/resources/herbalgram/issues/96/table-of-contents/herbalgram-96-turkish-rose-history-ethnobotany-modern-uses",
+        "provider": "tavily"
+      },
+      {
+        "title": "A Little Botany - American Rose Society",
+        "url": "https://rose.org/a-little-botany",
+        "provider": "tavily"
+      },
+      {
+        "title": "Rose | Description, Species, Images, & Facts | Britannica",
+        "url": "https://www.britannica.com/plant/rose-plant",
+        "provider": "tavily"
+      },
+      {
+        "title": "Beneficial medicinal effects and material applications of rose",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10758878",
+        "provider": "tavily"
+      }
+    ]
+  },
+  "provider_usage": {
+    "known_input_tokens": 201,
+    "known_output_tokens": 117,
+    "tokens_used_or_reserved": 12220,
+    "calls_with_unknown_actual_token_usage": 2,
+    "estimated_cost_usd": null
+  },
+  "limits": [
+    "Full Gemini workflow remains unverified because query preparation returned HTTP 503.",
+    "Source-only completion and exact quotations do not establish semantic completeness or source truth.",
+    "The second hosted build was not yet observed; no extra hosted API call was submitted."
+  ]
+}

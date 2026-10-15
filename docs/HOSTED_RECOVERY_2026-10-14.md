@@ -70,11 +70,15 @@ Lint, formatting and strict type checking passed (88 source files).
 passed **533 tests in 32.85 seconds**, plus the container persistence, backup/restore,
 UI health and authenticated gateway checks, for source commit `1b1279d`.
 
-The source fix is pushed to the deployed branch. An independent anonymous page
-check did not yet observe the new guidance. The browser management helper timed
-out, so an owner reboot was requested; hosted activation remains unconfirmed.
+The owner reported rebooting and the initial recovery UI was observed on the
+hosted app. That live reproduction timed out. The subsequent combined-planning
+source fix is pushed; its hosted preflight did not yet observe the new build.
+The browser management helper continues to time out.
 
-The owner approved six Gemini calls and one Tavily search, then reported rebooting
-the app. The hosted reproduction used one Gemini call and no searches. The
-remaining verification is limited to five additional Gemini calls and one search
-within that same allowance; earlier campaigns remain unchanged.
+The [completed live verification and screenshots](ROSE_RECOVERY_2026-10-14.md)
+used three Gemini calls and one Tavily search within the approved six-call/one-search
+allowance. The combined review passed locally, query generation returned HTTP 503,
+and source-only recovery completed with 33 exact-quotation audits. Full Gemini
+workflow success remains unverified. No additional calls are being made.
+The latest [source CI](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/38606699743)
+passed 540 tests for commit `86ab08b`; earlier campaigns remain unchanged.

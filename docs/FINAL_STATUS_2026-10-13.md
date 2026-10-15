@@ -123,3 +123,16 @@ failure, and the atmosphere case failed before retrieval. See the
 [screenshots, usage receipts and limitations](HOSTED_LIVE_TESTS_2026-10-14.md).
 Two model-stage failures and incomplete detailed-error exports remain open;
 general live reliability is not established. Hosting remains free only.
+
+## Rose response recovery - evidence updated 15 October 2026
+
+A separately approved campaign used three Gemini calls and one Tavily search.
+The hosted first stage timed out. New combined review/planning passed locally,
+then query generation returned HTTP 503. The existing source-only recovery control
+completed a real Tavily run with 33 exact-quotation audits and no Gemini generation.
+See [measured outcomes and screenshots](ROSE_RECOVERY_2026-10-14.md).
+The repaired source passed 540 tests and both CI jobs. Full Gemini workflow success
+and activation of the second hosted repair remain unconfirmed. No extra provider
+calls are being made; hosting remains free only.
+Safe detailed-error exports are now implemented and covered by regression tests;
+the earlier note listing their omission describes the preceding hosted campaign.
