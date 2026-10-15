@@ -159,3 +159,12 @@ passed 544 tests and both jobs for commit 4983c5e; 22 unique focused tests passe
 No Gemini, Tavily or LangSmith calls ran for this repair. The public preflight
 still saw the older build. The browser management tool timed out, and an owner
 reboot was requested; hosted activation is not yet confirmed. Hosting remains free only.
+
+## Hosted activation verified after reboot - 15 October 2026
+
+The owner rebooted the app. A fresh anonymous browser verified version 2026-10-15.1,
+the combined-planning guidance and explicit research mode. A source-free submission
+was blocked without creating a plan or report and with zero Gemini/Tavily calls.
+The [hosted screenshot and measured result](SOURCE_SELECTION_FIX_2026-10-15.md#hosted-verification-after-owner-reboot)
+close the hosted activation item above. Full paid workflow success remains the
+separately recorded local live test. Hosting remains free only.

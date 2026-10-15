@@ -1,5 +1,8 @@
 # Real research requires real sources
 
+**Current hosted status: verified after the owner rebooted.** Version 2026-10-15.1
+and the real-source guard are active. The pre-reboot failures below remain historical.
+
 ## Reported issue
 
 The user asked for the capital of Telangana with Gemini selected but Tavily
@@ -56,3 +59,22 @@ It never submits a paid research request on an older build.
 - The browser management tool timed out when connecting to the existing app tab.
   An owner reboot was requested. Hosted activation and the actual hosted guard
   remain unconfirmed until that reboot can be checked.
+
+## Hosted verification after owner reboot
+
+A fresh anonymous browser observed the new mode control, combined-planning guidance
+and version 2026-10-15.1. With Tavily and energy disabled and no document selected,
+submitting the Telangana capital question showed the source-selection warning.
+No plan or report was created and no Gemini/Tavily calls ran.
+
+The first browser attempt timed out; a diagnostic attempt observed the new build
+but could not click a styled checkbox. The successful check used standard keyboard
+toggles, asserted both source checkboxes were off, and submitted only the guarded
+source-free form. It made no paid research request.
+
+![Actual hosted source guard after reboot](images/source-selection-hosted-2026-10-15.png)
+
+[Machine-readable check result](SOURCE_SELECTION_HOSTED_2026-10-15.json).
+This confirms hosted UI activation and the guard; it is not a new hosted
+Gemini/Tavily research success. The separately verified live workflow remains
+[the local five-call test](LIVE_ROSE_SUCCESS_2026-10-15.md). Hosting remains free only.

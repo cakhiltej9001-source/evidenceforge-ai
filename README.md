@@ -49,10 +49,11 @@ used 3 Gemini calls and 1 Tavily search. Source-only recovery completed; Gemini
 review passed but query preparation returned HTTP 503. The combined planning
 repair passed 540 source tests. A [fresh live test on 15 October](docs/LIVE_ROSE_SUCCESS_2026-10-15.md)
 completed all five Gemini stages and one Tavily search locally, with six supported
-exact citations and zero tool errors. Hosted activation of that repair remains unconfirmed.
+exact citations and zero tool errors. The new hosted build was observed after reboot.
 [Explicit source selection](docs/SOURCE_SELECTION_FIX_2026-10-15.md) now blocks
 real research without a selected source before any API call. Synthetic examples
-require choosing Synthetic demonstration. The updated hosted build still needs activation.
+require choosing Synthetic demonstration. Hosted version 2026-10-15.1 and its source guard
+were verified after reboot with zero provider calls.
 See the [14 October hosted configuration repair](docs/HOSTED_CONFIG_FIX_2026-10-14.md)
 and [current phase status](docs/FINAL_STATUS_2026-10-13.md). Actual hosted
 [Markdown/JSON downloads and fresh-visitor isolation](docs/HOSTED_DOWNLOAD_VERIFICATION_2026-10-08.md) passed; full source CI passed 544 tests.
