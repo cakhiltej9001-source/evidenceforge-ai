@@ -4,7 +4,7 @@
 ![Python](https://img.shields.io/badge/Python-3.12–3.14-blue)
 ![LangGraph](https://img.shields.io/badge/Workflow-LangGraph-teal)
 ![SQLite](https://img.shields.io/badge/Storage-SQLite-blue)
-![Tests](https://img.shields.io/badge/Tests-540%20passed-brightgreen)
+![Tests](https://img.shields.io/badge/Tests-544%20passed-brightgreen)
 ![Demo](https://img.shields.io/badge/Demo-public%20Streamlit-green)
 
 > A local research workbench that plans questions, gathers inspectable evidence,
@@ -16,7 +16,7 @@ and why the workflow completed or stopped. Python, LangGraph, SQLite and Streaml
 connect the research stages; offline fixtures support demonstrations and optional
 Gemini reasoning supports explicitly started provider runs.
 
-**Current verification:** 540 source tests and both private CI jobs passed,
+**Current verification:** 544 source tests and both private CI jobs passed,
 including Docker persistence, backup/restore and authenticated gateway checks.
 The fresh 12 October run completed all six Gemini roles and one Tavily search,
 retaining three NASA sources and two exactly cited claims. Offline review verified
@@ -50,9 +50,12 @@ review passed but query preparation returned HTTP 503. The combined planning
 repair passed 540 source tests. A [fresh live test on 15 October](docs/LIVE_ROSE_SUCCESS_2026-10-15.md)
 completed all five Gemini stages and one Tavily search locally, with six supported
 exact citations and zero tool errors. Hosted activation of that repair remains unconfirmed.
+[Explicit source selection](docs/SOURCE_SELECTION_FIX_2026-10-15.md) now blocks
+real research without a selected source before any API call. Synthetic examples
+require choosing Synthetic demonstration. The updated hosted build still needs activation.
 See the [14 October hosted configuration repair](docs/HOSTED_CONFIG_FIX_2026-10-14.md)
 and [current phase status](docs/FINAL_STATUS_2026-10-13.md). Actual hosted
-[Markdown/JSON downloads and fresh-visitor isolation](docs/HOSTED_DOWNLOAD_VERIFICATION_2026-10-08.md) passed; full source CI passed 540 tests.
+[Markdown/JSON downloads and fresh-visitor isolation](docs/HOSTED_DOWNLOAD_VERIFICATION_2026-10-08.md) passed; full source CI passed 544 tests.
 
 ## ✨ Project at a glance
 
@@ -345,9 +348,9 @@ uv run --locked mypy
 uv build
 ```
 
-[CI on 14 October](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/38606699743)
-passed **540 tests in 31.11 seconds** on product source
-`86ab08ba4e1725f5cf87f9b5d7ee2b633cf19589`, plus lint/format/types,
+[CI on 15 October](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/38676396131)
+passed **544 tests in 46.94 seconds** on product source
+`4983c5eaf5c0439f476992cb1dbd79d3c87993df`, plus lint/format/types,
 package build, official Render schema and offline deployment smoke. Docker checks passed nonroot UID 10001,
 512 MB/half-CPU execution, fresh-container persistence, fresh-volume synthetic
 backup/restore, health and authenticated gateway access. Tests block ordinary
@@ -493,7 +496,7 @@ finalization and shared rewrite/search/model/pass/token allowances constrain run
 They do not guarantee correct planning or source truth.
 
 **7. How did you evaluate the project?**
-540 offline tests and constrained Docker checks verify engineering behavior. A
+544 offline tests and constrained Docker checks verify engineering behavior. A
 20-case, 40-answer Gemini comparison records support, scope, disputes, abstentions,
 calls, tokens and latency with explicit synthetic/AI-review limitations.
 

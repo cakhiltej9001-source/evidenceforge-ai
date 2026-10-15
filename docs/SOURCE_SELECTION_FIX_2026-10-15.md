@@ -43,3 +43,16 @@ Earlier failed runs and provider receipts are preserved. Hosting remains free on
 Hosted activation is checked separately with a fresh browser: the check requires
 the new mode control and version before attempting a source-free submission.
 It never submits a paid research request on an older build.
+
+## Measured verification
+
+- Four new source-selection regressions passed in 15.67 seconds. Eighteen existing
+  focused UI, cloud and recovery tests also passed, for 22 unique focused tests.
+- Source commit 4983c5e passed [full CI](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/38676396131):
+  **544 tests in 46.94 seconds**, strict checking of 88 source files, lint/format,
+  packaging and constrained container persistence, backup/restore and gateway checks.
+- The public preflight did not observe the new mode and version, so it submitted
+  no research request. It made zero Gemini/Tavily calls.
+- The browser management tool timed out when connecting to the existing app tab.
+  An owner reboot was requested. Hosted activation and the actual hosted guard
+  remain unconfirmed until that reboot can be checked.

@@ -149,3 +149,13 @@ searches are now exhausted. Earlier unrelated allowances remain separate.
 This verifies the current combined workflow for one local live case. Public
 Streamlit still showed the older planning path in a zero-call preflight, so its
 latest-build activation remains unconfirmed. Hosting remains free only.
+
+## Explicit source selection fixed - 15 October 2026
+
+The [source-selection repair](SOURCE_SELECTION_FIX_2026-10-15.md) blocks real
+research with no selected source before any API call. Synthetic demonstrations
+now require an explicit mode choice and use offline reasoning. Full source CI
+passed 544 tests and both jobs for commit 4983c5e; 22 unique focused tests passed.
+No Gemini, Tavily or LangSmith calls ran for this repair. The public preflight
+still saw the older build. The browser management tool timed out, and an owner
+reboot was requested; hosted activation is not yet confirmed. Hosting remains free only.
