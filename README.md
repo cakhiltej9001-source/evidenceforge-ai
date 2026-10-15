@@ -47,7 +47,9 @@ preserves earlier usage and still requires plan approval.
 [Live rose recovery results and screenshots](docs/ROSE_RECOVERY_2026-10-14.md)
 used 3 Gemini calls and 1 Tavily search. Source-only recovery completed; Gemini
 review passed but query preparation returned HTTP 503. The combined planning
-repair passed 540 source tests; full Gemini workflow success remains unverified.
+repair passed 540 source tests. A [fresh live test on 15 October](docs/LIVE_ROSE_SUCCESS_2026-10-15.md)
+completed all five Gemini stages and one Tavily search locally, with six supported
+exact citations and zero tool errors. Hosted activation of that repair remains unconfirmed.
 See the [14 October hosted configuration repair](docs/HOSTED_CONFIG_FIX_2026-10-14.md)
 and [current phase status](docs/FINAL_STATUS_2026-10-13.md). Actual hosted
 [Markdown/JSON downloads and fresh-visitor isolation](docs/HOSTED_DOWNLOAD_VERIFICATION_2026-10-08.md) passed; full source CI passed 540 tests.

@@ -1,5 +1,9 @@
 # Rose response recovery — live results
 
+**Later result:** the [15 October live test](LIVE_ROSE_SUCCESS_2026-10-15.md)
+completed all five Gemini stages and a Tavily search locally. The failures below
+remain historical evidence; hosted activation of the latest repair is still unconfirmed.
+
 Tests: 14 October 2026. Evidence publication: 15 October 2026.
 
 **The live Tavily source-only recovery completed and returned cited rose passages.**

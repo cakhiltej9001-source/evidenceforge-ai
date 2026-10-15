@@ -136,3 +136,16 @@ and activation of the second hosted repair remain unconfirmed. No extra provider
 calls are being made; hosting remains free only.
 Safe detailed-error exports are now implemented and covered by regression tests;
 the earlier note listing their omission describes the preceding hosted campaign.
+
+## Fresh full live workflow passed - 15 October 2026
+
+The [fresh live rose workflow](LIVE_ROSE_SUCCESS_2026-10-15.md) completed locally
+with all five Gemini stages successful, one Tavily search, 32 retained passages,
+six exactly supported citations and zero tool errors. Saved planning was reused;
+the continuation used four model calls and one search. Total known tokens for
+this run were 55,606. No automatic retries occurred.
+Together with the preceding campaign, eight approved Gemini calls and two approved
+searches are now exhausted. Earlier unrelated allowances remain separate.
+This verifies the current combined workflow for one local live case. Public
+Streamlit still showed the older planning path in a zero-call preflight, so its
+latest-build activation remains unconfirmed. Hosting remains free only.

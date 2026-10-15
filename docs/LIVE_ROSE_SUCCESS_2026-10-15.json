@@ -1,0 +1,80 @@
+{
+  "date": "2026-10-15",
+  "scope": "Local workbench with real provider calls; not a hosted UI run",
+  "question": "What is a rose flower?",
+  "model": "gemini-3.1-flash-lite",
+  "status": "completed",
+  "stop": "sufficient",
+  "gemini_calls": 5,
+  "successful_gemini_calls": 5,
+  "tavily_searches": 1,
+  "retained_passages": 32,
+  "claims": 6,
+  "supported_exact_citation_audits": 6,
+  "tool_errors": 0,
+  "input_tokens": 51728,
+  "output_tokens": 3878,
+  "total_tokens": 55606,
+  "estimated_cost_usd": null,
+  "roles": [
+    {
+      "role": "reviewed_planner",
+      "status": "succeeded",
+      "tokens": 318
+    },
+    {
+      "role": "query_generator",
+      "status": "succeeded",
+      "tokens": 591
+    },
+    {
+      "role": "coverage_evaluator",
+      "status": "succeeded",
+      "tokens": 19333
+    },
+    {
+      "role": "synthesis",
+      "status": "succeeded",
+      "tokens": 15426
+    },
+    {
+      "role": "critic",
+      "status": "succeeded",
+      "tokens": 19938
+    }
+  ],
+  "sources": [
+    {
+      "title": "Family: Rosaceae (rose family): Go Botany",
+      "url": "https://gobotany.nativeplanttrust.org/family/rosaceae"
+    },
+    {
+      "title": "Rosa - Trees and Shrubs Online",
+      "url": "https://www.treesandshrubsonline.org/articles/rosa"
+    },
+    {
+      "title": "Rosaceae - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Rosaceae"
+    },
+    {
+      "title": "Rosa - an overview | ScienceDirect Topics",
+      "url": "https://www.sciencedirect.com/topics/agricultural-and-biological-sciences/rosa"
+    },
+    {
+      "title": "Part 1: The Rose Family: Rosaceae | From the Notebook of a Rosarian…",
+      "url": "https://thero2017.wordpress.com/2019/09/11/part-1-the-rose-family-rosaceae"
+    }
+  ],
+  "allowance": {
+    "continuation_gemini_calls": 4,
+    "continuation_searches": 1,
+    "preceding_plus_current_campaign_gemini_used": 8,
+    "preceding_plus_current_campaign_gemini_approved": 8,
+    "preceding_plus_current_campaign_searches_used": 2,
+    "preceding_plus_current_campaign_searches_approved": 2
+  },
+  "limits": [
+    "One case does not establish general reliability or source truth.",
+    "Public hosted activation remains unconfirmed."
+  ]
+}
