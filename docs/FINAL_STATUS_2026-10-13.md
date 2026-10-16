@@ -168,3 +168,8 @@ was blocked without creating a plan or report and with zero Gemini/Tavily calls.
 The [hosted screenshot and measured result](SOURCE_SELECTION_FIX_2026-10-15.md#hosted-verification-after-owner-reboot)
 close the hosted activation item above. Full paid workflow success remains the
 separately recorded local live test. Hosting remains free only.
+
+## Saved access for blocked source links - 16 October 2026
+
+The [blocked-source repair](BLOCKED_SOURCE_FIX_2026-10-16.md) adds local saved-passage links and exact-text downloads while preserving original URLs. The publisher returned 403 for both host variants; the app cannot remove that external restriction. Only report-cited evidence from the existing scoped state is shown, with excerpt/full-page limitations.
+Source commit 669d3fe passed 547 tests and both CI jobs; 34 focused regressions passed locally. No new Gemini or Tavily calls ran. Hosted version 2026-10-16.1 still needs activation: the browser management tool timed out and an owner reboot was requested. Hosting remains free only.

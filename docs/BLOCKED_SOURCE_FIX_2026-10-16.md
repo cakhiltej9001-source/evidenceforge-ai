@@ -32,3 +32,11 @@ run with networking blocked, including exact Unicode/markup preservation, exclus
 of uncited evidence, safe title rendering, local anchors and real text downloads.
 Full CI and hosted activation are recorded after verification; the publisher's
 original 403 response remains outside the app's control. Hosting remains free only.
+
+## Measured verification
+
+- 34 focused offline regressions passed in 337.52 seconds on Windows.
+- Source commit 669d3fe passed [full CI](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/38839597945): **547 tests in 44.24 seconds**, strict checking of 88 source files, lint/format, packaging and constrained container checks.
+- Direct checks of the reported www and non-www publisher URLs both returned 403. No alternate URL was substituted into the source provenance.
+- The public build preflight did not observe 2026-10-16.1 and submitted no demonstration or research request. Gemini and Tavily use for this repair is zero.
+- The browser management tool timed out. An owner reboot was requested; hosted activation and a zero-provider-call synthetic UI/download check remain pending.
