@@ -13,7 +13,7 @@ from evidenceforge.exports import report_export
 from evidenceforge.graph.state import ResearchState, StateSnapshot
 from evidenceforge.nodes.approval import PlanDecision
 from evidenceforge.planning import PlanDraft
-from evidenceforge.reporting import render_report
+from evidenceforge.reporting import render_report, retained_source_passages, retained_source_text
 from evidenceforge.schemas import ResearchRequest
 from evidenceforge.services.observability import public_progress, public_timeline
 from evidenceforge.services.usage import usage_summary
@@ -45,7 +45,8 @@ def ingest_upload(store: DocumentStore, owner: str, name: str, data: bytes) -> D
 
 def show_report(state: ResearchState, export_json: str | None = None) -> None:
     st.subheader("Research report")
-    st.markdown(render_report(state))
+    st.markdown(render_report(state, local_source_links=True))
+    show_saved_sources(state)
     st.caption("Downloads include selected document/source passages. Review before sharing.")
     st.download_button(
         "Download Markdown", render_report(state), "report.md", "text/markdown", on_click="ignore"
@@ -82,6 +83,52 @@ def show_report(state: ResearchState, export_json: str | None = None) -> None:
             st.json(graph.model_dump(mode="json"))
     else:
         st.info("No audited claims were produced.")
+
+
+def show_saved_sources(state: ResearchState) -> None:
+    snapshot = StateSnapshot.model_validate(state)
+    report = snapshot.final_report
+    if report is None or not report.source_ids:
+        return
+    st.subheader("Saved source passages")
+    st.caption(
+        "Read the retained quotations here if an original website is blocked. "
+        "Opening or downloading these passages makes no model or search calls. "
+        "These are saved excerpts, not a live or complete copy of the website."
+    )
+    for index, sid in enumerate(report.source_ids, 1):
+        source = snapshot.source_records[sid]
+        passages = retained_source_passages(snapshot, sid)
+        st.subheader(f"Source [{index}]", anchor=f"saved-source-{index}")
+        st.text(source.title)
+        if source.access_status == "excerpt_only" or any(
+            snapshot.source_acquisitions[aid].content_scope == "search_excerpt"
+            or snapshot.source_acquisitions[aid].section is not None
+            for evidence in passages
+            for aid in evidence.acquisition_ids
+        ):
+            st.info("Retained search or section excerpts only; full-page access is not verified.")
+        with st.expander(f"Read saved passages [{index}]", expanded=index == 1):
+            if not passages:
+                st.info("No cited passages are available for this source.")
+            for evidence in passages:
+                locator = evidence.locator
+                location = [f"offsets {locator.start_offset}-{locator.end_offset}"]
+                if locator.page is not None:
+                    location.append(f"page {locator.page}")
+                if locator.paragraph is not None:
+                    location.append(f"paragraph {locator.paragraph}")
+                st.caption("; ".join(location))
+                st.code(evidence.passage, language=None, wrap_lines=True)
+            if passages:
+                st.download_button(
+                    f"Download saved passages [{index}]",
+                    retained_source_text(snapshot, sid),
+                    f"source-{index}-passages.txt",
+                    "text/plain",
+                    key=f"saved_source_download_{index}",
+                    on_click="ignore",
+                )
 
 
 @st.fragment(run_every=2.0)  # type: ignore[untyped-decorator]

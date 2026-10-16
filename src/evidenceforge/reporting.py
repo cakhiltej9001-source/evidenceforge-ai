@@ -234,7 +234,61 @@ def escape(text: str) -> str:
     )
 
 
-def render_report(state: ResearchState) -> str:
+def retained_source_passages(snapshot: StateSnapshot, source_id: str) -> tuple[EvidenceItem, ...]:
+    """Read only the retained passages actually cited by this finalized report."""
+    report = snapshot.final_report
+    if report is None or source_id not in report.source_ids:
+        return ()
+    evidence_ids = {
+        eid
+        for section in report.sections
+        for cid in section.claim_ids
+        for eid in snapshot.report_claims[cid].evidence_ids
+        if snapshot.evidence_store[eid].source_id == source_id
+    }
+    return tuple(
+        sorted(
+            (snapshot.evidence_store[eid] for eid in evidence_ids),
+            key=lambda item: (item.locator.page or 0, item.locator.start_offset, item.id),
+        )
+    )
+
+
+def retained_source_text(snapshot: StateSnapshot, source_id: str) -> str:
+    """Download saved quotations without fetching or mirroring the original website."""
+    passages = retained_source_passages(snapshot, source_id)
+    if not passages:
+        return "No cited passages are available for this source.\n"
+    source = snapshot.source_records[source_id]
+    acquisitions = {aid for evidence in passages for aid in evidence.acquisition_ids}
+    dates = sorted(
+        snapshot.source_acquisitions[aid].retrieved_at.isoformat() for aid in acquisitions
+    )
+    scopes = sorted({snapshot.source_acquisitions[aid].content_scope for aid in acquisitions})
+    lines = [
+        "Saved source passages - retained evidence, not a full-page mirror",
+        source.title,
+        "Original URL: " + (str(source.url) if source.url else "Local document"),
+        "Provider: " + source.provider,
+        "Retrieved: " + ", ".join(dict.fromkeys(dates)),
+        "Retained content scope: " + ", ".join(scopes),
+        "Original website access and source truth are not verified by this download.",
+        "",
+    ]
+    for index, evidence in enumerate(passages, 1):
+        locator = evidence.locator
+        location = [f"offsets {locator.start_offset}-{locator.end_offset}"]
+        if locator.page is not None:
+            location.append(f"page {locator.page}")
+        if locator.paragraph is not None:
+            location.append(f"paragraph {locator.paragraph}")
+        if locator.section is not None:
+            location.append(locator.section)
+        lines.extend([f"Passage {index} (" + "; ".join(location) + ")", evidence.passage, ""])
+    return "\n".join(lines)
+
+
+def render_report(state: ResearchState, *, local_source_links: bool = False) -> str:
     s = StateSnapshot.model_validate(state)
     has_documents = any(source.source_type == "document" for source in s.source_records.values())
     notice = (
@@ -368,7 +422,9 @@ def render_report(state: ResearchState) -> str:
                 if locator.section is not None:
                     locations.append(escape(locator.section))
             suffix = " (" + "; ".join(sorted(set(locations))) + ")" if locations else ""
-            refs = " ".join(f"[{n}]" for n in citations)
+            refs = " ".join(
+                f"[{n}](#saved-source-{n})" if local_source_links else f"[{n}]" for n in citations
+            )
             if readable and name == "summary":
                 rendered.append(f"Supported quotation Q{quote_numbers[cid]}: {refs}{suffix}")
             elif readable and claim.statement in shown:
@@ -404,11 +460,30 @@ def render_report(state: ResearchState) -> str:
             lines.append("No supported claims are available for this section.")
         lines.append("")
     lines.extend(["## Sources", ""])
+    if sources:
+        lines.extend(
+            [
+                (
+                    "Source titles open saved passages below. Original website links are "
+                    "separate; those sites may block access with HTTP 403."
+                    if local_source_links
+                    else "Original websites control access and may return HTTP 403. "
+                    "Saved quoted passages are available in the app and the JSON download."
+                ),
+                "",
+            ]
+        )
     for sid, index in sources.items():
         source = s.source_records[sid]
         url = str(source.url).replace("(", "%28").replace(")", "%29") if source.url else None
         title = escape(source.title)
-        lines.append(f"- [{index}] [{title}]({url})" if url else f"- [{index}] {title}")
+        if local_source_links:
+            line = f"- [{index}] [{title}](#saved-source-{index})"
+            if url:
+                line += f" — [Original website]({url})"
+            lines.append(line)
+        else:
+            lines.append(f"- [{index}] [{title}]({url})" if url else f"- [{index}] {title}")
         if source.document_id is not None:
             dates = sorted(
                 {

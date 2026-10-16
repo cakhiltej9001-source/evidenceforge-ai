@@ -65,7 +65,7 @@ def test_public_demo_completes_and_isolates_visitors(tmp_path, monkeypatch):
         next(b for b in first.button if b.label == "Approve plan").click().run()
         first.run()
         assert not first.exception and not first.error
-        assert {b.label for b in first.get("download_button")} == {
+        assert {b.label for b in first.get("download_button")} >= {
             "Download Markdown",
             "Download JSON",
         }

@@ -49,7 +49,7 @@ def test_ui_create_approve_download_and_change_scope(tmp_path, monkeypatch):
         next(b for b in at.button if b.label == "Approve plan").click().run()
         at.run()
         assert not at.exception and not at.error
-        assert {b.label for b in at.get("download_button")} == {
+        assert {b.label for b in at.get("download_button")} >= {
             "Download Markdown",
             "Download JSON",
         }
