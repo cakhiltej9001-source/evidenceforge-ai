@@ -6,6 +6,7 @@ from typing import cast
 
 from pydantic import JsonValue
 
+from evidenceforge.answering import answer_excerpts, unresolved_answer
 from evidenceforge.evidence.deduplication import working_evidence
 from evidenceforge.evidence.text_quality import (
     EXERCISE,
@@ -288,7 +289,9 @@ def retained_source_text(snapshot: StateSnapshot, source_id: str) -> str:
     return "\n".join(lines)
 
 
-def render_report(state: ResearchState, *, local_source_links: bool = False) -> str:
+def render_report(
+    state: ResearchState, *, local_source_links: bool = False, answer_first: bool = False
+) -> str:
     s = StateSnapshot.model_validate(state)
     has_documents = any(source.source_type == "document" for source in s.source_records.values())
     notice = (
@@ -388,12 +391,59 @@ def render_report(state: ResearchState, *, local_source_links: bool = False) -> 
                 )
             )
         )
+    if answer_first:
+        # Summary selections remain findings even when replacing the summary's presentation.
+        sections["key_findings"] = tuple(
+            dict.fromkeys((*sections.get("key_findings", ()), *sections.get("summary", ())))
+        )
+        lines.extend(["## Answer", ""])
+        if unresolved_answer(s):
+            lines.extend(
+                [
+                    "The retained evidence contains unresolved differences or measurement "
+                    "scopes. A single answer is not established; see the findings below.",
+                    "",
+                ]
+            )
+        else:
+            excerpts = answer_excerpts(s)
+            if excerpts:
+                if s.run_status != "completed" or s.coverage_status != "sufficient":
+                    lines.extend(
+                        [
+                            "The evidence is incomplete. These cited excerpts "
+                            "give a partial answer.",
+                            "",
+                        ]
+                    )
+                for excerpt in excerpts:
+                    source_id = s.evidence_store[excerpt.evidence_id].source_id
+                    number = sources[source_id]
+                    ref = (
+                        f"[{number}](#saved-source-{number})"
+                        if local_source_links
+                        else f"[{number}]"
+                    )
+                    lines.extend([escape(excerpt.text) + " " + ref, ""])
+                lines.extend(
+                    ["Short quotations from the retained evidence; full passages follow.", ""]
+                )
+            else:
+                lines.extend(
+                    [
+                        "A concise supported answer could not be extracted from the retained "
+                        "quotations. Review the findings and unresolved criteria below.",
+                        "",
+                    ]
+                )
     for name, title in (
         ("summary", "Summary"),
         ("key_findings", "Key Findings"),
         ("limitations", "Quoted Limitations"),
         ("disagreements", "Quoted Disagreements"),
     ):
+        if answer_first and name == "summary":
+            continue
         if name not in ("summary", "key_findings") and not sections.get(name):
             continue
         lines.extend([f"## {title}", ""])

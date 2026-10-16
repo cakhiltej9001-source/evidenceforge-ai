@@ -45,11 +45,15 @@ def ingest_upload(store: DocumentStore, owner: str, name: str, data: bytes) -> D
 
 def show_report(state: ResearchState, export_json: str | None = None) -> None:
     st.subheader("Research report")
-    st.markdown(render_report(state, local_source_links=True))
+    st.markdown(render_report(state, local_source_links=True, answer_first=True))
     show_saved_sources(state)
     st.caption("Downloads include selected document/source passages. Review before sharing.")
     st.download_button(
-        "Download Markdown", render_report(state), "report.md", "text/markdown", on_click="ignore"
+        "Download Markdown",
+        render_report(state, answer_first=True),
+        "report.md",
+        "text/markdown",
+        on_click="ignore",
     )
     st.download_button(
         "Download JSON",
