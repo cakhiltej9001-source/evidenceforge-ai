@@ -173,3 +173,14 @@ separately recorded local live test. Hosting remains free only.
 
 The [blocked-source repair](BLOCKED_SOURCE_FIX_2026-10-16.md) adds local saved-passage links and exact-text downloads while preserving original URLs. The publisher returned 403 for both host variants; the app cannot remove that external restriction. Only report-cited evidence from the existing scoped state is shown, with excerpt/full-page limitations.
 Source commit 669d3fe passed 547 tests and both CI jobs; 34 focused regressions passed locally. No new Gemini or Tavily calls ran. Hosted version 2026-10-16.1 still needs activation: the browser management tool timed out and an owner reboot was requested. Hosting remains free only.
+
+## Hosted saved-source access verified after reboot - 16 October 2026
+
+The owner rebooted the app. A fresh anonymous browser verified version 2026-10-16.1,
+local source links, retained-passage viewing and plain-text download with original
+URL metadata. The test explicitly used the offline synthetic demonstration with
+live-source controls absent: zero Gemini calls and zero Tavily searches.
+The [actual hosted screenshot and result](BLOCKED_SOURCE_FIX_2026-10-16.md#hosted-verification-after-reboot)
+close the activation/download item above. The publisher can still return 403;
+the app provides saved excerpts rather than bypassing that restriction or claiming
+a complete article. Full source CI remains 547 passing tests. Hosting remains free only.

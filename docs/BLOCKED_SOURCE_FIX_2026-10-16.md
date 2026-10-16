@@ -1,5 +1,8 @@
 # Read saved source passages when an original website is blocked
 
+**Hosted status: verified after owner reboot.** Version 2026-10-16.1, saved-source
+links and exact text downloads are active. Pre-reboot notes below are historical.
+
 ## Diagnosis
 
 The reported URL, https://www.globalelectricity.org/solar-vs-wind-energy/,
@@ -40,3 +43,24 @@ original 403 response remains outside the app's control. Hosting remains free on
 - Direct checks of the reported www and non-www publisher URLs both returned 403. No alternate URL was substituted into the source provenance.
 - The public build preflight did not observe 2026-10-16.1 and submitted no demonstration or research request. Gemini and Tavily use for this repair is zero.
 - The browser management tool timed out. An owner reboot was requested; hosted activation and a zero-provider-call synthetic UI/download check remain pending.
+
+## Hosted verification after reboot
+
+A fresh anonymous browser observed build 2026-10-16.1. It explicitly selected
+Synthetic demonstration, verified Offline reasoning and the absence of live-source
+controls, then created and approved one offline fixture plan. The rendered report
+provided local citation links, labeled retained passages and a working plain-text
+download containing the saved passage and original source URL. No Gemini or Tavily
+calls ran. This is a UI/mechanics check with synthetic text, not a new live research
+answer or a claim that the publisher has removed its 403 response.
+
+The first after-reboot check stopped before submitting a plan because the styled
+select control did not expose its value as inner text. The successful check
+inspected the visible select value in its rendered container before submission.
+No production source was fetched or substituted by either check.
+
+![Actual hosted saved-passage viewer using a synthetic fixture](images/blocked-source-hosted-saved-passages-2026-10-16.png)
+
+[Machine-readable hosted result](BLOCKED_SOURCE_HOSTED_2026-10-16.json).
+The screenshot is an actual public-app capture; its passage is explicitly synthetic.
+The original website remains a separate external link and can still refuse access.

@@ -1,0 +1,12 @@
+{
+  "new_build_visible": true,
+  "gemini_calls": 0,
+  "tavily_searches": 0,
+  "synthetic_ui_check": true,
+  "reasoning_verified_offline": true,
+  "live_source_controls_absent": true,
+  "local_source_links": true,
+  "saved_text_downloaded": true,
+  "original_url_preserved": true,
+  "viewer_scope_labeled": true
+}

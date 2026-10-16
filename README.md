@@ -57,7 +57,8 @@ were verified after reboot with zero provider calls.
 [Saved-source access for blocked publisher links](docs/BLOCKED_SOURCE_FIX_2026-10-16.md)
 lets in-app citations open the retained passages and download their exact text.
 Original website links remain separate. Build 2026-10-16.1 passed full CI;
-its hosted activation is awaiting an owner reboot.
+hosted version 2026-10-16.1 and its saved-source links/text downloads were verified
+after reboot using an offline synthetic demonstration with zero provider calls.
 See the [14 October hosted configuration repair](docs/HOSTED_CONFIG_FIX_2026-10-14.md)
 and [current phase status](docs/FINAL_STATUS_2026-10-13.md). Actual hosted
 [Markdown/JSON downloads and fresh-visitor isolation](docs/HOSTED_DOWNLOAD_VERIFICATION_2026-10-08.md) passed; full source CI passed 547 tests.
