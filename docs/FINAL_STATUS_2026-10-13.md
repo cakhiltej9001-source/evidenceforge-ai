@@ -184,3 +184,8 @@ The [actual hosted screenshot and result](BLOCKED_SOURCE_FIX_2026-10-16.md#hoste
 close the activation/download item above. The publisher can still return 403;
 the app provides saved excerpts rather than bypassing that restriction or claiming
 a complete article. Full source CI remains 547 passing tests. Hosting remains free only.
+
+## Answer before key findings implemented - 16 October 2026
+
+The [answer-first presentation](ANSWER_FIRST_2026-10-16.md) adds short exact cited excerpts before Key Findings in the workbench and its Markdown download. Relevant unresolved differences prevent a single winner, qualifiers remain attached, and canonical claims/evidence are preserved. Existing compatible saved reports can use the view without new provider calls.
+Source commit 11e6f4c passed 554 tests and both CI jobs, with 89 source files type-checked. Local focused runs covered 41 unique tests. No new Gemini or Tavily calls ran. Version 2026-10-16.2 still needs hosted activation: the management connection timed out and an owner reboot was requested. Hosting remains free only.
