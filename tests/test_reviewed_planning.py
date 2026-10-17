@@ -89,7 +89,8 @@ def test_malformed_combined_review_cannot_reach_search(tmp_path, result):
     assert not state["research_questions"] and search.calls == 0
 
 
-def test_combined_review_approval_resume_uses_exactly_five_calls(tmp_path):
+@pytest.mark.parametrize("policy", [2, 3])
+def test_combined_review_approval_resume_uses_exactly_five_calls(tmp_path, policy):
     fixture = FixtureResearchModel()
     titles = []
     budget = BudgetLimits(
@@ -108,6 +109,8 @@ def test_combined_review_approval_resume_uses_exactly_five_calls(tmp_path):
         titles.append(title)
         value = json.loads(payload["contents"][0]["parts"][0]["text"])
         if title == "ReviewedPlanDraft":
+            prompt = payload["systemInstruction"]["parts"][0]["text"]
+            assert ("practical answer to the user's actual goal" in prompt) is (policy == 3)
             assert payload["generationConfig"]["thinkingConfig"]["thinkingLevel"] == "minimal"
             assert payload["generationConfig"]["maxOutputTokens"] == 1024
             assert (
@@ -140,7 +143,9 @@ def test_combined_review_approval_resume_uses_exactly_five_calls(tmp_path):
             model=adapter(respond, budget),
             retrieval=RetrievalService(tmp_path, {SourceType.WEB: search}),
             options=ResearchOptions(
-                production_policy_version=2, require_plan_approval=True, node_timeout_seconds=60
+                production_policy_version=policy,
+                require_plan_approval=True,
+                node_timeout_seconds=60,
             ),
         )
 
@@ -161,5 +166,11 @@ def test_combined_review_approval_resume_uses_exactly_five_calls(tmp_path):
     assert completed["run_status"] == "completed"
     assert len(titles) == 5 and search.calls == 1
     assert completed["planning_attempts"] + completed["quality_attempts"] == 5
+    saved_usage = json.loads(
+        (tmp_path / "reports" / completed["run_id"] / "usage.json").read_text()
+    )
+    assert saved_usage["input_tokens_known"] == 100
+    assert saved_usage["output_tokens_known"] == 300
+    assert saved_usage["token_usage_unknown_records"] == 0
     assert asyncio.run(service().resume(paused["thread_id"])) == completed
     assert len(titles) == 5

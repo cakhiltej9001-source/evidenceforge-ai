@@ -246,7 +246,7 @@ class ResearchService:
         if type(version) is not int or version not in (1, 2):
             raise CheckpointFailure("Unsupported research input contract version.")
         policy = json.loads(profile)["research_options"].get("production_policy_version", 0)
-        if type(policy) is not int or policy not in (0, 1, 2):
+        if type(policy) is not int or policy not in (0, 1, 2, 3):
             raise CheckpointFailure("Unsupported production policy version.")
         selection = json.loads(profile)["research_options"].get("quote_selection_version", 0)
         if type(selection) is not int or selection not in (0, 1, 2, 3, 4, 5, 6):
@@ -725,8 +725,9 @@ class ResearchService:
         path = self.report_path(state)
         from evidenceforge.exports import report_export
 
+        paid = self.model.usage() if isinstance(self.model, GeminiResearchModel) else None
         atomic_write(path, render_report(state))
-        atomic_write(path.with_name("report.json"), report_export(state))
+        atomic_write(path.with_name("report.json"), report_export(state, provider_usage=paid))
         atomic_write(path.with_name("state.json"), json.dumps(state, ensure_ascii=False, indent=2))
         if isinstance(self.model, GeminiResearchModel):
             atomic_write(
@@ -753,7 +754,11 @@ class ResearchService:
         atomic_write(path.with_name("inspection.md"), render_inspection(state))
         atomic_write(
             path.with_name("usage.json"),
-            json.dumps(usage_summary(state, self.prices), ensure_ascii=False, indent=2),
+            json.dumps(
+                usage_summary(state, self.prices, provider_usage=paid),
+                ensure_ascii=False,
+                indent=2,
+            ),
         )
         atomic_write(
             path.with_name("progress.json"),

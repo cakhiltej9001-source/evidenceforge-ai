@@ -221,3 +221,16 @@ All seven existing focused UI checks passed in 98.63 seconds, including typed
 questions, zero-call blank submission, approval/downloads and visitor isolation.
 Lint and formatting passed. No Gemini or Tavily calls ran. The published build
 marker is 2026-10-17.2; hosted activation is checked separately.
+
+## Partial-report answer and usage repair - 17 October 2026
+
+The [report recovery](REPORT_RECOVERY_2026-10-17.md) addresses missing how-to
+answers despite retained evidence, visible unresolved requirements, entity display,
+and conflicting token summaries. UI and export totals use scoped durable Gemini
+receipts. New policy 3 improves practical planning and source/quote guidance; old
+saved runs preserve their original request hashes and replay behavior. Call/search
+limits and the no-automatic-paid-retry policy remain unchanged.
+Forty unique focused checks passed across the initial 38-case run and final
+14-case recovery suite. Direct strict typing, project lint and format checks passed.
+No new live Gemini or Tavily calls ran. Version 2026-10-17.3 still needs hosted
+activation verification; the browser management connection timed out.

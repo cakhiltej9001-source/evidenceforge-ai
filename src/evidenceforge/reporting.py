@@ -235,6 +235,11 @@ def escape(text: str) -> str:
     )
 
 
+def readable_quote(text: str) -> str:
+    """Decode display entities, then escape markup; retained text is never changed."""
+    return escape(html.unescape(text))
+
+
 def retained_source_passages(snapshot: StateSnapshot, source_id: str) -> tuple[EvidenceItem, ...]:
     """Read only the retained passages actually cited by this finalized report."""
     report = snapshot.final_report
@@ -424,9 +429,10 @@ def render_report(
                         if local_source_links
                         else f"[{number}]"
                     )
-                    lines.extend([escape(excerpt.text) + " " + ref, ""])
+                    prefix = "- " if len(excerpts) > 1 else ""
+                    lines.extend([prefix + readable_quote(excerpt.text) + " " + ref, ""])
                 lines.extend(
-                    ["Short quotations from the retained evidence; full passages follow.", ""]
+                    ["Cited quotations from the retained evidence; full passages follow.", ""]
                 )
             else:
                 lines.extend(
@@ -436,6 +442,21 @@ def render_report(
                         "",
                     ]
                 )
+        if s.gaps:
+            lines.extend(["**Still unresolved:**", ""])
+            missing = list(dict.fromkeys(gap.missing_aspect for gap in s.gaps))
+            lines.extend("- " + escape(item) for item in missing[:3])
+            if len(missing) > 3:
+                lines.append("- Further gaps are listed under limitations and unresolved work.")
+            lines.append("")
+        if s.run_status == "partial" and s.stop_reason in {"pass_limit", "search_limit"}:
+            lines.extend(
+                [
+                    "This run reached its configured research/search limit. "
+                    "Further research requires another approved run or additional documents.",
+                    "",
+                ]
+            )
     for name, title in (
         ("summary", "Summary"),
         ("key_findings", "Key Findings"),
@@ -493,7 +514,8 @@ def render_report(
                 shown[claim.statement] = quote_numbers[cid]
             else:
                 label = f"**Q{quote_numbers[cid]}.** " if readable else ""
-                rendered.append(label + f'"{escape(claim.statement)}" ' + refs + suffix)
+                quote = readable_quote(claim.statement) if answer_first else escape(claim.statement)
+                rendered.append(label + f'"{quote}" ' + refs + suffix)
                 shown[claim.statement] = quote_numbers[cid]
         if name == "summary" and rendered:
             count = min(3, len(rendered))
@@ -509,6 +531,16 @@ def render_report(
         if not sections.get(name):
             lines.append("No supported claims are available for this section.")
         lines.append("")
+    if answer_first and any(
+        html.unescape(claim.statement) != claim.statement for claim in s.report_claims.values()
+    ):
+        lines.extend(
+            [
+                "Character entities are decoded for reading. Saved source passages and "
+                "JSON records preserve the original text.",
+                "",
+            ]
+        )
     lines.extend(["## Sources", ""])
     if sources:
         lines.extend(

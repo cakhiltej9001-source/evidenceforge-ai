@@ -1,5 +1,6 @@
 """Short exact excerpts for report presentation; no new claims or model calls."""
 
+import html
 import re
 from dataclasses import dataclass
 
@@ -25,6 +26,20 @@ QUALIFIER = re.compile(
 )
 CONTEXT = re.compile(r"\b(?:\d{4}|historically|previously|as of|following|after|before)\b", re.I)
 DEPENDENT_START = re.compile(r"^(?:it|this|that|these|those|they|he|she|there)\b", re.I)
+HOW_TO = re.compile(
+    r"^\s*how\s+(?:(?:can|do|should|would|could)\s+(?:i|we|you|one)\s+)?"
+    r"(?:to\s+)?(?:become|start|build|create|learn|establish|launch|develop|set\s+up)\b",
+    re.I,
+)
+PLAN_GENERIC = frozenset(
+    "essential steps typical phases common identify list describe requirements including "
+    "establishing focused least three first second third can i we you my your should would".split()
+)
+PROMOTIONAL = re.compile(
+    r"\b(?:subscribe|like and share|my course|my school|my community|our course|"
+    r"join my|join our|profile picture|follow original audio)\b|\[music\]",
+    re.I,
+)
 
 
 @dataclass(frozen=True)
@@ -45,9 +60,21 @@ def unresolved_answer(snapshot: StateSnapshot) -> bool:
     if report is None:
         return False
     anchors = words(snapshot.request.question)
+    procedural = bool(HOW_TO.search(snapshot.request.question))
+    plan_topics = set().union(
+        *(words(question.question) - PLAN_GENERIC for question in snapshot.research_questions)
+    )
+
+    coverage_texts = {
+        snapshot.evidence_store[eid].passage
+        for coverage in snapshot.coverage_by_question.values()
+        for eid in coverage.evidence_ids
+    }
 
     def relevant(text: str) -> bool:
         terms = words(text)
+        if procedural:
+            return text in coverage_texts or len(terms & (anchors | plan_topics)) >= 2
         return bool(anchors) and (
             anchors.issubset(terms)
             if "capital" in anchors
@@ -94,8 +121,16 @@ def answer_excerpts(snapshot: StateSnapshot) -> tuple[AnswerExcerpt, ...]:
     }
     cited = dict.fromkeys(cid for section in report.sections for cid in section.claim_ids)
     candidates: list[tuple[float, int, AnswerExcerpt, set[str]]] = []
+    procedural = bool(HOW_TO.search(snapshot.request.question))
+    planned = {q.id: words(q.question) - PLAN_GENERIC for q in snapshot.research_questions}
+    answer_claims = {
+        cid
+        for section in report.sections
+        if section.name in {"summary", "key_findings"}
+        for cid in section.claim_ids
+    }
     for cid in cited:
-        if cid not in accepted:
+        if cid not in accepted or cid not in answer_claims:
             continue
         claim = snapshot.report_claims[cid]
         for eid in claim.evidence_ids:
@@ -104,17 +139,34 @@ def answer_excerpts(snapshot: StateSnapshot) -> tuple[AnswerExcerpt, ...]:
                 continue
             text = evidence.passage
             spans = [(0, len(text))] if QUALIFIER.search(text) else list(readable_spans(text, 1))
+            # A longer whole passage can preserve a how-to answer and all its caveats.
+            # It is a fallback, never permission to shorten away qualifications.
+            if procedural and (0, len(text)) not in spans:
+                spans.append((0, len(text)))
             for start, end in spans:
                 excerpt = text[start:end]
+                decoded = html.unescape(excerpt)
+                context_fallback = procedural and start == 0 and end == len(text)
                 if (
-                    not 8 <= len(excerpt) <= 320
-                    or NOISE.search(excerpt)
+                    not 8 <= len(excerpt) <= (1600 if context_fallback else 320)
+                    or NOISE.search(decoded)
+                    or PROMOTIONAL.search(decoded)
                     or DEPENDENT_START.search(excerpt.lstrip())
                     or (start > 0 and CONTEXT.search(text[:start]))
                 ):
                     continue
                 overlap = words(excerpt) & anchors
-                if not overlap or len(overlap) / len(anchors) < 0.5:
+                plan_anchors = set().union(*(planned.get(qid, set()) for qid in claim.question_ids))
+                plan_overlap = words(decoded) & plan_anchors
+                if procedural:
+                    assessed = any(
+                        eid in snapshot.coverage_by_question[qid].evidence_ids
+                        for qid in claim.question_ids
+                        if qid in snapshot.coverage_by_question
+                    )
+                    if len(overlap | plan_overlap) < 2 and not (assessed and context_fallback):
+                        continue
+                elif not overlap or len(overlap) / len(anchors) < 0.5:
                     continue
                 if "capital" in anchors and (
                     not anchors.issubset(words(excerpt))
@@ -127,20 +179,38 @@ def answer_excerpts(snapshot: StateSnapshot) -> tuple[AnswerExcerpt, ...]:
                 ):
                     continue
                 score = len(overlap) / len(anchors)
+                if procedural:
+                    score += min(0.5, len(plan_overlap) / max(1, len(plan_anchors)))
+                if len(excerpt) > 320:
+                    score -= 1.0
                 if re.search(r"\b(?:is|are|means|refers to)\b", excerpt, re.I):
                     score += 0.1
                 candidates.append(
-                    (score, len(excerpt), AnswerExcerpt(cid, eid, start, end, excerpt), overlap)
+                    (
+                        score,
+                        len(excerpt),
+                        AnswerExcerpt(cid, eid, start, end, excerpt),
+                        overlap | plan_overlap if procedural else overlap,
+                    )
                 )
     selected: list[AnswerExcerpt] = []
     covered: set[str] = set()
     seen: set[str] = set()
     for _, _, selected_excerpt, overlap in sorted(candidates, key=lambda item: (-item[0], item[1])):
-        if selected_excerpt.text in seen or not overlap - covered:
+        if selected_excerpt.text in seen or (not procedural and not overlap - covered):
+            continue
+        if procedural and any(
+            selected_excerpt.text in previous.text
+            or previous.text in selected_excerpt.text
+            or len(words(selected_excerpt.text) & words(previous.text))
+            / max(1, len(words(selected_excerpt.text) | words(previous.text)))
+            > 0.8
+            for previous in selected
+        ):
             continue
         selected.append(selected_excerpt)
         seen.add(selected_excerpt.text)
         covered.update(overlap)
-        if anchors.issubset(covered) or len(selected) == 3:
+        if (not procedural and anchors.issubset(covered)) or len(selected) == 3:
             break
     return tuple(selected)

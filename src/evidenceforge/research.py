@@ -102,7 +102,7 @@ class CriticAssessment(Contract):
 
 
 class ResearchOptions(Contract):
-    production_policy_version: Literal[0, 1, 2] = 0
+    production_policy_version: Literal[0, 1, 2, 3] = 0
     require_plan_approval: bool = False
     live_web: StrictBool = False
     live_energy: StrictBool = False

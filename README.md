@@ -68,7 +68,10 @@ The workbench source controls now offer Tavily web search and imported documents
 the GB half-hour energy API checkbox and its help text were removed at the owner's request.
 The question box starts empty, with a writing prompt and ideas for explanations,
 comparisons and document research. Blank submissions are blocked before any API call.
-The next hosted build is version 2026-10-17.2; activation is checked separately.
+[Report recovery](docs/REPORT_RECOVERY_2026-10-17.md) adds plan-aware how-to answers,
+visible evidence gaps and Gemini receipt totals shared by the UI and JSON exports.
+New runs use versioned practical research guidance with the same call/search caps.
+The published build is 2026-10-17.3; hosted activation is checked separately.
 See the [14 October hosted configuration repair](docs/HOSTED_CONFIG_FIX_2026-10-14.md)
 and [current phase status](docs/FINAL_STATUS_2026-10-13.md). Actual hosted
 [Markdown/JSON downloads and fresh-visitor isolation](docs/HOSTED_DOWNLOAD_VERIFICATION_2026-10-08.md) passed; full source CI passed 554 tests.

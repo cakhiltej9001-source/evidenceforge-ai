@@ -11,7 +11,7 @@ from evidenceforge.services.observability import public_progress
 from evidenceforge.services.usage import usage_summary
 
 
-def report_export(state: ResearchState) -> str:
+def report_export(state: ResearchState, *, provider_usage: dict[str, object] | None = None) -> str:
     s = StateSnapshot.model_validate(state)
     if s.run_status.value in {"created", "running"}:
         raise ValueError("Report export requires a finalized run.")
@@ -56,7 +56,7 @@ def report_export(state: ResearchState) -> str:
             }
             for evidence in transcripts
         ],
-        "usage": usage_summary(state),
+        "usage": usage_summary(state, provider_usage=provider_usage),
         "limitations": [
             "Exact passage checks do not independently establish source truth.",
             "Export contains selected source and document passages.",

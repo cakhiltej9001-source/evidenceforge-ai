@@ -82,9 +82,11 @@ def build_research_graph(
 ) -> CompiledStateGraph[ResearchState, None, ResearchState, ResearchState]:
     if model.is_fixture is not True and not isinstance(model, GeminiResearchModel):
         raise ValueError("Unsupported live research model.")
+    if isinstance(model, GeminiResearchModel):
+        model.guidance_version = 1 if options.production_policy_version >= 3 else 0
     planning = PlanningOptions(
         available_source_types=tuple(processor.adapters),
-        node_timeout_seconds=60 if options.production_policy_version == 2 else 30,
+        node_timeout_seconds=60 if options.production_policy_version >= 2 else 30,
     )
     graph = StateGraph(ResearchState)
     from collections.abc import Callable
@@ -95,7 +97,7 @@ def build_research_graph(
 
     add_node("manager", manager)
     add_node(
-        "planner", Planner(model, planning, reviewed_plan=options.production_policy_version == 2)
+        "planner", Planner(model, planning, reviewed_plan=options.production_policy_version >= 2)
     )
     add_node("context_manager", ContextManager(repository, planning))
     add_node(

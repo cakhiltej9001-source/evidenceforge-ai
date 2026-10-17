@@ -157,7 +157,15 @@ def run_panel(app: LocalWorkbench, owner: str) -> None:
         st.write({**progress, "approval": state["approval_status"]})
         st.caption("Thread: " + thread)
         s = StateSnapshot.model_validate(state)
-        usage = usage_summary(state)
+        paid = app.paid_usage(owner, thread)
+        usage = usage_summary(state, provider_usage=paid)
+        if state["approval_status"] == "awaiting_approval":
+            st.info("Plan ready. Review it below and choose Approve plan to start research.")
+        elif s.run_status == "partial" and s.stop_reason in {"pass_limit", "search_limit"}:
+            st.warning(
+                "This run reached its research limit. The report contains a partial "
+                "answer; unresolved requirements are shown below it."
+            )
         if state["tool_errors"]:
             from evidenceforge.services.failures import public_failures
 
@@ -225,7 +233,6 @@ def run_panel(app: LocalWorkbench, owner: str) -> None:
                     "still consume search credits."
                 )
             st.json(usage)
-            paid = app.paid_usage(owner, thread)
             if paid is not None:
                 st.write("Gemini provider usage")
                 st.json(paid)

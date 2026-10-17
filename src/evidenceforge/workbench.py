@@ -70,7 +70,7 @@ class LocalWorkbench:
                 model_id or str(settings.model_id),
                 settings.model_api_key,
                 settings.budget,
-                request_timeout_seconds=45 if options.production_policy_version == 2 else 25,
+                request_timeout_seconds=45 if options.production_policy_version >= 2 else 25,
             )
         return ResearchService(
             self.data_dir,
@@ -145,7 +145,7 @@ class LocalWorkbench:
                 require_plan_approval=True,
                 live_web=live_web,
                 live_energy=live_energy,
-                production_policy_version=2,
+                production_policy_version=3,
                 node_timeout_seconds=60,
             ),
             gemini=gemini,
@@ -181,7 +181,7 @@ class LocalWorkbench:
             service = self.service("immediate", options, gemini=False)
         else:
             service = self.registered_service(owner, thread)
-            if service.options.production_policy_version < 2 and (
+            if service.options.production_policy_version < 3 and (
                 service.options.live_web
                 or service.options.live_energy
                 or state["request"]["document_ids"]
@@ -190,7 +190,7 @@ class LocalWorkbench:
                 # remains bound to its registered policy and paid-call hashes.
                 service = self.service(
                     options=service.options.model_copy(
-                        update={"production_policy_version": 2, "node_timeout_seconds": 60}
+                        update={"production_policy_version": 3, "node_timeout_seconds": 60}
                     ),
                     gemini=True,
                     model_id=profile.get("model_id"),
@@ -231,7 +231,11 @@ class LocalWorkbench:
     def export(self, owner: str, thread: str) -> str:
         from evidenceforge.exports import report_export
 
-        data = json.loads(report_export(self.snapshot(owner, thread)))
+        data = json.loads(
+            report_export(
+                self.snapshot(owner, thread), provider_usage=self.paid_usage(owner, thread)
+            )
+        )
         data["provider_failures"] = self.model_failures(owner, thread)
         return json.dumps(data, ensure_ascii=False, indent=2)
 
