@@ -237,7 +237,7 @@ def escape(text: str) -> str:
 
 def readable_quote(text: str) -> str:
     """Decode display entities, then escape markup; retained text is never changed."""
-    return escape(html.unescape(text))
+    return re.sub(r"([\\`*_{}\[\]()#+.!|<>~-])", r"\\\1", html.unescape(text)).replace("\n", " ")
 
 
 def retained_source_passages(snapshot: StateSnapshot, source_id: str) -> tuple[EvidenceItem, ...]:

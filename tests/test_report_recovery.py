@@ -140,6 +140,8 @@ def test_entities_are_readable_but_original_audit_text_is_preserved(tmp_path):
     original = deepcopy(state)
     rendered = render_report(state, answer_first=True)
     assert "&amp;#x27;" not in rendered
+    assert readable_quote("founder&#x27;s") == "founder's"
+    assert readable_quote("A &amp; B") == "A & B"
     assert readable_quote(passage) in rendered
     assert "Character entities are decoded" in rendered
     assert state == original
