@@ -189,3 +189,15 @@ a complete article. Full source CI remains 547 passing tests. Hosting remains fr
 
 The [answer-first presentation](ANSWER_FIRST_2026-10-16.md) adds short exact cited excerpts before Key Findings in the workbench and its Markdown download. Relevant unresolved differences prevent a single winner, qualifiers remain attached, and canonical claims/evidence are preserved. Existing compatible saved reports can use the view without new provider calls.
 Source commit 11e6f4c passed 554 tests and both CI jobs, with 89 source files type-checked. Local focused runs covered 41 unique tests. No new Gemini or Tavily calls ran. Version 2026-10-16.2 still needs hosted activation: the management connection timed out and an owner reboot was requested. Hosting remains free only.
+
+## Hosted Answer-first layout verified after reboot - 16 October 2026
+
+The owner rebooted the app. A fresh anonymous browser verified version
+2026-10-16.2, Answer before Key Findings, and matching order and cited answer text
+in the actual Markdown download. Saved-source links and text downloads also passed.
+The check explicitly selected offline synthetic demonstration with live-source
+controls absent: zero Gemini calls and zero Tavily searches. Its partial-answer
+label remained visible. The [hosted screenshot and measured result](ANSWER_FIRST_2026-10-16.md#hosted-verification-after-reboot)
+close the preceding activation item. Full source CI remains 554 passing tests;
+this presentation check does not claim a fresh hosted live-provider research run.
+Hosting remains free only.

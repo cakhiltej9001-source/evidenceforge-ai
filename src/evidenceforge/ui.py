@@ -466,7 +466,7 @@ def main(*, public_demo: bool = False, cloud_hosted: bool = False) -> None:
             )
         else:
             st.caption(
-                "Select Tavily web search, the relevant energy API, or imported documents. "
+                "Select Tavily web search or imported documents. "
                 "Gemini does not search the web by itself."
             )
     with st.form("new_research"):
@@ -485,7 +485,6 @@ def main(*, public_demo: bool = False, cloud_hosted: bool = False) -> None:
             ),
         )
         live_web = False
-        live_energy = False
         if not synthetic_mode:
             st.caption(
                 "Gemini sends the question and selected evidence to Google "
@@ -500,11 +499,9 @@ def main(*, public_demo: bool = False, cloud_hosted: bool = False) -> None:
                 "Search live web with Tavily",
                 value=load_settings().tavily_api_key is not None,
             )
-            live_energy = st.checkbox("Include GB half-hour energy API", value=False)
             st.caption(
-                "Live search uses configured search credits; the energy API returns GB "
-                "generation shares, not annual/global output. Documents are searched "
-                "alongside selected live sources."
+                "Live search uses configured search credits. Documents are searched "
+                "alongside selected web sources."
             )
         if not public_demo:
             limits = load_settings().budget
@@ -530,7 +527,7 @@ def main(*, public_demo: bool = False, cloud_hosted: bool = False) -> None:
                     else tuple(x.strip() for x in entered.splitlines() if x.strip())
                 ),
             )
-            if not synthetic_mode and not (request.document_ids or live_web or live_energy):
+            if not synthetic_mode and not (request.document_ids or live_web):
                 st.error(
                     "No research sources selected. Enable Search live web with Tavily "
                     "or import a document, then click Create plan. Gemini does not search "
@@ -543,7 +540,7 @@ def main(*, public_demo: bool = False, cloud_hosted: bool = False) -> None:
                     budget=load_settings().budget,
                     gemini=reasoning == "Gemini (configured)",
                     live_web=live_web,
-                    live_energy=live_energy,
+                    live_energy=False,
                 )
                 st.session_state.pop("selected_thread", None)
         except ConfigurationError as exc:

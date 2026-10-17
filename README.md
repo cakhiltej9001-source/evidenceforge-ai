@@ -61,7 +61,11 @@ hosted version 2026-10-16.1 and its saved-source links/text downloads were verif
 after reboot using an offline synthetic demonstration with zero provider calls.
 [Answer-first presentation](docs/ANSWER_FIRST_2026-10-16.md) puts short cited text
 before Key Findings in the workbench and Markdown download, without new provider
-calls. Version 2026-10-16.2 passed full CI; its hosted activation awaits owner reboot.
+calls. Version 2026-10-16.2 passed full CI; its hosted Answer-before-Findings layout
+and Markdown download were verified after reboot using an offline synthetic
+demonstration with zero Gemini calls and zero Tavily searches.
+The workbench source controls now offer Tavily web search and imported documents;
+the GB half-hour energy API checkbox and its help text were removed at the owner's request.
 See the [14 October hosted configuration repair](docs/HOSTED_CONFIG_FIX_2026-10-14.md)
 and [current phase status](docs/FINAL_STATUS_2026-10-13.md). Actual hosted
 [Markdown/JSON downloads and fresh-visitor isolation](docs/HOSTED_DOWNLOAD_VERIFICATION_2026-10-08.md) passed; full source CI passed 554 tests.

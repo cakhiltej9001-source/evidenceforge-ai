@@ -1,5 +1,8 @@
 # Answer first, then key findings
 
+**Current status:** Hosted version **2026-10-16.2** is verified after the owner
+reboot. The report and downloaded Markdown show Answer before Key Findings.
+
 ## Requested presentation
 
 The workbench report and its Markdown download show **Answer** before **Key Findings**.
@@ -35,7 +38,7 @@ relevant disagreement, unrelated differences and uncited evidence. Existing
 report, source-download and UI tests are included in the focused checks.
 
 The hosted build marker is **App version: 2026-10-16.2**. Full CI and hosted checks
-are recorded after completion. Hosting remains free only.
+are recorded below. Hosting remains free only.
 
 ## Measured verification
 
@@ -43,4 +46,22 @@ are recorded after completion. Hosting remains free only.
 - Source commit 11e6f4c passed [full CI](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/38856496552): **554 tests in 47.47 seconds**, strict checking of 89 source files, lint/format, packaging and constrained container checks.
 - The new cases include preserving an explicit false-statement caution with its quotation rather than displaying the preceding sentence alone. They check exact spans, source-number mapping and unchanged canonical state.
 - The public preflight did not observe version 2026-10-16.2 and submitted no research or demonstration request. No new Gemini or Tavily calls ran for this repair.
-- The browser management connection timed out. An owner reboot was requested; hosted activation and the zero-provider-call offline ordering/download check remain pending.
+- The browser management connection timed out during the initial preflight. The owner then rebooted the app; the check below closes that activation item.
+
+## Hosted verification after reboot
+
+A fresh anonymous browser observed version **2026-10-16.2** and explicitly selected
+**Synthetic demonstration**. Offline reasoning was checked before submission and
+live-source controls were absent. The rendered report showed a short cited Answer
+before Key Findings; the actual Markdown download had the same order and contained
+answer text rather than only quotation references. Saved-source viewing and its
+plain-text download also passed, preserving the original URL metadata.
+
+The fixture report correctly labels its evidence as incomplete and its answer as
+partial. This check verifies hosted presentation and downloads; it is not a new
+live Gemini/Tavily research test or independent verification of source truth.
+**Zero Gemini calls and zero Tavily searches** were used.
+
+![Hosted synthetic report showing Answer before Key Findings](images/answer-first-hosted-2026-10-16.png)
+
+See the [sanitized measured result](ANSWER_FIRST_HOSTED_2026-10-16.json).
