@@ -66,6 +66,7 @@ and Markdown download were verified after reboot using an offline synthetic
 demonstration with zero Gemini calls and zero Tavily searches.
 The workbench source controls now offer Tavily web search and imported documents;
 the GB half-hour energy API checkbox and its help text were removed at the owner's request.
+Version 2026-10-17.1 passed CI; hosted activation remains pending.
 See the [14 October hosted configuration repair](docs/HOSTED_CONFIG_FIX_2026-10-14.md)
 and [current phase status](docs/FINAL_STATUS_2026-10-13.md). Actual hosted
 [Markdown/JSON downloads and fresh-visitor isolation](docs/HOSTED_DOWNLOAD_VERIFICATION_2026-10-08.md) passed; full source CI passed 554 tests.

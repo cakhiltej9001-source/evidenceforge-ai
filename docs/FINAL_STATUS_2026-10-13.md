@@ -201,3 +201,12 @@ label remained visible. The [hosted screenshot and measured result](ANSWER_FIRST
 close the preceding activation item. Full source CI remains 554 passing tests;
 this presentation check does not claim a fresh hosted live-provider research run.
 Hosting remains free only.
+
+## Energy API option removed - 17 October 2026
+
+The workbench no longer offers the GB half-hour energy API checkbox or its
+help text. New form submissions use Tavily and/or imported documents, with the
+energy source disabled. Source commit b9dddd5 passed all four existing source-
+selection UI tests, lint/format and [full GitHub CI](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/38994699249).
+The public read-only check did not yet observe version 2026-10-17.1; hosted
+activation remains pending. No Gemini calls or Tavily searches were made.
