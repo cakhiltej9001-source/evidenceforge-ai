@@ -33,6 +33,14 @@ class ModelUnavailable(RuntimeError):
     """Expected adapter failure; raw provider messages stay outside public events."""
 
 
+class ModelBudgetExceeded(ModelUnavailable):
+    """A local preflight rejection; no new provider request was sent."""
+
+    def __init__(self, reason: Literal["token_limit", "model_call_limit"]) -> None:
+        self.reason = reason
+        super().__init__("Gemini call or token allowance reached.")
+
+
 class ContextUnavailable(RuntimeError):
     """An optional context repository cannot currently be read."""
 

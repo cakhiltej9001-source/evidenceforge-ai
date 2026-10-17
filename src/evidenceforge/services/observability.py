@@ -202,6 +202,7 @@ def trace_phase(previous: PublicProgress, current: PublicProgress) -> str:
 
 
 _EVENT_LABELS = {
+    "model_request_blocked": "Request blocked locally by the model allowance",
     "initialization_started": "Planning started",
     "plan_created": "Plan created",
     "plan_edited": "Plan edited",

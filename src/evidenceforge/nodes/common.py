@@ -43,6 +43,31 @@ def initialization_patch(state: ResearchState, role: str, status: str) -> Update
     return {"initialization_results": {result.id: record_data(result)}}
 
 
+def blocked_model_patch(state: ResearchState, role: str, reason: str, patch: Update) -> Update:
+    """Record a known unsent attempt separately from uncertain paid outcomes."""
+    marker = event_patch(state, role, "model_request_blocked", reason)
+    return checked_patch(
+        state,
+        {
+            **patch,
+            **(
+                {
+                    "run_status": "failed",
+                    "planning_status": "failed",
+                    "finished_at": utc_now().isoformat(),
+                }
+                if role == "planner"
+                else {}
+            ),
+            "stop_reason": reason,
+            "events": {
+                **cast(dict[str, object], patch.get("events", {})),
+                **cast(dict[str, object], marker["events"]),
+            },
+        },
+    )
+
+
 def failure_patch(
     state: ResearchState,
     role: str,

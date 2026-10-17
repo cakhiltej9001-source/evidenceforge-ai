@@ -1,0 +1,21 @@
+{
+  "mode": "offline_reconstructed_compact_critic_request",
+  "review_evidence": 14,
+  "original_reservation": 68534,
+  "retained_evidence": 40,
+  "working_evidence": 39,
+  "claims": 11,
+  "known_previous_tokens": 43757,
+  "next_request_conservative_reservation": 36248,
+  "combined_required_allowance": 80005,
+  "public_hosted_token_cap": 100000,
+  "would_exceed_current_hosted_cap": false,
+  "network_requests": 0,
+  "caveat": "Reconstructed from the export and current deployed code; export omits the original configured budget and receipt-level rejection reason.",
+  "changed_budget": false,
+  "production_policy_for_new_workbench_runs": 4,
+  "saved_policy_three_request_format_preserved": true,
+  "targeted_regression_tests_passed": 13,
+  "targeted_regression_seconds": 51.96,
+  "live_provider_verification": false
+}

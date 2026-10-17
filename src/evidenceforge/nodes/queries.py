@@ -9,12 +9,14 @@ from evidenceforge.identity import stable_id
 from evidenceforge.models.base import PlanningModel
 from evidenceforge.nodes.common import (
     Update,
+    blocked_model_patch,
     checked_patch,
     event_patch,
     failure_patch,
     record_data,
 )
 from evidenceforge.planning import (
+    ModelBudgetExceeded,
     ModelUnavailable,
     PlanningContractError,
     PlanningOptions,
@@ -158,5 +160,7 @@ class QueryGenerator:
             return failed("schema")
         except TimeoutError:
             return failed("timeout")
+        except ModelBudgetExceeded as exc:
+            return blocked_model_patch(state, "query_generator", exc.reason, failed("budget"))
         except ModelUnavailable:
             return failed("provider")

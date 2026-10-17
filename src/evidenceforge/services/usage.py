@@ -66,11 +66,13 @@ def usage_summary(
     unknown_credits = sum(
         u.search_credits is None for u in records if s.calls[u.call_id].kind == "search"
     )
+    blocked_requests = sum(e.kind == "model_request_blocked" for e in s.events.values())
     unrecorded_model_attempts = max(
         0,
         s.quality_attempts
         + s.planning_attempts
         - paid_calls
+        - blocked_requests
         - sum(
             c.kind == "model" and (provider_usage is None or c.provider != "gemini")
             for c in s.calls.values()
@@ -119,6 +121,7 @@ def usage_summary(
             r.searches for r in s.reservations.values() if r.status != "released"
         ),
         "model_attempts": max(s.quality_attempts + s.planning_attempts, paid_calls),
+        "model_requests_blocked_locally": blocked_requests,
         "planning_model_attempts": s.planning_attempts,
         "quality_model_attempts": s.quality_attempts,
         "input_tokens_known": input_known,

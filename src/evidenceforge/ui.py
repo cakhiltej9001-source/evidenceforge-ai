@@ -233,6 +233,11 @@ def run_panel(app: LocalWorkbench, owner: str) -> None:
                     "still consume search credits."
                 )
             st.json(usage)
+            if usage["model_requests_blocked_locally"]:
+                st.caption(
+                    "Requests blocked locally are workflow attempts, not additional "
+                    "Gemini calls or unknown provider charges."
+                )
             if paid is not None:
                 st.write("Gemini provider usage")
                 st.json(paid)

@@ -11,6 +11,7 @@ from pydantic import SecretStr, ValidationError
 
 from evidenceforge.identity import stable_id
 from evidenceforge.planning import (
+    ModelBudgetExceeded,
     ModelUnavailable,
     PlanDraft,
     QueryBatchDraft,
@@ -216,15 +217,15 @@ class GeminiResearchModel:
         # Conservatively reserve a byte per possible input token plus the output allowance.
         # Unknown/failed usage retains its entire reservation; there are no automatic retries.
         reservation = len(body) + int(payload["generationConfig"]["maxOutputTokens"])
+        if len(body) > 500_000:
+            raise ModelUnavailable("Gemini request exceeded size allowance.")
+        if self._ledger is None and self._attempts >= self._budget.max_model_calls:
+            raise ModelBudgetExceeded("model_call_limit")
         if (
-            len(body) > 500_000
-            or (self._ledger is None and self._attempts >= self._budget.max_model_calls)
-            or (
-                self._ledger is None
-                and self._reserved_tokens + reservation > self._budget.max_total_tokens
-            )
+            self._ledger is None
+            and self._reserved_tokens + reservation > self._budget.max_total_tokens
         ):
-            raise ModelUnavailable("Gemini call or token allowance reached.")
+            raise ModelBudgetExceeded("token_limit")
         if self.trace_payloads and self._ledger is not None:
             try:
                 trace = self._ledger.path.parent / "payload_traces" / self._ledger.path.stem

@@ -242,3 +242,7 @@ Final source correction c06de3c passed 569 tests in 51.26 seconds and both CI jo
 ### Hosted activation and live recovery verified - 17 October 2026
 
 The owner rebooted the app and a fresh browser observed version 2026-10-17.4. The [new hosted live check](REPORT_RECOVERY_LIVE_2026-10-17.md) completed with 5 Gemini calls and 1 Tavily search under the separately approved 6/1 cap. It retained 30 passages, produced a nonempty Answer before Key Findings, passed 17 exact citation audits and recorded zero errors or gaps. All 19 export/usage checks passed; UI and JSON totals agree at 54,023 input plus 6,175 output tokens. No automatic paid retry ran. These close the hosted activation and fresh provider verification items for this repair; broader independent quality review and free-hosting durability remain separate limitations. Hosting remains free only.
+
+### Review token-budget repair - 17 October 2026
+
+The [review-budget repair](REVIEW_BUDGET_FIX_2026-10-17.md) preserves all cited, coverage and numeric counter-evidence while reducing the reported reconstruction from 112,291 to 80,005 required tokens. Policy 4 applies to new workbench runs; saved request formats and receipts remain stable. Local token blocks now have a clear explanation and separate uncharged-attempt accounting. Thirteen targeted regressions passed. Full source CI and hosted version 2026-10-17.5 activation are being checked. No provider calls ran; hosting remains free only.

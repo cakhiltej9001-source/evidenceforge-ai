@@ -10,9 +10,14 @@ from pydantic import JsonValue, ValidationError
 from evidenceforge.evidence.deduplication import WorkingEvidence, working_evidence
 from evidenceforge.graph.state import ResearchState, StateSnapshot
 from evidenceforge.identity import stable_id
-from evidenceforge.nodes.common import Update, checked_patch, record_data
+from evidenceforge.nodes.common import Update, blocked_model_patch, checked_patch, record_data
 from evidenceforge.nodes.quality_common import quality_error, quality_event
-from evidenceforge.planning import ModelUnavailable, PlanningContractError, parse_response
+from evidenceforge.planning import (
+    ModelBudgetExceeded,
+    ModelUnavailable,
+    PlanningContractError,
+    parse_response,
+)
 from evidenceforge.research import (
     CompactQuoteSelectionModel,
     ConstrainedQuoteSelectionModel,
@@ -99,6 +104,13 @@ class QualityNode:
         return parse_response(payload, schema, self.options.max_response_bytes)
 
     def failure(self, state: ResearchState, role: str, exc: Exception) -> Update:
+        if isinstance(exc, ModelBudgetExceeded):
+            return blocked_model_patch(
+                state,
+                role,
+                exc.reason,
+                quality_error(state, role, "budget", state["quality_attempts"] + 1),
+            )
         category = (
             "timeout"
             if isinstance(exc, TimeoutError)
@@ -448,6 +460,32 @@ class Synthesis(QualityNode):
             return self.failure(state, "synthesis", exc)
 
 
+def compact_critic_input(s: StateSnapshot) -> CriticInput:
+    """Review complete cited/coverage evidence and numeric counter-evidence."""
+    assert s.draft_report is not None
+    required = {eid for claim in s.report_claims.values() for eid in claim.evidence_ids}
+    required.update(
+        eid for coverage in s.coverage_by_question.values() for eid in coverage.evidence_ids
+    )
+    # Do not hide retained conflicting measurements just because synthesis omitted them.
+    for comparison in s.comparisons.values():
+        if comparison.relationship == "contradicts":
+            required.update(
+                s.propositions[pid].evidence_id for pid in (comparison.left_id, comparison.right_id)
+            )
+    if not required.issubset(s.evidence_store):
+        raise PlanningContractError("Missing review evidence reference.")
+    return CriticInput(
+        request=s.request,
+        questions=s.research_questions,
+        report=s.draft_report,
+        claims=tuple(s.report_claims.values()),
+        # Include every referenced raw record, including duplicate provenance IDs.
+        evidence=tuple(item for item in s.evidence_store.values() if item.id in required),
+        coverage=tuple(s.coverage_by_question.values()),
+    )
+
+
 class Critic(QualityNode):
     async def __call__(self, state: ResearchState) -> Update:
         s = StateSnapshot.model_validate(state)
@@ -456,14 +494,17 @@ class Critic(QualityNode):
         if quality_remaining(s) <= 0:
             return quality_error(state, "critic", "budget", s.quality_attempts)
         try:
-            working = self.working(s)
-            request = CriticInput(
-                report=s.draft_report,
-                claims=tuple(s.report_claims.values()),
-                evidence=working.evidence,
-                duplicate_evidence=working.duplicates,
-                coverage=tuple(s.coverage_by_question.values()),
-            )
+            if self.options.production_policy_version >= 4:
+                request = compact_critic_input(s)
+            else:
+                working = self.working(s)
+                request = CriticInput(
+                    report=s.draft_report,
+                    claims=tuple(s.report_claims.values()),
+                    evidence=working.evidence,
+                    duplicate_evidence=working.duplicates,
+                    coverage=tuple(s.coverage_by_question.values()),
+                )
             task = (
                 self.model.critique_quotes(request)
                 if self.options.quality_input_version == 2

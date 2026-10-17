@@ -11,6 +11,7 @@ from evidenceforge.models.base import PlanningModel
 from evidenceforge.models.gemini import GeminiResearchModel
 from evidenceforge.nodes.common import (
     Update,
+    blocked_model_patch,
     checked_patch,
     event_patch,
     failure_patch,
@@ -19,6 +20,7 @@ from evidenceforge.nodes.common import (
 )
 from evidenceforge.nodes.input_review import GUIDANCE
 from evidenceforge.planning import (
+    ModelBudgetExceeded,
     ModelUnavailable,
     PlanDraft,
     PlanningContractError,
@@ -166,5 +168,7 @@ class Planner:
             return failed("schema")
         except TimeoutError:
             return failed("timeout")
+        except ModelBudgetExceeded as exc:
+            return blocked_model_patch(state, "planner", exc.reason, failed("budget"))
         except ModelUnavailable:
             return failed("provider")

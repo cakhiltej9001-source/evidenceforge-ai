@@ -35,7 +35,12 @@ def public_failures(state: ResearchState) -> list[dict[str, str]]:
         {
             "stage": STAGES.get(error.provider, "Source or workflow step"),
             "category": error.category,
-            "message": CATEGORIES.get(error.category, CATEGORIES["internal"]),
+            "message": (
+                "The token reservation exceeded the remaining allowance. "
+                "This request was blocked locally before contacting Gemini."
+                if error.category == "budget" and snapshot.stop_reason == "token_limit"
+                else CATEGORIES.get(error.category, CATEGORIES["internal"])
+            ),
         }
         for error in snapshot.tool_errors.values()
     ]

@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Literal, cast
 
 from evidenceforge.identity import stable_id
-from evidenceforge.planning import ModelUnavailable
+from evidenceforge.planning import ModelBudgetExceeded, ModelUnavailable
 from evidenceforge.schemas import BudgetLimits, Contract, ResearchRequest
 
 
@@ -83,12 +83,10 @@ class ModelCallLedger:
                 cast(int, r.observation.get("total_tokens") or r.observation["reserved_tokens"])
                 for r in records
             )
-            if (
-                len(records) >= self.budget.max_model_calls
-                or reserved + cast(int, observation["reserved_tokens"])
-                > self.budget.max_total_tokens
-            ):
-                raise ModelUnavailable("Gemini call or token allowance reached.")
+            if len(records) >= self.budget.max_model_calls:
+                raise ModelBudgetExceeded("model_call_limit")
+            if reserved + cast(int, observation["reserved_tokens"]) > self.budget.max_total_tokens:
+                raise ModelBudgetExceeded("token_limit")
             observation = {**observation, "attempt": len(records) + 1}
             receipt = ModelReceipt(id=identifier, observation=observation)
             conn.execute("INSERT INTO calls VALUES (?,?)", (identifier, receipt.model_dump_json()))

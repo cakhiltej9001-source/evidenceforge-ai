@@ -246,7 +246,7 @@ class ResearchService:
         if type(version) is not int or version not in (1, 2):
             raise CheckpointFailure("Unsupported research input contract version.")
         policy = json.loads(profile)["research_options"].get("production_policy_version", 0)
-        if type(policy) is not int or policy not in (0, 1, 2, 3):
+        if type(policy) is not int or policy not in (0, 1, 2, 3, 4):
             raise CheckpointFailure("Unsupported production policy version.")
         selection = json.loads(profile)["research_options"].get("quote_selection_version", 0)
         if type(selection) is not int or selection not in (0, 1, 2, 3, 4, 5, 6):

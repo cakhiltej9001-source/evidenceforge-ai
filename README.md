@@ -72,6 +72,7 @@ comparisons and document research. Blank submissions are blocked before any API 
 visible evidence gaps and Gemini receipt totals shared by the UI and JSON exports.
 New runs use versioned practical research guidance with the same call/search caps.
 Hosted build **2026-10-17.4** was verified after reboot. A [fresh hosted AI-entrepreneur test](docs/REPORT_RECOVERY_LIVE_2026-10-17.md) completed using **5 Gemini calls and 1 Tavily search**, with a nonempty Answer, 17 supported exact citation audits, zero tool errors and matching receipt totals. This verifies one case; the Answer remains extractive and independent source truth is not established.
+[Review-budget repair](docs/REVIEW_BUDGET_FIX_2026-10-17.md) adds compact, versioned review context and clear local token-limit diagnostics. The reconstructed reported case fits the unchanged 100,000-token cap at 80,005 reserved/recorded tokens. Build 2026-10-17.5 requires activation verification; no new live provider calls ran for this repair.
 See the [14 October hosted configuration repair](docs/HOSTED_CONFIG_FIX_2026-10-14.md)
 and [current phase status](docs/FINAL_STATUS_2026-10-13.md). Actual hosted
 [Markdown/JSON downloads and fresh-visitor isolation](docs/HOSTED_DOWNLOAD_VERIFICATION_2026-10-08.md) passed; full source CI passed 569 tests.
