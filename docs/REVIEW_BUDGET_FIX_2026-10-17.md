@@ -14,6 +14,7 @@ and precise local rejection reason, so this is a reconstructed diagnosis.
 ## Repair
 
 New local and hosted workbench runs use production policy 4. Review receives:
+
 - The original research request and approved questions/criteria.
 - Complete evidence referenced by claims and coverage assessments.
 - Both sides of retained numeric contradictions.
@@ -51,7 +52,7 @@ The focused regression module passed **13 tests in 51.96 seconds**, including
 complete reference retention, numeric counter-evidence, known local blocks,
 uncertain usage, failed reservations and historical paid critic-response replay.
 Local typing passed across 89 source files. Lint and formatting passed.
-Full source CI and hosted activation are recorded after checking.
+[Full source CI](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/39036637322) passed **583 tests in 50.59 seconds** on source commit 65f4f04. Both CI jobs passed, including typing, lint/formatting, package build, checkpoint smoke, container persistence, backup/restore and gateway checks.
 
 The deployment marker is **App version: 2026-10-17.5**.
 Call/search/token caps are unchanged. No automatic paid retry was added.
@@ -63,3 +64,5 @@ Hosting remains free only.
 This verifies local behavior and request sizing. A fresh live provider response
 has not been verified for this build. Larger or more complex reports can still
 reach their configured limit; they should now receive an accurate explanation.
+
+A read-only public check did not observe version 2026-10-17.5 yet. The owner management connection timed out, so the agent did not reboot the app. Hosted activation remains pending; the owner can use Manage app > menu > Reboot app, then verify the footer. Existing terminal reports retain their original status; use a new plan after activation to exercise policy 4.

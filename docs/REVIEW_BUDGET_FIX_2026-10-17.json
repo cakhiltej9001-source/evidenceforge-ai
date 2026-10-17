@@ -17,5 +17,10 @@
   "saved_policy_three_request_format_preserved": true,
   "targeted_regression_tests_passed": 13,
   "targeted_regression_seconds": 51.96,
-  "live_provider_verification": false
+  "live_provider_verification": false,
+  "ci_source_commit": "65f4f044c7292fcb0eea7bd2f20cb04acac2ea88",
+  "ci_url": "https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/39036637322",
+  "full_ci_tests_passed": 583,
+  "full_ci_test_seconds": 50.59,
+  "hosted_activation_verified": false
 }

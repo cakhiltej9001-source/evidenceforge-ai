@@ -246,3 +246,5 @@ The owner rebooted the app and a fresh browser observed version 2026-10-17.4. Th
 ### Review token-budget repair - 17 October 2026
 
 The [review-budget repair](REVIEW_BUDGET_FIX_2026-10-17.md) preserves all cited, coverage and numeric counter-evidence while reducing the reported reconstruction from 112,291 to 80,005 required tokens. Policy 4 applies to new workbench runs; saved request formats and receipts remain stable. Local token blocks now have a clear explanation and separate uncharged-attempt accounting. Thirteen targeted regressions passed. Full source CI and hosted version 2026-10-17.5 activation are being checked. No provider calls ran; hosting remains free only.
+
+Final verification: source commit 65f4f04 passed **583 tests in 50.59 seconds** and both CI jobs: https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/39036637322 . The public check did not observe build 2026-10-17.5, and the management connection timed out. Owner reboot/hosted activation remains pending. No Gemini, Tavily or LangSmith calls ran during the repair.

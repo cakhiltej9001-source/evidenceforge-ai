@@ -4,7 +4,7 @@
 ![Python](https://img.shields.io/badge/Python-3.12–3.14-blue)
 ![LangGraph](https://img.shields.io/badge/Workflow-LangGraph-teal)
 ![SQLite](https://img.shields.io/badge/Storage-SQLite-blue)
-![Tests](https://img.shields.io/badge/Tests-569%20passed-brightgreen)
+![Tests](https://img.shields.io/badge/Tests-583%20passed-brightgreen)
 ![Demo](https://img.shields.io/badge/Demo-public%20Streamlit-green)
 
 > A local research workbench that plans questions, gathers inspectable evidence,
@@ -16,7 +16,7 @@ and why the workflow completed or stopped. Python, LangGraph, SQLite and Streaml
 connect the research stages; offline fixtures support demonstrations and optional
 Gemini reasoning supports explicitly started provider runs.
 
-**Current verification:** 569 source tests and both private CI jobs passed,
+**Current verification:** 583 source tests and both private CI jobs passed,
 including Docker persistence, backup/restore and authenticated gateway checks.
 The fresh 12 October run completed all six Gemini roles and one Tavily search,
 retaining three NASA sources and two exactly cited claims. Offline review verified
@@ -72,10 +72,10 @@ comparisons and document research. Blank submissions are blocked before any API 
 visible evidence gaps and Gemini receipt totals shared by the UI and JSON exports.
 New runs use versioned practical research guidance with the same call/search caps.
 Hosted build **2026-10-17.4** was verified after reboot. A [fresh hosted AI-entrepreneur test](docs/REPORT_RECOVERY_LIVE_2026-10-17.md) completed using **5 Gemini calls and 1 Tavily search**, with a nonempty Answer, 17 supported exact citation audits, zero tool errors and matching receipt totals. This verifies one case; the Answer remains extractive and independent source truth is not established.
-[Review-budget repair](docs/REVIEW_BUDGET_FIX_2026-10-17.md) adds compact, versioned review context and clear local token-limit diagnostics. The reconstructed reported case fits the unchanged 100,000-token cap at 80,005 reserved/recorded tokens. Build 2026-10-17.5 requires activation verification; no new live provider calls ran for this repair.
+[Review-budget repair](docs/REVIEW_BUDGET_FIX_2026-10-17.md) adds compact, versioned review context and clear local token-limit diagnostics. The reconstructed reported case fits the unchanged 100,000-token cap at 80,005 reserved/recorded tokens. Build 2026-10-17.5 passed full CI (583 tests); hosted activation awaits an owner reboot after the management connection timed out. No new live provider calls ran for this repair.
 See the [14 October hosted configuration repair](docs/HOSTED_CONFIG_FIX_2026-10-14.md)
 and [current phase status](docs/FINAL_STATUS_2026-10-13.md). Actual hosted
-[Markdown/JSON downloads and fresh-visitor isolation](docs/HOSTED_DOWNLOAD_VERIFICATION_2026-10-08.md) passed; full source CI passed 569 tests.
+[Markdown/JSON downloads and fresh-visitor isolation](docs/HOSTED_DOWNLOAD_VERIFICATION_2026-10-08.md) passed; full source CI passed 583 tests.
 
 ## ✨ Project at a glance
 
@@ -368,9 +368,9 @@ uv run --locked mypy
 uv build
 ```
 
-[CI on 17 October](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/39014261618)
-passed **569 tests in 51.26 seconds** on product source
-`c06de3c6cc998841ae3975b021db620806005dbf`, plus lint/format/types,
+[CI on 17 October](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/39036637322)
+passed **583 tests in 50.59 seconds** on product source
+`65f4f044c7292fcb0eea7bd2f20cb04acac2ea88`, plus lint/format/types,
 package build, official Render schema and offline deployment smoke. Docker checks passed nonroot UID 10001,
 512 MB/half-CPU execution, fresh-container persistence, fresh-volume synthetic
 backup/restore, health and authenticated gateway access. Tests block ordinary
@@ -516,7 +516,7 @@ finalization and shared rewrite/search/model/pass/token allowances constrain run
 They do not guarantee correct planning or source truth.
 
 **7. How did you evaluate the project?**
-569 offline tests and constrained Docker checks verify engineering behavior. A
+583 offline tests and constrained Docker checks verify engineering behavior. A
 20-case, 40-answer Gemini comparison records support, scope, disputes, abstentions,
 calls, tokens and latency with explicit synthetic/AI-review limitations.
 
