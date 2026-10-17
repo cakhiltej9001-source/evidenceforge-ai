@@ -252,3 +252,7 @@ Final verification: source commit 65f4f04 passed **583 tests in 50.59 seconds** 
 ### Review-budget repair activated - 18 October 2026
 
 After the owner rebooted the public app, an independent fresh browser observed **App version: 2026-10-17.5**. The hosted activation item is closed. The read-only version check used zero Gemini calls and zero Tavily searches. Source CI remains 583 passing tests on 65f4f04. Fresh live provider verification of policy 4 remains unverified; existing terminal reports retain their recorded outcomes. Hosting remains free only.
+
+### Fresh review-budget live verification passed - 18 October 2026
+
+The [fresh hosted AI-engineer test](REVIEW_BUDGET_LIVE_2026-10-18.md) completed on version 2026-10-17.5 using 5 successful Gemini calls and 1 Tavily search. It retained 40 passages from 5 cited sources, passed 9 exact citation audits and produced a nonempty Answer before Key Findings. Tool errors, local budget blocks, unknown usage and unconfirmed calls were all zero. UI/export counters agreed at 53,563 input plus 3,363 output tokens. All 20 live-result checks passed. The sixth model call was unused; no automatic paid retry ran and prior allowances were unchanged. This closes fresh live verification for the repair; broader independent quality validation remains separate. Hosting remains free only.

@@ -1,0 +1,113 @@
+{
+  "date": "2026-10-18",
+  "execution_mode": "actual_hosted_live_research",
+  "app_url": "https://evidenceforge-ai-akhiltej.streamlit.app/",
+  "app_version": "2026-10-17.5",
+  "question": "how to become AI engineer ?",
+  "model": "gemini-3.1-flash-lite",
+  "progress": {
+    "run_status": "completed",
+    "stop_reason": "sufficient",
+    "retrieval_passes": 1,
+    "rewrites": 0,
+    "search_calls": 1,
+    "evidence_count": 40,
+    "tool_errors": 0,
+    "citation_checks": 9
+  },
+  "plan_criteria": 4,
+  "claims": 9,
+  "evidence": 40,
+  "sources": [
+    {
+      "title": "6-Month AI Engineer Roadmap: Step-by-Step Guide",
+      "url": "https://opencv.org/ai-engineer-roadmap",
+      "provider": "tavily"
+    },
+    {
+      "title": "AI career pathways explained practical guide for engineers",
+      "url": "https://zenvanriel.com/ai-engineer-blog/ai-career-pathways-practical-guide-engineers-2026",
+      "provider": "tavily"
+    },
+    {
+      "title": "How to Become an AI Engineer: Skills, Salary & Career Path",
+      "url": "https://online.csp.edu/resources/article/how-to-become-an-ai-engineer",
+      "provider": "tavily"
+    },
+    {
+      "title": "Career Path for Artificial Intelligence Engineers - StrataScratch",
+      "url": "https://www.stratascratch.com/blog/career-path-for-artificial-intelligence-engineers",
+      "provider": "tavily"
+    },
+    {
+      "title": "Ultimate Guide to AI Engineering Portfolios",
+      "url": "https://www.dataexpert.io/blog/ultimate-guide-ai-engineering-portfolios",
+      "provider": "tavily"
+    }
+  ],
+  "gaps": [],
+  "usage": {
+    "search_reservations": 1,
+    "model_attempts": 5,
+    "model_requests_blocked_locally": 0,
+    "planning_model_attempts": 2,
+    "quality_model_attempts": 3,
+    "input_tokens_known": 53563,
+    "output_tokens_known": 3363,
+    "token_usage_unknown_records": 0,
+    "search_credits_known": 1,
+    "search_credit_unknown_records": 0,
+    "estimated_cost_usd": null,
+    "known_cost_lower_bound_usd": 0,
+    "price_table_date": null,
+    "cost_complete": false,
+    "model_usage_source": "durable_gemini_receipts",
+    "paid_model_calls": 5
+  },
+  "paid_usage": {
+    "paid_calls": 5,
+    "succeeded_calls": 5,
+    "unconfirmed_calls": 0,
+    "input_tokens_known": 53563,
+    "output_tokens_known": 3363,
+    "usage_unknown_calls": 0
+  },
+  "allowance": {
+    "fresh_workflow_gemini_cap": 6,
+    "fresh_workflow_tavily_cap": 1,
+    "gemini_calls_used": 5,
+    "tavily_searches_used": 1,
+    "automatic_paid_retries": false,
+    "historical_allowances_changed": false
+  },
+  "checks": {
+    "live_export": true,
+    "gemini_export": true,
+    "within_model_cap": true,
+    "within_search_cap": true,
+    "exports_stable_without_research_retry": true,
+    "nonempty_findings": true,
+    "server_citations_supported": true,
+    "quotations_match_exported_evidence": true,
+    "no_duplicate_claims": true,
+    "credential_fields_absent": true,
+    "nonempty_cited_answer": true,
+    "answer_before_key_findings": true,
+    "export_matches_provider_input_tokens": true,
+    "export_matches_provider_output_tokens": true,
+    "ui_input_totals_agree": true,
+    "ui_output_totals_agree": true,
+    "no_unknown_or_unconfirmed_calls": true,
+    "no_tool_errors": true,
+    "workflow_completed": true,
+    "no_local_budget_blocks": true
+  },
+  "screenshot_scope": "Rendering of recorded hosted live results, not a direct screenshot of the hosted interface.",
+  "limitations": [
+    "One case does not establish broad research reliability.",
+    "This fresh plan contains four criteria and retrieved different material from the earlier failed run.",
+    "Exact quotation audits do not establish independent source truth.",
+    "The Answer remains extractive, with source wording and formatting limitations.",
+    "Cost is unavailable without a verified dated pricing table; hosting remains free only."
+  ]
+}
