@@ -67,7 +67,9 @@ The browser-rendered screenshot also checks decoded apostrophes and safe markup.
 These counters and passages are fixtures; no provider request was made.
 
 The hosted marker is **App version: 2026-10-17.4**. Both final CI jobs passed, including typing, lint, formatting, build,
-checkpoint smoke and container checks. A read-only public check did not observe
-this footer yet; hosted activation remains unverified. The owner management
-connection timed out, so a reboot was not performed by the agent. A fresh paid end-to-end check requires a new separate
-allowance; historical allowances have not been reused. Hosting remains free only.
+checkpoint smoke and container checks. After the owner rebooted it, a fresh browser observed this footer.
+The [actual hosted live check](REPORT_RECOVERY_LIVE_2026-10-17.md) completed
+with 5 Gemini calls, 1 Tavily search, 17 supported citation audits and zero tool
+errors under a newly approved separate allowance. Hosted activation and this
+fresh provider check are verified. The fresh paid check used its newly approved separate allowance;
+historical allowances have not been reused. Hosting remains free only.

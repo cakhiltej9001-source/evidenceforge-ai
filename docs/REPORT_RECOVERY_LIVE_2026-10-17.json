@@ -1,0 +1,106 @@
+{
+  "date": "2026-10-17",
+  "execution_mode": "actual_hosted_live_research",
+  "app_url": "https://evidenceforge-ai-akhiltej.streamlit.app/",
+  "app_version": "2026-10-17.4",
+  "question": "How to become an AI entrepreneur?",
+  "model": "gemini-3.1-flash-lite",
+  "progress": {
+    "run_status": "completed",
+    "stop_reason": "sufficient",
+    "retrieval_passes": 1,
+    "rewrites": 0,
+    "search_calls": 1,
+    "evidence_count": 30,
+    "tool_errors": 0,
+    "citation_checks": 17
+  },
+  "plan_criteria": 4,
+  "claims": 17,
+  "evidence": 30,
+  "sources": [
+    {
+      "title": "AI as a Service (AIaaS): Definition, Types, Pricing",
+      "url": "https://www.domo.com/glossary/ai-as-a-service",
+      "provider": "tavily"
+    },
+    {
+      "title": "CRV | AI Business Model: How AI-Native Companies Make Money",
+      "url": "https://www.crv.com/content/ai-business-model",
+      "provider": "tavily"
+    },
+    {
+      "title": "Building AI Infrastructure: A Practical Guide | Mirantis",
+      "url": "https://www.mirantis.com/blog/build-ai-infrastructure-your-definitive-guide-to-getting-ai-right",
+      "provider": "tavily"
+    },
+    {
+      "title": "Understanding and managing the AI lifecycle | GSA - IT Modernization Centers of Excellence",
+      "url": "https://coe.gsa.gov/coe/ai-guide-for-government/understanding-managing-ai-lifecycle",
+      "provider": "tavily"
+    }
+  ],
+  "gaps": [],
+  "usage": {
+    "search_reservations": 1,
+    "model_attempts": 5,
+    "planning_model_attempts": 2,
+    "quality_model_attempts": 3,
+    "input_tokens_known": 54023,
+    "output_tokens_known": 6175,
+    "token_usage_unknown_records": 0,
+    "search_credits_known": 1,
+    "search_credit_unknown_records": 0,
+    "estimated_cost_usd": null,
+    "known_cost_lower_bound_usd": 0,
+    "price_table_date": null,
+    "cost_complete": false,
+    "model_usage_source": "durable_gemini_receipts",
+    "paid_model_calls": 5
+  },
+  "paid_usage": {
+    "paid_calls": 5,
+    "succeeded_calls": 5,
+    "unconfirmed_calls": 0,
+    "input_tokens_known": 54023,
+    "output_tokens_known": 6175,
+    "usage_unknown_calls": 0
+  },
+  "allowance": {
+    "new_separate_gemini_call_cap": 6,
+    "new_separate_tavily_search_cap": 1,
+    "gemini_calls_used": 5,
+    "tavily_searches_used": 1,
+    "automatic_paid_retries": false,
+    "historical_allowances_changed": false
+  },
+  "checks": {
+    "live_export": true,
+    "gemini_export": true,
+    "within_model_cap": true,
+    "within_search_cap": true,
+    "exports_stable_without_research_retry": true,
+    "nonempty_findings": true,
+    "server_citations_supported": true,
+    "quotations_match_exported_evidence": true,
+    "no_duplicate_claims": true,
+    "credential_fields_absent": true,
+    "nonempty_cited_answer": true,
+    "answer_before_key_findings": true,
+    "export_matches_provider_input_tokens": true,
+    "export_matches_provider_output_tokens": true,
+    "ui_input_totals_agree": true,
+    "ui_output_totals_agree": true,
+    "no_unknown_or_unconfirmed_calls": true,
+    "no_tool_errors": true,
+    "workflow_completed": true
+  },
+  "screenshot_scope": "Rendering of recorded hosted live results, not a direct screenshot of the hosted interface.",
+  "limitations": [
+    "One case does not establish broad research reliability.",
+    "Coverage is the workflow assessment; exact quotation audits do not establish independent source truth.",
+    "The Answer contains extracted cited quotations rather than a rewritten guide.",
+    "No verified dated pricing table is configured; null cost is unavailable, not free.",
+    "Hosted storage is temporary; hosting remains free only."
+  ]
+}

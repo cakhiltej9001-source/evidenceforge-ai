@@ -71,7 +71,7 @@ comparisons and document research. Blank submissions are blocked before any API 
 [Report recovery](docs/REPORT_RECOVERY_2026-10-17.md) adds plan-aware how-to answers,
 visible evidence gaps and Gemini receipt totals shared by the UI and JSON exports.
 New runs use versioned practical research guidance with the same call/search caps.
-The published build is 2026-10-17.4; hosted activation is checked separately.
+Hosted build **2026-10-17.4** was verified after reboot. A [fresh hosted AI-entrepreneur test](docs/REPORT_RECOVERY_LIVE_2026-10-17.md) completed using **5 Gemini calls and 1 Tavily search**, with a nonempty Answer, 17 supported exact citation audits, zero tool errors and matching receipt totals. This verifies one case; the Answer remains extractive and independent source truth is not established.
 See the [14 October hosted configuration repair](docs/HOSTED_CONFIG_FIX_2026-10-14.md)
 and [current phase status](docs/FINAL_STATUS_2026-10-13.md). Actual hosted
 [Markdown/JSON downloads and fresh-visitor isolation](docs/HOSTED_DOWNLOAD_VERIFICATION_2026-10-08.md) passed; full source CI passed 569 tests.
