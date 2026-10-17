@@ -1,0 +1,20 @@
+{
+  "mode": "offline_synthetic_regression",
+  "hosted_live_research": false,
+  "question": "How to become an AI entrepreneur?",
+  "run_status": "partial",
+  "stop_reason": "pass_limit",
+  "answer_contains_cited_text": true,
+  "answer_before_findings": true,
+  "unresolved_requirements_shown": true,
+  "citation_checks": 2,
+  "all_citations_supported": true,
+  "receipt_totals_reconciled": true,
+  "receipt_counter_values_are_synthetic": true,
+  "gemini_api_calls": 0,
+  "tavily_api_searches": 0,
+  "actual_report_component_rendered": true,
+  "rendered_answer_before_findings": true,
+  "synthetic_warning_visible": true,
+  "rendered_entities_decoded": true
+}

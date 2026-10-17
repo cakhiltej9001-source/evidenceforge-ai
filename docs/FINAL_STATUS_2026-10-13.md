@@ -232,5 +232,9 @@ saved runs preserve their original request hashes and replay behavior. Call/sear
 limits and the no-automatic-paid-retry policy remain unchanged.
 Forty unique focused checks passed across the initial 38-case run and final
 14-case recovery suite. Direct strict typing, project lint and format checks passed.
-No new live Gemini or Tavily calls ran. Version 2026-10-17.3 still needs hosted
+No new live Gemini or Tavily calls ran. Version 2026-10-17.4 still needs hosted
 activation verification; the browser management connection timed out.
+
+Follow-up: actual browser rendering exposed a literal apostrophe entity; display escaping was corrected without changing retained evidence. The 21 affected report tests passed. Main repair CI passed 569 tests; final follow-up CI and hosted activation are recorded in the report recovery document.
+
+Final source correction c06de3c passed 569 tests in 51.26 seconds and both CI jobs: https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/39014261618 . The corrected synthetic browser screenshot and sanitized checks are published in the report recovery document. The read-only public check did not observe version 2026-10-17.4; hosted activation and a fresh live provider check remain unverified. No additional provider allowance has been spent.

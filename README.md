@@ -4,7 +4,7 @@
 ![Python](https://img.shields.io/badge/Python-3.12–3.14-blue)
 ![LangGraph](https://img.shields.io/badge/Workflow-LangGraph-teal)
 ![SQLite](https://img.shields.io/badge/Storage-SQLite-blue)
-![Tests](https://img.shields.io/badge/Tests-554%20passed-brightgreen)
+![Tests](https://img.shields.io/badge/Tests-569%20passed-brightgreen)
 ![Demo](https://img.shields.io/badge/Demo-public%20Streamlit-green)
 
 > A local research workbench that plans questions, gathers inspectable evidence,
@@ -16,7 +16,7 @@ and why the workflow completed or stopped. Python, LangGraph, SQLite and Streaml
 connect the research stages; offline fixtures support demonstrations and optional
 Gemini reasoning supports explicitly started provider runs.
 
-**Current verification:** 554 source tests and both private CI jobs passed,
+**Current verification:** 569 source tests and both private CI jobs passed,
 including Docker persistence, backup/restore and authenticated gateway checks.
 The fresh 12 October run completed all six Gemini roles and one Tavily search,
 retaining three NASA sources and two exactly cited claims. Offline review verified
@@ -71,10 +71,10 @@ comparisons and document research. Blank submissions are blocked before any API 
 [Report recovery](docs/REPORT_RECOVERY_2026-10-17.md) adds plan-aware how-to answers,
 visible evidence gaps and Gemini receipt totals shared by the UI and JSON exports.
 New runs use versioned practical research guidance with the same call/search caps.
-The published build is 2026-10-17.3; hosted activation is checked separately.
+The published build is 2026-10-17.4; hosted activation is checked separately.
 See the [14 October hosted configuration repair](docs/HOSTED_CONFIG_FIX_2026-10-14.md)
 and [current phase status](docs/FINAL_STATUS_2026-10-13.md). Actual hosted
-[Markdown/JSON downloads and fresh-visitor isolation](docs/HOSTED_DOWNLOAD_VERIFICATION_2026-10-08.md) passed; full source CI passed 554 tests.
+[Markdown/JSON downloads and fresh-visitor isolation](docs/HOSTED_DOWNLOAD_VERIFICATION_2026-10-08.md) passed; full source CI passed 569 tests.
 
 ## ✨ Project at a glance
 
@@ -367,9 +367,9 @@ uv run --locked mypy
 uv build
 ```
 
-[CI on 16 October](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/38856496552)
-passed **554 tests in 47.47 seconds** on product source
-`11e6f4ce0ce0fcbd4409e8ea187756c47be4227b`, plus lint/format/types,
+[CI on 17 October](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/39014261618)
+passed **569 tests in 51.26 seconds** on product source
+`c06de3c6cc998841ae3975b021db620806005dbf`, plus lint/format/types,
 package build, official Render schema and offline deployment smoke. Docker checks passed nonroot UID 10001,
 512 MB/half-CPU execution, fresh-container persistence, fresh-volume synthetic
 backup/restore, health and authenticated gateway access. Tests block ordinary
@@ -515,7 +515,7 @@ finalization and shared rewrite/search/model/pass/token allowances constrain run
 They do not guarantee correct planning or source truth.
 
 **7. How did you evaluate the project?**
-554 offline tests and constrained Docker checks verify engineering behavior. A
+569 offline tests and constrained Docker checks verify engineering behavior. A
 20-case, 40-answer Gemini comparison records support, scope, disputes, abstentions,
 calls, tokens and latency with explicit synthetic/AI-review limitations.
 
