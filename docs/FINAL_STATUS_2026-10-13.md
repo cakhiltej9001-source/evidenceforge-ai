@@ -210,3 +210,14 @@ energy source disabled. Source commit b9dddd5 passed all four existing source-
 selection UI tests, lint/format and [full GitHub CI](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/38994699249).
 The public read-only check did not yet observe version 2026-10-17.1; hosted
 activation remains pending. No Gemini calls or Tavily searches were made.
+
+## Empty question box and writing guidance - 17 October 2026
+
+The research question now starts empty in local, hosted and synthetic forms.
+A taller input has a placeholder inviting the user's own question, a short
+explanation/comparison/document prompt line, and a focus tip. Blank or whitespace-
+only submissions show a clear message before any research starts.
+All seven existing focused UI checks passed in 98.63 seconds, including typed
+questions, zero-call blank submission, approval/downloads and visitor isolation.
+Lint and formatting passed. No Gemini or Tavily calls ran. The published build
+marker is 2026-10-17.2; hosted activation is checked separately.

@@ -61,6 +61,9 @@ def test_public_demo_completes_and_isolates_visitors(tmp_path, monkeypatch):
         first_owner = first.session_state["public_demo_owner"]
         second_owner = second.session_state["public_demo_owner"]
         assert first_owner != second_owner
+        next(t for t in first.text_area if t.label == "Research question").set_value(
+            "Compare solar and wind electricity output."
+        )
         next(b for b in first.button if b.label == "Create plan").click().run()
         next(b for b in first.button if b.label == "Approve plan").click().run()
         first.run()

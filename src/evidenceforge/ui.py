@@ -470,8 +470,13 @@ def main(*, public_demo: bool = False, cloud_hosted: bool = False) -> None:
                 "Gemini does not search the web by itself."
             )
     with st.form("new_research"):
+        st.caption("Explain a topic · Compare ideas · Explore your documents")
         question = st.text_area(
-            "Research question", value="Compare solar and wind electricity output."
+            "Research question",
+            value="",
+            height=140,
+            placeholder=("What would you like to find out?\nType your question in your own words."),
+            help="Add a location, time period or comparison for a more focused answer.",
         )
         reasoning = st.selectbox(
             "Reasoning provider",
@@ -516,7 +521,9 @@ def main(*, public_demo: bool = False, cloud_hosted: bool = False) -> None:
                 ["second-pass", "immediate", "empty", "dispute"],
             )
         submitted = st.form_submit_button("Create plan", disabled=app.active(owner))
-    if submitted:
+    if submitted and not question.strip():
+        st.error("Type a research question to get started. No API calls were made.")
+    elif submitted:
         try:
             request = ResearchRequest(
                 question=question,

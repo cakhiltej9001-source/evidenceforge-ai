@@ -47,6 +47,12 @@ def test_source_free_research_is_blocked_before_workbench_start(tmp_path, monkey
         "Research with real sources"
     )
     assert not any(s.label == "Synthetic scenario" for s in at.selectbox)
+    question = next(t for t in at.text_area if t.label == "Research question")
+    assert question.value == ""
+    question.set_value("   ")
+    next(b for b in at.button if b.label == "Create plan").click().run()
+    assert not at.exception and starts == []
+    assert any("Type a research question" in e.value for e in at.error)
     next(t for t in at.text_area if t.label == "Research question").set_value(
         "What is the capital of Telangana?"
     )
@@ -63,6 +69,9 @@ def test_source_free_research_is_blocked_before_workbench_start(tmp_path, monkey
 @pytest.mark.parametrize("source", ["web", "document"])
 def test_explicit_real_sources_reach_the_workbench(tmp_path, monkeypatch, source):
     at, starts = form(tmp_path, monkeypatch)
+    next(t for t in at.text_area if t.label == "Research question").set_value(
+        "What is the capital of Telangana?"
+    )
     document_ids = ()
     if source == "document":
         path = tmp_path / "capital.txt"
