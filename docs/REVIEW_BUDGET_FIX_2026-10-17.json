@@ -22,5 +22,8 @@
   "ci_url": "https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/39036637322",
   "full_ci_tests_passed": 583,
   "full_ci_test_seconds": 50.59,
-  "hosted_activation_verified": false
+  "hosted_activation_verified": true,
+  "hosted_activation_checked_on": "2026-10-18",
+  "hosted_activation_check_gemini_calls": 0,
+  "hosted_activation_check_tavily_searches": 0
 }

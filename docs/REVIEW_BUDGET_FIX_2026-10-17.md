@@ -65,4 +65,4 @@ This verifies local behavior and request sizing. A fresh live provider response
 has not been verified for this build. Larger or more complex reports can still
 reach their configured limit; they should now receive an accurate explanation.
 
-A read-only public check did not observe version 2026-10-17.5 yet. The owner management connection timed out, so the agent did not reboot the app. Hosted activation remains pending; the owner can use Manage app > menu > Reboot app, then verify the footer. Existing terminal reports retain their original status; use a new plan after activation to exercise policy 4.
+After the owner rebooted the app, a fresh read-only browser check observed **App version: 2026-10-17.5** on **18 October 2026**. Hosted activation is verified. This check made zero Gemini calls and zero Tavily searches. Create a new plan to exercise policy 4. Existing terminal reports retain their original status. A fresh live provider response has not been verified for this build.
