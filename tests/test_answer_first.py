@@ -8,6 +8,7 @@ import pytest
 from evidenceforge.answering import answer_excerpts, unresolved_answer
 from evidenceforge.graph.state import StateSnapshot
 from evidenceforge.models.research import FixtureResearchModel
+from evidenceforge.presentation import clean_spans, display_issues, future_years
 from evidenceforge.reporting import escape, render_report
 from evidenceforge.research import ResearchOptions
 from evidenceforge.retrieval.contracts import RetrievalBatch, RetrievedSource
@@ -144,3 +145,85 @@ def test_uncited_evidence_does_not_become_an_answer(populated_state):
     answer = answer_section(render_report(populated_state, answer_first=True))
     assert "concise supported answer could not be extracted" in answer
     assert "Synthetic evidence" not in answer
+
+
+@pytest.mark.parametrize(
+    "clutter",
+    [
+        "Join our course for placement support.",
+        "Python skills [2:16] are important for an AI engineer.",
+        "Photo by Example / Unsplash. Read more.",
+        "| Phase | Months | Focus | Output |",
+    ],
+)
+def test_clean_display_spans_skip_clutter_without_rewriting_it(clutter):
+    useful = "Build Python projects and test the deployed model with realistic inputs."
+    text = useful + "\n\n" + clutter
+    spans = list(clean_spans(text, year=2026, request="How do I become an AI engineer?"))
+    assert spans and text[slice(*spans[0])] == useful
+    assert all(not display_issues(text[a:b], year=2026, request="AI engineer") for a, b in spans)
+    assert clutter in text
+
+
+def test_cleanup_abstains_when_it_would_detach_a_caveat():
+    text = "Python is useful. However, join our course only if it meets your needs."
+    assert not list(clean_spans(text, year=2026, request="How do I learn Python?"))
+
+
+def test_future_date_detection_respects_an_explicit_requested_year():
+    assert future_years("AI engineer requirements in 2027.", 2026, "AI engineer") == {2027}
+    assert not future_years("Requirements in 2027.", 2026, "What is forecast for 2027?")
+    assert not future_years("A history of AI in 2020.", 2026, "AI engineer")
+
+
+def test_role_and_future_context_cannot_be_removed_to_make_an_excerpt_look_relevant():
+    for text in (
+        "A machine learning engineer builds production models. Learn Python and test projects.",
+        "An AI engineer builds models. These are projected requirements for 2099.",
+    ):
+        assert not list(clean_spans(text, year=2026, request="How to become an AI engineer?"))
+
+
+def test_noisy_findings_are_not_highlighted_but_evidence_and_status_are_preserved(tmp_path):
+    clean = "An AI engineer builds Python projects and tests models before deployment."
+    state = report_for(
+        tmp_path,
+        [
+            clean,
+            "An AI engineer should join our course for placement support.",
+            "AI engineer requirements in 2099 include advanced software skills.",
+            "AI engineer roadmap | Phase | Months | Skills | Output | "
+            "Foundations | 2 | Python | App |",
+        ],
+        "How to become an AI engineer?",
+    )
+    original = json.dumps(state, sort_keys=True)
+    markdown = render_report(state, answer_first=True, local_source_links=True)
+    findings = markdown.split("## Key Findings", 1)[1].split("## Sources", 1)[0]
+    assert escape(clean) in answer_section(markdown)
+    assert "join our course" not in findings
+    assert "roadmap \\|" not in findings
+    assert "requirements in 2099" not in findings
+    assert "**Date caution:**" in markdown
+    assert "rather than highlighted" in markdown
+    assert json.dumps(state, sort_keys=True) == original
+    assert "join our course" in render_report(state)  # Historical default is still inspectable.
+
+
+def test_concrete_how_to_excerpt_is_ranked_ahead_of_generic_introduction(tmp_path):
+    useful = (
+        "An AI engineer learns Python, builds tested projects and deploys models with monitoring."
+    )
+    state = report_for(
+        tmp_path,
+        ["An AI engineer needs a good educational foundation.", useful],
+        "How to become an AI engineer?",
+    )
+    excerpts = answer_excerpts(StateSnapshot.model_validate(state))
+    assert excerpts[0].text == useful
+    assert "1. " in answer_section(render_report(state, answer_first=True))
+
+
+def test_aligned_table_is_preserved_as_evidence_not_treated_as_broken_layout():
+    table = "| Skill | Practice |\n| --- | --- |\n| Python | Build projects |"
+    assert not display_issues(table, year=2026, request="AI engineering skills")

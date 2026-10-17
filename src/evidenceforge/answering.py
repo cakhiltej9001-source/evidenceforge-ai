@@ -6,6 +6,7 @@ from dataclasses import dataclass
 
 from evidenceforge.graph.state import StateSnapshot
 from evidenceforge.nodes.extraction import readable_spans
+from evidenceforge.presentation import TABLE, adjacent_role, display_issues, future_years
 
 QUESTION_WORDS = frozenset(
     "what which who whose where when why how is are was were do does did a an the "
@@ -122,7 +123,10 @@ def answer_excerpts(snapshot: StateSnapshot) -> tuple[AnswerExcerpt, ...]:
     cited = dict.fromkeys(cid for section in report.sections for cid in section.claim_ids)
     candidates: list[tuple[float, int, AnswerExcerpt, set[str]]] = []
     procedural = bool(HOW_TO.search(snapshot.request.question))
-    planned = {q.id: words(q.question) - PLAN_GENERIC for q in snapshot.research_questions}
+    planned = {
+        q.id: words(q.question + " " + " ".join(q.acceptance_criteria)) - PLAN_GENERIC
+        for q in snapshot.research_questions
+    }
     answer_claims = {
         cid
         for section in report.sections
@@ -138,6 +142,10 @@ def answer_excerpts(snapshot: StateSnapshot) -> tuple[AnswerExcerpt, ...]:
             if claim.statement != evidence.passage:
                 continue
             text = evidence.passage
+            if future_years(
+                text, snapshot.started_at.year, snapshot.request.question
+            ) or adjacent_role(text, snapshot.request.question):
+                continue
             spans = [(0, len(text))] if QUALIFIER.search(text) else list(readable_spans(text, 1))
             # A longer whole passage can preserve a how-to answer and all its caveats.
             # It is a fallback, never permission to shorten away qualifications.
@@ -148,9 +156,15 @@ def answer_excerpts(snapshot: StateSnapshot) -> tuple[AnswerExcerpt, ...]:
                 decoded = html.unescape(excerpt)
                 context_fallback = procedural and start == 0 and end == len(text)
                 if (
-                    not 8 <= len(excerpt) <= (1600 if context_fallback else 320)
+                    not 8
+                    <= len(excerpt)
+                    <= (1600 if context_fallback else 650 if procedural else 320)
                     or NOISE.search(decoded)
                     or PROMOTIONAL.search(decoded)
+                    or TABLE.search(decoded)
+                    or display_issues(
+                        decoded, year=snapshot.started_at.year, request=snapshot.request.question
+                    )
                     or DEPENDENT_START.search(excerpt.lstrip())
                     or (start > 0 and CONTEXT.search(text[:start]))
                 ):
@@ -180,9 +194,50 @@ def answer_excerpts(snapshot: StateSnapshot) -> tuple[AnswerExcerpt, ...]:
                     continue
                 score = len(overlap) / len(anchors)
                 if procedural:
+                    # Repeating the user's topic is weaker than giving concrete guidance.
+                    score *= 0.25
                     score += min(0.5, len(plan_overlap) / max(1, len(plan_anchors)))
+                if procedural:
+                    # Favor concrete content over short sentences repeating the job/topic.
+                    detail = (
+                        words(decoded)
+                        - anchors
+                        - PLAN_GENERIC
+                        - {
+                            "become",
+                            "engineer",
+                            "engineering",
+                            "ai",
+                            "successful",
+                            "good",
+                            "strong",
+                            "foundation",
+                            "foundational",
+                            "step",
+                            "needs",
+                            "need",
+                        }
+                    )
+                    score += min(0.3, len(detail) / 70)
+                    if re.search(
+                        r"\b(?:build|learn|test|deploy|validate|practice|implement|"
+                        r"programming|python|mathematics|statistics|portfolio|projects|"
+                        r"monitoring|interviews|evaluate|testing)\b",
+                        decoded,
+                        re.I,
+                    ):
+                        score += 0.4
+                    concrete = re.findall(
+                        r"\b(?:python|java|sql|numpy|pandas|pytorch|scikit-learn|"
+                        r"linear algebra|probability|statistics|calculus|portfolio|"
+                        r"projects|deploy(?:ment)?|monitoring|interviews|"
+                        r"validate|testing|measured|prototype)\b",
+                        decoded,
+                        re.I,
+                    )
+                    score += min(0.8, len(set(word.casefold() for word in concrete)) * 0.2)
                 if len(excerpt) > 320:
-                    score -= 1.0
+                    score -= 0.5
                 if re.search(r"\b(?:is|are|means|refers to)\b", excerpt, re.I):
                     score += 0.1
                 candidates.append(
@@ -204,13 +259,15 @@ def answer_excerpts(snapshot: StateSnapshot) -> tuple[AnswerExcerpt, ...]:
             or previous.text in selected_excerpt.text
             or len(words(selected_excerpt.text) & words(previous.text))
             / max(1, len(words(selected_excerpt.text) | words(previous.text)))
-            > 0.8
+            > 0.65
             for previous in selected
         ):
             continue
         selected.append(selected_excerpt)
         seen.add(selected_excerpt.text)
         covered.update(overlap)
-        if (not procedural and anchors.issubset(covered)) or len(selected) == 3:
+        if (not procedural and anchors.issubset(covered)) or len(selected) == (
+            5 if procedural else 3
+        ):
             break
     return tuple(selected)

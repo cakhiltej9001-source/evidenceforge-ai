@@ -20,6 +20,7 @@ from evidenceforge.nodes.common import Update, checked_patch, record_data
 from evidenceforge.nodes.extraction import ambiguous_table
 from evidenceforge.nodes.quality import quality_remaining
 from evidenceforge.nodes.quality_common import quality_event
+from evidenceforge.presentation import clean_spans, display_issues, future_years
 from evidenceforge.schemas import (
     EvidenceItem,
     QuestionCoverage,
@@ -396,7 +397,25 @@ def render_report(
                 )
             )
         )
+    presentation_omissions = 0
+    future_dates = set().union(
+        *(
+            future_years(claim.statement, s.started_at.year, s.request.question)
+            for claim in s.report_claims.values()
+        )
+    )
     if answer_first:
+        if future_dates:
+            lines.extend(
+                [
+                    "**Date caution:** Some retained passages refer to "
+                    + ", ".join(str(year) for year in sorted(future_dates))
+                    + f", later than this run's year ({s.started_at.year}). "
+                    "They are excluded from the concise answer; inspect their saved context "
+                    "before treating them as current guidance.",
+                    "",
+                ]
+            )
         # Summary selections remain findings even when replacing the summary's presentation.
         sections["key_findings"] = tuple(
             dict.fromkeys((*sections.get("key_findings", ()), *sections.get("summary", ())))
@@ -429,10 +448,15 @@ def render_report(
                         if local_source_links
                         else f"[{number}]"
                     )
-                    prefix = "- " if len(excerpts) > 1 else ""
+                    prefix = f"{excerpts.index(excerpt) + 1}. " if len(excerpts) > 1 else ""
                     lines.extend([prefix + readable_quote(excerpt.text) + " " + ref, ""])
                 lines.extend(
-                    ["Cited quotations from the retained evidence; full passages follow.", ""]
+                    [
+                        "Selected exact excerpts, ordered for reading; numbering is not a "
+                        "verified timeline. Full evidence and any caveats remain "
+                        "in saved passages.",
+                        "",
+                    ]
                 )
             else:
                 lines.extend(
@@ -496,6 +520,32 @@ def render_report(
             refs = " ".join(
                 f"[{n}](#saved-source-{n})" if local_source_links else f"[{n}]" for n in citations
             )
+            if (
+                answer_first
+                and name == "key_findings"
+                and display_issues(
+                    claim.statement, year=s.started_at.year, request=s.request.question
+                )
+            ):
+                spans = list(
+                    clean_spans(claim.statement, year=s.started_at.year, request=s.request.question)
+                )
+                if spans:
+                    cleaned = " ".join(
+                        '"' + readable_quote(claim.statement[start:end]) + '"'
+                        for start, end in spans[:2]
+                    )
+                    rendered.append(
+                        f"**Q{quote_numbers[cid]}.** "
+                        + cleaned
+                        + " "
+                        + refs
+                        + suffix
+                        + " (Selected exact excerpts; full context in saved passages.)"
+                    )
+                else:
+                    presentation_omissions += 1
+                continue
             if readable and name == "summary":
                 rendered.append(f"Supported quotation Q{quote_numbers[cid]}: {refs}{suffix}")
             elif readable and claim.statement in shown:
@@ -530,7 +580,23 @@ def render_report(
             lines.extend("- " + value for value in rendered)
         if not sections.get(name):
             lines.append("No supported claims are available for this section.")
+        elif answer_first and name == "key_findings" and not rendered:
+            lines.append(
+                "No clean finding could be displayed without losing context. "
+                "Inspect the saved source passages and JSON audit."
+            )
         lines.append("")
+    if answer_first and presentation_omissions:
+        lines.extend(
+            [
+                f"{presentation_omissions} audited quotation(s) are retained in the saved sources "
+                "and JSON rather than highlighted here because they contain promotional/transcript "
+                "clutter, adjacent-role wording, unresolved table layout or future-dated wording. "
+                "This display filter does not change the run status or certify "
+                "answer completeness.",
+                "",
+            ]
+        )
     if answer_first and any(
         html.unescape(claim.statement) != claim.statement for claim in s.report_claims.values()
     ):

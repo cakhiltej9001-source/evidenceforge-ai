@@ -118,7 +118,7 @@ def test_conflicting_measurements_remain_even_when_not_selected(tmp_path):
     assert required.issubset({e.id for e in compact_critic_input(s).evidence})
 
 
-@pytest.mark.parametrize("policy", [3, 4])
+@pytest.mark.parametrize("policy", [3, 4, 5])
 def test_critic_version_controls_input_without_mutating_evidence(snapshot, policy):
     class Capture(FixtureResearchModel):
         captured = None

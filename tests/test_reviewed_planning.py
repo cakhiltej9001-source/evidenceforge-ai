@@ -89,7 +89,7 @@ def test_malformed_combined_review_cannot_reach_search(tmp_path, result):
     assert not state["research_questions"] and search.calls == 0
 
 
-@pytest.mark.parametrize("policy", [2, 3, 4])
+@pytest.mark.parametrize("policy", [2, 3, 4, 5])
 def test_combined_review_approval_resume_uses_exactly_five_calls(tmp_path, policy):
     fixture = FixtureResearchModel()
     titles = []
@@ -108,6 +108,11 @@ def test_combined_review_approval_resume_uses_exactly_five_calls(tmp_path, polic
         title = payload["generationConfig"]["responseJsonSchema"]["title"]
         titles.append(title)
         value = json.loads(payload["contents"][0]["parts"][0]["text"])
+        if title in {"QuoteSelectionDraft", "CriticAssessment"}:
+            prompt = payload["systemInstruction"]["parts"][0]["text"]
+            assert ("small, complementary set" in prompt) is (policy >= 5)
+            assert ("Future-year wording" in prompt) is (policy >= 5)
+            assert ("reference_date" in value) is (policy >= 5)
         if title == "ReviewedPlanDraft":
             prompt = payload["systemInstruction"]["parts"][0]["text"]
             assert ("practical answer to the user's actual goal" in prompt) is (policy >= 3)

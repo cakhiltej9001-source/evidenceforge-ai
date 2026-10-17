@@ -1,5 +1,6 @@
 """Structured research inputs and validated model-output boundaries."""
 
+from datetime import date
 from typing import Annotated, Literal, Protocol, runtime_checkable
 
 from pydantic import Field, StrictBool
@@ -72,6 +73,7 @@ class QuoteSelectionDraft(Contract):
 
 
 class SynthesisInput(Contract):
+    reference_date: date | None = Field(default=None, exclude_if=lambda value: value is None)
     duplicate_evidence: tuple[DuplicateEvidence, ...] = Field(
         default=(), exclude_if=lambda value: not value
     )
@@ -87,6 +89,7 @@ class SynthesisInput(Contract):
 
 
 class CriticInput(Contract):
+    reference_date: date | None = Field(default=None, exclude_if=lambda value: value is None)
     request: ResearchRequest | None = Field(default=None, exclude_if=lambda value: value is None)
     questions: tuple[ResearchQuestion, ...] = Field(default=(), exclude_if=lambda value: not value)
     duplicate_evidence: tuple[DuplicateEvidence, ...] = Field(
@@ -104,7 +107,7 @@ class CriticAssessment(Contract):
 
 
 class ResearchOptions(Contract):
-    production_policy_version: Literal[0, 1, 2, 3, 4] = 0
+    production_policy_version: Literal[0, 1, 2, 3, 4, 5] = 0
     require_plan_approval: bool = False
     live_web: StrictBool = False
     live_energy: StrictBool = False

@@ -332,6 +332,9 @@ class Synthesis(QualityNode):
             version = s.revision_count + 1
             working = self.working(s, ranked=True)
             request = SynthesisInput(
+                reference_date=s.started_at.date()
+                if self.options.production_policy_version >= 5
+                else None,
                 request=s.request,
                 questions=s.research_questions,
                 evidence=working.evidence,
@@ -460,7 +463,7 @@ class Synthesis(QualityNode):
             return self.failure(state, "synthesis", exc)
 
 
-def compact_critic_input(s: StateSnapshot) -> CriticInput:
+def compact_critic_input(s: StateSnapshot, *, dated: bool = False) -> CriticInput:
     """Review complete cited/coverage evidence and numeric counter-evidence."""
     assert s.draft_report is not None
     required = {eid for claim in s.report_claims.values() for eid in claim.evidence_ids}
@@ -476,6 +479,7 @@ def compact_critic_input(s: StateSnapshot) -> CriticInput:
     if not required.issubset(s.evidence_store):
         raise PlanningContractError("Missing review evidence reference.")
     return CriticInput(
+        reference_date=s.started_at.date() if dated else None,
         request=s.request,
         questions=s.research_questions,
         report=s.draft_report,
@@ -495,7 +499,7 @@ class Critic(QualityNode):
             return quality_error(state, "critic", "budget", s.quality_attempts)
         try:
             if self.options.production_policy_version >= 4:
-                request = compact_critic_input(s)
+                request = compact_critic_input(s, dated=self.options.production_policy_version >= 5)
             else:
                 working = self.working(s)
                 request = CriticInput(

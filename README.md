@@ -594,3 +594,9 @@ These are proposed extensions, not completed features:
 The original PDF describes source/graph/report/persistence mechanics and incremental
 production guidance. It does not specify a grading rubric, deadline or hosting
 mandate. External submission acceptance is not claimed.
+
+### Answer and findings quality update
+
+See [the 18 October repair](docs/REPORT_PRESENTATION_FIX_2026-10-18.md) for more concrete
+exact-excerpt answers, disclosed presentation omissions and date/role-context guards.
+New workbench runs use policy 5; saved workflows retain their original policy.

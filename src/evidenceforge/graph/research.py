@@ -83,7 +83,13 @@ def build_research_graph(
     if model.is_fixture is not True and not isinstance(model, GeminiResearchModel):
         raise ValueError("Unsupported live research model.")
     if isinstance(model, GeminiResearchModel):
-        model.guidance_version = 1 if options.production_policy_version >= 3 else 0
+        model.guidance_version = (
+            2
+            if options.production_policy_version >= 5
+            else 1
+            if options.production_policy_version >= 3
+            else 0
+        )
     planning = PlanningOptions(
         available_source_types=tuple(processor.adapters),
         node_timeout_seconds=60 if options.production_policy_version >= 2 else 30,
