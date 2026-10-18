@@ -62,6 +62,17 @@ Free hosting and the existing per-run API budgets remain unchanged.
 
 ## Verification
 
-Local lint and formatting gates passed. Strict mypy passed all 90 source files.
-Focused regression verification and full GitHub CI are recorded after completion;
-no new provider allowance was consumed by these checks.
+Source commit: `a342ce7a7a3707982afa22d4dc9c0e8455918dd0`.
+
+[Full source CI](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/39078511847)
+passed: **595 tests in 49.67 seconds**, lint, formatting, strict mypy, package build,
+Render schema validation, container research/reconnect, nonroot backup/restore,
+UI health and authenticated-gateway smoke checks.
+
+The focused policy-5 approval/resume, critic-input and aligned-table checks also
+passed locally (3 tests). The approval/resume regression caught and closed the
+checkpoint loader's policy whitelist gap before publication. Local strict mypy
+passed all 90 source files. No new provider allowance was consumed by these checks.
+
+This verifies engineering behavior and the offline presentation replay. It does
+not establish new live Gemini answer quality or independent source truth.
