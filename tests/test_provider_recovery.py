@@ -208,6 +208,26 @@ def test_ui_retry_recovers_a_rose_answer_with_mocked_providers(tmp_path, monkeyp
             result = await fixture.generate_queries(QueryGenerationRequest.model_validate(value))
         elif title == "CoverageAssessment":
             result = await fixture.evaluate_coverage(CoverageInput.model_validate(value))
+        elif title == "CoverageSelectionDraft":
+            coverage = await fixture.evaluate_coverage(
+                CoverageInput.model_validate(
+                    {"questions": value["questions"], "evidence": value["evidence"]}
+                )
+            )
+            criteria_by_question = {
+                q["id"]: [c for c in value["criteria"] if c["question_id"] == q["id"]]
+                for q in value["questions"]
+            }
+            result = {
+                "matches": [
+                    {
+                        "criterion_id": criteria_by_question[q["question_id"]][c["index"]]["id"],
+                        "evidence_ids": c["evidence_ids"],
+                    }
+                    for q in coverage["questions"]
+                    for c in q["criteria"]
+                ]
+            }
         elif title == "QuoteSelectionDraft":
             result = {
                 "claims": [
@@ -296,7 +316,7 @@ def test_ui_retry_recovers_a_rose_answer_with_mocked_providers(tmp_path, monkeyp
         assert final["run_status"] == "completed" and final["report_claims"]
         assert final["thread_id"] != first_thread
         assert apps[0].snapshot("local", first_thread)["run_status"] == "failed"
-        assert len(requests) == (1 if source_only else 6)
+        assert len(requests) == (1 if source_only else 5)
         assert bool(apps[0].paid_usage("local", final["thread_id"])) is not source_only
         assert any("flowering plant" in m.value for m in at.markdown)
     finally:

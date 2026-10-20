@@ -89,7 +89,8 @@ def test_plan_vocabulary_recovers_partial_how_to_answer_without_new_calls(tmp_pa
         assert retained[item.start_offset : item.end_offset] == item.text
     result = answer(render_report(state, answer_first=True, local_source_links=True))
     assert "customer problem" in result and "#saved-source-" in result
-    assert "partial answer" in result and "Still unresolved" in result
+    assert "coverage or final review remains unresolved" in result
+    assert "draft answer" in result and "Still unresolved" in result
     assert "business model types" in result and "technical infrastructure data" in result
     assert "research/search limit" in result
     assert state["run_status"] == "partial" and state["stop_reason"] == "pass_limit"
