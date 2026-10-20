@@ -602,3 +602,9 @@ exact-excerpt answers, disclosed presentation omissions and date/role-context gu
 New workbench runs now use policy 6; saved workflows retain their original policy.
 See [the report and revision repair](docs/SUBMISSION_READINESS_REPAIR_2026-10-20.md)
 for promotion guards, criterion-based answers and a six-call revision path.
+
+Fresh live verification on 20 October used **4 Gemini calls and 1 Tavily search**:
+zero tool errors, 12 passing quotation checks and an approved critic review.
+The report correctly remained **partial** because sources covered 3 of 4 planned
+criteria. The repair notes include screenshots, sanitized counters and the exact
+remaining evidence gap.

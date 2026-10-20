@@ -1,0 +1,48 @@
+{
+  "checked_utc": "2026-10-20T07:50:51.797834+00:00",
+  "scope": "Local execution of the same research service and policy used by the Streamlit workbench.",
+  "question": "How to become an AI engineer?",
+  "model": "gemini-3.1-flash-lite",
+  "policy_version": 6,
+  "budget": {
+    "max_research_passes": 1,
+    "max_rewrites": 1,
+    "max_subquestions": 1,
+    "max_queries_per_pass": 1,
+    "max_searches": 1,
+    "max_model_calls": 6,
+    "reserved_quality_calls": 3,
+    "max_total_tokens": 100000,
+    "max_evidence_count": 200,
+    "max_evidence_bytes": 1000000,
+    "max_elapsed_seconds": 1800,
+    "max_concurrency": 1,
+    "max_attempts_per_call": 1,
+    "max_cost_usd": null
+  },
+  "progress": {
+    "run_status": "partial",
+    "stop_reason": "pass_limit",
+    "retrieval_passes": 1,
+    "rewrites": 0,
+    "search_calls": 1,
+    "evidence_count": 40,
+    "tool_errors": 0,
+    "citation_checks": 12
+  },
+  "model_calls": 4,
+  "critic_decision": "approved",
+  "source_count": 5,
+  "cited_source_count": 5,
+  "concise_excerpts": 5,
+  "criterion_labels": [
+    "Outline practical project types for a portfolio that demonstrate real-world problem-solving.",
+    "List common professional roles or paths that serve as entry points into AI engineering.",
+    "Mention educational or training avenues without prescribing a single mandatory degree."
+  ],
+  "all_citations_passed": true,
+  "completed_and_reviewed": false,
+  "repair_model_calls_total": 13,
+  "repair_tavily_searches_total": 3,
+  "historical_allowances_modified": false
+}
