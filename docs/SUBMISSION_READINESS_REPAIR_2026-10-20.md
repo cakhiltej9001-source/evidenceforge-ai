@@ -58,7 +58,27 @@ schema acceptance is separate from semantic correctness and local validation.
 - **10 legacy planning regressions passed**, including policy 2-5 approval/resume.
 - Earlier focused report/UI checks passed 41 tests before the live diagnostics.
 - Strict mypy passed all **90 source files**. Lint passed.
-- Full GitHub CI and hosted activation are checked after publication.
+- **20 provider/report recovery checks passed locally**, including a fresh explicit
+  retry after a simulated HTTP 503 with the criterion-ID wire contract. These
+  mocked checks use no paid provider calls.
+- [Full GitHub CI passed 612 tests](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/runs/39387653439)
+  on source commit `c181da7`. Lint, formatting, types, build, deployment smoke and
+  container checks also passed. The first CI run exposed two stale test contracts;
+  the recovery mock and partial-answer wording assertions were corrected.
+
+## Hosted activation
+
+On 20 October the free app was asleep from inactivity. It was awakened, and an
+independent browser check confirmed **App version: 2026-10-20.1**, the empty
+question input, configured Gemini, Tavily search, and the enabled one-revision
+control. No research form was submitted during this hosted check.
+
+![Hosted research form and revision control, version 2026-10-20.1](images/hosted-revision-2026-10-20.png)
+
+This screenshot verifies the deployed UI. It does not establish that a fresh
+live workflow completed successfully. That final check still needs the pending
+additional API allowance; the diagnostics above remain the only live evidence
+claimed for this repair.
 
 Original exports, provider receipts and diagnostic artifacts remain Git-ignored.
 Only sanitized counters and reviewed screenshots are suitable for public docs.
