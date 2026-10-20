@@ -13,6 +13,7 @@ from evidenceforge.exports import report_export
 from evidenceforge.graph.state import ResearchState, StateSnapshot
 from evidenceforge.nodes.approval import PlanDecision
 from evidenceforge.planning import PlanDraft
+from evidenceforge.report_pdf import PdfExportError, report_pdf
 from evidenceforge.reporting import render_report, retained_source_passages, retained_source_text
 from evidenceforge.schemas import ResearchRequest
 from evidenceforge.services.observability import public_progress, public_timeline
@@ -45,12 +46,27 @@ def ingest_upload(store: DocumentStore, owner: str, name: str, data: bytes) -> D
 
 def show_report(state: ResearchState, export_json: str | None = None) -> None:
     st.subheader("Research report")
-    st.markdown(render_report(state, local_source_links=True, answer_first=True))
+    st.markdown(
+        render_report(
+            state, local_source_links=True, answer_first=True, include_evidence_details=False
+        )
+    )
+    try:
+        pdf = report_pdf(state)
+    except PdfExportError as exc:
+        st.caption(str(exc))
+    else:
+        st.download_button(
+            "Download report PDF", pdf, "research-report.pdf", "application/pdf", on_click="ignore"
+        )
+    st.caption(
+        "The PDF contains the report and source links. Audits and original passages are in JSON."
+    )
     show_saved_sources(state)
     st.caption("Downloads include selected document/source passages. Review before sharing.")
     st.download_button(
         "Download Markdown",
-        render_report(state, answer_first=True),
+        render_report(state, answer_first=True, include_evidence_details=False),
         "report.md",
         "text/markdown",
         on_click="ignore",

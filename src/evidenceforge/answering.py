@@ -5,8 +5,13 @@ import re
 from dataclasses import dataclass, replace
 
 from evidenceforge.graph.state import StateSnapshot
-from evidenceforge.nodes.extraction import readable_spans
-from evidenceforge.presentation import TABLE, adjacent_role, display_issues, future_years
+from evidenceforge.presentation import (
+    TABLE,
+    adjacent_role,
+    display_issues,
+    future_years,
+    presentation_spans,
+)
 
 QUESTION_WORDS = frozenset(
     "what which who whose where when why how is are was were do does did a an the "
@@ -19,14 +24,7 @@ NOISE = re.compile(
     r"<[^>]+>|&(?:#\w+|\w+);|\?",
     re.I,
 )
-QUALIFIER = re.compile(
-    r"\b(?:not|never|no longer|formerly|until|if|unless|however|but|except|"
-    r"excludes?|excluding|only|may|might|could|disputed|incorrect|outdated|"
-    r"false|untrue|wrong|misleading|inaccurate|unverified|uncertain)\b",
-    re.I,
-)
 CONTEXT = re.compile(r"\b(?:\d{4}|historically|previously|as of|following|after|before)\b", re.I)
-DEPENDENT_START = re.compile(r"^(?:it|this|that|these|those|they|he|she|there)\b", re.I)
 HOW_TO = re.compile(
     r"^\s*how\s+(?:(?:can|do|should|would|could)\s+(?:i|we|you|one)\s+)?"
     r"(?:to\s+)?(?:become|start|build|create|learn|establish|launch|develop|set\s+up)\b",
@@ -86,10 +84,43 @@ def criterion_topic_matches(criterion: str, passage: str) -> bool:
         r"frameworks?|pytorch|tensorflow|scikit.learn",
         r"degrees?|education|academic",
     )
-    for topic in topics:
-        if re.search(topic, criterion, re.I):
-            return bool(re.search(topic, passage, re.I))
-    return True
+    return all(
+        re.search(topic, passage, re.I) for topic in topics if re.search(topic, criterion, re.I)
+    ) and (not career_criterion(criterion) or bool(CAREER_EVIDENCE.search(passage)))
+
+
+CAREER_EVIDENCE = re.compile(
+    r"\b(?:entry[- ]level|junior|internships?|apprenticeships?|job titles?|"
+    r"apply for|transition|career paths?)\b",
+    re.I,
+)
+PROJECT_EXAMPLES = re.compile(r"\bprojects?\s*[:(]|\b(?:for example|such as|e\.g\.)\b", re.I)
+
+
+def career_criterion(criterion: str) -> bool:
+    return bool(
+        re.search(r"entry[- ]level|entry points?|career|professional roles", criterion, re.I)
+    )
+
+
+def criterion_fit(criterion: str, passage: str, request: str) -> float | None:
+    terms = criterion_words(criterion) - criterion_words(request)
+    overlap = len(criterion_words(passage) & terms)
+    career = career_criterion(criterion) and bool(CAREER_EVIDENCE.search(passage))
+    examples = bool(
+        re.search(r"portfolio|projects?", criterion, re.I) and PROJECT_EXAMPLES.search(passage)
+    )
+    framework_list = bool(
+        re.search(r"frameworks?|libraries", criterion, re.I)
+        and re.search(r"\b(?:frameworks?|libraries)\s*:", passage, re.I)
+    )
+    if not terms or not criterion_topic_matches(criterion, passage):
+        return None
+    if overlap < min(2, len(terms)) and not (career or examples or framework_list):
+        return None
+    return overlap / len(terms) + (
+        1.5 if examples else 1.0 if career else 0.75 if framework_list else 0.0
+    )
 
 
 def unresolved_answer(snapshot: StateSnapshot) -> bool:
@@ -182,7 +213,7 @@ def answer_excerpts(snapshot: StateSnapshot) -> tuple[AnswerExcerpt, ...]:
                 text, snapshot.started_at.year, snapshot.request.question
             ) or adjacent_role(text, snapshot.request.question):
                 continue
-            spans = [(0, len(text))] if QUALIFIER.search(text) else list(readable_spans(text, 1))
+            spans = list(presentation_spans(text))
             # A longer whole passage can preserve a how-to answer and all its caveats.
             # It is a fallback, never permission to shorten away qualifications.
             if procedural and (0, len(text)) not in spans:
@@ -201,7 +232,6 @@ def answer_excerpts(snapshot: StateSnapshot) -> tuple[AnswerExcerpt, ...]:
                     or display_issues(
                         decoded, year=snapshot.started_at.year, request=snapshot.request.question
                     )
-                    or DEPENDENT_START.search(excerpt.lstrip())
                     or (start > 0 and CONTEXT.search(text[:start]))
                 ):
                     continue
@@ -214,7 +244,15 @@ def answer_excerpts(snapshot: StateSnapshot) -> tuple[AnswerExcerpt, ...]:
                         for qid in claim.question_ids
                         if qid in snapshot.coverage_by_question
                     )
-                    if len(overlap | plan_overlap) < 2 and not (assessed and context_fallback):
+                    focused = assessed and any(
+                        criterion_fit(criterion, decoded, snapshot.request.question) is not None
+                        for q in snapshot.research_questions
+                        if q.id in claim.question_ids
+                        for criterion in q.acceptance_criteria
+                    )
+                    if len(overlap | plan_overlap) < 2 and not (
+                        assessed and (context_fallback or focused)
+                    ):
                         continue
                 elif not overlap or len(overlap) / len(anchors) < 0.5:
                     continue
@@ -304,18 +342,13 @@ def answer_excerpts(snapshot: StateSnapshot) -> tuple[AnswerExcerpt, ...]:
         # These labels organize exact quotations; they do not assert new facts.
         for question in snapshot.research_questions:
             for criterion in question.acceptance_criteria:
-                terms = criterion_words(criterion) - criterion_words(snapshot.request.question)
                 matches = [
-                    (
-                        len(criterion_words(item[2].text) & terms) / max(1, len(terms)),
-                        item,
-                    )
+                    (fit, item)
                     for item in ranked
                     if question.id in snapshot.report_claims[item[2].claim_id].question_ids
-                    and len(criterion_words(item[2].text) & terms) >= min(2, len(terms))
-                    and terms
-                    and criterion_topic_matches(criterion, item[2].text)
                     and not redundant(item[2])
+                    and (fit := criterion_fit(criterion, item[2].text, snapshot.request.question))
+                    is not None
                 ]
                 if matches and len(selected) < 5:
                     _, chosen = max(matches, key=lambda pair: (pair[0], pair[1][0]))
@@ -323,6 +356,8 @@ def answer_excerpts(snapshot: StateSnapshot) -> tuple[AnswerExcerpt, ...]:
                     selected.append(criterion_excerpt)
                     seen.add(criterion_excerpt.text)
                     covered.update(chosen[3])
+        if selected:
+            return tuple(selected)
     for _, _, selected_excerpt, overlap in ranked:
         if len(selected) >= (5 if procedural else 3):
             break
@@ -340,6 +375,12 @@ def answer_excerpts(snapshot: StateSnapshot) -> tuple[AnswerExcerpt, ...]:
 
 def criterion_label(criterion: str) -> str:
     """Readable navigation labels derived from an approved criterion, not new claims."""
+    programming = bool(re.search(r"programming|languages?", criterion, re.I))
+    frameworks = bool(re.search(r"frameworks?|libraries", criterion, re.I))
+    if programming and not frameworks:
+        return "Programming languages"
+    if frameworks and not programming:
+        return "Frameworks and libraries"
     for pattern, label in (
         (r"education|degrees?|certifications?|academic", "Education and training"),
         (r"programming|languages?|frameworks?|tools?", "Programming and tools"),

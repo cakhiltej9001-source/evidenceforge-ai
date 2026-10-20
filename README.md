@@ -608,3 +608,10 @@ zero tool errors, 12 passing quotation checks and an approved critic review.
 The report correctly remained **partial** because sources covered 3 of 4 planned
 criteria. The repair notes include screenshots, sanitized counters and the exact
 remaining evidence gap.
+
+### Report polish and PDF download
+
+[Version 2026-10-20.2](docs/REPORT_POLISH_2026-10-20.md) improves course-promotion
+filtering, context preservation, topic ordering and sequential finding labels.
+Use **Download report PDF** for a clean report with source links; inspection records
+and original passages remain available through the app and JSON export.

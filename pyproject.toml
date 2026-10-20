@@ -33,6 +33,7 @@ evidenceforge-energy = "evidenceforge.energy_demo:main"
 [project.optional-dependencies]
 ui = [
     "streamlit>=1.50,<2",
+    "reportlab>=4.4,<5",
 ]
 ocr = [
     "rapidocr-onnxruntime==1.4.4; python_version < '3.13'",
@@ -63,7 +64,7 @@ files = ["src/evidenceforge"]
 
 
 [[tool.mypy.overrides]]
-module = ["streamlit", "streamlit.*"]
+module = ["streamlit", "streamlit.*", "reportlab", "reportlab.*"]
 follow_imports = "skip"
 ignore_missing_imports = true
 

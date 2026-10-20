@@ -107,6 +107,9 @@ def test_saved_passages_and_text_download_work_without_a_network_request(
         default_timeout=90,
     ).run()
     assert not at.exception and not at.error
+    pdf_button = next(b for b in at.get("download_button") if b.label == "Download report PDF")
+    pdf = stores[-1].get_file(Path(pdf_button.proto.url).name)
+    assert pdf.filename == "research-report.pdf" and pdf.content.startswith(b"%PDF")
     assert any(h.value == "Saved source passages" for h in at.subheader)
     assert any("full-page access is not verified" in i.value for i in at.info)
     expected = retained_source_passages(

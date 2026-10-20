@@ -97,7 +97,9 @@ class QualityNode:
             item
             for item in s.evidence_store.values()
             if self.options.production_policy_version < 6
-            or not display_issues(item.passage, year=s.started_at.year, request=s.request.question)
+            or not display_issues(
+                item.passage, year=s.started_at.year, request=s.request.question, editorial=False
+            )
         ]
         if self.options.quality_input_version == 1:
             if ranked:

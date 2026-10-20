@@ -296,7 +296,11 @@ def retained_source_text(snapshot: StateSnapshot, source_id: str) -> str:
 
 
 def render_report(
-    state: ResearchState, *, local_source_links: bool = False, answer_first: bool = False
+    state: ResearchState,
+    *,
+    local_source_links: bool = False,
+    answer_first: bool = False,
+    include_evidence_details: bool = True,
 ) -> str:
     s = StateSnapshot.model_validate(state)
     has_documents = any(source.source_type == "document" for source in s.source_records.values())
@@ -371,6 +375,7 @@ def render_report(
     lines = [
         "# EvidenceForge research report",
         "",
+        *(["Research question: " + escape(s.request.question), ""] if answer_first else []),
         notice,
         "",
         f"Status: `{s.run_status.value}` | "
@@ -385,7 +390,18 @@ def render_report(
     sources = {sid: index + 1 for index, sid in enumerate(report.source_ids if report else ())}
     sections = {section.name: section.claim_ids for section in report.sections} if report else {}
     readable = any(event.kind == "readable_report" for event in s.events.values())
-    quote_numbers = {cid: index + 1 for index, cid in enumerate(s.report_claims)}
+    quote_numbers = (
+        {} if answer_first else {cid: index + 1 for index, cid in enumerate(s.report_claims)}
+    )
+
+    def quote_number(cid: str) -> int:
+        if cid not in quote_numbers:
+            quote_numbers[cid] = len(quote_numbers) + 1
+        return quote_numbers[cid]
+
+    def quote_name(cid: str) -> str:
+        return f"Finding {quote_number(cid)}" if answer_first else f"Q{quote_number(cid)}"
+
     shown: dict[str, int] = {}
     if readable and sections.get("summary"):
         assigned = {cid for name, ids in sections.items() if name != "summary" for cid in ids}
@@ -541,7 +557,7 @@ def render_report(
                         for start, end in spans[:2]
                     )
                     rendered.append(
-                        f"**Q{quote_numbers[cid]}.** "
+                        f"**{quote_name(cid)}.** "
                         + cleaned
                         + " "
                         + refs
@@ -552,9 +568,14 @@ def render_report(
                     presentation_omissions += 1
                 continue
             if readable and name == "summary":
-                rendered.append(f"Supported quotation Q{quote_numbers[cid]}: {refs}{suffix}")
+                rendered.append(f"Supported quotation {quote_name(cid)}: {refs}{suffix}")
             elif readable and claim.statement in shown:
-                rendered.append(f"See quotation Q{shown[claim.statement]} above. {refs}{suffix}")
+                previous = (
+                    f"Finding {shown[claim.statement]}"
+                    if answer_first
+                    else f"quotation Q{shown[claim.statement]}"
+                )
+                rendered.append(f"See {previous} above. {refs}{suffix}")
             elif any(
                 e.kind == "report_quality_guard_v2" for e in s.events.values()
             ) and aligned_table(claim.statement):
@@ -563,15 +584,15 @@ def render_report(
                 )
                 fence = chr(96) * max(3, longest + 1)
                 rendered.append(
-                    f"**Q{quote_numbers[cid]}.** {refs}{suffix}\n\n"
+                    f"**{quote_name(cid)}.** {refs}{suffix}\n\n"
                     f"{fence}text\n{claim.statement}\n{fence}"
                 )
-                shown[claim.statement] = quote_numbers[cid]
+                shown[claim.statement] = quote_number(cid)
             else:
-                label = f"**Q{quote_numbers[cid]}.** " if readable else ""
+                label = f"**{quote_name(cid)}.** " if readable or answer_first else ""
                 quote = readable_quote(claim.statement) if answer_first else escape(claim.statement)
                 rendered.append(label + f'"{quote}" ' + refs + suffix)
-                shown[claim.statement] = quote_numbers[cid]
+                shown[claim.statement] = quote_number(cid)
         if name == "summary" and rendered:
             count = min(3, len(rendered))
             for index in range(count):
@@ -637,6 +658,8 @@ def render_report(
             lines.append(line)
         else:
             lines.append(f"- [{index}] [{title}]({url})" if url else f"- [{index}] {title}")
+        if not include_evidence_details:
+            continue
         if source.document_id is not None:
             dates = sorted(
                 {

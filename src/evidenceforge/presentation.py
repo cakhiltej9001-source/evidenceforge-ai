@@ -19,9 +19,9 @@ TABLE = re.compile(r"(?:\|[^|\n]*){3,}|\t[^\n]*\t")
 # A qualification elsewhere in the quotation can change a sentence's meaning.
 # Keep the entire passage or abstain, rather than silently stripping its caveat.
 SCOPE = re.compile(
-    r"\b(?:not|never|no longer|formerly|until|if|unless|however|but|except|"
+    r"\b(?:not|never|no|formerly|until|if|unless|however|but|except|"
     r"excludes?|excluding|only|may|might|could|disputed|incorrect|outdated|"
-    r"false|untrue|wrong|misleading|inaccurate|unverified|uncertain)\b",
+    r"false|untrue|wrong|misleading|inaccurate|unverified|uncertain)\b|\b\w+n['\u2019]t\b",
     re.I,
 )
 YEARS = re.compile(r"\b(?:19|20|21)\d{2}\b")
@@ -37,11 +37,29 @@ PITCH = re.compile(
     r"boost your resume|solidify your standing)\b|[\w]+['\u2019]s\s+.{0,80}\bboot\s?camp",
     re.I,
 )
+BRANDED_COURSE = re.compile(
+    r"\b[\w&.-]+['\u2019]s\s+[^.!?\n]{0,100}\b(?:courses?|boot\s?camps?|programs?)\b"
+    r"[^.!?\n]{0,100}\b(?:cover|provide|offer|help|teach|equip|learners|participants)\w*\b",
+    re.I,
+)
+PAGE_HEADER = re.compile(r"\b(?:updated on|published on|posted on)\b", re.I)
+DEPENDENT_START = re.compile(
+    r"^(?:it|this|that|these|those|they|he|she|there|yes|because|also|moreover)\b|"
+    r"^no(?:\s*[,;:.]|\s+because\b)",
+    re.I,
+)
+QUESTION_TAIL = re.compile(
+    r"\b(?:What|Which|Where|When|Why|How|Is|Are|Do|Does|Can|Should)\b[^.!?]*\?\s*$"
+)
 
 
 def promotional(text: str) -> bool:
     """Catch third-party course pitches without excluding neutral training discussion."""
-    return bool(CLUTTER.search(text) or (TRAINING.search(text) and PITCH.search(text)))
+    return bool(
+        CLUTTER.search(text)
+        or BRANDED_COURSE.search(text)
+        or (TRAINING.search(text) and PITCH.search(text))
+    )
 
 
 def future_years(text: str, year: int, request: str) -> set[int]:
@@ -59,10 +77,20 @@ def adjacent_role(text: str, request: str) -> bool:
     )
 
 
-def display_issues(text: str, *, year: int, request: str) -> tuple[str, ...]:
+def display_issues(
+    text: str, *, year: int, request: str, editorial: bool = True
+) -> tuple[str, ...]:
     issues = []
     if promotional(text):
         issues.append("promotional, transcript or page-navigation text")
+    if editorial and PAGE_HEADER.search(text):
+        issues.append("publication header or byline text")
+    if editorial and DEPENDENT_START.search(text.lstrip()):
+        issues.append("a fragment that depends on missing preceding context")
+    if editorial and (QUESTION_TAIL.search(text) or re.search(r"\?\s*\S", text)):
+        issues.append("FAQ questions mixed with extracted text")
+    if editorial and numbered_sections(text):
+        issues.append("flattened numbered sections")
     if TABLE.search(text) and not aligned_table(text):
         issues.append("table formatting that needs the original layout")
     if future_years(text, year, request):
@@ -72,19 +100,71 @@ def display_issues(text: str, *, year: int, request: str) -> tuple[str, ...]:
     return tuple(issues)
 
 
+def numbered_sections(text: str) -> tuple[tuple[int, int], ...]:
+    """Recognize consecutive, independently headed items in a flattened list."""
+    markers = list(re.finditer(r"(?<![\w.])([1-9]\d?)\.\s*(?=[A-Z]|$)", text))
+    if len(markers) < 2 or any(
+        int(right[1]) != int(left[1]) + 1 for left, right in zip(markers, markers[1:], strict=False)
+    ):
+        return ()
+    starts = [0, *(marker.end() for marker in markers)]
+    ends = [*(marker.start() for marker in markers), len(text)]
+    sections = tuple(
+        (
+            start + len(text[start:end]) - len(text[start:end].lstrip()),
+            start + len(text[start:end].rstrip()),
+        )
+        for start, end in zip(starts, ends, strict=True)
+        if text[start:end].strip()
+    )
+    if len(sections) < 2 or not all(
+        re.match(r"[A-Z][A-Za-z /&-]{1,60}\([^\n)]{1,80}\)", text[a:b]) for a, b in sections
+    ):
+        return ()
+    return sections
+
+
+def presentation_spans(text: str) -> Iterator[tuple[int, int]]:
+    """Exact sentence/list spans, excluding a trailing FAQ question, with caveats intact."""
+    for offset, stop in numbered_sections(text) or ((0, len(text)),):
+        block = text[offset:stop]
+        spans = [(0, len(block))] if SCOPE.search(block) else readable_spans(block, 1)
+        for a, b in spans:
+            start, end = offset + a, offset + b
+            question = QUESTION_TAIL.search(text[start:end])
+            if question:
+                end = start + len(text[start : start + question.start()].rstrip())
+            ordinal = re.search(r"(?<=[)\].])\s+\d{1,2}\.\s*$", text[start:end])
+            previous = re.search(r"([1-9]\d?)\.\s*$", text[:start])
+            next_item = re.search(r"\s+([1-9]\d?)\.\s*$", text[start:end])
+            if (
+                previous
+                and next_item
+                and int(next_item[1]) == int(previous[1]) + 1
+                and re.match(
+                    r"(?:Learn|Build|Deploy|Apply|Practice|Study|Create)\b", text[start:end]
+                )
+            ):
+                ordinal = next_item
+            if ordinal and re.match(
+                r"(?:Learn|Build|Deploy|Apply|Practice|Study|Create)\b", text[end:].lstrip()
+            ):
+                end = start + ordinal.start()
+            if end > start:
+                yield start, end
+
+
 def clean_spans(
     text: str, *, year: int, request: str, limit: int = 650
 ) -> Iterator[tuple[int, int]]:
     """Select exact whole sentences; never rewrite a table or remove a caveat."""
     if future_years(text, year, request) or adjacent_role(text, request):
         return
-    spans = [(0, len(text))] if SCOPE.search(text) else readable_spans(text, 1)
-    for start, end in spans:
+    for start, end in presentation_spans(text):
         candidate = text[start:end]
         if (
             8 <= len(candidate) <= limit
             and not display_issues(candidate, year=year, request=request)
-            and not re.match(r"^(?:it|this|that|these|those|they|he|she|there)\b", candidate, re.I)
             and not (start and YEARS.search(text[:start]))
         ):
             yield start, end
