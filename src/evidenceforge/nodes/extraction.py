@@ -21,6 +21,31 @@ def tokens(text: str) -> set[str]:
     return {word for word in re.findall(r"\w+", text.casefold()) if word not in STOP_WORDS}
 
 
+def criterion_focus_terms(text: str) -> set[str]:
+    return tokens(text) - {
+        "identify",
+        "list",
+        "describe",
+        "outline",
+        "name",
+        "core",
+        "essential",
+        "key",
+        "required",
+        "necessary",
+        "common",
+        "ai",
+        "engineer",
+        "engineering",
+        "used",
+        "industry",
+        "role",
+        "roles",
+        "typically",
+        "foundational",
+    }
+
+
 def spans(text: str, size: int) -> Iterator[tuple[int, int]]:
     """Character offsets into the stored text; preserve every returned character."""
     start = 0
@@ -108,12 +133,14 @@ class EvidenceExtractor:
         sentence_boundaries: bool = False,
         quality_guards: bool = False,
         strict_quality_guards: bool = False,
+        criteria_focus: bool = False,
     ) -> None:
         self.artifacts, self.options = artifacts, options
         self.evict_lowest = evict_lowest
         self.sentence_boundaries = sentence_boundaries
         self.quality_guards = quality_guards
         self.strict_quality_guards = strict_quality_guards
+        self.criteria_focus = criteria_focus
 
     def __call__(self, state: ResearchState) -> Update:
         from evidenceforge.evidence.text_quality import (
@@ -178,6 +205,16 @@ class EvidenceExtractor:
                 if self.sentence_boundaries
                 else spans(content, self.options.passage_chars)
             )
+            criterion_terms = (
+                [
+                    criterion_focus_terms(criterion)
+                    for question in snapshot.research_questions
+                    if question.id in questions
+                    for criterion in question.acceptance_criteria
+                ]
+                if self.criteria_focus
+                else []
+            )
             if self.sentence_boundaries:
                 focus = set().union(
                     *(tokens(q.question) for q in snapshot.research_questions if q.id in questions)
@@ -189,6 +226,31 @@ class EvidenceExtractor:
                         pair[0],
                     )
                 )
+            if self.criteria_focus:
+                from evidenceforge.presentation import display_issues
+
+                prioritized: list[tuple[int, int]] = []
+                for terms in criterion_terms:
+                    eligible = [
+                        pair
+                        for pair in candidates
+                        if terms & tokens(content[pair[0] : pair[1]])
+                        and not display_issues(
+                            content[pair[0] : pair[1]],
+                            year=snapshot.started_at.year,
+                            request=snapshot.request.question,
+                        )
+                    ]
+                    if eligible:
+                        best = max(
+                            eligible,
+                            key=lambda pair: (
+                                len(terms & tokens(content[pair[0] : pair[1]])) / max(1, len(terms))
+                            ),
+                        )
+                        if best not in prioritized:
+                            prioritized.append(best)
+                candidates = prioritized + [pair for pair in candidates if pair not in prioritized]
             for start, end in candidates:
                 passage = content[start:end]
                 identifier = stable_id(
@@ -230,7 +292,16 @@ class EvidenceExtractor:
                         continue
                     focus = tokens(question.question)
                     score = len(focus & passage_tokens) / len(focus) if focus else 0.0
-                    if score >= self.options.min_relevance and focus & passage_tokens:
+                    if self.criteria_focus:
+                        criterion_scores = [
+                            len(terms & passage_tokens) / len(terms)
+                            for criterion in question.acceptance_criteria
+                            if (terms := criterion_focus_terms(criterion))
+                        ]
+                        score = max(score, *criterion_scores) if criterion_scores else score
+                    if score >= self.options.min_relevance and (
+                        focus & passage_tokens or self.criteria_focus and score > 0
+                    ):
                         scores[question.id] = score
                 if not scores:
                     reject(
@@ -295,7 +366,11 @@ class EvidenceExtractor:
                             else None,
                         ),
                         relevance=max(scores.values()),
-                        relevance_rationale="Lexical question overlap; not factual verification.",
+                        relevance_rationale=(
+                            "Lexical approved question/criterion overlap; not factual verification."
+                            if self.criteria_focus
+                            else "Lexical question overlap; not factual verification."
+                        ),
                     )
                     total_count += 1
                     total_bytes += len(passage.encode("utf-8"))

@@ -481,6 +481,7 @@ def main(*, public_demo: bool = False, cloud_hosted: bool = False) -> None:
                 "Select Tavily web search or imported documents. "
                 "Gemini does not search the web by itself."
             )
+    allow_revision = False
     with st.form("new_research"):
         st.caption("Explain a topic · Compare ideas · Explore your documents")
         question = st.text_area(
@@ -511,7 +512,10 @@ def main(*, public_demo: bool = False, cloud_hosted: bool = False) -> None:
                 "If Gemini is unavailable, select Offline and keep Tavily enabled to get "
                 "quotations from real web sources without Gemini calls."
             )
-            st.caption("New Gemini runs combine question review and planning in one call.")
+            st.caption(
+                "Gemini reviews and plans in one call. The first search uses the approved "
+                "plan, leaving room for a revision and review within six model calls."
+            )
             live_web = st.checkbox(
                 "Search live web with Tavily",
                 value=load_settings().tavily_api_key is not None,
@@ -522,6 +526,15 @@ def main(*, public_demo: bool = False, cloud_hosted: bool = False) -> None:
             )
         if not public_demo:
             limits = load_settings().budget
+            if not synthetic_mode:
+                allow_revision = st.checkbox(
+                    "Allow one report revision within the call limit",
+                    value=True,
+                    help="A revision and its review need two remaining calls. "
+                    "The model-call, token and search limits stay unchanged.",
+                )
+                if limits.max_model_calls < 6:
+                    st.caption("This call limit may leave no room for a full revision and review.")
             st.caption(
                 f"Per run: up to {limits.max_model_calls} model calls and "
                 f"{limits.max_searches} searches. Review the plan before continuing."
@@ -556,7 +569,13 @@ def main(*, public_demo: bool = False, cloud_hosted: bool = False) -> None:
                 st.session_state["active_job"] = app.start(
                     request,
                     demo,
-                    budget=load_settings().budget,
+                    budget=(
+                        load_settings().budget.model_copy(
+                            update={"max_rewrites": 1 if allow_revision else 0}
+                        )
+                        if not synthetic_mode
+                        else load_settings().budget
+                    ),
                     gemini=reasoning == "Gemini (configured)",
                     live_web=live_web,
                     live_energy=False,

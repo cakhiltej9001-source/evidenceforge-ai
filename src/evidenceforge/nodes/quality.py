@@ -18,6 +18,7 @@ from evidenceforge.planning import (
     PlanningContractError,
     parse_response,
 )
+from evidenceforge.presentation import display_issues
 from evidenceforge.research import (
     CompactQuoteSelectionModel,
     ConstrainedQuoteSelectionModel,
@@ -92,12 +93,17 @@ class QualityNode:
 
     def working(self, s: StateSnapshot, *, ranked: bool = False) -> WorkingEvidence:
         scores = {sid: ranking.score for sid, ranking in s.source_quality.items()} if ranked else {}
+        evidence = [
+            item
+            for item in s.evidence_store.values()
+            if self.options.production_policy_version < 6
+            or not display_issues(item.passage, year=s.started_at.year, request=s.request.question)
+        ]
         if self.options.quality_input_version == 1:
-            evidence = list(s.evidence_store.values())
             if ranked:
                 evidence.sort(key=lambda item: (-scores.get(item.source_id, 0.5), item.id))
             return WorkingEvidence(evidence=tuple(evidence), duplicates=())
-        return working_evidence(s.evidence_store.values(), scores)
+        return working_evidence(evidence, scores)
 
     async def response(self, task: Awaitable[object], schema: type[T]) -> T:
         payload = await asyncio.wait_for(task, self.options.node_timeout_seconds)

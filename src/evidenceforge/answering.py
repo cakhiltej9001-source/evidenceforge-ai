@@ -2,7 +2,7 @@
 
 import html
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 from evidenceforge.graph.state import StateSnapshot
 from evidenceforge.nodes.extraction import readable_spans
@@ -50,10 +50,46 @@ class AnswerExcerpt:
     start_offset: int
     end_offset: int
     text: str
+    criterion: str | None = None
 
 
 def words(text: str) -> set[str]:
     return set(re.findall(r"[^\W\d_]+|\d+(?:\.\d+)?", text.casefold())) - QUESTION_WORDS
+
+
+CRITERION_GENERIC = frozenset(
+    "identify identifies list lists name names specify specifies core essential key typical "
+    "typically necessary relevant development foundational foundations fields field study "
+    "role roles industry standards requirements required skills learning paths recognized "
+    "reputable professional practical specific used".split()
+)
+
+
+def criterion_words(text: str) -> set[str]:
+    equivalents = {
+        "educational": "education",
+        "academic": "education",
+        "mathematical": "mathematics",
+        "statistical": "statistics",
+    }
+    return {
+        word[:-1] if word.endswith("s") and len(word) > 4 else word
+        for term in words(text) - PLAN_GENERIC - CRITERION_GENERIC
+        for word in (equivalents.get(term, term),)
+    }
+
+
+def criterion_topic_matches(criterion: str, passage: str) -> bool:
+    topics = (
+        r"portfolio|projects?",
+        r"linear algebra|mathematic\w*|statistic\w*|probability|calculus",
+        r"frameworks?|pytorch|tensorflow|scikit.learn",
+        r"degrees?|education|academic",
+    )
+    for topic in topics:
+        if re.search(topic, criterion, re.I):
+            return bool(re.search(topic, passage, re.I))
+    return True
 
 
 def unresolved_answer(snapshot: StateSnapshot) -> bool:
@@ -251,23 +287,70 @@ def answer_excerpts(snapshot: StateSnapshot) -> tuple[AnswerExcerpt, ...]:
     selected: list[AnswerExcerpt] = []
     covered: set[str] = set()
     seen: set[str] = set()
-    for _, _, selected_excerpt, overlap in sorted(candidates, key=lambda item: (-item[0], item[1])):
-        if selected_excerpt.text in seen or (not procedural and not overlap - covered):
-            continue
-        if procedural and any(
-            selected_excerpt.text in previous.text
-            or previous.text in selected_excerpt.text
-            or len(words(selected_excerpt.text) & words(previous.text))
-            / max(1, len(words(selected_excerpt.text) | words(previous.text)))
+    ranked = sorted(candidates, key=lambda item: (-item[0], item[1]))
+
+    def redundant(excerpt: AnswerExcerpt) -> bool:
+        return any(
+            excerpt.text in previous.text
+            or previous.text in excerpt.text
+            or len(words(excerpt.text) & words(previous.text))
+            / max(1, len(words(excerpt.text) | words(previous.text)))
             > 0.65
             for previous in selected
-        ):
+        )
+
+    if procedural:
+        # Cover distinct approved criteria before adding more detail on one topic.
+        # These labels organize exact quotations; they do not assert new facts.
+        for question in snapshot.research_questions:
+            for criterion in question.acceptance_criteria:
+                terms = criterion_words(criterion) - criterion_words(snapshot.request.question)
+                matches = [
+                    (
+                        len(criterion_words(item[2].text) & terms) / max(1, len(terms)),
+                        item,
+                    )
+                    for item in ranked
+                    if question.id in snapshot.report_claims[item[2].claim_id].question_ids
+                    and len(criterion_words(item[2].text) & terms) >= min(2, len(terms))
+                    and terms
+                    and criterion_topic_matches(criterion, item[2].text)
+                    and not redundant(item[2])
+                ]
+                if matches and len(selected) < 5:
+                    _, chosen = max(matches, key=lambda pair: (pair[0], pair[1][0]))
+                    criterion_excerpt = replace(chosen[2], criterion=criterion)
+                    selected.append(criterion_excerpt)
+                    seen.add(criterion_excerpt.text)
+                    covered.update(chosen[3])
+    for _, _, selected_excerpt, overlap in ranked:
+        if len(selected) >= (5 if procedural else 3):
+            break
+        if selected_excerpt.text in seen or (not procedural and not overlap - covered):
+            continue
+        if procedural and redundant(selected_excerpt):
             continue
         selected.append(selected_excerpt)
         seen.add(selected_excerpt.text)
         covered.update(overlap)
-        if (not procedural and anchors.issubset(covered)) or len(selected) == (
-            5 if procedural else 3
-        ):
+        if not procedural and anchors.issubset(covered):
             break
     return tuple(selected)
+
+
+def criterion_label(criterion: str) -> str:
+    """Readable navigation labels derived from an approved criterion, not new claims."""
+    for pattern, label in (
+        (r"education|degrees?|certifications?|academic", "Education and training"),
+        (r"programming|languages?|frameworks?|tools?", "Programming and tools"),
+        (
+            r"machine learning|deep learning|mathematical|mathematics|"
+            r"statistical|statistics|technical skills",
+            "Technical foundations",
+        ),
+        (r"portfolio|projects?|practical|open.source", "Practical experience"),
+        (r"career|entry points?|transition", "Career steps"),
+    ):
+        if re.search(pattern, criterion, re.I):
+            return label
+    return criterion

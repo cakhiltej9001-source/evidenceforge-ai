@@ -84,7 +84,9 @@ def build_research_graph(
         raise ValueError("Unsupported live research model.")
     if isinstance(model, GeminiResearchModel):
         model.guidance_version = (
-            2
+            3
+            if options.production_policy_version >= 6
+            else 2
             if options.production_policy_version >= 5
             else 1
             if options.production_policy_version >= 3
@@ -110,7 +112,10 @@ def build_research_graph(
         "prepare_approval", lambda state: prepare_approval(state, options.require_plan_approval)
     )
     add_node("plan_approval", approve_plan)
-    add_node("query_generator", QueryGenerator(model, planning))
+    add_node(
+        "query_generator",
+        QueryGenerator(model, planning, initial_from_plan=options.production_policy_version >= 6),
+    )
     add_node("source_processor", processor)
     add_node("evidence_extractor", extractor)
     add_node("evidence_intelligence", EvidenceIntelligence(options.analysis))

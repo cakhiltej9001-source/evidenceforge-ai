@@ -145,7 +145,7 @@ class LocalWorkbench:
                 require_plan_approval=True,
                 live_web=live_web,
                 live_energy=live_energy,
-                production_policy_version=5,
+                production_policy_version=6,
                 node_timeout_seconds=60,
             ),
             gemini=gemini,
@@ -181,7 +181,7 @@ class LocalWorkbench:
             service = self.service("immediate", options, gemini=False)
         else:
             service = self.registered_service(owner, thread)
-            if service.options.production_policy_version < 5 and (
+            if service.options.production_policy_version < 6 and (
                 service.options.live_web
                 or service.options.live_energy
                 or state["request"]["document_ids"]
@@ -190,7 +190,7 @@ class LocalWorkbench:
                 # remains bound to its registered policy and paid-call hashes.
                 service = self.service(
                     options=service.options.model_copy(
-                        update={"production_policy_version": 5, "node_timeout_seconds": 60}
+                        update={"production_policy_version": 6, "node_timeout_seconds": 60}
                     ),
                     gemini=True,
                     model_id=profile.get("model_id"),

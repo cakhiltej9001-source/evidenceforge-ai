@@ -35,9 +35,12 @@ def query_key(text: str, source_type: SourceType, owner_scope: str) -> str:
 
 
 class QueryGenerator:
-    def __init__(self, model: PlanningModel, options: PlanningOptions) -> None:
+    def __init__(
+        self, model: PlanningModel, options: PlanningOptions, *, initial_from_plan: bool = False
+    ) -> None:
         self.model = model
         self.options = options
+        self.initial_from_plan = initial_from_plan
 
     async def __call__(self, state: ResearchState) -> Update:
         state = validate_state(state)
@@ -73,12 +76,15 @@ class QueryGenerator:
         ):
             return failure_patch(state, "query_generator", "budget")
 
+        bootstrap = self.initial_from_plan and snapshot.iteration_count == 0
+        model_attempt = int(not bootstrap)
+
         def failed(category: str) -> Update:
             return checked_patch(
                 state,
                 {
                     **failure_patch(state, "query_generator", category),
-                    "planning_attempts": snapshot.planning_attempts + 1,
+                    "planning_attempts": snapshot.planning_attempts + model_attempt,
                 },
             )
 
@@ -93,11 +99,27 @@ class QueryGenerator:
             max_queries=max_queries,
         )
         try:
-            response = await asyncio.wait_for(
-                self.model.generate_queries(request),
-                timeout=self.options.node_timeout_seconds,
-            )
-            batch = parse_response(response, QueryBatchDraft, self.options.max_response_bytes)
+            if bootstrap:
+                # Approval/editing has already fixed scope. Reuse that plan instead
+                # of spending a call restating it; later passes still use gap queries.
+                text = " ".join(q.question for q in request.questions)[:1000].strip()
+                batch = QueryBatchDraft(
+                    queries=tuple(
+                        QueryDraft(
+                            question_ids=tuple(q.id for q in request.questions),
+                            text=text,
+                            source_type=source,
+                            purpose="support",
+                        )
+                        for source in available_sources[:max_queries]
+                    )
+                )
+            else:
+                response = await asyncio.wait_for(
+                    self.model.generate_queries(request),
+                    timeout=self.options.node_timeout_seconds,
+                )
+                batch = parse_response(response, QueryBatchDraft, self.options.max_response_bytes)
             if len(batch.queries) > max_queries:
                 raise PlanningContractError("query allowance exceeded")
             known_questions = {question.id for question in snapshot.research_questions}
@@ -147,12 +169,17 @@ class QueryGenerator:
                     "search_queries": [record_data(query) for query in queries],
                     "query_records": {query.id: record_data(query) for query in queries},
                     "planning_status": "ready",
-                    "planning_attempts": snapshot.planning_attempts + 1,
+                    "planning_attempts": snapshot.planning_attempts + model_attempt,
                     **event_patch(
                         state,
                         "query_generator",
                         "queries_generated",
-                        f"Prepared {len(queries)} queries for the next retrieval pass.",
+                        (
+                            f"Prepared {len(queries)} queries from the approved plan "
+                            "without a query-generation model call."
+                            if bootstrap
+                            else f"Prepared {len(queries)} queries for the next retrieval pass."
+                        ),
                     ),
                 },
             )

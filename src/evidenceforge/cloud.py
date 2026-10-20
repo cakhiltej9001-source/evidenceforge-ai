@@ -95,7 +95,7 @@ def configure_cloud(environ: MutableMapping[str, str], secrets: Mapping[str, obj
                 "max_queries_per_pass": 1,
                 "max_searches": 1,
                 "max_research_passes": 1,
-                "max_rewrites": 0,
+                "max_rewrites": 1,
                 "reserved_quality_calls": 3,
                 "max_total_tokens": 100000,
                 "max_elapsed_seconds": 1800,

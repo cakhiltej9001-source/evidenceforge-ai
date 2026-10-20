@@ -47,6 +47,27 @@ class CoverageInput(Contract):
     evidence: tuple[EvidenceItem, ...]
 
 
+class CoverageCriterion(Contract):
+    id: Identifier
+    question_id: Identifier
+    text: Text
+
+
+class CoverageSelectionInput(Contract):
+    questions: tuple[ResearchQuestion, ...]
+    criteria: tuple[CoverageCriterion, ...]
+    evidence: tuple[EvidenceItem, ...]
+
+
+class CoverageMatch(Contract):
+    criterion_id: Identifier
+    evidence_ids: Annotated[tuple[Identifier, ...], Field(min_length=1)]
+
+
+class CoverageSelectionDraft(Contract):
+    matches: Annotated[tuple[CoverageMatch, ...], Field(max_length=256)]
+
+
 class DraftClaim(Contract):
     statement: Text
     question_ids: Annotated[tuple[Identifier, ...], Field(min_length=1)]
@@ -107,7 +128,7 @@ class CriticAssessment(Contract):
 
 
 class ResearchOptions(Contract):
-    production_policy_version: Literal[0, 1, 2, 3, 4, 5] = 0
+    production_policy_version: Literal[0, 1, 2, 3, 4, 5, 6] = 0
     require_plan_approval: bool = False
     live_web: StrictBool = False
     live_energy: StrictBool = False

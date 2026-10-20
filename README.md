@@ -599,4 +599,6 @@ mandate. External submission acceptance is not claimed.
 
 See [the 18 October repair](docs/REPORT_PRESENTATION_FIX_2026-10-18.md) for more concrete
 exact-excerpt answers, disclosed presentation omissions and date/role-context guards.
-New workbench runs use policy 5; saved workflows retain their original policy.
+New workbench runs now use policy 6; saved workflows retain their original policy.
+See [the report and revision repair](docs/SUBMISSION_READINESS_REPAIR_2026-10-20.md)
+for promotion guards, criterion-based answers and a six-call revision path.

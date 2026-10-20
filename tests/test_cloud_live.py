@@ -24,6 +24,7 @@ def test_live_cloud_removes_previous_login_and_retains_private_keys():
     budget = json.loads(env["EVIDENCEFORGE_BUDGET"])
     assert budget["max_model_calls"] == 6 and budget["max_searches"] == 1
     assert budget["max_attempts_per_call"] == 1
+    assert budget["max_rewrites"] == 1
     assert env["LANGSMITH_TRACING"] == "false"
 
 

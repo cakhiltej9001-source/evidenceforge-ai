@@ -6,7 +6,7 @@ from typing import cast
 
 from pydantic import JsonValue
 
-from evidenceforge.answering import answer_excerpts, unresolved_answer
+from evidenceforge.answering import answer_excerpts, criterion_label, unresolved_answer
 from evidenceforge.evidence.deduplication import working_evidence
 from evidenceforge.evidence.text_quality import (
     EXERCISE,
@@ -435,8 +435,8 @@ def render_report(
                 if s.run_status != "completed" or s.coverage_status != "sufficient":
                     lines.extend(
                         [
-                            "The evidence is incomplete. These cited excerpts "
-                            "give a partial answer.",
+                            "This report is partial: coverage or final review remains "
+                            "unresolved. These cited excerpts are a draft answer.",
                             "",
                         ]
                     )
@@ -449,7 +449,12 @@ def render_report(
                         else f"[{number}]"
                     )
                     prefix = f"{excerpts.index(excerpt) + 1}. " if len(excerpts) > 1 else ""
-                    lines.extend([prefix + readable_quote(excerpt.text) + " " + ref, ""])
+                    label = (
+                        "**" + escape(criterion_label(excerpt.criterion)) + ":** "
+                        if excerpt.criterion
+                        else ""
+                    )
+                    lines.extend([prefix + label + readable_quote(excerpt.text) + " " + ref, ""])
                 lines.extend(
                     [
                         "Selected exact excerpts, ordered for reading; numbering is not a "

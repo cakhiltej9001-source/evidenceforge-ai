@@ -246,7 +246,7 @@ class ResearchService:
         if type(version) is not int or version not in (1, 2):
             raise CheckpointFailure("Unsupported research input contract version.")
         policy = json.loads(profile)["research_options"].get("production_policy_version", 0)
-        if type(policy) is not int or policy not in (0, 1, 2, 3, 4, 5):
+        if type(policy) is not int or policy not in (0, 1, 2, 3, 4, 5, 6):
             raise CheckpointFailure("Unsupported production policy version.")
         selection = json.loads(profile)["research_options"].get("quote_selection_version", 0)
         if type(selection) is not int or selection not in (0, 1, 2, 3, 4, 5, 6):
@@ -421,6 +421,7 @@ class ResearchService:
                             artifacts,
                             retrieval.options,
                             evict_lowest=bool(self.options.production_policy_version),
+                            criteria_focus=self.options.production_policy_version >= 6,
                             strict_quality_guards=(
                                 self.options.quality_input_version == 2
                                 and self.options.quote_selection_version >= 6
@@ -564,6 +565,7 @@ class ResearchService:
                             artifacts,
                             retrieval.options,
                             evict_lowest=bool(self.options.production_policy_version),
+                            criteria_focus=self.options.production_policy_version >= 6,
                             strict_quality_guards=(
                                 self.options.quality_input_version == 2
                                 and self.options.quote_selection_version >= 6

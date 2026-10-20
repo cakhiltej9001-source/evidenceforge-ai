@@ -90,3 +90,40 @@ def test_explicit_real_sources_reach_the_workbench(tmp_path, monkeypatch, source
     assert options["gemini"] is True
     assert options["live_web"] is (source == "web")
     assert options["live_energy"] is False
+
+
+@pytest.mark.parametrize("allow", [True, False])
+def test_revision_choice_handles_legacy_zero_rewrites_without_raising_provider_caps(
+    tmp_path, monkeypatch, allow
+):
+    from evidenceforge.schemas import BudgetLimits
+
+    at, starts = form(tmp_path, monkeypatch)
+    budget = BudgetLimits(
+        max_model_calls=6, max_searches=1, max_rewrites=0, max_total_tokens=100000
+    )
+    settings = Settings(
+        model_provider="gemini",
+        model_id="synthetic-model",
+        model_api_key="synthetic-key",
+        tavily_api_key="synthetic-key",
+        data_dir=tmp_path,
+        budget=budget,
+    )
+    monkeypatch.setattr(ui, "load_settings", lambda: settings)
+    at.run()
+    choice = next(
+        c for c in at.checkbox if c.label == "Allow one report revision within the call limit"
+    )
+    assert choice.value is True
+    choice.set_value(allow)
+    next(t for t in at.text_area if t.label == "Research question").set_value(
+        "How to become an AI engineer?"
+    )
+    next(b for b in at.button if b.label == "Create plan").click().run()
+    assert not at.exception and not at.error
+    actual = starts[0][2]["budget"]
+    assert actual.max_rewrites == int(allow)
+    assert actual.model_dump(exclude={"max_rewrites"}) == budget.model_dump(
+        exclude={"max_rewrites"}
+    )

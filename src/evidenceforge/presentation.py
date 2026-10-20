@@ -25,6 +25,23 @@ SCOPE = re.compile(
     re.I,
 )
 YEARS = re.compile(r"\b(?:19|20|21)\d{2}\b")
+TRAINING = re.compile(
+    r"\b(?:boot\s?camps?|courses?|programmes?|programs?|certificates?|"
+    r"certifications?|credentials?|speciali[sz]ations?)\b",
+    re.I,
+)
+PITCH = re.compile(
+    r"\b(?:enrol(?:l)?|sign up|register|apply now|career[- ]ready|job[- ]ready|"
+    r"career prep(?:aration)?|placement|mentorship|mentoring|expert mentors?|hands[- ]on|"
+    r"is designed to|will help you|our|we offer|acclaimed|world[- ]class|industry readiness|"
+    r"boost your resume|solidify your standing)\b|[\w]+['\u2019]s\s+.{0,80}\bboot\s?camp",
+    re.I,
+)
+
+
+def promotional(text: str) -> bool:
+    """Catch third-party course pitches without excluding neutral training discussion."""
+    return bool(CLUTTER.search(text) or (TRAINING.search(text) and PITCH.search(text)))
 
 
 def future_years(text: str, year: int, request: str) -> set[int]:
@@ -44,7 +61,7 @@ def adjacent_role(text: str, request: str) -> bool:
 
 def display_issues(text: str, *, year: int, request: str) -> tuple[str, ...]:
     issues = []
-    if CLUTTER.search(text):
+    if promotional(text):
         issues.append("promotional, transcript or page-navigation text")
     if TABLE.search(text) and not aligned_table(text):
         issues.append("table formatting that needs the original layout")

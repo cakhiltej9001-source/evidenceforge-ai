@@ -20,7 +20,10 @@ from evidenceforge.planning import (
 )
 from evidenceforge.research import (
     CoverageAssessment,
+    CoverageCriterion,
     CoverageInput,
+    CoverageSelectionDraft,
+    CoverageSelectionInput,
     CriticAssessment,
     CriticInput,
     QuoteSelectionDraft,
@@ -196,6 +199,25 @@ class GeminiResearchModel:
                 "Never edit quotations to conceal these issues or invent missing guidance. "
                 "The critic must request revision for these issues when they materially "
                 "prevent the selected evidence from answering the approved criteria."
+            )
+        if self.guidance_version >= 3 and role == "reviewed_planner":
+            instruction += (
+                "\nFor a broad career how-to, include practical progression and portfolio "
+                "work alongside relevant skills and educational options. Do not assume "
+                "a degree or certification is mandatory, or invent a universal credential "
+                "standard. Keep each criterion distinct and directly useful to the user."
+            )
+        if self.guidance_version >= 3 and role in {"synthesis", "critic"}:
+            instruction += (
+                "\nNever recommend an advertised provider, bootcamp or course as the answer "
+                "to a general career question. Third-party sales copy is promotional too. "
+                "Select a small set of complementary passages that directly address the "
+                "approved criteria. For a how-to request prioritize educational prerequisites, "
+                "specific tools/skills and practical actions over introductions and headings. "
+                "Use summary for the clearest direct answer and key_findings for supporting "
+                "detail. A requested revision must replace or omit the specifically flagged "
+                "selection while retaining useful supported content. If the evidence cannot "
+                "answer a criterion, preserve that gap instead of padding the report."
             )
         system = (
             "You are an evidence research assistant. Return only JSON matching the schema. "
@@ -403,6 +425,8 @@ class GeminiResearchModel:
         )
 
     async def evaluate_coverage(self, request: CoverageInput) -> object:
+        if self.guidance_version >= 3:
+            return await self.coverage_by_id(request)
         return await self._generate(
             "coverage_evaluator",
             request,
@@ -413,6 +437,78 @@ class GeminiResearchModel:
             "Use criteria=[] when no criterion has support. Every included criterion must "
             "have at least one linked evidence ID; never return evidence_ids=[].",
         )
+
+    async def coverage_by_id(self, request: CoverageInput) -> object:
+        """Map enum-constrained criterion IDs to canonical zero-based indices locally."""
+        questions = {q.id: f"q_{i}" for i, q in enumerate(request.questions)}
+        evidence = {e.id: f"e_{i}" for i, e in enumerate(request.evidence)}
+        criteria = {
+            f"c_{i}": (q.id, index, text)
+            for i, (q, index, text) in enumerate(
+                (q, index, text)
+                for q in request.questions
+                for index, text in enumerate(q.acceptance_criteria)
+            )
+        }
+        mapped = CoverageSelectionInput(
+            questions=tuple(
+                q.model_copy(update={"id": questions[q.id]}) for q in request.questions
+            ),
+            criteria=tuple(
+                CoverageCriterion(id=alias, question_id=questions[qid], text=text)
+                for alias, (qid, _, text) in criteria.items()
+            ),
+            evidence=tuple(
+                e.model_copy(
+                    update={
+                        "id": evidence[e.id],
+                        "question_ids": tuple(questions[qid] for qid in e.question_ids),
+                    }
+                )
+                for e in request.evidence
+            ),
+        )
+        wire = provider_schema(CoverageSelectionDraft.model_json_schema())
+        fields = wire["$defs"]["CoverageMatch"]["properties"]
+        fields["criterion_id"]["enum"] = list(criteria)
+        if evidence:
+            fields["evidence_ids"]["items"]["enum"] = list(evidence.values())
+        raw = await self._generate(
+            "coverage_evaluator",
+            mapped,
+            CoverageSelectionDraft,
+            "Select supported criterion IDs from the provided list; never number or rename "
+            "criteria. Include a criterion only when retained passages directly support its "
+            "whole requirement. Use allowed evidence IDs linked to that criterion's question. "
+            "Omit unsupported criteria and return matches=[] when none are supported. "
+            "Do not treat sales copy, a general topic mention, or an adjacent role as proof.",
+            wire_schema=wire,
+        )
+        matches = CoverageSelectionDraft.model_validate(raw)
+        reverse_evidence = {alias: real for real, alias in evidence.items()}
+        by_question: dict[str, list[dict[str, object]]] = {q.id: [] for q in request.questions}
+        seen = set()
+        try:
+            for match in matches.matches:
+                if match.criterion_id in seen:
+                    raise KeyError("duplicate criterion")
+                seen.add(match.criterion_id)
+                qid, index, _ = criteria[match.criterion_id]
+                ids = [reverse_evidence[eid] for eid in match.evidence_ids]
+                if not all(qid in item.question_ids for item in request.evidence if item.id in ids):
+                    raise KeyError("unlinked evidence")
+                by_question[qid].append({"index": index, "evidence_ids": ids})
+        except KeyError:
+            raise ModelUnavailable(
+                "Gemini coverage referenced an invalid criterion or evidence."
+            ) from None
+        return CoverageAssessment.model_validate(
+            {
+                "questions": [
+                    {"question_id": q.id, "criteria": by_question[q.id]} for q in request.questions
+                ]
+            }
+        ).model_dump(mode="json")
 
     async def synthesize(self, request: SynthesisInput) -> object:
         return await self._generate(
