@@ -4,7 +4,6 @@
 ![Python](https://img.shields.io/badge/Python-3.12–3.14-blue)
 ![LangGraph](https://img.shields.io/badge/Workflow-LangGraph-teal)
 ![SQLite](https://img.shields.io/badge/Storage-SQLite-blue)
-![Tests](https://img.shields.io/badge/Tests-583%20passed-brightgreen)
 ![Demo](https://img.shields.io/badge/Demo-public%20Streamlit-green)
 
 > A local research workbench that plans questions, gathers inspectable evidence,
@@ -16,8 +15,12 @@ and why the workflow completed or stopped. Python, LangGraph, SQLite and Streaml
 connect the research stages; offline fixtures support demonstrations and optional
 Gemini reasoning supports explicitly started provider runs.
 
-**Current verification:** 583 source tests and both private CI jobs passed,
-including Docker persistence, backup/restore and authenticated gateway checks.
+**Current verification:** source tests, lint, formatting, type checks and container
+checks run in [GitHub CI](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/workflows/ci.yml).
+The [21 October repair note](docs/REPORT_DETAIL_AND_PAGE_PRINT_2026-10-21.md)
+records the latest evidence-detail and full-page print checks.
+
+Earlier verification included Docker persistence, backup/restore and authenticated gateway checks.
 The fresh 12 October run completed all six Gemini roles and one Tavily search,
 retaining three NASA sources and two exactly cited claims. Offline review verified
 all audits and fresh-process reconnect with zero network attempts. LangSmith
@@ -615,3 +618,12 @@ remaining evidence gap.
 filtering, context preservation, topic ordering and sequential finding labels.
 Use **Download report PDF** for a clean report with source links; inspection records
 and original passages remain available through the app and JSON export.
+
+
+## Entire-page printing and clearer evidence coverage
+
+Select **Print entire page / Save as PDF** at the top of the workbench to save the
+current session from its question through the report, saved passages and audits.
+The concise **Download report PDF** remains below the report. Missing detailed
+evidence is disclosed explicitly; salary snippets no longer fill career-path steps.
+See [the repair and verification note](docs/REPORT_DETAIL_AND_PAGE_PRINT_2026-10-21.md).

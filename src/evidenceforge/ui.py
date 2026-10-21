@@ -1,5 +1,6 @@
 """Streamlit entry point for the local evidence workbench."""
 
+import json
 from pathlib import Path
 from tempfile import NamedTemporaryFile, gettempdir
 from uuid import uuid4
@@ -12,6 +13,7 @@ from evidenceforge.evidence.projection import audit, project
 from evidenceforge.exports import report_export
 from evidenceforge.graph.state import ResearchState, StateSnapshot
 from evidenceforge.nodes.approval import PlanDecision
+from evidenceforge.page_print import PAGE_PRINT_HTML, json_print_html
 from evidenceforge.planning import PlanDraft
 from evidenceforge.report_pdf import PdfExportError, report_pdf
 from evidenceforge.reporting import render_report, retained_source_passages, retained_source_text
@@ -42,6 +44,12 @@ def ingest_upload(store: DocumentStore, owner: str, name: str, data: bytes) -> D
     finally:
         if path is not None:
             path.unlink(missing_ok=True)
+
+
+def show_json(value: object) -> None:
+    """Interactive JSON plus a complete, escaped print copy of nested records."""
+    st.json(json.dumps(value, ensure_ascii=False, default=str))
+    st.html(json_print_html(value))
 
 
 def show_report(state: ResearchState, export_json: str | None = None) -> None:
@@ -79,7 +87,7 @@ def show_report(state: ResearchState, export_json: str | None = None) -> None:
         on_click="ignore",
     )
     with st.expander("Audit results, source ranking and disputes"):
-        st.json(audit(state))
+        show_json(audit(state))
     st.subheader("Inspect a finding")
     claims = state["report_claims"]
     if claims:
@@ -90,7 +98,7 @@ def show_report(state: ResearchState, export_json: str | None = None) -> None:
         for node in graph.nodes:
             if node.kind == "evidence":
                 st.text(node.label)
-                st.json(
+                show_json(
                     {
                         "source_id": node.record.get("source_id"),
                         "locator": node.record.get("locator"),
@@ -98,9 +106,9 @@ def show_report(state: ResearchState, export_json: str | None = None) -> None:
                 )
             elif node.kind == "source":
                 st.text(node.label)
-                st.json({k: node.record.get(k) for k in ("url", "document_id", "content_hash")})
+                show_json({k: node.record.get(k) for k in ("url", "document_id", "content_hash")})
         with st.expander("Links, ranking and disagreements"):
-            st.json(graph.model_dump(mode="json"))
+            show_json(graph.model_dump(mode="json"))
     else:
         st.info("No audited claims were produced.")
 
@@ -170,7 +178,7 @@ def run_panel(app: LocalWorkbench, owner: str) -> None:
         state = app.snapshot(owner, thread)
         progress = public_progress(state).as_dict()
         st.subheader("Progress")
-        st.write({**progress, "approval": state["approval_status"]})
+        show_json({**progress, "approval": state["approval_status"]})
         st.caption("Thread: " + thread)
         s = StateSnapshot.model_validate(state)
         paid = app.paid_usage(owner, thread)
@@ -220,7 +228,7 @@ def run_panel(app: LocalWorkbench, owner: str) -> None:
         with st.expander("Live timeline"):
             st.table([{"Time": e["time"], "Event": e["step"]} for e in public_timeline(state)])
         with st.expander("Coverage and unresolved questions"):
-            st.json(
+            show_json(
                 {
                     "status": state["coverage_status"],
                     "questions": state["coverage_by_question"],
@@ -248,7 +256,7 @@ def run_panel(app: LocalWorkbench, owner: str) -> None:
                     "Offline reasoning makes no Gemini calls. Selected live sources may "
                     "still consume search credits."
                 )
-            st.json(usage)
+            show_json(usage)
             if usage["model_requests_blocked_locally"]:
                 st.caption(
                     "Requests blocked locally are workflow attempts, not additional "
@@ -256,7 +264,7 @@ def run_panel(app: LocalWorkbench, owner: str) -> None:
                 )
             if paid is not None:
                 st.write("Gemini provider usage")
-                st.json(paid)
+                show_json(paid)
 
         active = app.active(owner)
         if state["run_status"] in {"created", "running"}:
@@ -389,6 +397,7 @@ def main(*, public_demo: bool = False, cloud_hosted: bool = False) -> None:
     if not authenticated():
         return
     st.title("EvidenceForge research workbench")
+    st.html(PAGE_PRINT_HTML, unsafe_allow_javascript=True)
     if required(load_settings()) and st.sidebar.button("Sign out"):
         st.session_state.clear()
         st.rerun()

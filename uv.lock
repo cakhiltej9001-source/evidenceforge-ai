@@ -326,7 +326,7 @@ requires-dist = [
     { name = "python-docx", specifier = ">=1.2.0,<2" },
     { name = "rapidocr-onnxruntime", marker = "python_full_version < '3.13' and extra == 'ocr'", specifier = "==1.4.4" },
     { name = "reportlab", marker = "extra == 'ui'", specifier = ">=4.4,<5" },
-    { name = "streamlit", marker = "extra == 'ui'", specifier = ">=1.50,<2" },
+    { name = "streamlit", marker = "extra == 'ui'", specifier = ">=1.56,<2" },
     { name = "typing-extensions", specifier = ">=4,<5" },
 ]
 provides-extras = ["ui", "ocr"]

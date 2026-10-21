@@ -51,6 +51,29 @@ DEPENDENT_START = re.compile(
 QUESTION_TAIL = re.compile(
     r"\b(?:What|Which|Where|When|Why|How|Is|Are|Do|Does|Can|Should)\b[^.!?]*\?\s*$"
 )
+TRAILING_LIST_NUMBER = re.compile(r"\n\s*[1-9]\d?\.\s*$")
+SOURCE_REFERENCE = re.compile(r"\[\d{1,3}(?:\s*[,;\u2013-]\s*\d{1,3})*\]")
+
+
+def unrequested_career_aside(text: str, request: str) -> bool:
+    """Keep compensation and duration assertions out of an unrelated career answer."""
+    if not re.search(r"\b(?:become|career|roadmap)\b", request, re.I):
+        return False
+    salary = bool(
+        re.search(
+            r"\b(?:salar(?:y|ies)|compensation)\b|[$\u00a3\u20ac]\s*\d|"
+            r"\bearn\w*\b[^.!?\n]{0,60}\d",
+            text,
+            re.I,
+        )
+        and not re.search(r"\b(?:salar(?:y|ies)|compensation|pay|earn\w*|income)\b", request, re.I)
+    )
+    duration = bool(
+        re.search(r"\b(?:learners?|beginners?|professionals?|developers?)\b", text, re.I)
+        and re.search(r"\b\d+\s*(?:and\s*\d+\s*)?(?:months?|years?)\b", text, re.I)
+        and not re.search(r"\b(?:long|duration|time|months?|years?)\b", request, re.I)
+    )
+    return salary or duration
 
 
 def promotional(text: str) -> bool:
@@ -91,6 +114,12 @@ def display_issues(
         issues.append("FAQ questions mixed with extracted text")
     if editorial and numbered_sections(text):
         issues.append("flattened numbered sections")
+    if editorial and TRAILING_LIST_NUMBER.search(text):
+        issues.append("a dangling number from the next list item")
+    if editorial and SOURCE_REFERENCE.search(text):
+        issues.append("a bibliography marker whose referenced material was not imported")
+    if editorial and unrequested_career_aside(text, request):
+        issues.append("unrequested compensation or learning-duration assertions")
     if TABLE.search(text) and not aligned_table(text):
         issues.append("table formatting that needs the original layout")
     if future_years(text, year, request):
@@ -126,7 +155,13 @@ def numbered_sections(text: str) -> tuple[tuple[int, int], ...]:
 
 def presentation_spans(text: str) -> Iterator[tuple[int, int]]:
     """Exact sentence/list spans, excluding a trailing FAQ question, with caveats intact."""
-    for offset, stop in numbered_sections(text) or ((0, len(text)),):
+    tail = TRAILING_LIST_NUMBER.search(text)
+    last = len(text[: tail.start()].rstrip()) if tail else len(text)
+    if len(re.findall(r"\n\s*[1-9]\d?\.\s+[^.\n]{2,80}:", text[:last])) >= 2:
+        # A role progression is useful as a whole list, including all qualifications.
+        yield 0, last
+        return
+    for offset, stop in numbered_sections(text[:last]) or ((0, last),):
         block = text[offset:stop]
         spans = [(0, len(block))] if SCOPE.search(block) else readable_spans(block, 1)
         for a, b in spans:
@@ -134,6 +169,9 @@ def presentation_spans(text: str) -> Iterator[tuple[int, int]]:
             question = QUESTION_TAIL.search(text[start:end])
             if question:
                 end = start + len(text[start : start + question.start()].rstrip())
+            dangling = TRAILING_LIST_NUMBER.search(text[start:end])
+            if dangling:
+                end = start + len(text[start : start + dangling.start()].rstrip())
             ordinal = re.search(r"(?<=[)\].])\s+\d{1,2}\.\s*$", text[start:end])
             previous = re.search(r"([1-9]\d?)\.\s*$", text[:start])
             next_item = re.search(r"\s+([1-9]\d?)\.\s*$", text[start:end])

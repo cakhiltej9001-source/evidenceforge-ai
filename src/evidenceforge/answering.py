@@ -4,6 +4,7 @@ import html
 import re
 from dataclasses import dataclass, replace
 
+from evidenceforge.evidence.coverage_detail import enumerative_support
 from evidenceforge.graph.state import StateSnapshot
 from evidenceforge.presentation import (
     TABLE,
@@ -79,27 +80,44 @@ def criterion_words(text: str) -> set[str]:
 
 def criterion_topic_matches(criterion: str, passage: str) -> bool:
     topics = (
-        r"portfolio|projects?",
         r"linear algebra|mathematic\w*|statistic\w*|probability|calculus",
         r"frameworks?|pytorch|tensorflow|scikit.learn",
         r"degrees?|education|academic",
     )
-    return all(
-        re.search(topic, passage, re.I) for topic in topics if re.search(topic, criterion, re.I)
-    ) and (not career_criterion(criterion) or bool(CAREER_EVIDENCE.search(passage)))
+    return (
+        all(
+            re.search(topic, passage, re.I) for topic in topics if re.search(topic, criterion, re.I)
+        )
+        and (
+            not re.search(r"portfolio|projects?", criterion, re.I)
+            or bool(
+                re.search(r"portfolio|projects?", passage, re.I) or PROJECT_EXAMPLES.search(passage)
+            )
+        )
+        and (not career_criterion(criterion) or bool(CAREER_EVIDENCE.search(passage)))
+    )
 
 
 CAREER_EVIDENCE = re.compile(
-    r"\b(?:entry[- ]level|junior|internships?|apprenticeships?|job titles?|"
-    r"apply for|transition|career paths?)\b",
+    r"\b(?:entry[- ]level|entry points?|junior|intern(?:ships?)?|apprenticeships?|job titles?|"
+    r"apply for|transitions?|progress(?:es|ion)? from)\b",
     re.I,
 )
-PROJECT_EXAMPLES = re.compile(r"\bprojects?\s*[:(]|\b(?:for example|such as|e\.g\.)\b", re.I)
+PROJECT_EXAMPLES = re.compile(
+    r"\bprojects?\s*[:(]|\b(?:practical\s+)?exercises?\s+(?:like|including)\b|"
+    r"\b(?:for example|such as|e\.g\.)\b",
+    re.I,
+)
 
 
 def career_criterion(criterion: str) -> bool:
     return bool(
-        re.search(r"entry[- ]level|entry points?|career|professional roles", criterion, re.I)
+        re.search(
+            r"entry[- ]level|entry points?|career|professional (?:roles|progression|pathways)|"
+            r"role transitions?",
+            criterion,
+            re.I,
+        )
     )
 
 
@@ -114,9 +132,18 @@ def criterion_fit(criterion: str, passage: str, request: str) -> float | None:
         re.search(r"frameworks?|libraries", criterion, re.I)
         and re.search(r"\b(?:frameworks?|libraries)\s*:", passage, re.I)
     )
-    if not terms or not criterion_topic_matches(criterion, passage):
+    if (
+        not terms
+        or not criterion_topic_matches(criterion, passage)
+        or not enumerative_support(criterion, (passage,))
+    ):
         return None
-    if overlap < min(2, len(terms)) and not (career or examples or framework_list):
+    foundation_list = bool(
+        overlap and re.search(r"mathematic\w*|statistic\w*|foundations?", criterion, re.I)
+    )
+    if overlap < min(2, len(terms)) and not (
+        career or examples or framework_list or foundation_list
+    ):
         return None
     return overlap / len(terms) + (
         1.5 if examples else 1.0 if career else 0.75 if framework_list else 0.0
@@ -375,6 +402,8 @@ def answer_excerpts(snapshot: StateSnapshot) -> tuple[AnswerExcerpt, ...]:
 
 def criterion_label(criterion: str) -> str:
     """Readable navigation labels derived from an approved criterion, not new claims."""
+    if career_criterion(criterion):
+        return "Career steps"
     programming = bool(re.search(r"programming|languages?", criterion, re.I))
     frameworks = bool(re.search(r"frameworks?|libraries", criterion, re.I))
     if programming and not frameworks:

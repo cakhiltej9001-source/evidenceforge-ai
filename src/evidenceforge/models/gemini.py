@@ -481,7 +481,11 @@ class GeminiResearchModel:
             "criteria. Include a criterion only when retained passages directly support its "
             "whole requirement. Use allowed evidence IDs linked to that criterion's question. "
             "Omit unsupported criteria and return matches=[] when none are supported. "
-            "Do not treat sales copy, a general topic mention, or an adjacent role as proof.",
+            "Do not treat sales copy, a general topic mention, or an adjacent role as proof. "
+            "For a requested list or inventory, passages must name concrete members of "
+            "that category and meet any stated item count. Mentioning the category inside "
+            "a broader list does not enumerate its members. A neighboring unrelated list "
+            "cannot fill the gap.",
             wire_schema=wire,
         )
         matches = CoverageSelectionDraft.model_validate(raw)

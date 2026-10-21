@@ -8,12 +8,12 @@ from io import BytesIO
 import pytest
 from pypdf import PdfReader
 
-from evidenceforge.answering import answer_excerpts
+from evidenceforge.answering import answer_excerpts, criterion_fit, criterion_label
 from evidenceforge.graph.state import StateSnapshot
 from evidenceforge.models.research import FixtureResearchModel
 from evidenceforge.presentation import clean_spans, display_issues, promotional
 from evidenceforge.report_pdf import PdfExportError, _inline, report_pdf
-from evidenceforge.reporting import render_report
+from evidenceforge.reporting import escape, render_report
 from evidenceforge.research import ResearchOptions
 from evidenceforge.retrieval.contracts import RetrievalBatch, RetrievedSource
 from evidenceforge.retrieval.fixtures import FixtureRetrievalAdapter
@@ -171,3 +171,104 @@ def test_flattened_action_list_does_not_attach_the_next_item_number():
     assert "Build small projects (a spam classifier)." in values
     assert "Learn deep learning frameworks" in values
     assert "Deploy models using APIs" in values
+
+
+def test_career_criteria_select_progression_instead_of_salary_or_generic_tools():
+    criterion = (
+        "Outline professional progression steps, including entry-level role transitions "
+        "and practical skill acquisition methods."
+    )
+    assert criterion_label(criterion) == "Career steps"
+    assert criterion_fit(criterion, "Core Skills: Python, Docker, TensorFlow.", "AI career") is None
+    assert criterion_fit(criterion, "Career progression is important.", "AI career") is None
+    text = (
+        "AI Engineer Career Path\nThe typical career progression looks like this:\n"
+        "1. AI Intern: Entry point for graduates, focused on learning tools.\n"
+        "2. Junior AI Engineer: Building and testing models under guidance.\n"
+        "3. AI Engineer: Independently building and deploying models.\n4."
+    )
+    values = [text[a:b] for a, b in clean_spans(text, year=2026, request="AI career")]
+    assert len(values) == 1 and values[0].endswith("deploying models.")
+    assert "under guidance" in values[0]
+    assert criterion_fit(criterion, values[0], "AI career") is not None
+
+
+def test_generic_math_mention_cannot_stand_in_for_requested_foundation_list():
+    criterion = "List essential mathematical and statistical foundations required for AI/ML roles."
+    assert (
+        criterion_fit(
+            criterion,
+            "Core skills include Python programming, mathematics and statistics, MLOps, "
+            "and communication abilities.",
+            "How to become an AI engineer?",
+        )
+        is None
+    )
+    assert (
+        criterion_fit(
+            criterion,
+            "Mathematical foundations include linear algebra, probability and calculus.",
+            "How to become an AI engineer?",
+        )
+        is not None
+    )
+    assert (
+        criterion_fit(
+            "Describe three distinct portfolio project types that demonstrate AI engineering.",
+            "Begin with practical exercises like predictive models, image recognition, "
+            "chatbots, or recommendation engines.",
+            "How to become an AI engineer?",
+        )
+        is not None
+    )
+
+
+def test_unrequested_career_asides_and_source_bibliography_do_not_become_highlights():
+    text = (
+        "Entry-level roles offer $100,000 annually. "
+        "Core Skills: Python, Docker and TensorFlow. "
+        "Most learners take between 6 and 18 months depending on their starting point. "
+        "Production architectures reduce latency [17,1]. "
+        "Creating a RAG assistant is a portfolio project."
+    )
+    values = [
+        text[a:b] for a, b in clean_spans(text, year=2026, request="How to become an AI engineer?")
+    ]
+    assert values == [
+        "Core Skills: Python, Docker and TensorFlow.",
+        "Creating a RAG assistant is a portfolio project.",
+    ]
+    assert not display_issues(
+        "Entry-level roles offer $100,000 annually.", year=2026, request="AI engineer salaries"
+    )
+    assert not display_issues(
+        "Most learners take between 6 and 18 months.",
+        year=2026,
+        request="How long does it take to become an AI engineer?",
+    )
+    assert not display_issues(text, year=2026, request="AI career", editorial=False)
+
+
+def test_concise_answer_discloses_missing_detailed_criteria_without_changing_saved_status(
+    polished_report,
+):
+    state = deepcopy(polished_report)
+    criterion = "List essential mathematical and statistical foundations required for AI roles."
+    # This synthetic presentation check keeps historical status and audit records untouched.
+    state["research_questions"][0]["acceptance_criteria"].append(criterion)
+    # The cited fixture does name mathematical subjects, so use an unrelated inventory gap.
+    missing = "List two distinct professional certifications accepted in AI engineering."
+    state["research_questions"][0]["acceptance_criteria"].append(missing)
+    before = deepcopy(state)
+    text = render_report(state, answer_first=True, include_evidence_details=False)
+    assert "Not established in the concise answer" in text and escape(missing) in text
+    assert "recorded workflow status" in text
+    assert state == before
+
+
+def test_degree_acquisition_is_not_a_compensation_aside():
+    assert not display_issues(
+        "Earn a degree in computer science.",
+        year=2026,
+        request="How to become an AI engineer?",
+    )

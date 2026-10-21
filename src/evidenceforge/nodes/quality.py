@@ -7,6 +7,7 @@ from typing import TypeVar, cast
 
 from pydantic import JsonValue, ValidationError
 
+from evidenceforge.evidence.coverage_detail import enumerative_support
 from evidenceforge.evidence.deduplication import WorkingEvidence, working_evidence
 from evidenceforge.graph.state import ResearchState, StateSnapshot
 from evidenceforge.identity import stable_id
@@ -159,11 +160,16 @@ class CoverageEvaluator(QualityNode):
             for assessment in result.questions:
                 q = known[assessment.question_id]
                 indices = set()
+                seen_indices = set()
                 missing_percent_indices = set()
+                missing_detail_indices = set()
                 evidence_ids: set[str] = set()
                 for criterion in assessment.criteria:
-                    if criterion.index in indices or criterion.index >= len(q.acceptance_criteria):
+                    if criterion.index in seen_indices or criterion.index >= len(
+                        q.acceptance_criteria
+                    ):
                         raise PlanningContractError("invalid criterion")
+                    seen_indices.add(criterion.index)
                     for eid in criterion.evidence_ids:
                         if (
                             eid not in s.evidence_store
@@ -171,6 +177,12 @@ class CoverageEvaluator(QualityNode):
                         ):
                             raise PlanningContractError("invalid coverage evidence")
                     criterion_text = q.acceptance_criteria[criterion.index]
+                    if self.options.production_policy_version >= 6 and not enumerative_support(
+                        criterion_text,
+                        (s.evidence_store[eid].passage for eid in criterion.evidence_ids),
+                    ):
+                        missing_detail_indices.add(criterion.index)
+                        continue
                     requires_number = re.search(r"\bpercent(?:age|ages|s)?\b", criterion_text, re.I)
                     asks_for_absence = re.search(
                         r"\b(?:missing|unavailable|absent|unreported|not provided|not reported)\b",
@@ -230,6 +242,9 @@ class CoverageEvaluator(QualityNode):
                             "Numeric percentages are absent from linked retained evidence for: "
                             + text
                             if index in missing_percent_indices
+                            else "Concrete listed details are not established by linked retained "
+                            "evidence for: " + text
+                            if index in missing_detail_indices
                             else text
                         )
                         gaps.append(

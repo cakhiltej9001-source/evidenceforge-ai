@@ -6,7 +6,7 @@ from typing import cast
 
 from pydantic import JsonValue
 
-from evidenceforge.answering import answer_excerpts, criterion_label, unresolved_answer
+from evidenceforge.answering import HOW_TO, answer_excerpts, criterion_label, unresolved_answer
 from evidenceforge.evidence.deduplication import working_evidence
 from evidenceforge.evidence.text_quality import (
     EXERCISE,
@@ -20,7 +20,7 @@ from evidenceforge.nodes.common import Update, checked_patch, record_data
 from evidenceforge.nodes.extraction import ambiguous_table
 from evidenceforge.nodes.quality import quality_remaining
 from evidenceforge.nodes.quality_common import quality_event
-from evidenceforge.presentation import clean_spans, display_issues, future_years
+from evidenceforge.presentation import SOURCE_REFERENCE, clean_spans, display_issues, future_years
 from evidenceforge.schemas import (
     EvidenceItem,
     QuestionCoverage,
@@ -479,6 +479,30 @@ def render_report(
                         "",
                     ]
                 )
+                if HOW_TO.search(s.request.question) and any(e.criterion for e in excerpts):
+                    displayed = {e.criterion for e in excerpts}
+                    missing_excerpts = list(
+                        dict.fromkeys(
+                            criterion
+                            for question in s.research_questions
+                            for criterion in question.acceptance_criteria
+                            if criterion not in displayed
+                        )
+                    )
+                    if missing_excerpts:
+                        lines.extend(
+                            [
+                                "**Not established in the concise answer:**",
+                                "",
+                                *("- " + escape(criterion) for criterion in missing_excerpts),
+                                "",
+                                "No sufficiently specific, clean cited excerpt was selected for "
+                                "these criteria. This presentation check does not change the "
+                                "recorded workflow status or establish that the sources lack "
+                                "the information.",
+                                "",
+                            ]
+                        )
             else:
                 lines.extend(
                     [
@@ -617,9 +641,19 @@ def render_report(
             [
                 f"{presentation_omissions} audited quotation(s) are retained in the saved sources "
                 "and JSON rather than highlighted here because they contain promotional/transcript "
-                "clutter, adjacent-role wording, unresolved table layout or future-dated wording. "
+                "clutter, missing context, unrequested career assertions, source bibliography "
+                "markers, adjacent-role wording, unresolved table layout or future-dated wording. "
                 "This display filter does not change the run status or certify "
                 "answer completeness.",
+                "",
+            ]
+        )
+    if answer_first and any(SOURCE_REFERENCE.search(c.statement) for c in s.report_claims.values()):
+        lines.extend(
+            [
+                "Bracketed numbers copied from a source belong to its bibliography; those "
+                "references were not imported. Sentences containing these markers are not "
+                "highlighted here. Original passages remain in saved sources and JSON.",
                 "",
             ]
         )
