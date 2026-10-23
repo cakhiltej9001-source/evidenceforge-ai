@@ -30,6 +30,8 @@ Two selection defects were found by inspecting the saved run:
   detail before purpose-clause word overlap. Existing extraction limits remain.
 - Criteria phrased as mathematical "concepts" receive the same concrete-detail
   safeguard as criteria phrased as "foundations".
+- Failed planning stops at the initialization join. It preserves the provider
+  failure and no longer adds a misleading downstream search-schema error.
 
 ## Verification and limits
 
@@ -49,3 +51,19 @@ establish semantic sufficiency, certify source truth, or upgrade an old report.
 
 The hosted version marker for this repair is **2026-10-23.1**. A GitHub push does
 not by itself prove that Streamlit has loaded that version.
+
+
+## Fresh live check on 23 October
+
+A separately authorized check used **1 Gemini request**, which timed out during
+question review and planning. Its response and token usage are unconfirmed; the
+request remains counted. **No Tavily search ran.** No automatic retry was made.
+This does not establish a new successful end-to-end run.
+
+The timeout exposed the downstream error-reporting defect described above. A
+mocked provider-failure regression now verifies one original error, failed status,
+and no search preparation. The prior published source passed 660 tests; inspect
+the latest CI run for the follow-up guard's full result.
+
+The owner confirmed the public app displays version **2026-10-23.1**. Browser
+inspection from this environment timed out, so this is an owner observation.

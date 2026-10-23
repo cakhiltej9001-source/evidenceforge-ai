@@ -19,7 +19,19 @@ class PlanDecision(Contract):
 def prepare_approval(state: ResearchState, required: bool) -> Update:
     s = StateSnapshot.model_validate(state)
     statuses = {r.role: r.status for r in s.initialization_results.values()}
-    if s.run_status != "running" or not s.research_questions or "failed" in statuses.values():
+    if s.run_status != "running":
+        return {}
+    if "failed" in statuses.values():
+        return checked_patch(
+            state,
+            {
+                "run_status": "failed",
+                "planning_status": "failed",
+                "stop_reason": "fatal_error",
+                "finished_at": utc_now().isoformat(),
+            },
+        )
+    if not s.research_questions:
         return {}
     return checked_patch(
         state, {"approval_status": "awaiting_approval" if required else "not_required"}
@@ -64,6 +76,11 @@ def approve_plan(state: ResearchState) -> Update:
 
 
 def after_approval(state: ResearchState) -> str:
-    if state["run_status"] != "running":
+    s = StateSnapshot.model_validate(state)
+    if (
+        s.run_status != "running"
+        or not s.research_questions
+        or any(result.status == "failed" for result in s.initialization_results.values())
+    ):
         return "finalizer"
     return "query_generator"
