@@ -517,11 +517,11 @@ def answer_excerpts(snapshot: StateSnapshot) -> tuple[AnswerExcerpt, ...]:
                         # Both components must have audited content and display room.
                         if len(selected) + len(group) <= 6:
                             for chosen, label in group:
-                                excerpt = replace(
+                                paired_excerpt = replace(
                                     chosen[2], criterion=criterion, display_label=label
                                 )
-                                selected.append(excerpt)
-                                seen.add(excerpt.text)
+                                selected.append(paired_excerpt)
+                                seen.add(paired_excerpt.text)
                                 covered.update(chosen[3])
                             continue
                 matches = [
