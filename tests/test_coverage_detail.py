@@ -33,8 +33,12 @@ EXPLICIT = (
         "Mathematical and statistical foundations include mathematics and statistics.",
     ],
 )
-def test_parent_category_and_unrelated_neighbor_list_do_not_supply_members(passage):
-    assert not enumerative_support(MATH, (passage,))
+@pytest.mark.parametrize(
+    "criterion",
+    [MATH, "Identify key mathematical concepts needed for understanding ML algorithms."],
+)
+def test_parent_category_and_unrelated_neighbor_list_do_not_supply_members(passage, criterion):
+    assert not enumerative_support(criterion, (passage,))
 
 
 @pytest.mark.parametrize(
@@ -44,12 +48,16 @@ def test_parent_category_and_unrelated_neighbor_list_do_not_supply_members(passa
         "Linear algebra, probability and calculus are mathematical foundations.",
         "Mathematical foundations: linear algebra; probability; calculus.",
         "Mathematical foundations include linear algebra. "
-        "Statistical foundations include probability.",
+        "Mathematical and statistical foundations include probability.",
         "Linear algebra, probability and calculus.",
     ],
 )
-def test_specific_foundation_enumerations_remain_eligible(passage):
-    assert enumerative_support(MATH, (passage,))
+@pytest.mark.parametrize(
+    "criterion",
+    [MATH, "Identify key mathematical concepts needed for understanding ML algorithms."],
+)
+def test_specific_foundation_enumerations_remain_eligible(passage, criterion):
+    assert enumerative_support(criterion, (passage,))
 
 
 def test_inventories_are_general_and_respect_explicit_count():

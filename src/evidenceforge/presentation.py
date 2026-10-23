@@ -42,6 +42,11 @@ BRANDED_COURSE = re.compile(
     r"[^.!?\n]{0,100}\b(?:cover|provide|offer|help|teach|equip|learners|participants)\w*\b",
     re.I,
 )
+BIOGRAPHY = re.compile(
+    r"\b(?:meet (?:your|the) expert|about (?:the )?author|author bio(?:graphy)?)\b|"
+    r"\bin this (?:guide|article),[^.!?]{0,200}\b(?:breaks down|explains|discusses)\b",
+    re.I,
+)
 PAGE_HEADER = re.compile(r"\b(?:updated on|published on|posted on)\b", re.I)
 DEPENDENT_START = re.compile(
     r"^(?:it|this|that|these|those|they|he|she|there|yes|because|also|moreover)\b|"
@@ -100,12 +105,22 @@ def adjacent_role(text: str, request: str) -> bool:
     )
 
 
+def editorial_biography(text: str, request: str) -> bool:
+    """Do not turn an author's background into requirements for the reader's role."""
+    return bool(
+        BIOGRAPHY.search(text)
+        and not re.search(r"\b(?:author|biography|biographical|expert profile)\b", request, re.I)
+    )
+
+
 def display_issues(
     text: str, *, year: int, request: str, editorial: bool = True
 ) -> tuple[str, ...]:
     issues = []
     if promotional(text):
         issues.append("promotional, transcript or page-navigation text")
+    if editorial and editorial_biography(text, request):
+        issues.append("an author introduction or biography")
     if editorial and PAGE_HEADER.search(text):
         issues.append("publication header or byline text")
     if editorial and DEPENDENT_START.search(text.lstrip()):
@@ -196,7 +211,11 @@ def clean_spans(
     text: str, *, year: int, request: str, limit: int = 650
 ) -> Iterator[tuple[int, int]]:
     """Select exact whole sentences; never rewrite a table or remove a caveat."""
-    if future_years(text, year, request) or adjacent_role(text, request):
+    if (
+        future_years(text, year, request)
+        or adjacent_role(text, request)
+        or editorial_biography(text, request)
+    ):
         return
     for start, end in presentation_spans(text):
         candidate = text[start:end]

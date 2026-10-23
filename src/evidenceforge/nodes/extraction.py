@@ -3,6 +3,7 @@
 import re
 from collections.abc import Iterator
 
+from evidenceforge.evidence.coverage_detail import enumerative_support
 from evidenceforge.graph.state import ResearchState, StateSnapshot
 from evidenceforge.identity import stable_id
 from evidenceforge.nodes.common import Update, checked_patch, record_data
@@ -21,8 +22,14 @@ def tokens(text: str) -> set[str]:
     return {word for word in re.findall(r"\w+", text.casefold()) if word not in STOP_WORDS}
 
 
+def criterion_tokens(text: str) -> set[str]:
+    """Normalize equivalent subject words only for criterion-focused retrieval."""
+    aliases = {"math": "mathematics", "maths": "mathematics", "mathematical": "mathematics"}
+    return {aliases.get(word, word) for word in tokens(text)}
+
+
 def criterion_focus_terms(text: str) -> set[str]:
-    return tokens(text) - {
+    return criterion_tokens(text) - {
         "identify",
         "list",
         "describe",
@@ -44,6 +51,31 @@ def criterion_focus_terms(text: str) -> set[str]:
         "typically",
         "foundational",
     }
+
+
+def criterion_subject_terms(text: str) -> set[str]:
+    """Keep the requested subject ahead of explanatory purpose clauses.
+
+    "Mathematical concepts needed for understanding ML algorithms" asks for
+    mathematics; a DSA passage repeating "understanding" and "algorithms" must
+    not displace it merely by matching more words from the purpose clause.
+    """
+    head = re.split(
+        r"\b(?:required|needed|used|for|to|that|which)\b", text, maxsplit=1, flags=re.I
+    )[0]
+    return criterion_focus_terms(head) or criterion_focus_terms(text)
+
+
+def criterion_rank(criterion: str, passage: str) -> tuple[int, float, float]:
+    words = criterion_tokens(passage)
+    subject = criterion_subject_terms(criterion)
+    terms = criterion_focus_terms(criterion)
+    overlap = len(subject & words)
+    return (
+        int(bool(overlap) and enumerative_support(criterion, (passage,))),
+        overlap / max(1, len(subject)),
+        len(terms & words) / max(1, len(terms)),
+    )
 
 
 def spans(text: str, size: int) -> Iterator[tuple[int, int]]:
@@ -230,11 +262,17 @@ class EvidenceExtractor:
                 from evidenceforge.presentation import display_issues
 
                 prioritized: list[tuple[int, int]] = []
-                for terms in criterion_terms:
+                criteria = [
+                    criterion
+                    for question in snapshot.research_questions
+                    if question.id in questions
+                    for criterion in question.acceptance_criteria
+                ]
+                for criterion, terms in zip(criteria, criterion_terms, strict=True):
                     eligible = [
                         pair
                         for pair in candidates
-                        if terms & tokens(content[pair[0] : pair[1]])
+                        if terms & criterion_tokens(content[pair[0] : pair[1]])
                         and not display_issues(
                             content[pair[0] : pair[1]],
                             year=snapshot.started_at.year,
@@ -244,9 +282,7 @@ class EvidenceExtractor:
                     if eligible:
                         best = max(
                             eligible,
-                            key=lambda pair: (
-                                len(terms & tokens(content[pair[0] : pair[1]])) / max(1, len(terms))
-                            ),
+                            key=lambda pair: criterion_rank(criterion, content[pair[0] : pair[1]]),
                         )
                         if best not in prioritized:
                             prioritized.append(best)
@@ -294,7 +330,7 @@ class EvidenceExtractor:
                     score = len(focus & passage_tokens) / len(focus) if focus else 0.0
                     if self.criteria_focus:
                         criterion_scores = [
-                            len(terms & passage_tokens) / len(terms)
+                            len(terms & criterion_tokens(passage)) / len(terms)
                             for criterion in question.acceptance_criteria
                             if (terms := criterion_focus_terms(criterion))
                         ]

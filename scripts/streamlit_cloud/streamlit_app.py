@@ -39,4 +39,4 @@ except ConfigurationError as exc:
 from evidenceforge.ui import main  # noqa: E402
 
 main(public_demo=public_demo, cloud_hosted=not public_demo)
-st.caption("App version: 2026-10-21.1")
+st.caption("App version: 2026-10-23.1")

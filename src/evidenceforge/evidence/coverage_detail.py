@@ -14,7 +14,7 @@ _ACTION = re.compile(
 _CATEGORY = re.compile(
     r"\b(?:foundations|skills|topics|methods|techniques|types|kinds|languages|frameworks|"
     r"libraries|sources|gases|components|steps|examples|options|requirements|causes|"
-    r"factors|applications|projects?|metrics|roles|pathways)\b",
+    r"factors|applications|projects?|metrics|roles|pathways|concepts)\b",
     re.I,
 )
 _INTRO = re.compile(
@@ -33,7 +33,7 @@ _GENERIC = frozenset(
     "essential core key basic important distinct different main major relevant required "
     "necessary needed useful include includes including such like comprise comprises "
     "consist consists contains contain are is be used use can must should all various "
-    "foundation skill topic method technique type kind language framework library source "
+    "foundation concept skill topic method technique type kind language framework library source "
     "gas component step example option requirement cause factor application project "
     "metric role pathway knowledge understanding ability proficiency strong solid "
     "advanced fundamental technical professional practical enough etc "
@@ -106,6 +106,7 @@ def enumerative_support(criterion: str, passages: Iterable[str]) -> bool:
     scope = (_tokens(head) - _GENERIC) | categories
     broad = {
         "foundation",
+        "concept",
         "skill",
         "topic",
         "method",

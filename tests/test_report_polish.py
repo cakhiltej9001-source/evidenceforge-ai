@@ -272,3 +272,37 @@ def test_degree_acquisition_is_not_a_compensation_aside():
         year=2026,
         request="How to become an AI engineer?",
     )
+
+
+def test_author_background_is_not_a_role_requirement_even_after_sentence_splitting():
+    bio = (
+        "In this guide, Alex Example breaks down programming languages and frameworks. "
+        "Meet Your Expert: Alex Example. "
+        "Alex uses Python and React in software engineering work."
+    )
+    request = "How to become an AI engineer?"
+    assert display_issues(bio, year=2026, request=request)
+    assert not list(clean_spans(bio, year=2026, request=request))
+    assert not display_issues(bio, year=2026, request=request, editorial=False)
+    assert not display_issues(
+        "About the author: Alex Example builds Python tools.",
+        year=2026,
+        request="What is the author's background?",
+    )
+    requirement = "AI engineers need programming skills and experience with Python and PyTorch."
+    assert not display_issues(requirement, year=2026, request=request)
+
+
+@pytest.mark.parametrize(
+    "text,research_question",
+    [
+        ("Hamlet was written by William Shakespeare.", "Who wrote Hamlet?"),
+        (
+            "AI libraries written by developers include PyTorch and TensorFlow.",
+            "Which AI libraries are available?",
+        ),
+    ],
+)
+def test_attribution_phrases_are_not_treated_as_author_biographies(text, research_question):
+    assert not display_issues(text, year=2026, request=research_question)
+    assert [text[a:b] for a, b in clean_spans(text, year=2026, request=research_question)] == [text]

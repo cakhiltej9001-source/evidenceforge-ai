@@ -17,8 +17,9 @@ Gemini reasoning supports explicitly started provider runs.
 
 **Current verification:** source tests, lint, formatting, type checks and container
 checks run in [GitHub CI](https://github.com/cakhiltej9001-source/evidenceforge-ai/actions/workflows/ci.yml).
-The [21 October repair note](docs/REPORT_DETAIL_AND_PAGE_PRINT_2026-10-21.md)
-records the latest evidence-detail and full-page print checks.
+The [23 October repair note](docs/ANSWER_AND_EVIDENCE_SELECTION_2026-10-23.md)
+records answer selection and bounded extraction fixes. The [21 October note](docs/REPORT_DETAIL_AND_PAGE_PRINT_2026-10-21.md)
+records evidence-detail and full-page print checks.
 
 Earlier verification included Docker persistence, backup/restore and authenticated gateway checks.
 The fresh 12 October run completed all six Gemini roles and one Tavily search,

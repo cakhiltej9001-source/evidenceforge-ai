@@ -466,7 +466,9 @@ def render_report(
                     )
                     prefix = f"{excerpts.index(excerpt) + 1}. " if len(excerpts) > 1 else ""
                     label = (
-                        "**" + escape(criterion_label(excerpt.criterion)) + ":** "
+                        "**"
+                        + escape(excerpt.display_label or criterion_label(excerpt.criterion))
+                        + ":** "
                         if excerpt.criterion
                         else ""
                     )

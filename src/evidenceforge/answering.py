@@ -2,14 +2,18 @@
 
 import html
 import re
+import unicodedata
+from collections.abc import Iterator
 from dataclasses import dataclass, replace
 
 from evidenceforge.evidence.coverage_detail import enumerative_support
 from evidenceforge.graph.state import StateSnapshot
 from evidenceforge.presentation import (
+    SCOPE,
     TABLE,
     adjacent_role,
     display_issues,
+    editorial_biography,
     future_years,
     presentation_spans,
 )
@@ -50,10 +54,18 @@ class AnswerExcerpt:
     end_offset: int
     text: str
     criterion: str | None = None
+    display_label: str | None = None
+
+
+def matching_text(text: str) -> str:
+    """Normalize typography only for matching, never source text or offsets."""
+    return unicodedata.normalize("NFKC", html.unescape(text))
 
 
 def words(text: str) -> set[str]:
-    return set(re.findall(r"[^\W\d_]+|\d+(?:\.\d+)?", text.casefold())) - QUESTION_WORDS
+    return (
+        set(re.findall(r"[^\W\d_]+|\d+(?:\.\d+)?", matching_text(text).casefold())) - QUESTION_WORDS
+    )
 
 
 CRITERION_GENERIC = frozenset(
@@ -79,6 +91,14 @@ def criterion_words(text: str) -> set[str]:
 
 
 def criterion_topic_matches(criterion: str, passage: str) -> bool:
+    criterion, passage = matching_text(criterion), matching_text(passage)
+    if (
+        re.search(r"\blanguages?\b", criterion, re.I)
+        and re.search(r"\b(?:frameworks?|libraries)\b", criterion, re.I)
+        and re.search(r"\band\b", criterion, re.I)
+        and not re.search(r"\b(?:programming|coding|languages?)\b", passage, re.I)
+    ):
+        return False
     topics = (
         r"linear algebra|mathematic\w*|statistic\w*|probability|calculus",
         r"frameworks?|pytorch|tensorflow|scikit.learn",
@@ -122,6 +142,7 @@ def career_criterion(criterion: str) -> bool:
 
 
 def criterion_fit(criterion: str, passage: str, request: str) -> float | None:
+    criterion, passage = matching_text(criterion), matching_text(passage)
     terms = criterion_words(criterion) - criterion_words(request)
     overlap = len(criterion_words(passage) & terms)
     career = career_criterion(criterion) and bool(CAREER_EVIDENCE.search(passage))
@@ -148,6 +169,93 @@ def criterion_fit(criterion: str, passage: str, request: str) -> float | None:
     return overlap / len(terms) + (
         1.5 if examples else 1.0 if career else 0.75 if framework_list else 0.0
     )
+
+
+_BULLET_HEADING = re.compile(
+    r"(?m)^[ \t]*[\u2022\u25cf\u25aa\u25e6\U0001f539][ \t]+[^\n.!?]{1,80}\n"
+)
+_LANGUAGE_NAMES = re.compile(r"\b(?:python|sql|java(?:script)?|typescript|c\+\+|c#)(?!\w)", re.I)
+_FRAMEWORK_NAMES = re.compile(
+    r"\b(?:pytorch|tensorflow|scikit[- ]learn|keras|langchain|llamaindex)\b", re.I
+)
+
+
+def bullet_heading_spans(text: str) -> Iterator[tuple[int, int]]:
+    """Keep an exact independent bullet heading with its complete body.
+
+    A caveat anywhere in the original passage may govern subsequent items, so
+    do not split that passage. Unheaded introductory fragments are not blocks.
+    """
+    if SCOPE.search(text):
+        return
+    markers = list(_BULLET_HEADING.finditer(text))
+    for index, marker in enumerate(markers):
+        end = markers[index + 1].start() if index + 1 < len(markers) else len(text)
+        start = (
+            marker.start()
+            + len(text[marker.start() : end])
+            - len(text[marker.start() : end].lstrip())
+        )
+        end = start + len(text[start:end].rstrip())
+        if text[marker.end() : end].strip():
+            yield start, end
+
+
+def compound_tools_criterion(criterion: str) -> bool:
+    """Recognize an unnumbered language-and-framework inventory, not arbitrary AND."""
+    text = matching_text(criterion)
+    return bool(
+        re.search(r"\b(?:programming\s+)?languages?\b", text, re.I)
+        and re.search(r"\b(?:frameworks?|libraries)\b", text, re.I)
+        and re.search(r"\band\b", text, re.I)
+        and not re.search(r"\b(?:[1-9]\d*|one|two|three|four|five|six)\b", text, re.I)
+    )
+
+
+def tool_facet_fit(passage: str, facet: str) -> float | None:
+    """Locate concrete named content for one displayed part of a compound criterion.
+
+    This organizes already audited quotations; it is not a new semantic audit.
+    Named tools alone are insufficient without category or headed-item context.
+    """
+    text = matching_text(passage)
+    if facet == "languages":
+        names = _LANGUAGE_NAMES.findall(text)
+        explicit = bool(re.search(r"\b(?:programming|coding|languages?)\b", text, re.I))
+        context = bool(
+            re.search(
+                r"\b(?:learn|master|required|primary|used|uses|essential|programming|coding)\b",
+                text,
+                re.I,
+            )
+        )
+    else:
+        names = _FRAMEWORK_NAMES.findall(text)
+        explicit = bool(re.search(r"\b(?:frameworks?|libraries)\b", text, re.I))
+        first_line, separator, body = text.partition("\n")
+        heading = bool(
+            separator
+            and _FRAMEWORK_NAMES.search(first_line)
+            and re.fullmatch(
+                r"\s*[\u2022\u25cf\u25aa\u25e6\U0001f539]\s+"
+                r"(?:pytorch|tensorflow|scikit[- ]learn|keras|langchain|llamaindex)\s*",
+                first_line,
+                re.I,
+            )
+        )
+        explicit = explicit or bool(
+            heading
+            and re.search(
+                r"\b(?:learning|research|models?|prototyp\w*|deployment|systems?|"
+                r"graphs?|data|training|ML)\b",
+                body,
+                re.I,
+            )
+        )
+        context = explicit
+    if not names or not explicit or not context:
+        return None
+    return 1.0 + min(0.75, len({name.casefold() for name in names}) * 0.25)
 
 
 def unresolved_answer(snapshot: StateSnapshot) -> bool:
@@ -236,11 +344,15 @@ def answer_excerpts(snapshot: StateSnapshot) -> tuple[AnswerExcerpt, ...]:
             if claim.statement != evidence.passage:
                 continue
             text = evidence.passage
-            if future_years(
-                text, snapshot.started_at.year, snapshot.request.question
-            ) or adjacent_role(text, snapshot.request.question):
+            if (
+                future_years(text, snapshot.started_at.year, snapshot.request.question)
+                or adjacent_role(text, snapshot.request.question)
+                or editorial_biography(text, snapshot.request.question)
+            ):
                 continue
             spans = list(presentation_spans(text))
+            if procedural:
+                spans.extend(span for span in bullet_heading_spans(text) if span not in spans)
             # A longer whole passage can preserve a how-to answer and all its caveats.
             # It is a fallback, never permission to shorten away qualifications.
             if procedural and (0, len(text)) not in spans:
@@ -273,6 +385,13 @@ def answer_excerpts(snapshot: StateSnapshot) -> tuple[AnswerExcerpt, ...]:
                     )
                     focused = assessed and any(
                         criterion_fit(criterion, decoded, snapshot.request.question) is not None
+                        or (
+                            compound_tools_criterion(criterion)
+                            and any(
+                                tool_facet_fit(decoded, facet) is not None
+                                for facet in ("languages", "frameworks")
+                            )
+                        )
                         for q in snapshot.research_questions
                         if q.id in claim.question_ids
                         for criterion in q.acceptance_criteria
@@ -369,6 +488,42 @@ def answer_excerpts(snapshot: StateSnapshot) -> tuple[AnswerExcerpt, ...]:
         # These labels organize exact quotations; they do not assert new facts.
         for question in snapshot.research_questions:
             for criterion in question.acceptance_criteria:
+                if compound_tools_criterion(criterion):
+                    eligible = [
+                        item
+                        for item in ranked
+                        if question.id in snapshot.report_claims[item[2].claim_id].question_ids
+                        and not redundant(item[2])
+                    ]
+                    pairs = [
+                        (left_fit + right_fit + left[0] + right[0], left, right)
+                        for left in eligible
+                        if (left_fit := tool_facet_fit(left[2].text, "languages")) is not None
+                        for right in eligible
+                        if (right_fit := tool_facet_fit(right[2].text, "frameworks")) is not None
+                        if left[2] == right[2]
+                        or not (left[2].text in right[2].text or right[2].text in left[2].text)
+                    ]
+                    if pairs:
+                        _, left, right = max(pairs, key=lambda pair: pair[0])
+                        group = (
+                            [(left, "Programming and tools")]
+                            if left[2] == right[2]
+                            else [
+                                (left, "Programming languages"),
+                                (right, "Frameworks and libraries"),
+                            ]
+                        )
+                        # Both components must have audited content and display room.
+                        if len(selected) + len(group) <= 6:
+                            for chosen, label in group:
+                                excerpt = replace(
+                                    chosen[2], criterion=criterion, display_label=label
+                                )
+                                selected.append(excerpt)
+                                seen.add(excerpt.text)
+                                covered.update(chosen[3])
+                            continue
                 matches = [
                     (fit, item)
                     for item in ranked
@@ -377,7 +532,7 @@ def answer_excerpts(snapshot: StateSnapshot) -> tuple[AnswerExcerpt, ...]:
                     and (fit := criterion_fit(criterion, item[2].text, snapshot.request.question))
                     is not None
                 ]
-                if matches and len(selected) < 5:
+                if matches and len(selected) < 6:
                     _, chosen = max(matches, key=lambda pair: (pair[0], pair[1][0]))
                     criterion_excerpt = replace(chosen[2], criterion=criterion)
                     selected.append(criterion_excerpt)
@@ -386,7 +541,7 @@ def answer_excerpts(snapshot: StateSnapshot) -> tuple[AnswerExcerpt, ...]:
         if selected:
             return tuple(selected)
     for _, _, selected_excerpt, overlap in ranked:
-        if len(selected) >= (5 if procedural else 3):
+        if len(selected) >= (6 if procedural else 3):
             break
         if selected_excerpt.text in seen or (not procedural and not overlap - covered):
             continue
