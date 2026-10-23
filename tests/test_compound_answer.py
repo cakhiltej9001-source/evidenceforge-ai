@@ -102,7 +102,7 @@ def test_pair_keeps_original_criterion_and_offsets_without_mutating_state(paired
     assert paired_report == before
 
 
-@pytest.mark.parametrize("missing", ["unaudited", "uncited"])
+@pytest.mark.parametrize("missing", ["unaudited", "outside_answer_sections"])
 def test_one_eligible_facet_does_not_display_the_compound_criterion(paired_report, missing):
     state = deepcopy(paired_report)
     framework_ids = {
@@ -114,8 +114,24 @@ def test_one_eligible_facet_does_not_display_the_compound_criterion(paired_repor
             audit for audit in state["citation_audit"] if audit["claim_id"] not in framework_ids
         ]
     else:
-        for section in state["final_report"]["sections"]:
-            section["claim_ids"] = [cid for cid in section["claim_ids"] if cid not in framework_ids]
+        # Keep the valid claim registry intact while making the framework
+        # quotation ineligible for Answer selection (limitations only).
+        for name in ("draft_report", "final_report"):
+            report = state[name]
+            for section in report["sections"]:
+                section["claim_ids"] = [
+                    cid for cid in section["claim_ids"] if cid not in framework_ids
+                ]
+            limitations = next(
+                (section for section in report["sections"] if section["name"] == "limitations"),
+                None,
+            )
+            if limitations is None:
+                report["sections"].append(
+                    {"name": "limitations", "claim_ids": sorted(framework_ids)}
+                )
+            else:
+                limitations["claim_ids"].extend(sorted(framework_ids))
     excerpts = answer_excerpts(StateSnapshot.model_validate(state))
     assert not any(item.criterion == CRITERION for item in excerpts)
 
