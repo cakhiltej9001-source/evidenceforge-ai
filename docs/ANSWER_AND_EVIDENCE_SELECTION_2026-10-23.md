@@ -29,7 +29,9 @@ Two selection defects were found by inspecting the saved run:
 - Passage ranking prioritizes the requested subject and concrete inventory
   detail before purpose-clause word overlap. Existing extraction limits remain.
 - Criteria phrased as mathematical "concepts" receive the same concrete-detail
-  safeguard as criteria phrased as "foundations".
+  safeguard as criteria phrased as "foundations". Concrete examples named after
+  "such as", "including" or "like" remain eligible inventory members; they are
+  not discarded as mere repetitions of the requested category.
 - Failed planning stops at the initialization join. It preserves the provider
   failure and no longer adds a misleading downstream search-schema error.
 

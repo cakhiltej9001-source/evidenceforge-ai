@@ -97,9 +97,13 @@ def enumerative_support(criterion: str, passages: Iterable[str]) -> bool:
         else 2
     )
     head = re.split(
-        r"\b(?:required|needed|used|for|to|that|which)\b", criterion, maxsplit=1, flags=re.I
+        r"\b(?:required|needed|used|for|to|that|which|such as|including|like|namely)\b|e\.g\.",
+        criterion,
+        maxsplit=1,
+        flags=re.I,
     )[0]
-    criterion_words = _tokens(criterion)
+    # Examples supplied in the criterion are valid answers, not category restatements.
+    criterion_words = _tokens(head)
     # Keep category nouns for header matching, and meaningful modifiers such as
     # "mathematical". Drop generic wording, not the requested subject.
     categories = _tokens(" ".join(_CATEGORY.findall(head)))

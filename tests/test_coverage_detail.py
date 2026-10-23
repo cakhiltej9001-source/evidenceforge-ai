@@ -135,3 +135,13 @@ def test_generic_mentions_cannot_turn_current_workflow_sufficient(tmp_path):
     assert any("Concrete listed details" in gap["missing_aspect"] for gap in state["gaps"])
     assert any(GENERIC in item["passage"] for item in state["evidence_store"].values())
     assert not any("linear algebra" in item["passage"] for item in state["evidence_store"].values())
+
+
+@pytest.mark.parametrize("intro", ["such as", "including", "like", "namely", "e.g."])
+def test_criterion_examples_remain_valid_inventory_members(intro):
+    criterion = (
+        f"Identify foundational mathematical concepts {intro} linear algebra, "
+        "calculus, and probability."
+    )
+    assert enumerative_support(criterion, (EXPLICIT,))
+    assert not enumerative_support(criterion, (GENERIC,))
